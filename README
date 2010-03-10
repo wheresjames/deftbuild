@@ -1,0 +1,39 @@
+
+Following directory structure is assumed
+
+-- [any directory]
+	|
+	+---[deftbuild]		- This project
+	|
+	+---[lib]			- The libs will go here
+	|
+	+---[bin]			- Compiled code will go here
+	|
+	+---[dnl]			- Downloaded archive files
+	|
+	+---[arc]			- Archives
+	|
+	+---[patches]		- Custom patches to be applied
+
+
+//------------------------------------------------------------------
+// checkout.sh - Examples for checkout script
+//------------------------------------------------------------------
+
+// To checkout all projects
+
+	checkout.sh
+
+// Checkout specific project
+
+	checkout.sh libpng
+	
+// Chcekout specific project version
+
+	checkout.sh poco:1300
+	
+// Multiple
+
+	checkout.sh libpng,ffmpeg,poco:1300
+	
+	

@@ -1,0 +1,2 @@
+sqlite targz sqlite-3.6.23 http://www.sqlite.org/sqlite-amalgamation-3.6.23.tar.gz
+

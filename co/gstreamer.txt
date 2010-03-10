@@ -1,0 +1,14 @@
+gstreamer/common git * git://anongit.freedesktop.org/gstreamer/common
+
+gstreamer/gstreamer git * git://anongit.freedesktop.org/gstreamer/gstreamer
+
+gstreamer/gst-ffmpeg git * git://anongit.freedesktop.org/gstreamer/gst-ffmpeg
+
+gstreamer/gst-plugins-good git * git://anongit.freedesktop.org/gstreamer/gst-plugins-good
+
+gstreamer/gst-plugins-gl git * git://anongit.freedesktop.org/gstreamer/gst-plugins-gl
+
+gstreamer/gst-rtsp-server git * git://anongit.freedesktop.org/gstreamer/gst-rtsp-server
+
+gstreamer/gst-template git * git://anongit.freedesktop.org/gstreamer/gst-template
+

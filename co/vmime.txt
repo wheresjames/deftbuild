@@ -1,0 +1,2 @@
+vmime svn * https://vmime.svn.sourceforge.net/svnroot/vmime
+
