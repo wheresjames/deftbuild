@@ -1,4 +1,27 @@
 
+//------------------------------------------------------------------
+// To use
+//------------------------------------------------------------------
+
+// To get started, do something like the following
+
+mkdir buildroot
+cd buildroot
+git clone git://github.com/wheresjames/deftbuild.git
+cd deftbuild
+./checkout.sh
+make
+
+// To update, do this from the deftbuild directory
+
+./update.sh
+make
+
+
+//------------------------------------------------------------------
+// Directory structure
+//------------------------------------------------------------------
+
 Following directory structure is assumed
 
 -- [any directory]
