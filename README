@@ -43,20 +43,37 @@ Following directory structure is assumed
 // checkout.sh - Examples for checkout script
 //------------------------------------------------------------------
 
+// To checkout default projects
+
+	./checkout.sh
+
 // To checkout all projects
 
-	checkout.sh
+	./checkout.sh -
 
 // Checkout specific project
 
-	checkout.sh libpng
+	./checkout.sh - libpng
 	
 // Chcekout specific project version
 
-	checkout.sh poco:1300
-	
-// Multiple
+	./checkout.sh - poco:1300
 
-	checkout.sh libpng,ffmpeg,poco:1300
+// Force checkout
+
+	./checkout.sh - tinyxml 1
+	
+// Multiple projects
+
+	./checkout.sh - libpng,ffmpeg,poco:1300
+	
+// Checkout group
+
+	./checkout.sh 3d
+	
+// Multiple groups
+
+	./checkout.sh 3d,scripting
+	
 	
 	
