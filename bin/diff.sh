@@ -10,15 +10,15 @@ DIR_ARC=${DIR_CURRENT}/../arc
 DIR_DIF=${DIR_CURRENT}/../dif
 
 #Get archive name
-# date +%G%m%d%H%M%S
+# date +%G%m%d-%H%M%S
 if [ $1 ]; then
 	if [ $1 != "-" ]; then
 		ARCHNAME=$1
 	else
-		ARCHNAME=`date +%G%m%d%H%M%S`
+		ARCHNAME=`date +%G%m%d-%H%M%S`
 	fi
 else
-	ARCHNAME=`date +%G%m%d%H%M%S`
+	ARCHNAME=`date +%G%m%d-%H%M%S`
 fi
 
 echo "Creating Diff : ${ARCHNAME}"
@@ -85,7 +85,7 @@ do
 					REVN=${FVERS}			
 				fi
 
-				if [ -n "${PROJ}" ]; then
+				if [ -n "${PROJ}" ] && [ -n ${REPO} ] && [ "${PROJ}" != "#" ]; then
 	
 					# Switch to lib root
 					cd ${DIR_LIB}
@@ -101,42 +101,42 @@ do
 						# Subversion
 						if [ "${REPO}" == "svn" ]; then	
 		
-							FILE="${ARCHPATH}/${PROJ}.svn"
-				
 							cd ${LIBPATH}
 							CVER=`svnversion`
-#							svnversion > "${FILE}.ver"
-							svn diff > "${FILE}.${CVER}.diff"
+							svn diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.svn.diff"
 	
 						fi
 	
 						# CVS
 						if [ "${REPO}" == "cvs" ]; then	
-		
-							FILE="${ARCHPATH}/${PROJ}-${REVN}.cvs"
-							
+					
+							# +++ Ok, didn't find an obvious way to get CVS versions.
+							#     So I'm going to just tar for now.
+							CVER="---"
+
+							FILE="${ARCHPATH}/${PROJ}.${CVER}.tar.bz2"
+							tar -cf - ${PROJ} | bzip2 -c > ${FILE}
+
+							# Save the diff anyway
 							cd ${LIBPATH}
-							cvs -Q diff > "${FILE}.diff"
-	
+							cvs -Q diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.cvs.diff"
 						fi
 	
 						# git
 						if [ "${REPO}" == "git" ]; then	
 		
-							FILE="${ARCHPATH}/${PROJ}-${REVN}.git"
-							
 							cd ${LIBPATH}
-							git diff > "${FILE}.diff"
-	
+							CVER=`git rev-parse --verify HEAD`
+							git diff > "${ARCHPATH}/${PROJ}.${CVER}.git.diff"
+
 						fi
 	
 						# targz
 						if [ "${REPO}" == "targz" ]; then	
 
 							# Download and extract the file
-							FILE="${ARCHPATH}/${PROJ}-${REVN}.tar.gz"
-
-#							tar -cf - ${PROJ} | gzip -c > ${FILE}
+							FILE="${ARCHPATH}/${PROJ}.${REVN}.tar.gz"
+							tar -cf - ${PROJ} | gzip -c > ${FILE}
 
 						fi
 
@@ -145,8 +145,16 @@ do
 
 							# Download and extract the file
 							FILE="${ARCHPATH}/${PROJ}-${REVN}.tar.bz2"
-							
-#							tar -cf - ${PROJ} | bzip2 -c > ${FILE}
+							tar -cf - ${PROJ} | bzip2 -c > ${FILE}
+
+						fi
+						
+						# zip
+						if [ "${REPO}" == "zip" ]; then	
+
+							# Download and extract the file
+							FILE="${ARCHPATH}/${PROJ}-${REVN}.zip"
+							zip -q -r "${FILE}" "${PROJ}"
 
 						fi
 					fi

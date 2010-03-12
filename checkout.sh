@@ -1,18 +1,21 @@
 
 unset IFS
 DIR_CURRENT=$PWD
-DIR_CHO=${DIR_CURRENT}/co
+DIR_OSS=${DIR_CURRENT}/oss
 DIR_LIB=${DIR_CURRENT}/../lib3
 DIR_BIN=${DIR_CURRENT}/../bin
 DIR_DNL=${DIR_CURRENT}/../dnl
 DIR_UPL=${DIR_CURRENT}/../upl
+
+# Hmmmm...
+#SVN_OPTIONS=--trust-server-cert --non-interactive
 
 # Get directory roots
 if [ $1 ]; then
 	if [ $1 != "-" ]; then
 		IFS=","; DIRLIST=($1); unset IFS
 	else
-		cd ${DIR_CHO}
+		cd ${DIR_OSS}
 		for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
 	fi
 else
@@ -38,7 +41,7 @@ do
 		IFS=","; FILELIST=($2); unset IFS
 	else	
 		FILELIST=
-		for i in $(find "${DIR_CHO}/${DR}" -maxdepth 1 -type f); do FILELIST="${FILELIST} ${i##*/}"; done
+		for i in $(find "${DIR_OSS}/${DR}" -maxdepth 1 -type f); do FILELIST="${FILELIST} ${i##*/}"; done
 	fi
 
 	for CF in ${FILELIST[@]} 
@@ -47,7 +50,7 @@ do
 		CF=${CF%.*}
 		FNAME=${CF%:*}
 		FVERS=${CF#*:}
-		FULL="${DIR_CHO}/${DR}/${FNAME}.txt"
+		FULL="${DIR_OSS}/${DR}/${FNAME}.repo"
 
 		if [ -f ${FULL} ]; then
 
@@ -60,6 +63,8 @@ do
 			do
 				STR=${LINE}
 				PROJ=${STR%% *}
+				
+				
 				STR=${STR#* }
 				REPO=${STR%% *}
 				STR=${STR#* }
@@ -72,7 +77,7 @@ do
 					REVN=${FVERS}			
 				fi
 
-				if [ -n "${PROJ}" ]; then
+				if [ -n "${PROJ}" ] && [ -n ${REPO} ] && [ "${PROJ}" != "#" ]; then
 	
 					# Switch to lib root
 					cd ${DIR_LIB}
@@ -88,20 +93,20 @@ do
 		
 					if [ -d ${LIBPATH} ]; then 
 
-						echo "  .  Ignoring ${PROJ} : ${REVN}"
+						echo "  .  Ignoring ${PROJ} : ${REPO} : ${REVN}"
 		
 					else
 		
 						# Let the use know what's going on
-						echo " *** Checkout ${PROJ} : ${REVN}"
+						echo " *** Checkout ${PROJ} : ${REPO} : ${REVN}"
 
 						# Subversion
 						if [ "${REPO}" == "svn" ]; then	
 			
 							if [ "${REVN}" != "*" ]; then
-								svn co -q -r ${REVN} "${LINK}" "${LIBPATH}"
+								svn ${SVN_OPTIONS} co -q -r ${REVN} "${LINK}" "${LIBPATH}"
 							else
-								svn co -q "${LINK}" "${LIBPATH}"
+								svn ${SVN_OPTIONS} co -q "${LINK}" "${LIBPATH}"
 							fi
 		
 						fi
@@ -176,6 +181,29 @@ do
 							else			
 								cd "${PROJ}"
 								bunzip2 -c ${FILE} | tar xf -
+							fi
+		
+						fi
+						
+						# zip
+						if [ "${REPO}" == "zip" ]; then	
+
+							# ensure download directory
+							if [ ! -d ${DIR_DNL} ]; then
+								mkdir -p ${DIR_DNL}
+							fi
+
+							# Download and extract the file
+							FILE="${DIR_DNL}/${PROJ}.zip"
+							[ -f ${FILE} ] || wget -O "${FILE}" "${LINK}"
+			
+							if [ "${REVN}" != "*" ]; then
+								unzip -q ${FILE}
+								mv "${REVN}" "${PROJ}"
+							else
+								mkdir "${PROJ}"
+								cd "${PROJ}"
+								unzip -q ${FILE}
 							fi
 		
 						fi

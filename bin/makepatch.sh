@@ -6,9 +6,8 @@ DIR_LIB=${DIR_CURRENT}/../lib3
 DIR_BIN=${DIR_CURRENT}/../bin
 DIR_DNL=${DIR_CURRENT}/../dnl
 DIR_UPL=${DIR_CURRENT}/../upl
-
-# Hmmmm...
-#SVN_OPTIONS=--trust-server-cert --non-interactive
+DIR_ARC=${DIR_CURRENT}/../arc
+DIR_DIF=${DIR_CURRENT}/../dif
 
 # Get directory roots
 if [ $1 ]; then
@@ -19,20 +18,12 @@ if [ $1 ]; then
 		for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
 	fi
 else
-	DIRLIST="core"
+#	DIRLIST="core"
+	cd ${DIR_OSS}
+	for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
 fi
 
 echo "Searching in : ${DIRLIST[@]}"
-
-FRESHCOPY=0
-if [ $3 ]; then
-	FRESHCOPY=1
-fi
-
-# Ensure lib directory
-if [ ! -d ${DIR_LIB} ]; then
-	mkdir -p ${DIR_LIB}
-fi
 
 for DR in ${DIRLIST[@]} 
 do
@@ -51,6 +42,7 @@ do
 		FNAME=${CF%:*}
 		FVERS=${CF#*:}
 		FULL="${DIR_OSS}/${DR}/${FNAME}.repo"
+		PATCH="${DIR_OSS}/${DR}/${FNAME}.patch"
 
 		if [ -f ${FULL} ]; then
 
@@ -75,70 +67,43 @@ do
 					REVN=${FVERS}			
 				fi
 
-				if [ -n "${PROJ}" ]; then
+				if [ -n "${PROJ}" ] && [ -n ${REPO} ] && [ "${PROJ}" != "#" ]; then
 	
 					# Switch to lib root
 					cd ${DIR_LIB}
 	
 					# Where will the files go?
 					LIBPATH=${DIR_LIB}/${PROJ}
-	
-					if [ ${FRESHCOPY} -gt 0 ]; then	
-						if [ -s ${LIBPATH} ]; then
-							rm -Rf "${LIBPATH}"
-						fi
-					fi
-		
-					if [ -d ${LIBPATH} ]; then 
 
-						echo "  .  Ignoring ${PROJ} : ${REPO} : ${REVN}"
+					# Only update if it already exists
+					if [ -d ${LIBPATH} ]; then 
 		
-					else
-		
-						# Let the use know what's going on
-						echo " *** Checkout ${PROJ} : ${REPO} : ${REVN}"
+						echo " *** Diffing : ${PATCH}"
 
 						# Subversion
 						if [ "${REPO}" == "svn" ]; then	
-			
-							if [ "${REVN}" != "*" ]; then
-								svn ${SVN_OPTIONS} co -q -r ${REVN} "${LINK}" "${LIBPATH}"
-							else
-								svn ${SVN_OPTIONS} co -q "${LINK}" "${LIBPATH}"
-							fi
 		
+							cd ${LIBPATH}
+							svn diff > "${PATCH}"
+	
 						fi
-		
+	
 						# CVS
 						if [ "${REPO}" == "cvs" ]; then	
-			
-							MODL=${STR%% *}
-							STR=${STR#* }
-							PROTO=${STR%% *}
-							STR=${STR#* }
-							if [ ${PROTO} == ${MODL} ]; then
-								PROTO=
-							fi
-						
-							if [ "${REVN}" != "*" ]; then
-								cvs -Q -z3 -d "${PROTO}${LINK}" co -r ${REVN} -d "${PROJ}" "${MODL}"
-							else
-								cvs -Q -z3 -d "${PROTO}${LINK}" co -d "${PROJ}" "${MODL}"
-							fi
-		
+					
+							# Save the diff anyway
+							cd ${LIBPATH}
+							cvs -Q diff > "${PATCH}"
 						fi
-		
+	
 						# git
 						if [ "${REPO}" == "git" ]; then	
-			
-							git clone "${LINK}" "${PROJ}"
-							if [ "${REVN}" != "*" ]; then
-								cd "${PROJ}"
-								git checkout "${REVN}"
-							fi
 		
+							cd ${LIBPATH}
+							git diff > "${PATCH}"
+
 						fi
-		
+						
 						# targz
 						if [ "${REPO}" == "targz" ]; then	
 
@@ -151,13 +116,17 @@ do
 							FILE="${DIR_DNL}/${PROJ}.tar.gz"
 							[ -f ${FILE} ] || wget -O "${FILE}" "${LINK}"
 			
+							cd ${DIR_DNL}
 							if [ "${REVN}" != "*" ]; then
 								gunzip -c ${FILE} | tar xf -
 								mv "${REVN}" "${PROJ}"
 							else
 								cd "${PROJ}"
 								gunzip -c ${FILE} | tar xf -
-							fi			
+							fi		
+							
+							diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+							rm -Rf "${DIR_DNL}/${PROJ}/"							
 		
 						fi
 		
@@ -173,6 +142,7 @@ do
 							FILE="${DIR_DNL}/${PROJ}.tar.bz2"
 							[ -f ${FILE} ] || wget -O "${FILE}" "${LINK}"
 			
+							cd ${DIR_DNL}
 							if [ "${REVN}" != "*" ]; then
 								bunzip2 -c ${FILE} | tar xf -
 								mv "${REVN}" "${PROJ}"
@@ -180,9 +150,39 @@ do
 								cd "${PROJ}"
 								bunzip2 -c ${FILE} | tar xf -
 							fi
+
+							diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+							rm -Rf "${DIR_DNL}/${PROJ}/"							
 		
 						fi
-					fi		
+						
+						# zip
+						if [ "${REPO}" == "zip" ]; then	
+
+							# ensure download directory
+							if [ ! -d ${DIR_DNL} ]; then
+								mkdir -p ${DIR_DNL}
+							fi
+
+							# Download and extract the file
+							FILE="${DIR_DNL}/${PROJ}.zip"
+							[ -f ${FILE} ] || wget -O "${FILE}" "${LINK}"
+			
+							cd ${DIR_DNL}
+							if [ "${REVN}" != "*" ]; then
+								unzip -q ${FILE}
+								mv "${REVN}" "${PROJ}"
+							else
+								mkdir "${PROJ}"
+								cd "${PROJ}"
+								unzip -q ${FILE}
+							fi
+		
+							diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+							rm -Rf "${DIR_DNL}/${PROJ}/"							
+						fi
+						
+					fi
 				fi
 			done < ${FULL}		
 		fi

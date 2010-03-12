@@ -9,15 +9,15 @@ DIR_UPL=${DIR_CURRENT}/../upl
 DIR_ARC=${DIR_CURRENT}/../arc
 
 #Get archive name
-# date +%G%m%d%H%M%S
+# date +%G%m%d-%H%M%S
 if [ $1 ]; then
 	if [ $1 != "-" ]; then
 		ARCHNAME=$1
 	else
-		ARCHNAME=`date +%G%m%d%H%M%S`
+		ARCHNAME=`date +%G%m%d-%H%M%S`
 	fi
 else
-	ARCHNAME=`date +%G%m%d%H%M%S`
+	ARCHNAME=`date +%G%m%d-%H%M%S`
 fi
 
 echo "Creating Archive : ${ARCHNAME}"

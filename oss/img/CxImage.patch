@@ -1,0 +1,38 @@
+Index: ximacfg.h
+===================================================================
+RCS file: /cvsroot/cximage/CxImage/ximacfg.h,v
+retrieving revision 1.1.1.1
+diff -r1.1.1.1 ximacfg.h
+26c26
+< #define CXIMAGE_SUPPORT_TIF 1
+---
+> #define CXIMAGE_SUPPORT_TIF 0
+34,38c34,38
+< #define CXIMAGE_SUPPORT_JP2 1
+< #define CXIMAGE_SUPPORT_JPC 1
+< #define CXIMAGE_SUPPORT_PGX 1
+< #define CXIMAGE_SUPPORT_PNM 1
+< #define CXIMAGE_SUPPORT_RAS 1
+---
+> #define CXIMAGE_SUPPORT_JP2 0
+> #define CXIMAGE_SUPPORT_JPC 0
+> #define CXIMAGE_SUPPORT_PGX 0
+> #define CXIMAGE_SUPPORT_PNM 0
+> #define CXIMAGE_SUPPORT_RAS 0
+Index: ximapng.cpp
+===================================================================
+RCS file: /cvsroot/cximage/CxImage/ximapng.cpp,v
+retrieving revision 1.2
+diff -r1.2 ximapng.cpp
+145c145
+< 				pal[ip].rgbReserved=info_ptr->trans[ip];
+---
+> 				pal[ip].rgbReserved=info_ptr->trans_alpha[ip];
+358c358
+< 			info_ptr->trans = trans;
+---
+> 			info_ptr->trans_alpha = trans;
+388c388
+< 			info_ptr->trans = trans;
+---
+> 			info_ptr->trans_alpha = trans;

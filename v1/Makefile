@@ -1,0 +1,7 @@
+BUILDDIRS := dep
+
+.PHONY all: $(BUILDDIRS)
+
+.PHONY $(BUILDDIRS) :
+	$(MAKE) -C $@ $(BUILDTYPE)
+
