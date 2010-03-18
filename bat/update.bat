@@ -1,12 +1,6 @@
 REM echo %1 %2
 
 REM ----------------------------------------------------------------
-REM Where the diff should go
-REM ----------------------------------------------------------------
-set ARCHDIR=!DIR_DIF!\!LTIMESTAMP!
-IF NOT EXIST !ARCHDIR! md !ARCHDIR!
-
-REM ----------------------------------------------------------------
 REM For each project in the file
 REM ----------------------------------------------------------------
 FOR /f "tokens=1-8 delims= " %%a IN (%1) DO (
@@ -15,17 +9,14 @@ IF NOT %%a==# (
 
 IF EXIST %2 (
 
-echo *** Diffing %%a : %%c : %2
-
-cd "!DIR_LIB!"
+echo *** Updating %%a : %%b : %2
 
 REM ----------------------------------------------------------------
 REM git
 REM ----------------------------------------------------------------
 IF %%b==git (
 cd %2
-FOR /f "delims=" %%a in ('git rev-parse --verify HEAD') do set CVER=%%a
-git diff > "!ARCHDIR!/%%a.!CVER!.git.diff"
+git pull
 )
 
 REM ----------------------------------------------------------------
@@ -33,48 +24,84 @@ REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
 cd %2
-FOR /f "delims=" %%a in ('svnversion') do set CVER=%%a
-set CVER=!CVER:M=!
-svn diff > "!ARCHDIR!/%%a.!CVER!.svn.diff"
+svn update
 )
 
 REM ----------------------------------------------------------------
 REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
-
-set CVER="---"
-
-set FILE=!ARCHDIR!\%%a.tgz
-tar -czf "!FILE!" "%%a"
-
 cd %2
-cvs -Q diff > "!ARCHDIR!/%%a.!CVER!.cvs.diff"
-
+cvs update
 )
 
 REM ----------------------------------------------------------------
 REM targz
 REM ----------------------------------------------------------------
 IF %%b==targz (
-set FILE=!ARCHDIR!\%%a.tar.gz
-tar -cf - %%a | gzip -c > !FILE!
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
+
+set FILE=!DIR_DNL!\%%a.tar.gz
+IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
+
+IF EXIST !FILE! (
+
+rmdir /s /q "%%a"
+
+IF %%c==* (
+cd "%%a"
+!DIR_WBIN!\gzip -c -d !FILE! | !DIR_WBIN!\tar xf -
+) ELSE (
+!DIR_WBIN!\gzip -c -d !FILE! | !DIR_WBIN!\tar xf -
+rename "%%c" "%%a"
+)
+)
 )
 
 REM ----------------------------------------------------------------
 REM tarbz2
 REM ----------------------------------------------------------------
 IF %%b==tarbz2 (
-set FILE=!ARCHDIR!\%%a.tar.bz2
-tar -cf - %%a | bzip2 -c > !FILE!
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
+
+set FILE=!DIR_DNL!\%%a.tar.bz2
+IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
+
+IF EXIST !FILE! (
+
+rmdir /s /q "%%a"
+
+IF %%c==* (
+cd "%%a"
+!DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -
+) ELSE (
+!DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -
+rename "%%c" "%%a"
+)
+)
 )
 
 REM ----------------------------------------------------------------
 REM zip
 REM ----------------------------------------------------------------
 IF %%b==zip (
-set FILE=!ARCHDIR!\%%a.zip
-zip -q -r "!FILE!" "%%a"
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
+
+set FILE=!DIR_DNL!\%%a.zip
+IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
+
+IF EXIST !FILE! (
+
+rmdir /s /q "%%a"
+
+IF %%c==* (
+cd "%%a"
+!DIR_WBIN!\unzip -q !FILE!
+) ELSE (
+!DIR_WBIN!\unzip -q !FILE!
+rename "%%c" "%%a"
+)
+)
 )
 
 

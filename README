@@ -1,5 +1,36 @@
 
 //------------------------------------------------------------------
+// Required
+//------------------------------------------------------------------
+
+Command line versions of svn, cvs, git, bunzip2, gunzip, unzip
+
+//------------------------------------------------------------------
+// Platform
+//------------------------------------------------------------------
+
+The commands below are simply 'deftbuild' you should substitute the
+following...
+
+Windows		- deftbuild or deftbuild.bat
+Linux		- ./deftbuild.sh
+Mac			- ./deftbuild.sh
+
+deftbuild has the following basic command line structure
+
+deftbuild [command] [groups] [projects] [ext]
+
+command = build, checkout, compile, diff, archive, makepatch, applypatch
+	
+	build		- checkout, applypatch, compile
+	checkout	- Checks out the specified projects
+	compile		- Compiles and links the specified projects
+	diff		- Creates diffs of the working directories
+	archive		- Creates arechives of the working directories
+	makepatch	- Makes patches of the working directories
+	applypatch	- applies patches made with makepatch to the working directories
+
+//------------------------------------------------------------------
 // To use
 //------------------------------------------------------------------
 
@@ -9,14 +40,12 @@ mkdir buildroot
 cd buildroot
 git clone git://github.com/wheresjames/deftbuild.git
 cd deftbuild
-./checkout.sh
-make
+deftbuild build core -
 
 // To update, do this from the deftbuild directory
 
-./update.sh
+deftbuild update
 make
-
 
 //------------------------------------------------------------------
 // Directory structure
@@ -35,45 +64,43 @@ Following directory structure is assumed
 	+---[dnl]			- Downloaded archive files
 	|
 	+---[arc]			- Archives
-	|
-	+---[patches]		- Custom patches to be applied
 
 
 //------------------------------------------------------------------
-// checkout.sh - Examples for checkout script
+// checkout - Examples for checkout script
 //------------------------------------------------------------------
 
 // To checkout default projects
 
-	./checkout.sh
+	deftbuild checkout
 
 // To checkout all projects
 
-	./checkout.sh -
+	deftbuild checkout -
 
 // Checkout specific project
 
-	./checkout.sh - libpng
+	deftbuild checkout - libpng
 	
 // Chcekout specific project version
 
-	./checkout.sh - poco:1300
+	deftbuild checkout - poco:1300
 
 // Force checkout
 
-	./checkout.sh - tinyxml 1
+	deftbuild checkout - tinyxml 1
 	
 // Multiple projects
 
-	./checkout.sh - libpng,ffmpeg,poco:1300
+	deftbuild checkout - libpng,ffmpeg,poco:1300
 	
 // Checkout group
 
-	./checkout.sh 3d
+	deftbuild checkout 3d
 	
 // Multiple groups
 
-	./checkout.sh 3d,scripting
+	deftbuild checkout 3d,scripting
 	
 	
 	

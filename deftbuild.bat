@@ -21,9 +21,10 @@ FOR /F "tokens=1-8" %%a in ("%*") do (
 set CMD=%%a
 set GRP=%%b
 set PRJ=%%c
-set LTIMESTAMP=%%d
+set EXT=%%d
 )
 
+set LTIMESTAMP=!EXT!
 IF /I !LTIMESTAMP! EQU 0 (
 CALL !DIR_LBAT!\timestamp.bat
 )
@@ -35,6 +36,14 @@ IF /I !PRJ! EQU 0 SET /P PRJ=Which Projects?
 IF !CMD!==- set CMD=
 IF !GRP!==- set GRP=
 IF !PRJ!==- set PRJ=
+
+IF /I !CMD! EQU 0 (
+echo CMD : !CMD!
+echo GRP : !GRP!
+echo PRJ : !PRJ!
+echo EXT : !EXT!
+echo LTIMESTAMP : !LTIMESTAMP!
+)
 
 REM ----------------------------------------------------------------
 REM Find group files if not specified
@@ -85,6 +94,7 @@ REM ----------------------------------------------------------------
 FOR %%p in (!UPRJ!) do (
 
 set REPOPATH=!DIR_LPRJ!\%%g\%%p.!EXT_REPO!
+set MAKEPATH=!DIR_LPRJ!\%%g\%%p.!EXT_REPO!
 set LIBPATH=!DIR_LIB!\%%p
 
 IF EXIST !REPOPATH! (
@@ -94,11 +104,29 @@ echo %%g : %%p
 ) ELSE (
 
 REM ----------------------------------------------------------------
+REM Build
+REM ----------------------------------------------------------------
+IF !CMD!==build set CMD=bld
+IF !CMD!==bld (
+call %DIR_LBAT%\checkout-prj.bat !REPOPATH! !LIBPATH!
+call %DIR_LBAT%\applypatch.bat !REPOPATH! !LIBPATH! !EXT!
+call %DIR_LBAT%\compile.bat !MAKEPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
 REM Checkout
 REM ----------------------------------------------------------------
 IF !CMD!==checkout set CMD=co
 IF !CMD!==co (
 call %DIR_LBAT%\checkout-prj.bat !REPOPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
+REM update
+REM ----------------------------------------------------------------
+IF !CMD!==update set CMD=up
+IF !CMD!==up (
+call %DIR_LBAT%\update.bat !MAKEPATH! !LIBPATH!
 )
 
 REM ----------------------------------------------------------------
@@ -115,6 +143,30 @@ REM ----------------------------------------------------------------
 IF !CMD!==diff set CMD=dif
 IF !CMD!==dif (
 call %DIR_LBAT%\diff.bat !REPOPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
+REM makepatch
+REM ----------------------------------------------------------------
+IF !CMD!==makepatch set CMD=mp
+IF !CMD!==mp (
+call %DIR_LBAT%\makepatch.bat !REPOPATH! !LIBPATH! !EXT!
+)
+
+REM ----------------------------------------------------------------
+REM applypatch
+REM ----------------------------------------------------------------
+IF !CMD!==applypatch set CMD=ap
+IF !CMD!==ap (
+call %DIR_LBAT%\applypatch.bat !REPOPATH! !LIBPATH! !EXT!
+)
+
+REM ----------------------------------------------------------------
+REM compile
+REM ----------------------------------------------------------------
+IF !CMD!==applypatch set CMD=ap
+IF !CMD!==ap (
+call %DIR_LBAT%\compile.bat !MAKEPATH! !LIBPATH!
 )
 
 )

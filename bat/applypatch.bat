@@ -1,9 +1,12 @@
-REM echo %1 %2
 
 REM ----------------------------------------------------------------
-REM Where the diff should go
+REM Where the patches should go
 REM ----------------------------------------------------------------
-set ARCHDIR=!DIR_DIF!\!LTIMESTAMP!
+
+set SPATCH=%3
+IF /I !SPATCH! EQU 0 SET SPATCH=default
+
+set ARCHDIR=!DIR_LPAT!\!SPATCH!
 IF NOT EXIST !ARCHDIR! md !ARCHDIR!
 
 REM ----------------------------------------------------------------
@@ -15,7 +18,7 @@ IF NOT %%a==# (
 
 IF EXIST %2 (
 
-echo *** Diffing %%a : %%c : %2
+echo *** Applying patch for %%a
 
 cd "!DIR_LIB!"
 
@@ -24,8 +27,7 @@ REM git
 REM ----------------------------------------------------------------
 IF %%b==git (
 cd %2
-FOR /f "delims=" %%a in ('git rev-parse --verify HEAD') do set CVER=%%a
-git diff > "!ARCHDIR!/%%a.!CVER!.git.diff"
+git apply "!ARCHDIR!/%%a.git.diff"
 )
 
 REM ----------------------------------------------------------------
@@ -33,9 +35,7 @@ REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
 cd %2
-FOR /f "delims=" %%a in ('svnversion') do set CVER=%%a
-set CVER=!CVER:M=!
-svn diff > "!ARCHDIR!/%%a.!CVER!.svn.diff"
+patch -p0 < "!ARCHDIR!/%%a.svn.diff"
 )
 
 REM ----------------------------------------------------------------
@@ -43,13 +43,8 @@ REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
 
-set CVER="---"
-
-set FILE=!ARCHDIR!\%%a.tgz
-tar -czf "!FILE!" "%%a"
-
 cd %2
-cvs -Q diff > "!ARCHDIR!/%%a.!CVER!.cvs.diff"
+patch -p0 < "!ARCHDIR!/%%a.cvs.diff"
 
 )
 
@@ -57,24 +52,30 @@ REM ----------------------------------------------------------------
 REM targz
 REM ----------------------------------------------------------------
 IF %%b==targz (
-set FILE=!ARCHDIR!\%%a.tar.gz
-tar -cf - %%a | gzip -c > !FILE!
+
+cd %2
+patch -p0 < "!ARCHDIR!/%%a.targz.diff"
+
 )
 
 REM ----------------------------------------------------------------
 REM tarbz2
 REM ----------------------------------------------------------------
 IF %%b==tarbz2 (
-set FILE=!ARCHDIR!\%%a.tar.bz2
-tar -cf - %%a | bzip2 -c > !FILE!
+
+cd %2
+patch -p0 < "!ARCHDIR!/%%a.tarbz2.diff"
+
 )
 
 REM ----------------------------------------------------------------
 REM zip
 REM ----------------------------------------------------------------
 IF %%b==zip (
-set FILE=!ARCHDIR!\%%a.zip
-zip -q -r "!FILE!" "%%a"
+
+cd %2
+patch -p0 < "!ARCHDIR!/%%a.zip.diff"
+
 )
 
 
