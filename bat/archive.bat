@@ -1,6 +1,12 @@
 REM echo %1 %2
 
 REM ----------------------------------------------------------------
+REM Where the archive should go
+REM ----------------------------------------------------------------
+set ARCHDIR=!DIR_ARC!\!LTIMESTAMP!
+IF NOT EXIST !ARCHDIR! md !ARCHDIR!
+
+REM ----------------------------------------------------------------
 REM For each project in the file
 REM ----------------------------------------------------------------
 FOR /f "tokens=1-8 delims= " %%a IN (%1) DO (
@@ -11,11 +17,9 @@ IF EXIST %2 (
 
 echo *** Archiving : %2
 
-IF NOT EXIST !DIR_ARC! md !DIR_ARC!
-
 cd "!DIR_LIB!"
 
-set FILE=!DIR_ARC!\%%a.tgz
+set FILE=!ARCHDIR!\%%a.tgz
 tar -czf "!FILE!" "%%a"
 
 )

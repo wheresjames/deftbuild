@@ -21,6 +21,11 @@ FOR /F "tokens=1-8" %%a in ("%*") do (
 set CMD=%%a
 set GRP=%%b
 set PRJ=%%c
+set LTIMESTAMP=%%d
+)
+
+IF /I !LTIMESTAMP! EQU 0 (
+CALL !DIR_LBAT!\timestamp.bat
 )
 
 IF /I !CMD! EQU 0 SET /P CMD=Which Command? 
@@ -85,7 +90,7 @@ set LIBPATH=!DIR_LIB!\%%p
 IF EXIST !REPOPATH! (
 
 IF /I !CMD! EQU 0 (
-echo !REPOPATH!
+echo %%g : %%p
 ) ELSE (
 
 REM ----------------------------------------------------------------
@@ -102,6 +107,14 @@ REM ----------------------------------------------------------------
 IF !CMD!==archive set CMD=arc
 IF !CMD!==arc (
 call %DIR_LBAT%\archive.bat !REPOPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
+REM diff
+REM ----------------------------------------------------------------
+IF !CMD!==diff set CMD=dif
+IF !CMD!==dif (
+call %DIR_LBAT%\diff.bat !REPOPATH! !LIBPATH!
 )
 
 )
