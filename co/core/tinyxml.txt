@@ -1,2 +1,0 @@
-tinyxml cvs * anonymous@tinyxml.cvs.sourceforge.net:/cvsroot/tinyxml tinyxml :pserver:
-

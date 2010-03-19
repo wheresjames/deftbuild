@@ -1,2 +1,0 @@
-libpng git * git://libpng.git.sourceforge.net/gitroot/libpng/libpng
-

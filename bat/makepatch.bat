@@ -58,7 +58,7 @@ set FILE=!DIR_DNL!\%%a.tar.gz
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
 cd !DIR_DNL!
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\gzip -c -d !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -81,7 +81,7 @@ set FILE=!DIR_DNL!\%%a.tar.bz2
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
 cd !DIR_DNL!
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -104,7 +104,7 @@ set FILE=!DIR_DNL!\%%a.zip
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
 cd !DIR_DNL!
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\unzip -q !FILE!
 ) ELSE (

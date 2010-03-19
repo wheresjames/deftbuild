@@ -1,2 +1,0 @@
-bullet svn * http://bullet.googlecode.com/svn/trunk
-

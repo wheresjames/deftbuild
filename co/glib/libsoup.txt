@@ -1,2 +1,0 @@
-libsoup git * git://git.gnome.org/libsoup
-

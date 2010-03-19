@@ -1,2 +1,0 @@
-winglib git * git://github.com/wheresjames/winglib.git
-

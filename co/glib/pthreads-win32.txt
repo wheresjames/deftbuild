@@ -1,2 +1,0 @@
-pthreads-win32 cvs * anoncvs@sourceware.org:/cvs/pthreads-win32 pthreads :pserver:
-

@@ -48,7 +48,7 @@ IF EXIST !FILE! (
 
 rmdir /s /q "%%a"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\gzip -c -d !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -71,7 +71,7 @@ IF EXIST !FILE! (
 
 rmdir /s /q "%%a"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -94,7 +94,7 @@ IF EXIST !FILE! (
 
 rmdir /s /q "%%a"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\unzip -q !FILE!
 ) ELSE (

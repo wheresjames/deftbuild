@@ -1,2 +1,0 @@
-poco svn * https://poco.svn.sourceforge.net/svnroot/poco/poco/trunk
-

@@ -22,7 +22,7 @@ REM git
 REM ----------------------------------------------------------------
 IF %%b==git (
 git clone %%d %%a
-IF NOT %%c==* (
+IF NOT %%c==- (
 cd %2
 git checkout %%c
 )
@@ -32,7 +32,7 @@ REM ----------------------------------------------------------------
 REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
-IF %%c==* (
+IF %%c==- (
 svn co -q "%%d" "%2"
 ) ELSE (
 svn co -q -r %%c "%%d" "%2"
@@ -43,7 +43,7 @@ REM ----------------------------------------------------------------
 REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
-IF %%c==* (
+IF %%c==- (
 cvs -Q -z3 -d "%%f%%d" co -d %%a "%%e"
 ) ELSE (
 cvs -Q -z3 -d "%%f%%d" co -r %%c -d %%a "%%e"
@@ -59,7 +59,7 @@ IF NOT EXIST !DIR_DNL! md !DIR_DNL!
 set FILE=!DIR_DNL!\%%a.tar.gz
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\gzip -c -d !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -78,7 +78,7 @@ IF NOT EXIST !DIR_DNL! md !DIR_DNL!
 set FILE=!DIR_DNL!\%%a.tar.bz2
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -
 ) ELSE (
@@ -97,7 +97,7 @@ IF NOT EXIST !DIR_DNL! md !DIR_DNL!
 set FILE=!DIR_DNL!\%%a.zip
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
-IF %%c==* (
+IF %%c==- (
 cd "%%a"
 !DIR_WBIN!\unzip -q !FILE!
 ) ELSE (

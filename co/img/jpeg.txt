@@ -1,2 +1,0 @@
-jpeg targz jpeg-8a http://www.ijg.org/files/jpegsrc.v8a.tar.gz
-

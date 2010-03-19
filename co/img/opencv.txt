@@ -1,2 +1,0 @@
-opencv tarbz2 OpenCV-2.0.0 http://downloads.sourceforge.net/project/opencvlibrary/opencv-unix/2.0/OpenCV-2.0.0.tar.bz2
-

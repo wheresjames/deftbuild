@@ -1,166 +1,70 @@
 
-unset IFS
-DIR_CURRENT=$PWD
-DIR_OSS=${DIR_CURRENT}/oss
-DIR_LIB=${DIR_CURRENT}/../lib3
-DIR_BIN=${DIR_CURRENT}/../bin
-DIR_DNL=${DIR_CURRENT}/../dnl
-DIR_UPL=${DIR_CURRENT}/../upl
-DIR_ARC=${DIR_CURRENT}/../arc
-DIR_DIF=${DIR_CURRENT}/../dif
+# Only update if it already exists
+if [ ! -d ${LIBPATH} ]; then 
 
-#Get archive name
-# date +%G%m%d-%H%M%S
-if [ $1 ]; then
-	if [ $1 != "-" ]; then
-		ARCHNAME=$1
-	else
-		ARCHNAME=`date +%G%m%d-%H%M%S`
-	fi
-else
-	ARCHNAME=`date +%G%m%d-%H%M%S`
+	return
+	
 fi
 
-echo "Creating Diff : ${ARCHNAME}"
+echo " *** Diffing ${PROJ} : ${REPO} : ${REVN}"
 
-ARCHPATH="${DIR_DIF}/${ARCHNAME}"
-if [ ! -d ${ARCHPATH} ]; then
-	mkdir -p ${ARCHPATH}
+# Subversion
+if [ "${REPO}" == "svn" ]; then	
+
+	cd ${LIBPATH}
+	CVER=`svnversion`
+	svn diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.svn.diff"
+
 fi
 
-# Get directory roots
-if [ $2 ]; then
-	if [ $2 != "-" ]; then
-		IFS=","; DIRLIST=($2); unset IFS
-	else
-		cd ${DIR_OSS}
-		for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
-	fi
-else
-#	DIRLIST="core"
-	cd ${DIR_OSS}
-	for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
+# CVS
+if [ "${REPO}" == "cvs" ]; then	
+
+	# +++ Ok, didn't find an obvious way to get CVS versions.
+	#     So I'm going to just tar for now.
+	CVER="---"
+
+	FILE="${ARCHPATH}/${PROJ}.${CVER}.tar.bz2"
+	tar -cf - ${PROJ} | bzip2 -c > ${FILE}
+
+	# Save the diff anyway
+	cd ${LIBPATH}
+	cvs -Q diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.cvs.diff"
 fi
 
-echo "Searching in : ${DIRLIST[@]}"
+# git
+if [ "${REPO}" == "git" ]; then	
 
-for DR in ${DIRLIST[@]} 
-do
+	cd ${LIBPATH}
+	CVER=`git rev-parse --verify HEAD`
+	git diff > "${ARCHPATH}/${PROJ}.${CVER}.git.diff"
 
-	if [ $3 ]; then
-		IFS=","; FILELIST=($3); unset IFS
-	else	
-		FILELIST=
-		for i in $(find "${DIR_OSS}/${DR}" -maxdepth 1 -type f); do FILELIST="${FILELIST} ${i##*/}"; done
-	fi
+fi
 
-	for CF in ${FILELIST[@]} 
-	do
+# targz
+if [ "${REPO}" == "targz" ]; then	
 
-		CF=${CF%.*}
-		FNAME=${CF%:*}
-		FVERS=${CF#*:}
-		FULL="${DIR_OSS}/${DR}/${FNAME}.repo"
+	# Download and extract the file
+	FILE="${ARCHPATH}/${PROJ}.${REVN}.tar.gz"
+	tar -cf - ${PROJ} | gzip -c > ${FILE}
 
-		if [ -f ${FULL} ]; then
+fi
 
-			# bug???
-			if [ ${FNAME} == ${FVERS} ]; then
-				FVERS=
-			fi
+# tarbz2
+if [ "${REPO}" == "tarbz2" ]; then	
 
-			while read LINE
-			do
-				STR=${LINE}
-				PROJ=${STR%% *}
-				STR=${STR#* }
-				REPO=${STR%% *}
-				STR=${STR#* }
-				REVN=${STR%% *}
-				STR=${STR#* }
-				LINK=${STR%% *}
-				STR=${STR#* }
-		
-				if [ -n "${FVERS}" ]; then	
-					REVN=${FVERS}			
-				fi
+	# Download and extract the file
+	FILE="${ARCHPATH}/${PROJ}-${REVN}.tar.bz2"
+	tar -cf - ${PROJ} | bzip2 -c > ${FILE}
 
-				if [ -n "${PROJ}" ] && [ -n ${REPO} ] && [ "${PROJ}" != "#" ]; then
-	
-					# Switch to lib root
-					cd ${DIR_LIB}
-	
-					# Where will the files go?
-					LIBPATH=${DIR_LIB}/${PROJ}
+fi
 
-					# Only update if it already exists
-					if [ -d ${LIBPATH} ]; then 
-		
-						echo " *** Diffing ${PROJ} : ${REPO} : ${REVN}"
+# zip
+if [ "${REPO}" == "zip" ]; then	
 
-						# Subversion
-						if [ "${REPO}" == "svn" ]; then	
-		
-							cd ${LIBPATH}
-							CVER=`svnversion`
-							svn diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.svn.diff"
-	
-						fi
-	
-						# CVS
-						if [ "${REPO}" == "cvs" ]; then	
-					
-							# +++ Ok, didn't find an obvious way to get CVS versions.
-							#     So I'm going to just tar for now.
-							CVER="---"
+	# Download and extract the file
+	FILE="${ARCHPATH}/${PROJ}-${REVN}.zip"
+	zip -q -r "${FILE}" "${PROJ}"
 
-							FILE="${ARCHPATH}/${PROJ}.${CVER}.tar.bz2"
-							tar -cf - ${PROJ} | bzip2 -c > ${FILE}
-
-							# Save the diff anyway
-							cd ${LIBPATH}
-							cvs -Q diff > "${ARCHPATH}/${PROJ}.${CVER%*M}.cvs.diff"
-						fi
-	
-						# git
-						if [ "${REPO}" == "git" ]; then	
-		
-							cd ${LIBPATH}
-							CVER=`git rev-parse --verify HEAD`
-							git diff > "${ARCHPATH}/${PROJ}.${CVER}.git.diff"
-
-						fi
-	
-						# targz
-						if [ "${REPO}" == "targz" ]; then	
-
-							# Download and extract the file
-							FILE="${ARCHPATH}/${PROJ}.${REVN}.tar.gz"
-							tar -cf - ${PROJ} | gzip -c > ${FILE}
-
-						fi
-
-						# tarbz2
-						if [ "${REPO}" == "tarbz2" ]; then	
-
-							# Download and extract the file
-							FILE="${ARCHPATH}/${PROJ}-${REVN}.tar.bz2"
-							tar -cf - ${PROJ} | bzip2 -c > ${FILE}
-
-						fi
-						
-						# zip
-						if [ "${REPO}" == "zip" ]; then	
-
-							# Download and extract the file
-							FILE="${ARCHPATH}/${PROJ}-${REVN}.zip"
-							zip -q -r "${FILE}" "${PROJ}"
-
-						fi
-					fi
-				fi
-			done < ${FULL}		
-		fi
-	done
-done
+fi
 
