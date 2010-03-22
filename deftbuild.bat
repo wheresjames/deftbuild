@@ -118,7 +118,7 @@ REM Checkout
 REM ----------------------------------------------------------------
 IF !CMD!==checkout set CMD=co
 IF !CMD!==co (
-call %DIR_LBAT%\checkout-prj.bat !REPOPATH! !LIBPATH!
+call %DIR_LBAT%\checkout.bat !REPOPATH! !LIBPATH!
 )
 
 REM ----------------------------------------------------------------
@@ -164,8 +164,7 @@ call %DIR_LBAT%\applypatch.bat !REPOPATH! !LIBPATH! !EXT!
 REM ----------------------------------------------------------------
 REM compile
 REM ----------------------------------------------------------------
-IF !CMD!==applypatch set CMD=ap
-IF !CMD!==ap (
+IF !CMD!==compile (
 call %DIR_LBAT%\compile.bat !MAKEPATH! !LIBPATH!
 )
 

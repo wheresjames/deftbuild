@@ -16,44 +16,43 @@ FOR /f "tokens=1-8 delims= " %%a IN (%1) DO (
 
 IF NOT %%a==# (
 
-IF EXIST %2 (
+set PRJDIR=!DIR_LIB!\%%a
+
+IF EXIST !PRJDIR! (
+
+cd !PRJDIR!
+
+set PATCHFILE=!ARCHDIR!\%%a.%%b.!EXT_PATCH!
 
 echo *** Creating patch for %%a
-
-cd "!DIR_LIB!"
 
 REM ----------------------------------------------------------------
 REM git
 REM ----------------------------------------------------------------
 IF %%b==git (
-cd %2
-git diff > "!ARCHDIR!/%%a.git.diff"
+git diff > "!PATCHFILE!"
 )
 
 REM ----------------------------------------------------------------
 REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
-cd %2
-svn diff > "!ARCHDIR!/%%a.svn.diff"
+svn diff > "!PATCHFILE!"
 )
 
 REM ----------------------------------------------------------------
 REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
-
-cd %2
-cvs -Q diff > "!ARCHDIR!/%%a.cvs.diff"
-
+cvs -Q diff > "!PATCHFILE!"
 )
 
 REM ----------------------------------------------------------------
 REM targz
 REM ----------------------------------------------------------------
 IF %%b==targz (
-IF NOT EXIST !DIR_DNL! md !DIR_DNL!
 
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
 set FILE=!DIR_DNL!\%%a.tar.gz
 IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "%%d"
 
@@ -66,7 +65,7 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupN "!DIR_DNL!\%%a" "%2" > "!ARCHDIR!/%%a.targz.diff"
+diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -89,7 +88,7 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupN "!DIR_DNL!\%%a" "%2" > "!ARCHDIR!/%%a.tarbz2.diff"
+diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -112,9 +111,20 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupN "!DIR_DNL!\%%a" "%2" > "!ARCHDIR!/%%a.zip.diff"
+diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
+)
+
+REM FOR /F %%A IN ("File") DO IF %%~zA EQU 0 ECHO "File" is 0 in size
+REM ----------------------------------------------------------------
+REM Remove empty patch files
+REM ----------------------------------------------------------------
+IF EXIST !PATCHFILE! (
+REM IF "!~zPATCHFILE!" == "0" (
+FOR %%a IN (!PATCHFILE!) DO IF %%~za equ 0 (
+del /F /Q "!PATCHFILE!"
+)
 )
 
 

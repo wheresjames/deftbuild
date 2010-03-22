@@ -4,11 +4,12 @@ REM Configuration
 REM ----------------------------------------------------------------
 
 set EXT_REPO=repo
+set EXT_PATCH=patch
 
 set DIR_IDX=3
 set DIR_CURRENT=%~dp0
 
-set DIR_LPRJ=%DIR_CURRENT%oss
+set DIR_LPRJ=%DIR_CURRENT%repo
 set DIR_LBIN=%DIR_CURRENT%bin
 set DIR_LMAK=%DIR_CURRENT%mk
 set DIR_LBAT=%DIR_CURRENT%bat
