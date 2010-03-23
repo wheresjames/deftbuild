@@ -4,7 +4,7 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := curl
+PRJ_NAME := curl/include
 PRJ_TYPE := lib
 PRJ_INCS := libcurl/src openldap/include
 PRJ_LIBS := 
