@@ -1,4 +1,3 @@
-? gdchart
 Index: ximacfg.h
 ===================================================================
 RCS file: /cvsroot/cximage/CxImage/ximacfg.h,v
@@ -25,73 +24,7 @@ Index: ximadef.h
 RCS file: /cvsroot/cximage/CxImage/ximadef.h,v
 retrieving revision 1.1.1.1
 diff -r1.1.1.1 ximadef.h
-196a197,295
-> typedef void* (*t_cx_malloc)( size_t size );
-> extern "C" t_cx_malloc cximage_malloc;
-> 
-> typedef void* (*t_cx_calloc)( size_t num, size_t size );
-> extern "C" t_cx_calloc cximage_calloc;
-> 
-> typedef void* (*t_cx_realloc)( void * ptr, size_t size );
-> extern "C" t_cx_realloc cximage_realloc;
-> 
-> typedef void (*t_cx_free)( void *ptr );
-> extern "C" t_cx_free cximage_free;
-> 
-> #ifndef CX_NEW
-> #	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
-> #endif
-> #ifndef CX_DELETE
-> #	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
-> #endif
-> #ifndef CX_MALLOC
-> #	define CX_MALLOC(__sz) cximage_malloc(__sz)
-> #endif
-> #ifndef CX_CALLOC
-> #	define CX_CALLOC(__num,__sz) cximage_calloc(__num,__sz)
-> #endif
-> 
-> #ifdef CX_FORCE_CUSTOM_ALLOCATOR
-> #	define malloc please_use_CX_MALLOC
-> #	define calloc please_use_CX_CALLOC
-> #	define free please_use_CX_DELETE
-> #	define new please_use_CX_NEW
-> #	define delete please_use_CX_DELETE
-> #endif
-> 
-> typedef void* (*t_cx_malloc)( size_t size );
-> extern "C" t_cx_malloc cximage_malloc;
-> 
-> typedef void* (*t_cx_calloc)( size_t num, size_t size );
-> extern "C" t_cx_calloc cximage_calloc;
-> 
-> typedef void* (*t_cx_realloc)( void * ptr, size_t size );
-> extern "C" t_cx_realloc cximage_realloc;
-> 
-> typedef void (*t_cx_free)( void *ptr );
-> extern "C" t_cx_free cximage_free;
-> 
-> #ifndef CX_NEW
-> #	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
-> #endif
-> #ifndef CX_DELETE
-> #	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
-> #endif
-> #ifndef CX_MALLOC
-> #	define CX_MALLOC(__sz) cximage_malloc(__sz)
-> #endif
-> #ifndef CX_CALLOC
-> #	define CX_CALLOC(__num,__sz) cximage_calloc(__num,__sz)
-> #endif
-> 
-> #ifdef CX_FORCE_CUSTOM_ALLOCATOR
-> #	define malloc please_use_CX_MALLOC
-> #	define calloc please_use_CX_CALLOC
-> #	define free please_use_CX_DELETE
-> #	define new please_use_CX_NEW
-> #	define delete please_use_CX_DELETE
-> #endif
-> 
+196a197,229
 > typedef void* (*t_cx_malloc)( size_t size );
 > extern "C" t_cx_malloc cximage_malloc;
 > 
@@ -130,61 +63,7 @@ Index: ximage.cpp
 RCS file: /cvsroot/cximage/CxImage/ximage.cpp,v
 retrieving revision 1.2
 diff -r1.2 ximage.cpp
-7a8,88
-> #if !defined( CXIMAGE_CUSTOM_ALLOCATOR )
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		undef malloc
-> #		undef calloc
-> #		undef free
-> #		undef new
-> #		undef delete
-> #	endif
-> 
-> 	extern "C"
-> 	{	t_cx_malloc cximage_malloc = malloc;
-> 		t_cx_calloc cximage_calloc = calloc;
-> 		t_cx_realloc cximage_realloc = realloc;
-> 		t_cx_free cximage_free = free;
-> 	};
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		define malloc please_use_CX_MALLOC
-> #		define calloc please_use_CX_CALLOC
-> #		define free please_use_CX_DELETE
-> #		define new please_use_CX_NEW
-> #		define delete please_use_CX_DELETE
-> #	endif
-> 
-> #endif
-> 
-> #if !defined( CXIMAGE_CUSTOM_ALLOCATOR )
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		undef malloc
-> #		undef calloc
-> #		undef free
-> #		undef new
-> #		undef delete
-> #	endif
-> 
-> 	extern "C"
-> 	{	t_cx_malloc cximage_malloc = malloc;
-> 		t_cx_calloc cximage_calloc = calloc;
-> 		t_cx_realloc cximage_realloc = realloc;
-> 		t_cx_free cximage_free = free;
-> 	};
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		define malloc please_use_CX_MALLOC
-> #		define calloc please_use_CX_CALLOC
-> #		define free please_use_CX_DELETE
-> #		define new please_use_CX_NEW
-> #		define delete please_use_CX_DELETE
-> #	endif
-> 
-> #endif
-> 
+7a8,34
 > #if !defined( CXIMAGE_CUSTOM_ALLOCATOR )
 > 
 > #	ifdef CX_CUSTOM_MEMORY_ONLY
@@ -229,16 +108,3 @@ diff -r1.2 ximapng.cpp
 < 			info_ptr->trans = trans;
 ---
 > 			info_ptr->trans_alpha = trans;
-Index: ximatran.cpp
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximatran.cpp,v
-retrieving revision 1.2
-diff -r1.2 ximatran.cpp
-183c183
-< 			div_r = div(y + dlineup, 8);
----
-> 			div_r = div((int)(y + dlineup), 8);
-301c301
-< 			div_r = div(y, 8);
----
-> 			div_r = div((int)y, 8);
