@@ -38,7 +38,7 @@ fi
 if [ "${REPO}" == "targz" ]; then	
 
 	cd ${LIBPATH}
-	patch -p0 < "${PATCH}"							
+	patch -p1 < "${PATCH}"							
 	
 fi
 
@@ -46,7 +46,7 @@ fi
 if [ "${REPO}" == "tarbz2" ]; then	
 
 	cd ${LIBPATH}
-	patch -p0 < "${PATCH}"
+	patch -p1 < "${PATCH}"
 	
 fi
 
@@ -54,7 +54,7 @@ fi
 if [ "${REPO}" == "zip" ]; then	
 
 	cd ${LIBPATH}
-	patch -p0 < "${PATCH}"
+	patch -p1 < "${PATCH}"
 	
 fi
 

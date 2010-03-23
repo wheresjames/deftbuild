@@ -22,6 +22,7 @@ IF EXIST !PRJDIR! (
 
 cd !PRJDIR!
 
+set DNLREL=../dnl!DIR_IDX!/!PROJ!
 set PATCHFILE=!ARCHDIR!\%%a.%%b.!EXT_PATCH!
 
 echo *** Creating patch for %%a
@@ -65,7 +66,8 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
+cd !DIR_LIB!
+diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -88,7 +90,8 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
+cd !DIR_LIB!
+diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -111,7 +114,8 @@ cd "%%a"
 rename "%%c" "%%a"
 )
 
-diff -rupwN "!DIR_DNL!\%%a" "%2" > "!PATCHFILE!"
+cd !DIR_LIB!
+diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )

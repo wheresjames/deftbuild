@@ -1,7 +1,84 @@
-diff -rupwN ../dnl3/gdchart/gd1.3\gd.c ../lib3/gdchart/gd1.3/gd.c
---- gd1.3/gd.c	Fri Mar 13 17:29:28 1998
-+++ gd1.3/gd.c	Mon Mar 22 13:45:11 2010
-@@ -481,7 +481,7 @@ void gdImageString(gdImagePtr im, gdFont
+diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
+--- ../dnl3/gdchart/gd1.3/gd.c	1998-03-13 16:29:28.000000000 -0500
++++ gdchart/gd1.3/gd.c	2010-03-23 14:36:49.000000000 -0400
+@@ -5,6 +5,33 @@
+ #include "gd.h"
+ #include "mtables.c"
+ 
++#if !defined( GD_CUSTOM_ALLOCATOR )
++
++#	ifdef GD_FORCE_CUSTOM_ALLOCATOR
++#		undef malloc
++#		undef calloc
++#		undef free
++#		undef new
++#		undef delete
++#	endif
++
++	extern "C"
++	{	t_gd_malloc gdimage_malloc = malloc;
++		t_gd_calloc gdimage_calloc = calloc;
++		t_gd_realloc gdimage_realloc = realloc;
++		t_gd_free gdimage_free = free;
++	};
++
++#	ifdef GD_FORCE_CUSTOM_ALLOCATOR
++#		define malloc please_use_GD_MALLOC
++#		define calloc please_use_GD_CALLOC
++#		define free please_use_GD_DELETE
++#		define new please_use_GD_NEW
++#		define delete please_use_GD_DELETE
++#	endif
++
++#endif
++
+ static void gdImageBrushApply(gdImagePtr im, int x, int y);
+ static void gdImageTileApply(gdImagePtr im, int x, int y);
+ 
+@@ -12,9 +39,9 @@ gdImagePtr gdImageCreate(int sx, int sy)
+ {
+ 	int i;
+ 	gdImagePtr im;
+-	im = (gdImage *) malloc(sizeof(gdImage));
++	im = (gdImage*)GD_MALLOC(sizeof(gdImage));
+ 	/* NOW ROW-MAJOR IN GD 1.3 */
+-	im->pixels = (unsigned char **) malloc(sizeof(unsigned char *) * sy);
++	im->pixels = (unsigned char **) GD_MALLOC(sizeof(unsigned char *) * sy);
+ 	im->polyInts = 0;
+ 	im->polyAllocated = 0;
+ 	im->brush = 0;
+@@ -22,7 +49,7 @@ gdImagePtr gdImageCreate(int sx, int sy)
+ 	im->style = 0;
+ 	for (i=0; (i<sy); i++) {
+ 		/* NOW ROW-MAJOR IN GD 1.3 */
+-		im->pixels[i] = (unsigned char *) calloc(
++		im->pixels[i] = (unsigned char *) GD_CALLOC(
+ 			sx, sizeof(unsigned char));
+ 	}	
+ 	im->sx = sx;
+@@ -37,16 +64,16 @@ void gdImageDestroy(gdImagePtr im)
+ {
+ 	int i;
+ 	for (i=0; (i<im->sy); i++) {
+-		free(im->pixels[i]);
++		GD_FREE(im->pixels[i]);
+ 	}	
+-	free(im->pixels);
++	GD_FREE(im->pixels);
+ 	if (im->polyInts) {
+-			free(im->polyInts);
++			GD_FREE(im->polyInts);
+ 	}
+ 	if (im->style) {
+-		free(im->style);
++		GD_FREE(im->style);
+ 	}
+-	free(im);
++	GD_FREE(im);
+ }
+ 
+ int gdImageColorClosest(gdImagePtr im, int r, int g, int b)
+@@ -481,7 +508,7 @@ void gdImageString(gdImagePtr im, gdFont
  {
  	int i;
  	int l;
@@ -10,7 +87,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3\gd.c ../lib3/gdchart/gd1.3/gd.c
  	for (i=0; (i<l); i++) {
  		gdImageChar(im, f, x, y, s[i], color);
  		x += f->w;
-@@ -493,7 +493,7 @@ void gdImageStringUp(gdImagePtr im, gdFo
+@@ -493,7 +520,7 @@ void gdImageStringUp(gdImagePtr im, gdFo
  {
  	int i;
  	int l;
@@ -19,39 +96,104 @@ diff -rupwN ../dnl3/gdchart/gd1.3\gd.c ../lib3/gdchart/gd1.3/gd.c
  	for (i=0; (i<l); i++) {
  		gdImageCharUp(im, f, x, y, s[i], color);
  		y -= f->w;
-@@ -971,7 +971,8 @@ GIFEncode(FILE *fp, int GWidth, int GHei
-         /*
-          * Write the Magic header
-          */
--        fwrite( Transparent < 0 ? "GIF87a" : "GIF89a", 1, 6, fp );
-+        if ( fwrite( Transparent < 0 ? "GIF87a" : "GIF89a", 1, 6, fp ) )
-+        	{}
- 
-         /*
-          * Write out the screen width and height
-@@ -1205,7 +1206,8 @@ static void write_block(void)
-     printf("\n");
-   }
-  fputc(oblen,ofile);
-- fwrite(&oblock[0],1,oblen,ofile);
-+ if ( fwrite(&oblock[0],1,oblen,ofile) )
-+ 	{}
-  oblen = 0;
+@@ -2128,8 +2155,8 @@ void gdImageCopyResized(gdImagePtr dst, 
+ 	/* We only need to use floating point to determine the correct
+ 		stretch vector for one line's worth. */
+ 	double accum;
+-	stx = (int *) malloc(sizeof(int) * srcW);
+-	sty = (int *) malloc(sizeof(int) * srcH);
++	stx = (int *) GD_MALLOC(sizeof(int) * srcW);
++	sty = (int *) GD_MALLOC(sizeof(int) * srcH);
+ 	accum = 0;
+ 	for (i=0; (i < srcW); i++) {
+ 		int got;
+@@ -2198,8 +2225,8 @@ void gdImageCopyResized(gdImagePtr dst, 
+ 			toy++;
+ 		}
+ 	}
+-	free(stx);
+-	free(sty);
++	GD_FREE(stx);
++	GD_FREE(sty);
  }
  
-@@ -1269,7 +1271,9 @@ static void output_plain(int c)
-   }
- }
- 
-+#ifndef _MSC_VER
- static unsigned int isqrt(unsigned int) __attribute__((__const__));
-+#endif
- static unsigned int isqrt(unsigned int x)
+ int gdGetWord(int *result, FILE *in)
+@@ -2451,7 +2478,7 @@ void gdImageFilledPolygon(gdImagePtr im,
+ 		return;
+ 	}
+ 	if (!im->polyAllocated) {
+-		im->polyInts = (int *) malloc(sizeof(int) * n);
++		im->polyInts = (int *) GD_MALLOC(sizeof(int) * n);
+ 		im->polyAllocated = n;
+ 	}		
+ 	if (im->polyAllocated < n) {
+@@ -2565,10 +2592,10 @@ int gdCompareInt(const void *a, const vo
+ void gdImageSetStyle(gdImagePtr im, int *style, int noOfPixels)
  {
-  unsigned int r;
-diff -rupwN ../dnl3/gdchart/gdc.c ../lib3/gdchart/gdc.c
---- gdc.c	Thu Nov 12 23:00:28 1998
-+++ gdc.c	Mon Mar 22 13:39:38 2010
+ 	if (im->style) {
+-		free(im->style);
++		GD_FREE(im->style);
+ 	}
+ 	im->style = (int *) 
+-		malloc(sizeof(int) * noOfPixels);
++		GD_MALLOC(sizeof(int) * noOfPixels);
+ 	memcpy(im->style, style, sizeof(int) * noOfPixels);
+ 	im->styleLength = noOfPixels;
+ 	im->stylePos = 0;
+diff -rupwN ../dnl3/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
+--- ../dnl3/gdchart/gd1.3/gd.h	1998-03-13 16:13:45.000000000 -0500
++++ gdchart/gd1.3/gd.h	2010-03-23 14:18:59.000000000 -0400
+@@ -14,6 +14,47 @@
+ /* stdio is needed for file I/O. */
+ #include <stdio.h>
+ 
++#ifndef GD_NEW
++#	define GD_NEW(__type) new ((__type*)gd_malloc(sizeof(__type))) __type
++#endif
++#ifndef GD_DELETE
++#	define GD_DELETE(__ptr,__type) (__ptr?gd_free((__ptr->~__type(),__ptr)):0)
++#endif
++#ifndef GD_ALLOCATE
++#	define GD_ALLOCATE(__type,__size) (__type*)gd_malloc(sizeof(__type)*__size)
++#endif
++#ifndef GD_MALLOC
++#	define GD_MALLOC(__sz) gd_malloc(__sz)
++#endif
++#ifndef GD_CALLOC
++#	define GD_CALLOC(__num,__sz) gd_calloc(__num,__sz)
++#endif
++#ifndef GD_FREE
++#	define GD_FREE(__ptr) (__ptr?(gd_free(__ptr),1):0)
++#endif
++
++#ifdef GD_FORCE_CUSTOM_ALLOCATOR
++#	define malloc please_use_GD_MALLOC
++#	define calloc please_use_GD_CALLOC
++#	define free please_use_GD_DELETE
++#	define new please_use_GD_NEW
++#	define delete please_use_GD_DELETE
++#endif
++
++#define GD_size_t size_t
++
++typedef void* (*t_gd_malloc)( GD_size_t size );
++extern "C" t_gd_malloc gd_malloc;
++
++typedef void* (*t_gd_calloc)( GD_size_t num, GD_size_t size );
++extern "C" t_gd_calloc gd_calloc;
++
++typedef void* (*t_gd_realloc)( void * ptr, GD_size_t size );
++extern "C" t_gd_realloc gd_realloc;
++
++typedef void (*t_gd_free)( void *ptr );
++extern "C" t_gd_free gd_free;
++
+ /* This can't be changed, it's part of the GIF specification. */
+ 
+ #define gdMaxColors 256
+diff -rupwN ../dnl3/gdchart/gdc.c gdchart/gdc.c
+--- ../dnl3/gdchart/gdc.c	1998-11-12 23:00:28.000000000 -0500
++++ gdchart/gdc.c	2010-03-23 14:09:28.000000000 -0400
 @@ -77,9 +77,9 @@ GDCImageStringNL( gdImagePtr		im,
  {
  	int		i;
@@ -60,7 +202,7 @@ diff -rupwN ../dnl3/gdchart/gdc.c ../lib3/gdchart/gdc.c
 +	int     max_len = 0;
  	short   strs_num = cnt_nl( str, &max_len );
 -	char    sub_str[max_len+1];
-+	char    *sub_str = new char[max_len+1];
++	char    *sub_str = GD_ALLOCATE( char, max_len+1 );
  
  	len      = -1;
  	strs_num = -1;
@@ -75,7 +217,7 @@ diff -rupwN ../dnl3/gdchart/gdc.c ../lib3/gdchart/gdc.c
  			}
  		}
  	while( *(str+i) );
-+	delete [] sub_str;
++	GD_FREE( sub_str );
  }
  
  /* ------------------------------------------------------------------------ */
@@ -106,9 +248,9 @@ diff -rupwN ../dnl3/gdchart/gdc.c ../lib3/gdchart/gdc.c
  				   lineclr );
  
  	/* usually GDC_generate_gif is used in conjunction with hard or hold options */
-diff -rupwN ../dnl3/gdchart/gdc.h ../lib3/gdchart/gdc.h
---- gdc.h	Thu Nov 12 23:00:42 1998
-+++ gdc.h	Mon Mar 22 13:40:04 2010
+diff -rupwN ../dnl3/gdchart/gdc.h gdchart/gdc.h
+--- ../dnl3/gdchart/gdc.h	1998-11-12 23:00:42.000000000 -0500
++++ gdchart/gdc.h	2010-03-23 12:48:04.000000000 -0400
 @@ -8,6 +8,8 @@ General header common to chart (xy[z]) a
  #define _GDC_H
  
@@ -162,144 +304,10 @@ diff -rupwN ../dnl3/gdchart/gdc.h ../lib3/gdchart/gdc.h
 +				 const char		*str );
  
  #endif /*!_GDC_H*/
-diff -rupwN ../dnl3/gdchart/gdc_pie.c ../lib3/gdchart/gdc_pie.c
---- gdc_pie.c	Thu Nov 12 23:00:55 1998
-+++ gdc_pie.c	Mon Mar 22 13:41:02 2010
-@@ -1,7 +1,9 @@
- /* GDCHART 0.94b  GDC_PIE.C  12 Nov 1998 */
- 
- #include <stdio.h>
-+#ifndef _MSC_VER
- #include <values.h>
-+#endif
- #include <math.h>
- 
- #define GDC_INCL
-@@ -65,8 +67,11 @@ static float				dist_foo1, dist_foo2;
-  * order by angle opposite (180) of depth angle
-  * comparing across 0-360 line
- \* ------------------------------------------------------- */
--static int ocmpr( struct tmp_slice_t *a, struct tmp_slice_t *b )
-+static int ocmpr( const void *_a, const void *_b )
- {
-+	struct tmp_slice_t *a = (tmp_slice_t*)_a;
-+	struct tmp_slice_t *b = (tmp_slice_t*)_b;
-+
- 	if( RAD_DIST1(a->angle) < RAD_DIST2(b->angle) )
- 		return 1;
- 	if( RAD_DIST1(a->angle) > RAD_DIST2(b->angle) )
-@@ -115,8 +120,8 @@ pie_gif( short			GIFWIDTH,
- 				PlotColor,
- 				EdgeColor,
- 				EdgeColorShd,
--				SliceColor[num_points],
--				SliceColorShd[num_points];
-+				*SliceColor = new int[num_points],
-+				*SliceColorShd = new int[num_points];
- 
- 	float		rad = 0.0;					// radius
- 	float		tot_val = 0.0;
-@@ -131,8 +136,8 @@ pie_gif( short			GIFWIDTH,
- 	short		num_slices1 = 0,
- 				num_slices2 = 0;
- 	char		any_too_small = FALSE;
--	char		others[num_points];
--	float		slice_angle[3][num_points];	// must be used with others[]
-+	char		*others = new char[num_points];
-+	float		*slice_angle[3] = { new float[num_points], new float[num_points], new float[num_points] };	// must be used with others[]
- 	char		threeD = ( type == GDC_3DPIE );
- 
- 	int			xdepth_3D      = 0,			// affects PX()
-@@ -183,16 +188,16 @@ pie_gif( short			GIFWIDTH,
- 	for( i=0; i<num_points; ++i )
- 		{
- 		float	this_pct = val[i]/tot_val;						/* should never be > 100% */
--		float	this = this_pct*(2.0*M_PI);						/* pie-portion */
-+		float	_this = this_pct*(2.0*M_PI);					/* pie-portion */
- 		if( (this_pct > min_grphable) ||						/* too small */
- 			(!GDCPIE_missing || !GDCPIE_missing[i]) )			/* still want angles */
- 			{
- 			int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
- 			double	this_sin;
- 			double	this_cos;
--			slice_angle[0][i] = this/2.0+last;				/* mid-point on full pie */
-+			slice_angle[0][i] = _this/2.0+last;				/* mid-point on full pie */
- 			slice_angle[1][i] = last;						/* 1st on full pie */
--			slice_angle[2][i] = this+last;					/* 2nd on full pie */
-+			slice_angle[2][i] = _this+last;					/* 2nd on full pie */
- 			this_sin        = sin( (double)slice_angle[0][i] );
- 			this_cos        = cos( (double)slice_angle[0][i] );
- 
-@@ -302,7 +307,7 @@ pie_gif( short			GIFWIDTH,
- 			others[i] = TRUE;
- 			slice_angle[0][i] = -MAXFLOAT;
- 			}
--		last += this;
-+		last += _this;
- 		}
- 	}
- 
-@@ -385,7 +390,7 @@ pie_gif( short			GIFWIDTH,
- 		/* fill in connection to foreground pie */
- 		/* this is where we earn our keep */
- 		{
--		struct tmp_slice_t	tmp_slice[2*num_points+2];
-+		struct tmp_slice_t	*tmp_slice = new tmp_slice_t[2*num_points+2];
- 		int					t,
- 							num_slice_angles = 0;
- 
-@@ -460,6 +465,8 @@ pie_gif( short			GIFWIDTH,
- 							 EdgeColorShd );
- 				}
- 			}
-+
-+			delete [] tmp_slice;
- 		}
- 		}
- 
-@@ -581,6 +588,7 @@ pie_gif( short			GIFWIDTH,
- 											break;
- 					case GDCPIE_PCT_NONE:
- 					default:
-+						break;
- 					}
- 
- 				if( GDCPIE_percent_labels != GDCPIE_PCT_NONE )
-@@ -589,7 +597,7 @@ pie_gif( short			GIFWIDTH,
- 								   slice_angle[0][i] <= M_PI? pctx:
- 															  pctx+lbl_wdth-pct_wdth,
- 								   pcty,
--								   pct_str,
-+								   (unsigned char*)pct_str,
- 								   LineColor );
- 				if( lbl[i] )
- 					GDCImageStringNL( im,
-@@ -613,5 +621,9 @@ pie_gif( short			GIFWIDTH,
- 	gdImageGif(im, gif_fptr);
- 
- 	gdImageDestroy(im);
-+
-+	delete [] others;
-+	delete [] SliceColor;
-+	delete [] SliceColorShd;
- 	return;
- }
-diff -rupwN ../dnl3/gdchart/gdc_pie_samp.c ../lib3/gdchart/gdc_pie_samp.c
---- gdc_pie_samp.c	Thu Nov 12 23:01:08 1998
-+++ gdc_pie_samp.c	Mon Mar 22 13:41:11 2010
-@@ -4,7 +4,7 @@
- /*  vi: :set tabstop=4 */
- 
- #include <stdio.h>
--#include <values.h>
-+//#include <values.h>
- #include <math.h>
- 
- #include "gdc.h"
-diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
---- gdchart.c	Sun Apr 18 18:37:46 1999
-+++ gdchart.c	Mon Mar 22 13:42:54 2010
-@@ -3,11 +3,16 @@
+diff -rupwN ../dnl3/gdchart/gdchart.c gdchart/gdchart.c
+--- ../dnl3/gdchart/gdchart.c	1999-04-18 18:37:46.000000000 -0400
++++ gdchart/gdchart.c	2010-03-23 14:29:03.000000000 -0400
+@@ -3,18 +3,22 @@
  
  #include <stdio.h>
  #include <stdlib.h>
@@ -316,43 +324,51 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  
  #define GDC_INCL
  #define GDC_LIB
-@@ -95,13 +100,13 @@ draw_3d_line( gdImagePtr	im,
+ #include "gdc.h"
+ #include "gdchart.h"
+ 
+-
+ #define HIGHSET		0
+ #define LOWSET		1
+ #define CLOSESET	2
+@@ -95,13 +99,13 @@ draw_3d_line( gdImagePtr	im,
  {
  #define F(x,i)	(int)( (float)((x)-x1)*slope[i]+(float)y1[i] )
  	float		depth_slope  = xdepth==0? MAXFLOAT: (float)ydepth/(float)xdepth;
 -	float		slope[num_sets];
 -	int			lnclr[num_sets],
 -				shclr[num_sets];
-+	float		*slope = new float[num_sets];
-+	int			*lnclr = new int[num_sets],
-+				*shclr = new int[num_sets];
++	float		*slope = GD_ALLOCATE( float, num_sets );
++	int			*lnclr = GD_ALLOCATE( int, num_sets ),
++				*shclr = GD_ALLOCATE( int, num_sets );
  	int			i;
  	int			x;
  	gdPoint		poly[4];
 -	struct YS	ypts[num_sets];
-+	struct YS	*ypts = new YS[num_sets];
++	struct YS	*ypts = GD_ALLOCATE( YS, num_sets );
  
  	for( i=0; i<num_sets; ++i )
  		{
-@@ -134,6 +139,11 @@ draw_3d_line( gdImagePtr	im,
+@@ -134,6 +138,11 @@ draw_3d_line( gdImagePtr	im,
  							 -ypts[i].slope<=depth_slope? ypts[i].shclr: ypts[i].lnclr );
  			}
  		}
 +
-+	delete [] slope;
-+	delete [] lnclr;
-+	delete [] shclr;
-+	delete [] ypts;
++	GD_FREE( slope );
++	GD_FREE( lnclr );
++	GD_FREE( shclr );
++	GD_FREE( ypts );
  }
  
  /* ------------------------------------------------------------------------- */
-@@ -342,17 +352,18 @@ out_graph( short		GIFWIDTH,		/* no check
+@@ -342,17 +351,19 @@ out_graph( short		GIFWIDTH,		/* no check
  
  	/* args */
  	int			setno = 0;				// affects PX() and PY()
 -	float		*uvals[ type == GDC_HILOCLOSE        ||
 +	int			_num_sets = num_sets;
-+	float		**uvals = new float*[ type == GDC_HILOCLOSE        ||
++	float		**uvals = GD_ALLOCATE( float*, ( 
++						type == GDC_HILOCLOSE        ||
  						type == GDC_3DHILOCLOSE      ||
  						type == GDC_3DCOMBO_HLC_BAR  ||
  						type == GDC_3DCOMBO_HLC_AREA ||
@@ -365,7 +381,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
 -						type == GDC_COMBO_LINE_AREA? num_sets:		// 1 more last set is vol
 -						num_sets ];
 +						type == GDC_COMBO_LINE_AREA? _num_sets:		// 1 more last set is vol
-+						_num_sets ];
++						_num_sets ) );
  	float		*uvol;
  
  	int			BGColor,
@@ -374,7 +390,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  				GridColor,
  				VolColor,
 -				ExtVolColor[num_points],
-+				*ExtVolColor = new int[num_points],
++				*ExtVolColor = GD_ALLOCATE( int, num_points),
  				ThumbDColor,
  				ThumbLblColor,
  				ThumbUColor,
@@ -391,11 +407,11 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
 +	if ( num_sets != _num_sets )
 +		return -1;
 +
-+	ExtColor = new int*[ num_sets ];
-+	ExtColorShd = new int*[ num_sets ];
++	ExtColor = GD_ALLOCATE( int*, num_sets );
++	ExtColorShd = GD_ALLOCATE( int*, num_sets );
 +	for ( int i = 0; i < num_sets; i++ )
-+	{	ExtColor[ i ] = new int[ num_points ];
-+		ExtColorShd[ i ] = new int[ num_points ];
++	{	ExtColor[ i ] = GD_ALLOCATE( int, num_points );
++		ExtColorShd[ i ] = GD_ALLOCATE( int, num_points );
 +	} // end for
  
  	/* idiot checks */
@@ -492,7 +508,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  						int		xlen = 0;
  						short	xstrs_num = cnt_nl( xlbl[xi], &xlen );
 -						char	sub_xlbl[xlen+1];
-+						char	*sub_xlbl = new char[xlen+1];
++						char	*sub_xlbl = GD_ALLOCATE( char, xlen+1 );
  //						int		xlbl_strt = -1+ PX((float)i+(float)(do_bar?((float)num_points/(float)num_xlbls):0.0)) - (int)((float)(LBX.h-2)*((float)xstrs_num/2.0));
  						int		xlbl_strt = -1+ PX(i) - (int)((float)(LBX.h-2)*((float)xstrs_num/2.0));
  
@@ -507,7 +523,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  								}
  							} while( xlbl[xi][j] );
  #undef LBX
-+							delete [] sub_xlbl;
++							GD_FREE( sub_xlbl );
  						}
  				}
  		}
@@ -516,7 +532,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  			case GDC_STACK_LAYER:
  				{
 -				float	lasty[num_points];
-+				float	*lasty = new float[num_points];
++				float	*lasty = GD_ALLOCATE( float, num_points );
  				j = 0;
  //				for( i=0; i<num_points; ++i )
  //					if( uvals[j][i] != GDC_NOVALUE )
@@ -525,7 +541,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  				for( i=0; i<num_points; ++i )
  					{
 -					struct BS	barset[num_sets];
-+					struct BS	*barset = new BS[num_sets];
++					struct BS	*barset = GD_ALLOCATE( BS, num_sets );
  					float		lasty_pos = 0.0;
  					float		lasty_neg = 0.0;
  					int			k;
@@ -533,9 +549,9 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  									 barset[j].clr,
  									 barset[j].shclr );
  						}
-+						delete [] barset;
++						GD_FREE( barset );
  					}
-+					delete [] lasty;
++					GD_FREE( lasty );
  				}
  				break;
  
@@ -545,8 +561,8 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  			{
 -			int	y1[num_sets],
 -				y2[num_sets];
-+			int	*y1 = new int[num_sets],
-+				*y2 = new int[num_sets];
++			int	*y1 = GD_ALLOCATE( int, num_sets ),
++				*y2 = GD_ALLOCATE( int, num_sets );
  
  			for( i=1; i<num_points; ++i )
  				{
@@ -556,8 +572,8 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  					int		set;
 -					int		clr[num_sets],
 -							clrshd[num_sets];
-+					int		*clr = new int[num_sets],
-+							*clrshd = new int[num_sets];
++					int		*clr = GD_ALLOCATE( int, num_sets ),
++							*clrshd = GD_ALLOCATE( int, num_sets );
  					float	usey1 = 0.0,
  							usey2 = 0.0;
  					for( j=0,set=0; j<num_sets; ++j )
@@ -566,12 +582,12 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  						  clr,
  						  clrshd );
 +
-+						delete [] clr;
-+						delete [] clrshd;
++						GD_FREE( clr );
++						GD_FREE( clrshd );
  					}
  				}
-+				delete [] y1;
-+				delete [] y2;
++				GD_FREE( y1 );
++				GD_FREE( y2 );
  			}
  			break;
  
@@ -580,7 +596,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  			case GDC_STACK_SUM:
  				{
 -				float	lasty[num_points];
-+				float	*lasty = new float[num_points];
++				float	*lasty = GD_ALLOCATE( float, num_points );
  				j = 0;
  				for( i=1; i<num_points; ++i )
  					if( uvals[j][i] != GDC_NOVALUE )
@@ -588,7 +604,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
                                               threeD? ExtColorShd[j][i]: ExtColor[j][i] );
  							lasty[i] += uvals[j][i];
  							}
-+					delete [] lasty;
++					GD_FREE( lasty );
  				}
  				break;
  
@@ -597,7 +613,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  	if( GDC_scatter )
  		{
 -		int		scatter_clr[GDC_num_scatter_pts];
-+		int		*scatter_clr = new int[GDC_num_scatter_pts];
++		int		*scatter_clr = GD_ALLOCATE( int, GDC_num_scatter_pts );
  		gdPoint	ct[3];
  
  		for( i=0; i<GDC_num_scatter_pts; ++i )
@@ -605,7 +621,7 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  					break;
  				}
  			}
-+			delete [] scatter_clr;
++			GD_FREE( scatter_clr );
  		}
  
  
@@ -614,20 +630,20 @@ diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
  	else
  		gdImageDestroy(im);
 +
-+	delete [] uvals;
++	GD_FREE( uvals );
 +
 +	for ( int i = 0; i < num_sets; i++ )
-+	{	delete [] ExtColor[ i ];
-+		delete [] ExtColorShd[ i ];
++	{	GD_FREE( ExtColor[ i ] );
++		GD_FREE( ExtColorShd[ i ] );
 +	} // end for
-+	delete [] ExtColor;
-+	delete [] ExtColorShd;
++	GD_FREE( ExtColor );
++	GD_FREE( ExtColorShd );
 +
  	return 0;
  }
-diff -rupwN ../dnl3/gdchart/gdchart.h ../lib3/gdchart/gdchart.h
---- gdchart.h	Thu Nov 12 23:02:00 1998
-+++ gdchart.h	Mon Mar 22 13:43:15 2010
+diff -rupwN ../dnl3/gdchart/gdchart.h gdchart/gdchart.h
+--- ../dnl3/gdchart/gdchart.h	1998-11-12 23:02:00.000000000 -0500
++++ gdchart/gdchart.h	2010-03-23 12:48:04.000000000 -0400
 @@ -159,6 +159,16 @@ int GDC_out_graph( short		gifwidth,
  				   char			*xlbl[],
  				   int			num_sets,
@@ -645,9 +661,143 @@ diff -rupwN ../dnl3/gdchart/gdchart.h ../lib3/gdchart/gdchart.h
  /* expected params (...) for each chart type:
  GDC_LINE
  GDC_BAR
-diff -rupwN ../dnl3/gdchart/price_conv.c ../lib3/gdchart/price_conv.c
---- price_conv.c	Thu Nov 12 23:02:29 1998
-+++ price_conv.c	Mon Mar 22 13:43:29 2010
+diff -rupwN ../dnl3/gdchart/gdc_pie.c gdchart/gdc_pie.c
+--- ../dnl3/gdchart/gdc_pie.c	1998-11-12 23:00:55.000000000 -0500
++++ gdchart/gdc_pie.c	2010-03-23 14:32:57.000000000 -0400
+@@ -1,7 +1,9 @@
+ /* GDCHART 0.94b  GDC_PIE.C  12 Nov 1998 */
+ 
+ #include <stdio.h>
++#ifndef _MSC_VER
+ #include <values.h>
++#endif
+ #include <math.h>
+ 
+ #define GDC_INCL
+@@ -65,8 +67,11 @@ static float				dist_foo1, dist_foo2;
+  * order by angle opposite (180) of depth angle
+  * comparing across 0-360 line
+ \* ------------------------------------------------------- */
+-static int ocmpr( struct tmp_slice_t *a, struct tmp_slice_t *b )
++static int ocmpr( const void *_a, const void *_b )
+ {
++	struct tmp_slice_t *a = (tmp_slice_t*)_a;
++	struct tmp_slice_t *b = (tmp_slice_t*)_b;
++
+ 	if( RAD_DIST1(a->angle) < RAD_DIST2(b->angle) )
+ 		return 1;
+ 	if( RAD_DIST1(a->angle) > RAD_DIST2(b->angle) )
+@@ -115,8 +120,8 @@ pie_gif( short			GIFWIDTH,
+ 				PlotColor,
+ 				EdgeColor,
+ 				EdgeColorShd,
+-				SliceColor[num_points],
+-				SliceColorShd[num_points];
++				*SliceColor = GD_ALLOCATE( int, num_points ),
++				*SliceColorShd = GD_ALLOCATE( int, num_points );
+ 
+ 	float		rad = 0.0;					// radius
+ 	float		tot_val = 0.0;
+@@ -131,8 +136,8 @@ pie_gif( short			GIFWIDTH,
+ 	short		num_slices1 = 0,
+ 				num_slices2 = 0;
+ 	char		any_too_small = FALSE;
+-	char		others[num_points];
+-	float		slice_angle[3][num_points];	// must be used with others[]
++	char		*others = GD_ALLOCATE( char, num_points );
++	float		*slice_angle[3] = { GD_ALLOCATE( float, num_points ), GD_ALLOCATE( float, num_points ), GD_ALLOCATE( float, num_points ) };	// must be used with others[]
+ 	char		threeD = ( type == GDC_3DPIE );
+ 
+ 	int			xdepth_3D      = 0,			// affects PX()
+@@ -183,16 +188,16 @@ pie_gif( short			GIFWIDTH,
+ 	for( i=0; i<num_points; ++i )
+ 		{
+ 		float	this_pct = val[i]/tot_val;						/* should never be > 100% */
+-		float	this = this_pct*(2.0*M_PI);						/* pie-portion */
++		float	_this = this_pct*(2.0*M_PI);					/* pie-portion */
+ 		if( (this_pct > min_grphable) ||						/* too small */
+ 			(!GDCPIE_missing || !GDCPIE_missing[i]) )			/* still want angles */
+ 			{
+ 			int this_explode = GDCPIE_explode? GDCPIE_explode[i]: 0;
+ 			double	this_sin;
+ 			double	this_cos;
+-			slice_angle[0][i] = this/2.0+last;				/* mid-point on full pie */
++			slice_angle[0][i] = _this/2.0+last;				/* mid-point on full pie */
+ 			slice_angle[1][i] = last;						/* 1st on full pie */
+-			slice_angle[2][i] = this+last;					/* 2nd on full pie */
++			slice_angle[2][i] = _this+last;					/* 2nd on full pie */
+ 			this_sin        = sin( (double)slice_angle[0][i] );
+ 			this_cos        = cos( (double)slice_angle[0][i] );
+ 
+@@ -302,7 +307,7 @@ pie_gif( short			GIFWIDTH,
+ 			others[i] = TRUE;
+ 			slice_angle[0][i] = -MAXFLOAT;
+ 			}
+-		last += this;
++		last += _this;
+ 		}
+ 	}
+ 
+@@ -385,7 +390,7 @@ pie_gif( short			GIFWIDTH,
+ 		/* fill in connection to foreground pie */
+ 		/* this is where we earn our keep */
+ 		{
+-		struct tmp_slice_t	tmp_slice[2*num_points+2];
++		struct tmp_slice_t	*tmp_slice = GD_ALLOCATE( tmp_slice_t, 2*num_points+2 );
+ 		int					t,
+ 							num_slice_angles = 0;
+ 
+@@ -460,6 +465,8 @@ pie_gif( short			GIFWIDTH,
+ 							 EdgeColorShd );
+ 				}
+ 			}
++
++			GD_FREE( tmp_slice );
+ 		}
+ 		}
+ 
+@@ -581,6 +588,7 @@ pie_gif( short			GIFWIDTH,
+ 											break;
+ 					case GDCPIE_PCT_NONE:
+ 					default:
++						break;
+ 					}
+ 
+ 				if( GDCPIE_percent_labels != GDCPIE_PCT_NONE )
+@@ -589,7 +597,7 @@ pie_gif( short			GIFWIDTH,
+ 								   slice_angle[0][i] <= M_PI? pctx:
+ 															  pctx+lbl_wdth-pct_wdth,
+ 								   pcty,
+-								   pct_str,
++								   (unsigned char*)pct_str,
+ 								   LineColor );
+ 				if( lbl[i] )
+ 					GDCImageStringNL( im,
+@@ -613,5 +621,9 @@ pie_gif( short			GIFWIDTH,
+ 	gdImageGif(im, gif_fptr);
+ 
+ 	gdImageDestroy(im);
++
++	GD_FREE( others );
++	GD_FREE( SliceColor );
++	GD_FREE( SliceColorShd );
+ 	return;
+ }
+diff -rupwN ../dnl3/gdchart/gdc_pie_samp.c gdchart/gdc_pie_samp.c
+--- ../dnl3/gdchart/gdc_pie_samp.c	1998-11-12 23:01:08.000000000 -0500
++++ gdchart/gdc_pie_samp.c	2010-03-23 12:48:04.000000000 -0400
+@@ -4,7 +4,7 @@
+ /*  vi: :set tabstop=4 */
+ 
+ #include <stdio.h>
+-#include <values.h>
++//#include <values.h>
+ #include <math.h>
+ 
+ #include "gdc.h"
+diff -rupwN ../dnl3/gdchart/price_conv.c gdchart/price_conv.c
+--- ../dnl3/gdchart/price_conv.c	1998-11-12 23:02:29.000000000 -0500
++++ gdchart/price_conv.c	2010-03-23 12:48:04.000000000 -0400
 @@ -74,7 +74,7 @@ price_to_str( float	price,
  		if( whole<0 && numr<0.0 )
  			numr = -numr;

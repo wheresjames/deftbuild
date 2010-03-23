@@ -41,8 +41,11 @@ else
 fi
 
 echo "---"
-echo " Command : ${CMD}"
-echo " Groups  : ${DIRLIST[@]}"
+echo " Command  : ${CMD}"
+echo " Groups   : ${DIRLIST[@]}"
+if [ $3 ]; then
+	echo " Projects : $3"
+fi
 echo "---"
 
 # Ensure lib directory

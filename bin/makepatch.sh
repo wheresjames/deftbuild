@@ -6,6 +6,7 @@ if [ ! -d ${LIBPATH} ]; then
 	
 fi
 		
+DNLREL="../dnl${DIR_IDX}/${PROJ}"
 PATCH="${ARCHPATH}/${PROJ}.${REPO}.patch"
 
 echo " *** Creating Patch : ${PATCH}"
@@ -23,14 +24,14 @@ if [ "${REPO}" == "cvs" ]; then
 
 	# Save the diff anyway
 	cd ${LIBPATH}
-	cvs -Q diff > "${PATCH}"
+	cvs -Q -w diff > "${PATCH}"
 fi
 
 # git
 if [ "${REPO}" == "git" ]; then	
 
 	cd ${LIBPATH}
-	git diff > "${PATCH}"
+	git -w diff > "${PATCH}"
 
 fi
 
@@ -55,7 +56,8 @@ if [ "${REPO}" == "targz" ]; then
 		gunzip -c ${FILE} | tar xf -
 	fi		
 	
-	diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+	cd ${DIR_LIB}
+	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -81,7 +83,8 @@ if [ "${REPO}" == "tarbz2" ]; then
 		bunzip2 -c ${FILE} | tar xf -
 	fi
 
-	diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+	cd ${DIR_LIB}
+	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -108,7 +111,8 @@ if [ "${REPO}" == "zip" ]; then
 		unzip -q ${FILE}
 	fi
 
-	diff -rupN "${DIR_DNL}/${PROJ}/" "${LIBPATH}/" > "${PATCH}"
+	cd ${DIR_LIB}
+	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 fi
 
