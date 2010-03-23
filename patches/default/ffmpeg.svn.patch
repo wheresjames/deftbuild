@@ -1,0 +1,8 @@
+diff -rupwN -x .svn ../dnl3/ffmpeg/libavutil/avconfig.h ffmpeg/libavutil/avconfig.h
+--- ../dnl3/ffmpeg/libavutil/avconfig.h	1969-12-31 19:00:00.000000000 -0500
++++ ffmpeg/libavutil/avconfig.h	2010-03-23 09:24:32.000000000 -0400
+@@ -0,0 +1,4 @@
++#ifndef AVUTIL_AVCONFIG_H
++#define AVUTIL_AVCONFIG_H
++#define AV_HAVE_BIGENDIAN 0
++#endif /* AVUTIL_AVCONFIG_H */
