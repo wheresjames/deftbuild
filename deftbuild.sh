@@ -111,10 +111,6 @@ do
 		for i in $( find ${DIR_LPRJ}/${DR} -maxdepth 1 -type f -name '*'.${EXT_REPO} ); do FILELIST="${FILELIST} ${i##*/}"; done
 	fi
 
-	if [ ${CMD} == "show" ]; then
-		echo Repos: ${FILELIST}
-	fi
-
 	for CF in ${FILELIST[@]} 
 	do
 

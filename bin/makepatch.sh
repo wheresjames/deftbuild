@@ -14,8 +14,26 @@ echo " *** Creating Patch : ${PATCH}"
 # Subversion
 if [ "${REPO}" == "svn" ]; then	
 
-	cd ${LIBPATH}
-	svn diff > "${PATCH}"
+# booo, svn diff doesn't pick up new files
+#	cd ${LIBPATH}
+#	svn diff > "${PATCH}"
+
+	# ensure download directory
+	if [ ! -d ${DIR_DNL} ]; then
+		mkdir -p ${DIR_DNL}
+	fi
+
+	if [ "${REVN}" != "-" ]; then
+		svn ${SVN_OPTIONS} co -q -r ${REVN} "${LINK}" "${DIR_DNL}/${PROJ}"
+	else
+		cd ${LIBPATH}
+		CVER=`svnversion`
+		svn ${SVN_OPTIONS} co -q -r ${CVER%*M} "${LINK}" "${DIR_DNL}/${PROJ}"
+	fi
+
+	cd ${DIR_LIB}
+	diff -rupwN -x ".svn" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
 
@@ -117,8 +135,8 @@ if [ "${REPO}" == "zip" ]; then
 fi
 
 # Just delete empty patches
-if [ -f ${PATCH} ] && [ ! -s ${PATCH} ]; then
-	rm -f "${PATCH}"
-fi
+#if [ -f ${PATCH} ] && [ ! -s ${PATCH} ]; then
+#	rm -f "${PATCH}"
+#fi
 					
 
