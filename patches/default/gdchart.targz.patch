@@ -1,6 +1,6 @@
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gd1.3\gd.c V:\Code\deftbuild\..\lib3\gdchart\gd1.3\gd.c
---- V:\Code\deftbuild\..\dnl3\gdchart\gd1.3\gd.c	Fri Mar 13 17:29:28 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gd1.3\gd.c	Mon Mar 22 13:45:11 2010
+diff -rupwN ../dnl3/gdchart/gd1.3\gd.c ../lib3/gdchart/gd1.3/gd.c
+--- gd1.3/gd.c	Fri Mar 13 17:29:28 1998
++++ gd1.3/gd.c	Mon Mar 22 13:45:11 2010
 @@ -481,7 +481,7 @@ void gdImageString(gdImagePtr im, gdFont
  {
  	int i;
@@ -49,9 +49,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gd1.3\gd.c V:\Code\deftbuild\..\li
  static unsigned int isqrt(unsigned int x)
  {
   unsigned int r;
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc.c V:\Code\deftbuild\..\lib3\gdchart\gdc.c
---- V:\Code\deftbuild\..\dnl3\gdchart\gdc.c	Thu Nov 12 23:00:28 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdc.c	Mon Mar 22 13:39:38 2010
+diff -rupwN ../dnl3/gdchart/gdc.c ../lib3/gdchart/gdc.c
+--- gdc.c	Thu Nov 12 23:00:28 1998
++++ gdc.c	Mon Mar 22 13:39:38 2010
 @@ -77,9 +77,9 @@ GDCImageStringNL( gdImagePtr		im,
  {
  	int		i;
@@ -106,9 +106,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc.c V:\Code\deftbuild\..\lib3\gd
  				   lineclr );
  
  	/* usually GDC_generate_gif is used in conjunction with hard or hold options */
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc.h V:\Code\deftbuild\..\lib3\gdchart\gdc.h
---- V:\Code\deftbuild\..\dnl3\gdchart\gdc.h	Thu Nov 12 23:00:42 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdc.h	Mon Mar 22 13:40:04 2010
+diff -rupwN ../dnl3/gdchart/gdc.h ../lib3/gdchart/gdc.h
+--- gdc.h	Thu Nov 12 23:00:42 1998
++++ gdc.h	Mon Mar 22 13:40:04 2010
 @@ -8,6 +8,8 @@ General header common to chart (xy[z]) a
  #define _GDC_H
  
@@ -162,9 +162,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc.h V:\Code\deftbuild\..\lib3\gd
 +				 const char		*str );
  
  #endif /*!_GDC_H*/
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie.c V:\Code\deftbuild\..\lib3\gdchart\gdc_pie.c
---- V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie.c	Thu Nov 12 23:00:55 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdc_pie.c	Mon Mar 22 13:41:02 2010
+diff -rupwN ../dnl3/gdchart/gdc_pie.c ../lib3/gdchart/gdc_pie.c
+--- gdc_pie.c	Thu Nov 12 23:00:55 1998
++++ gdc_pie.c	Mon Mar 22 13:41:02 2010
 @@ -1,7 +1,9 @@
  /* GDCHART 0.94b  GDC_PIE.C  12 Nov 1998 */
  
@@ -284,9 +284,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie.c V:\Code\deftbuild\..\lib
 +	delete [] SliceColorShd;
  	return;
  }
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie_samp.c V:\Code\deftbuild\..\lib3\gdchart\gdc_pie_samp.c
---- V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie_samp.c	Thu Nov 12 23:01:08 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdc_pie_samp.c	Mon Mar 22 13:41:11 2010
+diff -rupwN ../dnl3/gdchart/gdc_pie_samp.c ../lib3/gdchart/gdc_pie_samp.c
+--- gdc_pie_samp.c	Thu Nov 12 23:01:08 1998
++++ gdc_pie_samp.c	Mon Mar 22 13:41:11 2010
 @@ -4,7 +4,7 @@
  /*  vi: :set tabstop=4 */
  
@@ -296,9 +296,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdc_pie_samp.c V:\Code\deftbuild\.
  #include <math.h>
  
  #include "gdc.h"
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdchart.c V:\Code\deftbuild\..\lib3\gdchart\gdchart.c
---- V:\Code\deftbuild\..\dnl3\gdchart\gdchart.c	Sun Apr 18 18:37:46 1999
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdchart.c	Mon Mar 22 13:42:54 2010
+diff -rupwN ../dnl3/gdchart/gdchart.c ../lib3/gdchart/gdchart.c
+--- gdchart.c	Sun Apr 18 18:37:46 1999
++++ gdchart.c	Mon Mar 22 13:42:54 2010
 @@ -3,11 +3,16 @@
  
  #include <stdio.h>
@@ -625,9 +625,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdchart.c V:\Code\deftbuild\..\lib
 +
  	return 0;
  }
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdchart.h V:\Code\deftbuild\..\lib3\gdchart\gdchart.h
---- V:\Code\deftbuild\..\dnl3\gdchart\gdchart.h	Thu Nov 12 23:02:00 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\gdchart.h	Mon Mar 22 13:43:15 2010
+diff -rupwN ../dnl3/gdchart/gdchart.h ../lib3/gdchart/gdchart.h
+--- gdchart.h	Thu Nov 12 23:02:00 1998
++++ gdchart.h	Mon Mar 22 13:43:15 2010
 @@ -159,6 +159,16 @@ int GDC_out_graph( short		gifwidth,
  				   char			*xlbl[],
  				   int			num_sets,
@@ -645,9 +645,9 @@ diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\gdchart.h V:\Code\deftbuild\..\lib
  /* expected params (...) for each chart type:
  GDC_LINE
  GDC_BAR
-diff -rupwN V:\Code\deftbuild\..\dnl3\gdchart\price_conv.c V:\Code\deftbuild\..\lib3\gdchart\price_conv.c
---- V:\Code\deftbuild\..\dnl3\gdchart\price_conv.c	Thu Nov 12 23:02:29 1998
-+++ V:\Code\deftbuild\..\lib3\gdchart\price_conv.c	Mon Mar 22 13:43:29 2010
+diff -rupwN ../dnl3/gdchart/price_conv.c ../lib3/gdchart/price_conv.c
+--- price_conv.c	Thu Nov 12 23:02:29 1998
++++ price_conv.c	Mon Mar 22 13:43:29 2010
 @@ -74,7 +74,7 @@ price_to_str( float	price,
  		if( whole<0 && numr<0.0 )
  			numr = -numr;

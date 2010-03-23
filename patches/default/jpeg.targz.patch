@@ -1,6 +1,6 @@
-diff -rupwN V:\Code\deftbuild\..\dnl3\jpeg\jconfig.h V:\Code\deftbuild\..\lib3\jpeg\jconfig.h
---- V:\Code\deftbuild\..\dnl3\jpeg\jconfig.h	Wed Dec 31 19:00:00 1969
-+++ V:\Code\deftbuild\..\lib3\jpeg\jconfig.h	Sat Mar 21 14:01:08 2009
+diff -rupwN ..\dnl3\jpeg\jconfig.h ..\lib3\jpeg\jconfig.h
+--- jconfig.h	Wed Dec 31 19:00:00 1969
++++ jconfig.h	Sat Mar 21 14:01:08 2009
 @@ -0,0 +1,45 @@
 +/* jconfig.vc --- jconfig.h for Microsoft Visual C++ on Windows 95 or NT. */
 +/* see jconfig.txt for explanations */
