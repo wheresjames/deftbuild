@@ -1,7 +1,6 @@
-Index: source/Irrlicht/CImageLoaderPNG.cpp
-===================================================================
---- source/Irrlicht/CImageLoaderPNG.cpp	(revision 3256)
-+++ source/Irrlicht/CImageLoaderPNG.cpp	(working copy)
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	(revision 3256)
++++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	(working copy)
 @@ -162,7 +162,7 @@
  	if (BitDepth < 8)
  	{
@@ -11,10 +10,9 @@ Index: source/Irrlicht/CImageLoaderPNG.cpp
  		else
  			png_set_packing(png_ptr);
  	}
-Index: source/Irrlicht/Irrlicht.cpp
-===================================================================
---- source/Irrlicht/Irrlicht.cpp	(revision 3256)
-+++ source/Irrlicht/Irrlicht.cpp	(working copy)
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	(revision 3256)
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	(working copy)
 @@ -126,7 +126,7 @@
  } // end namespace irr
  

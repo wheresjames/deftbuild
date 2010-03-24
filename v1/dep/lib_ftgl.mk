@@ -6,7 +6,7 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := ftgl
 PRJ_TYPE := lib
-PRJ_INCS := freetype2/include ftgl/src  ftgl/msvc
+PRJ_INCS := freetype2/include ftgl/src ftgl/msvc
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
