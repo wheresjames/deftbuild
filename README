@@ -40,12 +40,11 @@ mkdir buildroot
 cd buildroot
 git clone git://github.com/wheresjames/deftbuild.git
 cd deftbuild
-deftbuild build core -
+deftbuild checkout core,img -
 
 // To update, do this from the deftbuild directory
 
-deftbuild update
-make
+deftbuild update - -
 
 //------------------------------------------------------------------
 // Directory structure
