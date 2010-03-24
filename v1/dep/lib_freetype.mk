@@ -18,8 +18,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(3D),)
-UNSUPPORTED := Set make option 3D=1 to build
+ifeq ($(FREETYPE),)
+UNSUPPORTED := Set make option FREETYPE=1 to build
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

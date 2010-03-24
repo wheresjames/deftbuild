@@ -1,7 +1,7 @@
 diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
 --- ../dnl3/gdchart/gd1.3/gd.c	1998-03-13 16:29:28.000000000 -0500
 +++ gdchart/gd1.3/gd.c	2010-03-23 14:59:05.000000000 -0400
-@@ -5,6 +5,33 @@
+@@ -5,6 +5,38 @@
  #include "gd.h"
  #include "mtables.c"
  
@@ -15,12 +15,17 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
 +#		undef delete
 +#	endif
 +
++#ifdef __cplusplus
 +	extern "C"
-+	{	t_gd_malloc gdimage_malloc = malloc;
-+		t_gd_calloc gdimage_calloc = calloc;
-+		t_gd_realloc gdimage_realloc = realloc;
-+		t_gd_free gdimage_free = free;
++	{	
++#endif
++		t_gd_malloc gd_malloc = malloc;
++		t_gd_calloc gd_calloc = calloc;
++		t_gd_realloc gd_realloc = realloc;
++		t_gd_free gd_free = free;
++#ifdef __cplusplus
 +	};
++#endif
 +
 +#	ifdef GD_FORCE_CUSTOM_ALLOCATOR
 +#		define malloc please_use_GD_MALLOC
@@ -35,7 +40,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  static void gdImageBrushApply(gdImagePtr im, int x, int y);
  static void gdImageTileApply(gdImagePtr im, int x, int y);
  
-@@ -12,9 +39,9 @@ gdImagePtr gdImageCreate(int sx, int sy)
+@@ -12,9 +44,9 @@ gdImagePtr gdImageCreate(int sx, int sy)
  {
  	int i;
  	gdImagePtr im;
@@ -47,7 +52,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  	im->polyInts = 0;
  	im->polyAllocated = 0;
  	im->brush = 0;
-@@ -22,7 +49,7 @@ gdImagePtr gdImageCreate(int sx, int sy)
+@@ -22,7 +54,7 @@ gdImagePtr gdImageCreate(int sx, int sy)
  	im->style = 0;
  	for (i=0; (i<sy); i++) {
  		/* NOW ROW-MAJOR IN GD 1.3 */
@@ -56,7 +61,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  			sx, sizeof(unsigned char));
  	}	
  	im->sx = sx;
-@@ -37,16 +64,16 @@ void gdImageDestroy(gdImagePtr im)
+@@ -37,16 +69,16 @@ void gdImageDestroy(gdImagePtr im)
  {
  	int i;
  	for (i=0; (i<im->sy); i++) {
@@ -78,7 +83,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  }
  
  int gdImageColorClosest(gdImagePtr im, int r, int g, int b)
-@@ -481,7 +508,7 @@ void gdImageString(gdImagePtr im, gdFont
+@@ -481,7 +513,7 @@ void gdImageString(gdImagePtr im, gdFont
  {
  	int i;
  	int l;
@@ -87,7 +92,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  	for (i=0; (i<l); i++) {
  		gdImageChar(im, f, x, y, s[i], color);
  		x += f->w;
-@@ -493,7 +520,7 @@ void gdImageStringUp(gdImagePtr im, gdFo
+@@ -493,7 +525,7 @@ void gdImageStringUp(gdImagePtr im, gdFo
  {
  	int i;
  	int l;
@@ -96,7 +101,16 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  	for (i=0; (i<l); i++) {
  		gdImageCharUp(im, f, x, y, s[i], color);
  		y -= f->w;
-@@ -2128,8 +2155,8 @@ void gdImageCopyResized(gdImagePtr dst, 
+@@ -1269,7 +1301,7 @@ static void output_plain(int c)
+   }
+ }
+ 
+-static unsigned int isqrt(unsigned int) __attribute__((__const__));
++//static unsigned int isqrt(unsigned int) __attribute__((__const__));
+ static unsigned int isqrt(unsigned int x)
+ {
+  unsigned int r;
+@@ -2128,8 +2160,8 @@ void gdImageCopyResized(gdImagePtr dst, 
  	/* We only need to use floating point to determine the correct
  		stretch vector for one line's worth. */
  	double accum;
@@ -107,7 +121,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  	accum = 0;
  	for (i=0; (i < srcW); i++) {
  		int got;
-@@ -2198,8 +2225,8 @@ void gdImageCopyResized(gdImagePtr dst, 
+@@ -2198,8 +2230,8 @@ void gdImageCopyResized(gdImagePtr dst, 
  			toy++;
  		}
  	}
@@ -118,7 +132,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  }
  
  int gdGetWord(int *result, FILE *in)
-@@ -2451,7 +2478,7 @@ void gdImageFilledPolygon(gdImagePtr im,
+@@ -2451,7 +2483,7 @@ void gdImageFilledPolygon(gdImagePtr im,
  		return;
  	}
  	if (!im->polyAllocated) {
@@ -127,7 +141,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  		im->polyAllocated = n;
  	}		
  	if (im->polyAllocated < n) {
-@@ -2565,10 +2592,10 @@ int gdCompareInt(const void *a, const vo
+@@ -2565,10 +2597,10 @@ int gdCompareInt(const void *a, const vo
  void gdImageSetStyle(gdImagePtr im, int *style, int noOfPixels)
  {
  	if (im->style) {
@@ -143,7 +157,7 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
 diff -rupwN ../dnl3/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
 --- ../dnl3/gdchart/gd1.3/gd.h	1998-03-13 16:13:45.000000000 -0500
 +++ gdchart/gd1.3/gd.h	2010-03-23 15:53:15.000000000 -0400
-@@ -14,6 +14,47 @@
+@@ -14,6 +14,59 @@
  /* stdio is needed for file I/O. */
  #include <stdio.h>
  
@@ -177,16 +191,28 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
 +#define GD_size_t size_t
 +
 +typedef void* (*t_gd_malloc)( GD_size_t size );
-+extern "C" t_gd_malloc gd_malloc;
++#ifdef __cplusplus
++extern "C" 
++#endif
++t_gd_malloc gd_malloc;
 +
 +typedef void* (*t_gd_calloc)( GD_size_t num, GD_size_t size );
-+extern "C" t_gd_calloc gd_calloc;
++#ifdef __cplusplus
++extern "C" 
++#endif
++t_gd_calloc gd_calloc;
 +
 +typedef void* (*t_gd_realloc)( void * ptr, GD_size_t size );
-+extern "C" t_gd_realloc gd_realloc;
++#ifdef __cplusplus
++extern "C" 
++#endif
++t_gd_realloc gd_realloc;
 +
 +typedef void (*t_gd_free)( void *ptr );
-+extern "C" t_gd_free gd_free;
++#ifdef __cplusplus
++extern "C" 
++#endif
++t_gd_free gd_free;
 +
  /* This can't be changed, it's part of the GIF specification. */
  

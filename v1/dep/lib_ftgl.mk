@@ -6,7 +6,7 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := ftgl
 PRJ_TYPE := lib
-PRJ_INCS := freetype/include ftgl/src
+PRJ_INCS := freetype2/include ftgl/src  ftgl/msvc
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
@@ -17,8 +17,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(3D),)
-UNSUPPORTED := Set make option 3D=1 to build
+ifeq ($(FTGL),)
+UNSUPPORTED := Set make option FTGL=1 to build
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

@@ -14,7 +14,7 @@ echo " *** Applying patch : ${PATCH}"
 if [ "${REPO}" == "svn" ]; then	
 
 	cd ${LIBPATH}
-	patch -p0 < "${PATCH}"
+	patch -p1 < "${PATCH}"
 
 fi
 

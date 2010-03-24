@@ -6,7 +6,7 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := cximage
 PRJ_TYPE := lib
-PRJ_INCS := zlib libtiff
+PRJ_INCS := zlib tiff
 PRJ_LIBS := 
 PRJ_DEFS := CXIMAGE_CUSTOM_ALLOCATOR=1
 

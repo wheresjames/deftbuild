@@ -6,7 +6,7 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := cxcore
 PRJ_TYPE := lib
-PRJ_INCS := /opencv/include/opencv
+PRJ_INCS := /opencv/include/opencv zlib
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..

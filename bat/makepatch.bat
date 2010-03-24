@@ -1,5 +1,10 @@
 
 REM ----------------------------------------------------------------
+REM %1 - .repo file
+REM %2 - Lib directory
+REM ----------------------------------------------------------------
+
+REM ----------------------------------------------------------------
 REM Where the patches should go
 REM ----------------------------------------------------------------
 
@@ -11,6 +16,11 @@ IF NOT EXIST !ARCHDIR! md !ARCHDIR!
 
 REM ----------------------------------------------------------------
 REM For each project in the file
+REM
+REM %%a - Project name
+REM %%b - Repository type
+REM %%c - Version
+REM %%d - Repo link
 REM ----------------------------------------------------------------
 FOR /f "tokens=1-8 delims= " %%a IN (%1) DO (
 
@@ -22,7 +32,7 @@ IF EXIST !PRJDIR! (
 
 cd !PRJDIR!
 
-set DNLREL=../dnl!DIR_IDX!/!PROJ!
+set DNLREL=../dnl!DIR_IDX!/%%a
 set PATCHFILE=!ARCHDIR!\%%a.%%b.!EXT_PATCH!
 
 echo *** Creating patch for %%a
@@ -38,7 +48,24 @@ REM ----------------------------------------------------------------
 REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
-svn diff > "!PATCHFILE!"
+
+REM svn diff > "!PATCHFILE!"
+
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
+
+IF %%c==- (
+cd !PRJDIR!
+FOR /f "delims=" %%a in ('svnversion') do set CVER=%%a
+set CVER=!CVER:M=!
+svn co -q -r !CVER! "%%d" "!DIR_DNL!/%%a"
+) ELSE (
+svn co -q -r %%c "%%d" "!DIR_DNL!/%%a"
+)
+
+cd !DIR_LIB!
+diff -rupwN -x ".svn" "!DNLREL!" "%%a" > "!PATCHFILE!"
+rmdir /s /q "!DIR_DNL!\%%a\"
+
 )
 
 REM ----------------------------------------------------------------
@@ -67,7 +94,7 @@ rename "%%c" "%%a"
 )
 
 cd !DIR_LIB!
-diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
+diff -rupwN "!DNLREL!" "%%a" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -91,7 +118,7 @@ rename "%%c" "%%a"
 )
 
 cd !DIR_LIB!
-diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
+diff -rupwN "!DNLREL!" "%%a" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )
@@ -115,7 +142,7 @@ rename "%%c" "%%a"
 )
 
 cd !DIR_LIB!
-diff -rupwN "!DNLREL!/" "${PROJ}" > "!PATCHFILE!"
+diff -rupwN "!DNLREL!" "%%a" > "!PATCHFILE!"
 rmdir /s /q "!DIR_DNL!\%%a\"
 
 )

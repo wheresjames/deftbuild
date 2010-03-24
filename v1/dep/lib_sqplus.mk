@@ -8,7 +8,6 @@ PRJ_NAME := sqplus
 PRJ_TYPE := lib
 PRJ_INCS := SqPlus/include
 PRJ_LIBS :=
-PRJ_DEFS := uintptr_t=unsigned*
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -27,6 +26,7 @@ LOC_SRC_def := $(CFG_LIBROOT)/SqPlus/sqplus
 LOC_EXC_def := SqPlus_Backup SquirrelBindingsUtilsWin32_Backup \
 			   SquirrelObject_Backup SquirrelVM_Backup
 ifneq ($(PLATFORM),windows)	  
+	PRJ_DEFS := $(PRJ_DEFS) uintptr_t=unsigned*
 	LOC_EXC_def := $(LOC_EXC_def) SquirrelBindingsUtilsWin32
 endif
 include $(PRJ_LIBROOT)/build.mk

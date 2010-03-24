@@ -4,10 +4,11 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := curl/include
+PRJ_NAME := curl
 PRJ_TYPE := lib
-PRJ_INCS := libcurl/src openldap/include
+PRJ_INCS := curl/include curl/include/curl
 PRJ_LIBS := 
+PRJ_DEFS :=
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -46,9 +47,8 @@ endif
 export LOC_TAG := def
 LOC_CXX_def := c
 #LOC_BLD_def := cpp
-LOC_INC_def := $(CFG_LIBROOT)/libcurl/include
-LOC_SRC_def := $(CFG_LIBROOT)/libcurl/lib
-LOC_EXC_def := 
+LOC_SRC_def := $(CFG_LIBROOT)/curl/lib
+LOC_EXC_def := amigaos 
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

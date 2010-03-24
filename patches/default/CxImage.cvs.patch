@@ -108,3 +108,16 @@ diff -r1.2 ximapng.cpp
 < 			info_ptr->trans = trans;
 ---
 > 			info_ptr->trans_alpha = trans;
+Index: ximatran.cpp
+===================================================================
+RCS file: /cvsroot/cximage/CxImage/ximatran.cpp,v
+retrieving revision 1.2
+diff -r1.2 ximatran.cpp
+183c183
+< 			div_r = div(y + dlineup, 8);
+---
+> 			div_r = div((int)( y + dlineup ), 8);
+301c301
+< 			div_r = div(y, 8);
+---
+> 			div_r = div((int)y, 8);
