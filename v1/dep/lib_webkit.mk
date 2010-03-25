@@ -53,7 +53,7 @@ else
 ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) NDEBUG=1
 
-	PRJ_INCS := winglib/dep/etc/WebKit/inc/windows winglib/dep/etc/libxml/inc/windows \
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/WebKit/inc/windows $(CFG_LIB2BLD)/dep/etc/libxml/inc/windows \
 				$(PRJ_INCS) pthreads \
 				WebKit/WebCore/platform/network/curl
 
@@ -80,7 +80,7 @@ ifeq ($(PLATFORM),windows)
 	endif
 
 	
-#	PRJ_INCS := winglib/dep/etc/WebKit/inc/windows winglib/dep/etc/cairo/inc/windows \
+#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/WebKit/inc/windows $(CFG_LIB2BLD)/dep/etc/cairo/inc/windows \
 #				$(PRJ_INCS) pthreads \
 #				WebKit/WebKit/win WebKit/WebKit/win/WebCoreSupport WebKit/WebKit/win/webkit \
 #				WebKit/WebCore/platform/win WebKit/WebCore/platform/graphics/win \
@@ -96,7 +96,7 @@ else
 	PRJ_DEFS := $(PRJ_DEFS) CAIRO_HAS_FT_FONT CAIRO_HAS_FC_FONT
 
 	PRJ_SYSI := /usr/include/libsoup-2.4
-	PRJ_INCS := winglib/dep/etc/WebKit/inc/posix winglib/dep/etc/cairo/inc/posix $(PRJ_INCS) \
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/WebKit/inc/posix $(CFG_LIB2BLD)/dep/etc/cairo/inc/posix $(PRJ_INCS) \
 				WebKit/WebKit/gtk WebKit/WebKit/gtk/WebCoreSupport WebKit/WebKit/gtk/webkit \
 				WebKit/WebCore/platform/gtk WebKit/WebCore/platform/graphics/gtk \
 				WebKit/WebCore/accessibility/gtk WebKit/WebCore/loader/gtk WebKit/WebCore/page/gtk \

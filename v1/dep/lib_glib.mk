@@ -6,8 +6,7 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := glib
 PRJ_TYPE := lib
-PRJ_INCS := glib glib/glib \
-			winglib/dep/etc/glib/inc/posix
+PRJ_INCS := glib glib/glib
 PRJ_LIBS := 
 PRJ_DEFS := GOBJECT_COMPILATION LINK_SIZE=2 MAX_NAME_COUNT=10000 MAX_NAME_SIZE=32 NEWLINE=-1 \
 			POSIX_MALLOC_THRESHOLD=10 MATCH_LIMIT=10000000 MATCH_LIMIT_RECURSION=10000000
@@ -19,6 +18,8 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
+
+PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/glib/inc/posix
 
 ifndef BUILD_GSTREAMER
 UNSUPPORTED := Set make option BUILD_GSTREAMER=1 to build

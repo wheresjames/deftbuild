@@ -26,9 +26,9 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 #ifeq ($(PLATFORM),windows)
-#	PRJ_INCS := winglib/dep/etc/mimetic/inc/windows $(PRJ_INCS)
+#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
 #else
-#	PRJ_INCS := winglib/dep/etc/mimetic/inc/posix $(PRJ_INCS)
+#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/posix $(PRJ_INCS)
 #endif
 
 #-------------------------------------------------------------------

@@ -33,19 +33,19 @@ else
 
 ifeq ($(PLATFORM),windows)
 	ifeq ($(BUILD),vs)
-		PRJ_INCS := winglib/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)
 	else 
 		ifeq ($(PROC),arm)
-			PRJ_INCS := winglib/dep/etc/ffmpeg/inc/windows/arm $(PRJ_INCS) zlib
+			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/arm $(PRJ_INCS) zlib
 		else
-			PRJ_INCS := winglib/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
+			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
 		endif
 	endif
 else
 	ifeq ($(PROC),arm)
-		PRJ_INCS := winglib/dep/etc/ffmpeg/inc/arm $(PRJ_INCS) zlib
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/arm $(PRJ_INCS) zlib
 	else
-		PRJ_INCS := winglib/dep/etc/ffmpeg/inc/posix $(PRJ_INCS) zlib
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix $(PRJ_INCS) zlib
 	endif
 endif
 

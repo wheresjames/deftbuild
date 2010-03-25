@@ -25,9 +25,9 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_INCS := winglib/dep/etc/vmime/inc/windows winglib/dep/etc/gnutls/inc/windows $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/windows $(CFG_LIB2BLD)/dep/etc/gnutls/inc/windows $(PRJ_INCS)
 else
-	PRJ_INCS := winglib/dep/etc/vmime/inc/posix winglib/dep/etc/gnutls/inc/posix $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/posix $(CFG_LIB2BLD)/dep/etc/gnutls/inc/posix $(PRJ_INCS)
 endif
 
 #-------------------------------------------------------------------

@@ -23,7 +23,7 @@ include $(PRJ_LIBROOT)/config.mk
 ifeq ($(PLATFORM),windows)
 	PRJ_INCS := ntp/ports/winnt/include ntp/lib/isc/win32/include $(PRJ_INCS)
 else
-	PRJ_INCS := winglib/dep/etc/ntp/inc/posix \
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ntp/inc/posix \
 				ntp/lib/isc/unix/include $(PRJ_INCS) 
 endif
 

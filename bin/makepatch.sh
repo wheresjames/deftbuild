@@ -135,8 +135,8 @@ if [ "${REPO}" == "zip" ]; then
 fi
 
 # Just delete empty patches
-#if [ -f ${PATCH} ] && [ ! -s ${PATCH} ]; then
-#	rm -f "${PATCH}"
-#fi
+if [ -f ${PATCH} ] && [ ! -s ${PATCH} ]; then
+	rm -f "${PATCH}"
+fi
 					
 

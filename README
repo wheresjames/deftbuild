@@ -21,7 +21,7 @@ deftbuild has the following basic command line structure
 deftbuild [command] [groups] [projects] [ext]
 
 command = build, checkout, compile, diff, archive, makepatch, applypatch
-	
+
 	build		- checkout, applypatch, compile
 	checkout	- Checks out the specified projects
 	compile		- Compiles and links the specified projects
@@ -41,6 +41,9 @@ cd buildroot
 git clone git://github.com/wheresjames/deftbuild.git
 cd deftbuild
 deftbuild checkout core,img -
+deftbuild applypatch - -
+cd v1
+make BUILDDEP=1
 
 // To update, do this from the deftbuild directory
 
@@ -80,7 +83,7 @@ Following directory structure is assumed
 // Checkout specific project
 
 	deftbuild checkout - libpng
-	
+
 // Chcekout specific project version
 
 	deftbuild checkout - poco:1300
@@ -88,18 +91,18 @@ Following directory structure is assumed
 // Force checkout
 
 	deftbuild checkout - tinyxml 1
-	
+
 // Multiple projects
 
 	deftbuild checkout - libpng,ffmpeg,poco:1300
-	
+
 // Checkout group
 
 	deftbuild checkout 3d
-	
+
 // Multiple groups
 
 	deftbuild checkout 3d,scripting
-	
-	
-	
+
+
+

@@ -1,7 +1,7 @@
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
---- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	(revision 3256)
-+++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	(working copy)
-@@ -162,7 +162,7 @@
+--- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-25 12:17:20.000000000 -0400
++++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-25 12:13:07.000000000 -0400
+@@ -162,7 +162,7 @@ IImage* CImageLoaderPng::loadImage(io::I
  	if (BitDepth < 8)
  	{
  		if (ColorType==PNG_COLOR_TYPE_GRAY || ColorType==PNG_COLOR_TYPE_GRAY_ALPHA)
@@ -11,9 +11,9 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlich
  			png_set_packing(png_ptr);
  	}
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	(revision 3256)
-+++ irrlicht/source/Irrlicht/Irrlicht.cpp	(working copy)
-@@ -126,7 +126,7 @@
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-25 12:17:20.000000000 -0400
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-25 12:13:36.000000000 -0400
+@@ -126,7 +126,7 @@ namespace video
  } // end namespace irr
  
  

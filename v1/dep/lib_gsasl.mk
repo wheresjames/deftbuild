@@ -19,9 +19,9 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_INCS := winglib/dep/etc/gsasl/inc/windows libgsasl/win32/include $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/gsasl/inc/windows libgsasl/win32/include $(PRJ_INCS)
 else
-	PRJ_INCS := winglib/dep/etc/gsasl/inc/posix $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/gsasl/inc/posix $(PRJ_INCS)
 endif
 
 ifeq ($(BUILD),vs)

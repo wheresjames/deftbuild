@@ -7,13 +7,10 @@ default_target: all
 PRJ_NAME := gst-plugins-base
 PRJ_TYPE := lib
 PRJ_INCS := gstreamer/gstreamer gstreamer/gstreamer/libs \
-			winglib/dep/etc/gstreamer/inc/posix \
-			winglib/dep/etc/gstreamer/inc/posix/gst \
-			winglib/dep/etc/gstreamer/inc/posix/gst/interfaces \
 			gstreamer/gst-plugins-base/gst-libs \
 			gstreamer/gst-plugins-base/gst-libs/gst/interfaces \
 			glib glib/glib glib/gmodule glib/gobject \
-			libxml/include winglib/dep/etc/libxml/inc/posix
+			libxml/include
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_CONFIG_H=1 
 PRJ_LIBROOT := ..
@@ -23,6 +20,12 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
+
+PRJ_INCS := $(PRJ_INCS) \
+			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix \
+			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix/gst \
+			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix/gst/interfaces \
+			$(CFG_LIB2BLD)/dep/etc/libxml/inc/posix
 
 ifndef BUILD_GSTREAMER
 UNSUPPORTED := Set make option BUILD_GSTREAMER=1 to build
@@ -36,7 +39,7 @@ else
 export LOC_TAG := gpb_custom
 LOC_CXX_gpb_custom := c
 #LOC_INC_gpb_custom := $(CFG_LIBROOT)/gstreamer/gst-plugins-base/gst-libs/gst/interfaces
-LOC_SRC_gpb_custom := $(CFG_LIBROOT)/winglib/dep/etc/gstreamer/src/posix/plugins
+LOC_SRC_gpb_custom := $(CFG_LIBROOT)/$(CFG_LIB2BLD)/dep/etc/gstreamer/src/posix/plugins
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := gpb_interfaces

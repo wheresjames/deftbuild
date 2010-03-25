@@ -7,11 +7,10 @@ default_target: all
 PRJ_NAME := gst$(MK_MODULE)
 PRJ_TYPE := dll
 PRJ_INCS := gstreamer/gstreamer gstreamer/gstreamer/libs \
-			winglib/dep/etc/gstreamer/inc/posix \
 			gstreamer/gst-plugins-base/gst-libs \
 			gstreamer/gst-plugins-good/gst-libs \
 			glib glib/glib glib/gmodule glib/gobject \
-			libxml/include winglib/dep/etc/libxml/inc/posix
+			libxml/include
 PRJ_LIBS := gst-plugins-base
 PRJ_DEFS := HAVE_CONFIG_H=1
 PRJ_OSLB := $(MK_OSLB)
@@ -23,6 +22,10 @@ PRJ_SUBROOT := gst/plugins
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
+
+PRJ_INCS := $(PRJ_INCS) \
+			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix \
+			$(CFG_LIB2BLD)/dep/etc/libxml/inc/posix
 
 ifndef BUILD_GSTREAMER
 UNSUPPORTED := Set make option BUILD_GSTREAMER=1 to build

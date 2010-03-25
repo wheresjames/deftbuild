@@ -68,10 +68,12 @@ ifdef PRJ_ROOT
 	CFG_ROOT := $(PRJ_ROOT)
 	CFG_TOOLROOT := $(PRJ_ROOT)/tools
 	CFG_LIBROOT  := $(PRJ_OSROOT)
+	CFG_LIB2BLD  := ../deftbuld/v1
 else
 	CFG_ROOT := $(PRJ_LIBROOT)/../..
 	CFG_TOOLROOT := $(CFG_ROOT)/tools
 	CFG_LIBROOT  := $(CFG_ROOT)/$(DEFLIB)
+	CFG_LIB2BLD  := ../deftbuild/v1
 endif
 
 ifeq ($(BUILD),vs)
