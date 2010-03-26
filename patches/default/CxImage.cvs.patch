@@ -1,123 +1,186 @@
-Index: ximacfg.h
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximacfg.h,v
-retrieving revision 1.1.1.1
-diff -r1.1.1.1 ximacfg.h
-26c26
-< #define CXIMAGE_SUPPORT_TIF 1
----
-> #define CXIMAGE_SUPPORT_TIF 0
-34,38c34,38
-< #define CXIMAGE_SUPPORT_JP2 1
-< #define CXIMAGE_SUPPORT_JPC 1
-< #define CXIMAGE_SUPPORT_PGX 1
-< #define CXIMAGE_SUPPORT_PNM 1
-< #define CXIMAGE_SUPPORT_RAS 1
----
-> #define CXIMAGE_SUPPORT_JP2 0
-> #define CXIMAGE_SUPPORT_JPC 0
-> #define CXIMAGE_SUPPORT_PGX 0
-> #define CXIMAGE_SUPPORT_PNM 0
-> #define CXIMAGE_SUPPORT_RAS 0
-Index: ximadef.h
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximadef.h,v
-retrieving revision 1.1.1.1
-diff -r1.1.1.1 ximadef.h
-196a197,229
-> typedef void* (*t_cx_malloc)( size_t size );
-> extern "C" t_cx_malloc cximage_malloc;
-> 
-> typedef void* (*t_cx_calloc)( size_t num, size_t size );
-> extern "C" t_cx_calloc cximage_calloc;
-> 
-> typedef void* (*t_cx_realloc)( void * ptr, size_t size );
-> extern "C" t_cx_realloc cximage_realloc;
-> 
-> typedef void (*t_cx_free)( void *ptr );
-> extern "C" t_cx_free cximage_free;
-> 
-> #ifndef CX_NEW
-> #	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
-> #endif
-> #ifndef CX_DELETE
-> #	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
-> #endif
-> #ifndef CX_MALLOC
-> #	define CX_MALLOC(__sz) cximage_malloc(__sz)
-> #endif
-> #ifndef CX_CALLOC
-> #	define CX_CALLOC(__num,__sz) cximage_calloc(__num,__sz)
-> #endif
-> 
-> #ifdef CX_FORCE_CUSTOM_ALLOCATOR
-> #	define malloc please_use_CX_MALLOC
-> #	define calloc please_use_CX_CALLOC
-> #	define free please_use_CX_DELETE
-> #	define new please_use_CX_NEW
-> #	define delete please_use_CX_DELETE
-> #endif
-> 
-Index: ximage.cpp
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximage.cpp,v
-retrieving revision 1.2
-diff -r1.2 ximage.cpp
-7a8,34
-> #if !defined( CXIMAGE_CUSTOM_ALLOCATOR )
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		undef malloc
-> #		undef calloc
-> #		undef free
-> #		undef new
-> #		undef delete
-> #	endif
-> 
-> 	extern "C"
-> 	{	t_cx_malloc cximage_malloc = malloc;
-> 		t_cx_calloc cximage_calloc = calloc;
-> 		t_cx_realloc cximage_realloc = realloc;
-> 		t_cx_free cximage_free = free;
-> 	};
-> 
-> #	ifdef CX_CUSTOM_MEMORY_ONLY
-> #		define malloc please_use_CX_MALLOC
-> #		define calloc please_use_CX_CALLOC
-> #		define free please_use_CX_DELETE
-> #		define new please_use_CX_NEW
-> #		define delete please_use_CX_DELETE
-> #	endif
-> 
-> #endif
-> 
-Index: ximapng.cpp
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximapng.cpp,v
-retrieving revision 1.2
-diff -r1.2 ximapng.cpp
-145c145
-< 				pal[ip].rgbReserved=info_ptr->trans[ip];
----
-> 				pal[ip].rgbReserved=info_ptr->trans_alpha[ip];
-358c358
-< 			info_ptr->trans = trans;
----
-> 			info_ptr->trans_alpha = trans;
-388c388
-< 			info_ptr->trans = trans;
----
-> 			info_ptr->trans_alpha = trans;
-Index: ximatran.cpp
-===================================================================
-RCS file: /cvsroot/cximage/CxImage/ximatran.cpp,v
-retrieving revision 1.2
-diff -r1.2 ximatran.cpp
-183c183
-< 			div_r = div(y + dlineup, 8);
----
-> 			div_r = div((int)( y + dlineup ), 8);
-301c301
-< 			div_r = div(y, 8);
----
-> 			div_r = div((int)y, 8);
+diff -rupwN -x CVS ../dnl3/CxImage/ximacfg.h CxImage/ximacfg.h
+--- ../dnl3/CxImage/ximacfg.h	2004-10-13 15:33:21.000000000 -0400
++++ CxImage/ximacfg.h	2010-03-26 09:57:53.000000000 -0400
+@@ -23,7 +23,7 @@
+ #define CXIMAGE_SUPPORT_PNG 1
+ #define CXIMAGE_SUPPORT_MNG 0
+ #define CXIMAGE_SUPPORT_ICO 1
+-#define CXIMAGE_SUPPORT_TIF 1
++#define CXIMAGE_SUPPORT_TIF 0
+ #define CXIMAGE_SUPPORT_TGA 1
+ #define CXIMAGE_SUPPORT_PCX 1
+ #define CXIMAGE_SUPPORT_WBMP 1
+@@ -31,11 +31,11 @@
+ #define CXIMAGE_SUPPORT_J2K 0		// Beta, use JP2
+ #define CXIMAGE_SUPPORT_JBG 0		// GPL'd see ../jbig/copying.txt & ../jbig/patents.htm
+ 
+-#define CXIMAGE_SUPPORT_JP2 1
+-#define CXIMAGE_SUPPORT_JPC 1
+-#define CXIMAGE_SUPPORT_PGX 1
+-#define CXIMAGE_SUPPORT_PNM 1
+-#define CXIMAGE_SUPPORT_RAS 1
++#define CXIMAGE_SUPPORT_JP2 0
++#define CXIMAGE_SUPPORT_JPC 0
++#define CXIMAGE_SUPPORT_PGX 0
++#define CXIMAGE_SUPPORT_PNM 0
++#define CXIMAGE_SUPPORT_RAS 0
+ 
+ 
+ /////////////////////////////////////////////////////////////////////////////
+diff -rupwN -x CVS ../dnl3/CxImage/ximadef.h CxImage/ximadef.h
+--- ../dnl3/CxImage/ximadef.h	2004-10-13 15:32:58.000000000 -0400
++++ CxImage/ximadef.h	2010-03-26 09:57:53.000000000 -0400
+@@ -194,4 +194,37 @@ typedef struct tagcomplex {
+ 
+ #endif
+ 
++typedef void* (*t_cx_malloc)( size_t size );
++extern "C" t_cx_malloc cximage_malloc;
++
++typedef void* (*t_cx_calloc)( size_t num, size_t size );
++extern "C" t_cx_calloc cximage_calloc;
++
++typedef void* (*t_cx_realloc)( void * ptr, size_t size );
++extern "C" t_cx_realloc cximage_realloc;
++
++typedef void (*t_cx_free)( void *ptr );
++extern "C" t_cx_free cximage_free;
++
++#ifndef CX_NEW
++#	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
++#endif
++#ifndef CX_DELETE
++#	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
++#endif
++#ifndef CX_MALLOC
++#	define CX_MALLOC(__sz) cximage_malloc(__sz)
++#endif
++#ifndef CX_CALLOC
++#	define CX_CALLOC(__num,__sz) cximage_calloc(__num,__sz)
++#endif
++
++#ifdef CX_FORCE_CUSTOM_ALLOCATOR
++#	define malloc please_use_CX_MALLOC
++#	define calloc please_use_CX_CALLOC
++#	define free please_use_CX_DELETE
++#	define new please_use_CX_NEW
++#	define delete please_use_CX_DELETE
++#endif
++
+ #endif //__ximadefs
+diff -rupwN -x CVS ../dnl3/CxImage/ximaexif.cpp CxImage/ximaexif.cpp
+--- ../dnl3/CxImage/ximaexif.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximaexif.cpp	2010-03-26 11:06:12.000000000 -0400
+@@ -8,6 +8,10 @@
+ 
+ #include "ximajpg.h"
+ 
++#ifdef __MINGW32__
++#	include <ctype.h>
++#endif
++
+ #if CXIMAGEJPG_SUPPORT_EXIF
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+diff -rupwN -x CVS ../dnl3/CxImage/ximage.cpp CxImage/ximage.cpp
+--- ../dnl3/CxImage/ximage.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximage.cpp	2010-03-26 09:57:53.000000000 -0400
+@@ -5,6 +5,33 @@
+ 
+ #include "ximage.h"
+ 
++#if !defined( CXIMAGE_CUSTOM_ALLOCATOR )
++
++#	ifdef CX_CUSTOM_MEMORY_ONLY
++#		undef malloc
++#		undef calloc
++#		undef free
++#		undef new
++#		undef delete
++#	endif
++
++	extern "C"
++	{	t_cx_malloc cximage_malloc = malloc;
++		t_cx_calloc cximage_calloc = calloc;
++		t_cx_realloc cximage_realloc = realloc;
++		t_cx_free cximage_free = free;
++	};
++
++#	ifdef CX_CUSTOM_MEMORY_ONLY
++#		define malloc please_use_CX_MALLOC
++#		define calloc please_use_CX_CALLOC
++#		define free please_use_CX_DELETE
++#		define new please_use_CX_NEW
++#		define delete please_use_CX_DELETE
++#	endif
++
++#endif
++
+ ////////////////////////////////////////////////////////////////////////////////
+ // CxImage 
+ ////////////////////////////////////////////////////////////////////////////////
+diff -rupwN -x CVS ../dnl3/CxImage/ximapng.cpp CxImage/ximapng.cpp
+--- ../dnl3/CxImage/ximapng.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximapng.cpp	2010-03-26 09:57:53.000000000 -0400
+@@ -142,7 +142,7 @@ bool CxImagePNG::Decode(CxFile *hFile)
+ 		if (pal){
+ 			DWORD ip;
+ 			for (ip=0;ip<min(head.biClrUsed,(unsigned long)info_ptr->num_trans);ip++)
+-				pal[ip].rgbReserved=info_ptr->trans[ip];
++				pal[ip].rgbReserved=info_ptr->trans_alpha[ip];
+ 			if (info_ptr->num_trans==1 && pal[0].rgbReserved==0){
+ 				info.nBkgndIndex = 0;
+ 			} else {
+@@ -355,7 +355,7 @@ bool CxImagePNG::Encode(CxFile *hFile)
+ 			trans[0]=0;
+ 			info_ptr->num_trans = 1;
+ 			info_ptr->valid |= PNG_INFO_tRNS;
+-			info_ptr->trans = trans;
++			info_ptr->trans_alpha = trans;
+ 			// the transparency indexes start from 0
+ 			if (info.nBkgndIndex){
+ 				SwapIndex(0,(BYTE)info.nBkgndIndex);
+@@ -385,7 +385,7 @@ bool CxImagePNG::Encode(CxFile *hFile)
+ 				trans[ip]=GetPaletteColor((BYTE)ip).rgbReserved;
+ 			info_ptr->num_trans = (WORD)nc;
+ 			info_ptr->valid |= PNG_INFO_tRNS;
+-			info_ptr->trans = trans;
++			info_ptr->trans_alpha = trans;
+ 		}
+ 
+ 		// copy the palette colors
+diff -rupwN -x CVS ../dnl3/CxImage/ximatran.cpp CxImage/ximatran.cpp
+--- ../dnl3/CxImage/ximatran.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximatran.cpp	2010-03-26 09:57:53.000000000 -0400
+@@ -180,7 +180,7 @@ bool CxImage::RotateLeft(CxImage* iDst)
+ 		imgDest.Clear(0);
+ 		for (y = 0; y < head.biHeight; y++) {
+ 			// Figure out the Column we are going to be copying to
+-			div_r = div(y + dlineup, 8);
++			div_r = div((int)( y + dlineup ), 8);
+ 			// set bit pos of src column byte				
+ 			bitpos = 1 << div_r.rem;
+ 			srcdisp = bsrc + y * info.dwEffWidth;
+@@ -298,7 +298,7 @@ bool CxImage::RotateRight(CxImage* iDst)
+ 		imgDest.Clear(0);
+ 		for (y = 0; y < head.biHeight; y++) {
+ 			// Figure out the Column we are going to be copying to
+-			div_r = div(y, 8);
++			div_r = div((int)y, 8);
+ 			// set bit pos of src column byte				
+ 			bitpos = 128 >> div_r.rem;
+ 			srcdisp = bsrc + y * info.dwEffWidth;
+diff -rupwN -x CVS ../dnl3/CxImage/ximawnd.cpp CxImage/ximawnd.cpp
+--- ../dnl3/CxImage/ximawnd.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximawnd.cpp	2010-03-26 11:09:15.000000000 -0400
+@@ -8,6 +8,10 @@
+ #include "ximaiter.h" 
+ #include "ximabmp.h"
+ 
++#ifdef __MINGW32__
++#	define _tcsclen(x) _tcslen(x)
++#endif
++
+ ////////////////////////////////////////////////////////////////////////////////
+ #if CXIMAGE_SUPPORT_WINCE
+ ////////////////////////////////////////////////////////////////////////////////

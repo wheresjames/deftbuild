@@ -41,8 +41,34 @@ fi
 if [ "${REPO}" == "cvs" ]; then	
 
 	# Save the diff anyway
-	cd ${LIBPATH}
-	cvs -Q -w diff > "${PATCH}"
+#	cd ${LIBPATH}
+#	cvs -Q -w diff -N -u > "${PATCH}"
+
+
+	# ensure download directory
+	if [ ! -d ${DIR_DNL} ]; then
+		mkdir -p ${DIR_DNL}
+	fi
+
+	MODL=${STR%% *}
+	STR=${STR#* }
+	PROTO=${STR%% *}
+	STR=${STR#* }
+	if [ ${PROTO} == ${MODL} ]; then
+		PROTO=
+	fi
+
+	cd ${DIR_DNL}
+	if [ "${REVN}" != "-" ]; then
+		cvs -Q -z3 -d "${PROTO}${LINK}" co -r ${REVN} -d "${PROJ}" "${MODL}"
+	else
+		cvs -Q -z3 -d "${PROTO}${LINK}" co -d "${PROJ}" "${MODL}"
+	fi
+
+	cd ${DIR_LIB}
+	diff -rupwN -x "CVS" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	rm -Rf "${DIR_DNL}/${PROJ}/"							
+
 fi
 
 # git

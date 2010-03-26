@@ -8,6 +8,7 @@ PRJ_NAME := bullet
 PRJ_TYPE := lib
 PRJ_INCS := bullet/src
 PRJ_LIBS := 
+PRJ_DEFS := HAVE_POWF
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

@@ -72,7 +72,23 @@ REM ----------------------------------------------------------------
 REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
-cvs -Q diff > "!PATCHFILE!"
+
+REM cvs -Q diff -N -u > "!PATCHFILE!"
+
+IF NOT EXIST !DIR_DNL! md !DIR_DNL!
+
+cd !DIR_DNL!
+
+IF %%c==- (
+cvs -Q -z3 -d "%%f%%d" co -d %%a "%%e"
+) ELSE (
+cvs -Q -z3 -d "%%f%%d" co -r %%c -d %%a "%%e"
+)
+
+cd !DIR_LIB!
+diff -rupwN -x "CVS" "!DNLREL!" "%%a" > "!PATCHFILE!"
+rmdir /s /q "!DIR_DNL!\%%a\"
+
 )
 
 REM ----------------------------------------------------------------

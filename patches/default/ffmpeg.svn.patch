@@ -1,6 +1,6 @@
 diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h264dspenc.c
---- ../dnl3/ffmpeg/libavcodec/h264dspenc.c	2010-03-25 11:58:09.000000000 -0400
-+++ ffmpeg/libavcodec/h264dspenc.c	2010-03-25 11:46:17.000000000 -0400
+--- ../dnl3/ffmpeg/libavcodec/h264dspenc.c	2010-03-26 16:59:27.000000000 -0400
++++ ffmpeg/libavcodec/h264dspenc.c	2010-03-26 09:57:54.000000000 -0400
 @@ -73,6 +73,6 @@ static void h264_dct_c(DCTELEM block[4][
  
  av_cold void ff_h264dspenc_init(DSPContext* c, AVCodecContext *avctx)
@@ -10,8 +10,8 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h26
  }
  
 diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264enc.c ffmpeg/libavcodec/h264enc.c
---- ../dnl3/ffmpeg/libavcodec/h264enc.c	2010-03-25 11:58:09.000000000 -0400
-+++ ffmpeg/libavcodec/h264enc.c	2010-03-25 11:47:54.000000000 -0400
+--- ../dnl3/ffmpeg/libavcodec/h264enc.c	2010-03-26 16:59:27.000000000 -0400
++++ ffmpeg/libavcodec/h264enc.c	2010-03-26 09:57:54.000000000 -0400
 @@ -184,7 +184,7 @@ static inline int quantize_c(DCTELEM *bl
                               int intra, int separate_dc)
  {
@@ -22,8 +22,8 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264enc.c ffmpeg/libavcodec/h264en
      const unsigned int threshold1 = (1 << QUANT_SHIFT) - bias - 1;
      const unsigned int threshold2 = (threshold1 << 1);
 diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c ffmpeg/libavcodec/mpegaudio_tablegen.c
---- ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-25 11:58:09.000000000 -0400
-+++ ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-25 11:53:41.000000000 -0400
+--- ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-26 16:59:27.000000000 -0400
++++ ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-26 09:57:54.000000000 -0400
 @@ -22,6 +22,7 @@
  
  #include <stdlib.h>
@@ -32,9 +32,21 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c ffmpeg/libavc
  #include "mpegaudio_tablegen.h"
  #include "tableprint.h"
  
+diff -rupwN -x .svn ../dnl3/ffmpeg/libavformat/rtpdec_theora.c ffmpeg/libavformat/rtpdec_theora.c
+--- ../dnl3/ffmpeg/libavformat/rtpdec_theora.c	2010-03-26 16:59:30.000000000 -0400
++++ ffmpeg/libavformat/rtpdec_theora.c	2010-03-26 16:40:44.000000000 -0400
+@@ -349,7 +349,7 @@ static int theora_parse_sdp_line(AVForma
+     int value_size = strlen(line), attr_size = sizeof(attr), res = 0;
+     AVCodecContext* codec = s->streams[st_index]->codec;
+ 
+-    assert(codec->id == CODEC_ID_THEORA);
++    assert(codec->codec_id == CODEC_ID_THEORA);
+     assert(data);
+ 
+     if (!(value = av_malloc(value_size))) {
 diff -rupwN -x .svn ../dnl3/ffmpeg/libavutil/avconfig.h ffmpeg/libavutil/avconfig.h
 --- ../dnl3/ffmpeg/libavutil/avconfig.h	1969-12-31 19:00:00.000000000 -0500
-+++ ffmpeg/libavutil/avconfig.h	2010-03-25 09:51:26.000000000 -0400
++++ ffmpeg/libavutil/avconfig.h	2010-03-26 09:57:54.000000000 -0400
 @@ -0,0 +1,4 @@
 +#ifndef AVUTIL_AVCONFIG_H
 +#define AVUTIL_AVCONFIG_H

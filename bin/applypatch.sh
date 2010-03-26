@@ -23,7 +23,7 @@ if [ "${REPO}" == "cvs" ]; then
 
 	# Save the diff anyway
 	cd ${LIBPATH}
-	patch -p0 < "${PATCH}"
+	patch -p1 < "${PATCH}"
 fi
 
 # git

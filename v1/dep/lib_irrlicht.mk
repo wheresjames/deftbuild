@@ -6,9 +6,9 @@ default_target: all
 #-------------------------------------------------------------------
 PRJ_NAME := irrlicht
 PRJ_TYPE := lib
-PRJ_INCS := irrlicht/include jpeg png tiff zlib
+PRJ_INCS := irrlicht/include jpeg png tiff zlib bzip2
 PRJ_LIBS := 
-# PRJ_DEFS := _IRR_COMPILE_WITH_OPENGL_
+PRJ_DEFS := 
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

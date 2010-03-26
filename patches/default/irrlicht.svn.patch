@@ -1,6 +1,27 @@
+diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
+--- ../dnl3/irrlicht/include/IrrCompileConfig.h	2010-03-26 16:53:02.000000000 -0400
++++ irrlicht/include/IrrCompileConfig.h	2010-03-26 14:09:06.000000000 -0400
+@@ -348,7 +348,7 @@ ones. */
+ /** If this is commented out, Irrlicht will try to compile using the zlib
+ installed on the system. This is only used when _IRR_COMPILE_WITH_ZLIB_ is
+ defined. */
+-#define _IRR_USE_NON_SYSTEM_ZLIB_
++#undef _IRR_USE_NON_SYSTEM_ZLIB_
+ //! Define _IRR_COMPILE_WITH_ZIP_ENCRYPTION_ if you want to read AES-encrypted ZIP archives
+ #define _IRR_COMPILE_WITH_ZIP_ENCRYPTION_
+ //! Define _IRR_COMPILE_WITH_BZIP2_ if you want to support bzip2 compressed zip archives
+@@ -360,7 +360,7 @@ library. */
+ /** If this is commented out, Irrlicht will try to compile using the bzlib
+ installed on the system. This is only used when _IRR_COMPILE_WITH_BZLIB_ is
+ defined. */
+-#define _IRR_USE_NON_SYSTEM_BZLIB_
++#undef _IRR_USE_NON_SYSTEM_BZLIB_
+ //! Define _IRR_COMPILE_WITH_LZMA_ if you want to use LZMA compressed zip files.
+ /** LZMA is a very efficient compression code, known from 7zip. Irrlicht
+ currently only supports zip archives, though. */
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
---- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-25 12:17:20.000000000 -0400
-+++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-25 12:13:07.000000000 -0400
+--- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-26 16:52:56.000000000 -0400
++++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-26 09:57:53.000000000 -0400
 @@ -162,7 +162,7 @@ IImage* CImageLoaderPng::loadImage(io::I
  	if (BitDepth < 8)
  	{
@@ -10,9 +31,28 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlich
  		else
  			png_set_packing(png_ptr);
  	}
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
+--- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-03-26 16:52:56.000000000 -0400
++++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-03-26 11:59:32.000000000 -0400
+@@ -16,8 +16,15 @@
+ #if !defined(_IRR_XBOX_PLATFORM_)
+ 	#include <windows.h>
+ 	#include <mmsystem.h> // For JOYCAPS
++#	if !defined( __MINGW32__ )
+ 	#include <Windowsx.h>
+ #endif
++#endif
++
++#if defined( __MINGW32__ )
++#	define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
++#	define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
++#endif
+ 
+ namespace irr
+ {
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-25 12:17:20.000000000 -0400
-+++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-25 12:13:36.000000000 -0400
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-26 16:52:56.000000000 -0400
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-26 09:57:53.000000000 -0400
 @@ -126,7 +126,7 @@ namespace video
  } // end namespace irr
  

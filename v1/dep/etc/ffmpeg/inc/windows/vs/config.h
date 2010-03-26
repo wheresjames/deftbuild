@@ -21,6 +21,9 @@
 #define FFMPEG_DATADIR "/usr/local/share/ffmpeg"
 #define ARCH_ALPHA 0
 #define ARCH_ARM 0
+#define ARCH_AVR32 0
+#define ARCH_AVR32_AP 0
+#define ARCH_AVR32_UC 0
 #define ARCH_BFIN 0
 #define ARCH_IA64 0
 #define ARCH_M68K 0
