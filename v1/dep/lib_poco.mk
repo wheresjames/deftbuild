@@ -7,9 +7,9 @@ default_target: all
 PRJ_NAME := poco
 PRJ_DEPS := poco
 PRJ_TYPE := lib
-PRJ_INCS := poco/Poco/Foundation/include poco/Poco/Net/include \
-			poco/Poco/Crypto/include poco/Poco/WebWidgets/include \
-			poco/Poco/Xml/include poco/Poco/Zip/include
+PRJ_INCS := poco/Foundation/include poco/Net/include \
+			poco/Crypto/include poco/WebWidgets/include \
+			poco/Xml/include poco/Zip/include
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS
 
@@ -21,6 +21,13 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PLATFORM),windows)
+	ifeq ($(BUILD),gcc)
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mingw/inc $(PRJ_INCS)
+		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
+	endif
+endif
+
 #ifeq ($(PLATFORM),windows)
 #	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
 #else
@@ -31,7 +38,7 @@ include $(PRJ_LIBROOT)/config.mk
 # File locations
 #-------------------------------------------------------------------
 export LOC_TAG := def
-LOC_SRC_def := $(CFG_LIBROOT)/poco/Poco/Foundation/src
+LOC_SRC_def := $(CFG_LIBROOT)/poco/Foundation/src
 LOC_EXC_def := DirectoryIterator_UNIX DirectoryIterator_VMS DirectoryIterator_WIN32 DirectoryIterator_WIN32U \
 			   Environment_UNIX Environment_VMS Environment_WIN32 Environment_WIN32U \
 			   Event_POSIX Event_WIN32 File_UNIX File_VMS File_WIN32 File_WIN32U \
@@ -55,24 +62,24 @@ endif
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := net
-LOC_SRC_net := $(CFG_LIBROOT)/poco/Poco/Net/src
+LOC_SRC_net := $(CFG_LIBROOT)/poco/Net/src
 include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := ssl
-#LOC_INC_ssl := $(CFG_LIBROOT)/poco/Poco/NetSSL_OpenSSL/include
-#LOC_SRC_ssl := $(CFG_LIBROOT)/poco/Poco/NetSSL_OpenSSL/src
+#LOC_INC_ssl := $(CFG_LIBROOT)/poco/NetSSL_OpenSSL/include
+#LOC_SRC_ssl := $(CFG_LIBROOT)/poco/NetSSL_OpenSSL/src
 #include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := web
-#LOC_SRC_web := $(CFG_LIBROOT)/poco/Poco/WebWidgets/src
+#LOC_SRC_web := $(CFG_LIBROOT)/poco/WebWidgets/src
 #include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := xml
-#LOC_SRC_xml := $(CFG_LIBROOT)/poco/Poco/Xml/src
+#LOC_SRC_xml := $(CFG_LIBROOT)/poco/Xml/src
 #include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := zip
-#LOC_SRC_zip := $(CFG_LIBROOT)/poco/Poco/Zip/src
+#LOC_SRC_zip := $(CFG_LIBROOT)/poco/Zip/src
 #include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
