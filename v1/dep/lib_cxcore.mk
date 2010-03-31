@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := cxcore
+PRJ_DEPS := opencv
 PRJ_TYPE := lib
 PRJ_INCS := /opencv/include/opencv zlib
 PRJ_LIBS := 

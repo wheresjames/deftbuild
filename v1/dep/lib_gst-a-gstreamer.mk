@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := gstreamer
+PRJ_DEPS := gstreamer
 PRJ_TYPE := lib
 PRJ_INCS := gstreamer/gstreamer gstreamer/gstreamer/gst \
 			glib glib/glib glib/gmodule glib/gobject \
@@ -23,11 +24,6 @@ PRJ_INCS := $(PRJ_INCS) \
 			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix \
 			$(CFG_LIB2BLD)/dep/etc/gstreamer/inc/posix/gst \
 			$(CFG_LIB2BLD)/dep/etc/libxml/inc/posix
-
-ifndef BUILD_GSTREAMER
-UNSUPPORTED := Set make option BUILD_GSTREAMER=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 #-------------------------------------------------------------------
 # File locations
@@ -61,6 +57,4 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 

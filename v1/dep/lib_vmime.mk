@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := vmime
+PRJ_DEPS := vmime
 PRJ_TYPE := lib
 PRJ_INCS := libvmime
 #			gnutls/lib/includes gnutls/libextra/includes libgsasl/src

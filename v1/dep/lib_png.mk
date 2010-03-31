@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := png
+PRJ_DEPS := png
 PRJ_TYPE := lib
 PRJ_INCS := zlib
 PRJ_LIBS := 

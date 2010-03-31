@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := ntp
+PRJ_DEPS := ntp
 PRJ_TYPE := lib
 PRJ_INCS := ntp/include ntp/lib ntp/lib/isc/include
 PRJ_LIBS := 

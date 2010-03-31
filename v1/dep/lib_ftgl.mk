@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := ftgl
+PRJ_DEPS := ftgl
 PRJ_TYPE := lib
 PRJ_INCS := ftgl ftgl/src freetype2/include
 PRJ_LIBS := 
@@ -16,11 +17,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(FTGL),)
-UNSUPPORTED := Set make option FTGL=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 PRJ_DEFS := M_PI=3.14159265358979323846 
 
@@ -57,5 +53,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 

@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := live555
+PRJ_DEPS := live555
 PRJ_TYPE := lib
 PRJ_INCS := live555/liveMedia/include live555/groupsock/include \
 			live555/UsageEnvironment/include live555/BasicUsageEnvironment/include 
@@ -18,16 +19,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(BUILD_LIVE555),)
-UNSUPPORTED := Set make option BUILD_LIVE555=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
-
-#ifneq ($(PROC),i386)
-#UNSUPPORTED := PROC=$(PROC) is not supported
-#include $(PRJ_LIBROOT)/unsupported.mk
-#else
 
 ifeq ($(BUILD),vs)
 	PRJ_DEFS := $(PRJ_DEFS) socklen_t=int
@@ -74,7 +65,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-#endif
-
-endif
 

@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := j2k
+PRJ_DEPS := j2k
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 

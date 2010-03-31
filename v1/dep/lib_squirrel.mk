@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := squirrel
+PRJ_DEPS := SqPlus
 PRJ_TYPE := lib
 PRJ_INCS := SqPlus/include
 PRJ_LIBS :=

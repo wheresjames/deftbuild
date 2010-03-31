@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := irrlicht-es
+PRJ_DEPS := irrlicht-es
 PRJ_TYPE := lib
 PRJ_INCS := irrlicht-es/source/Irrlicht/zlib
 PRJ_LIBS := 
@@ -18,11 +19,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(3D),)
-UNSUPPORTED := Set make option 3D=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(PROC),i386)
 UNSUPPORTED := PROC=$(PROC) not supported
@@ -64,5 +60,4 @@ include $(PRJ_LIBROOT)/go.mk
 
 endif
 
-endif
 

@@ -1,2 +1,7 @@
-ffmpeg svn - svn://svn.ffmpeg.org/ffmpeg/trunk
+ffmpeg svn 22717 svn://svn.ffmpeg.org/ffmpeg/trunk
+
+# FATE - http://fate.multimedia.cx/index-v3.php
+# FATE logs svn versions so not using git :(
+# ffmpeg git - git://git.ffmpeg.org/ffmpeg/
+# ffmpeg/libswscale git - git://git.ffmpeg.org/libswscale/
 

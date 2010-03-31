@@ -1,5 +1,8 @@
 
+ifeq ($(ABORT_UNSUPPORTED),)
+
 # exit 0 only works on Windows
+ABORT_UNSUPPORTED := 1
 
 unsupported:
 	@echo =======================================================
@@ -13,3 +16,4 @@ rebuild: unsupported
 setup: unsupported
 clean: unsupported
 
+endif

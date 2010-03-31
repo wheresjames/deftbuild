@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := ogles-bld
+PRJ_DEPS := ogles
 PRJ_TYPE := lib
 PRJ_INCS := ogles/src ogles/src/WinCE ogles/include ogles/include/EVC3Inc/ARM \
 			ogles/src/codegen
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(BUILD_OGLES),)
-UNSUPPORTED := Set BUILD_OGLES=1 to build this project
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(OS),wince)
 	PRJ_DEFS := NO_GETENV
@@ -57,6 +53,4 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 

@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := bullet
+PRJ_DEPS := bullet
 PRJ_TYPE := lib
 PRJ_INCS := bullet/src
 PRJ_LIBS := 
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(3D),)
-UNSUPPORTED := Set make option 3D=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 #-------------------------------------------------------------------
 # File locations
@@ -103,5 +99,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 

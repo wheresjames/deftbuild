@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := sqlite
+PRJ_DEPS := sqlite
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 

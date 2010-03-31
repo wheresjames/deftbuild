@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := freetype
+PRJ_DEPS := freetype
 PRJ_TYPE := lib
 PRJ_INCS := freetype/include
 PRJ_LIBS := 
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(FREETYPE),)
-UNSUPPORTED := Set make option FREETYPE=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 #-------------------------------------------------------------------
 # File locations
@@ -164,5 +160,4 @@ endif
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 

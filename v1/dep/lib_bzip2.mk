@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := bzip2
+PRJ_DEPS := bzip2
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 

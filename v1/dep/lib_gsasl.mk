@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := gsasl
+PRJ_DEPS := gsasl
 PRJ_TYPE := lib
 PRJ_INCS := libgsasl libgsasl/gl
 PRJ_LIBS := 

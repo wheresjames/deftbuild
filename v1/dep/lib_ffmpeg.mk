@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := ffmpeg
+PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
 PRJ_INCS := ffmpeg
 PRJ_LIBS := 
@@ -20,11 +21,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifndef BUILD_FFMPEG
-UNSUPPORTED := Set make option BUILD_FFMPEG=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifneq ($(BUILD),gcc)
 UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
@@ -68,7 +64,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := libavformat
 LOC_CXX_libavformat := c
 LOC_SRC_libavformat := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_EXC_libavformat := avisynth libnut
+LOC_EXC_libavformat := avisynth libnut librtmp
 #LOC_EXC_libavformat := avisynth libnut matroskadec mov
 #ifeq ($(PROC),arm)
 #	LOC_EXC_libavformat := $(LOC_EXC_libavformat) ipmovie mpegts sierravmd
@@ -172,8 +168,6 @@ endif
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 endif
 

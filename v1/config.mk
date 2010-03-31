@@ -76,6 +76,17 @@ else
 	CFG_LIB2BLD  := ../deftbuild/v1
 endif
 
+ifneq ($(strip $(PRJ_DEPS)),)
+	EXISTS_LIBSRC := $(wildcard $(CFG_LIBROOT)/$(PRJ_DEPS))
+else
+	EXISTS_LIBSRC := nodeps
+endif
+
+ifeq ($(strip $(EXISTS_LIBSRC)),) 
+UNSUPPORTED := $(PRJ_DEPS) is not checked out
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifeq ($(BUILD),vs)
 	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\""
 else
@@ -661,4 +672,5 @@ $(CFG_RES_OUT)/%.$(CFG_OBJ_EXT): $(CFG_RES_OUT)/%.cpp
 
 endif
 
+endif
 

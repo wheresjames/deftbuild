@@ -1,4 +1,6 @@
 
+ifndef ABORT_UNSUPPORTED
+
 # go.mk
 ifndef BLD_FILE_EXE
 	ifdef PRJ_FILE_EXE		 
@@ -128,4 +130,5 @@ rebuild: $(BLD_REBUILD) $(BLD_PATH_EXE)
 setup: $(BLD_SETUP)
 clean: $(BLD_CLEAN)
 
+endif
 

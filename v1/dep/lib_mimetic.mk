@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := mimetic
+PRJ_DEPS := mimetic
 PRJ_TYPE := lib
 PRJ_INCS := mimetic
 PRJ_LIBS := 
@@ -21,11 +22,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifndef BUILD_MIMETIC
-UNSUPPORTED := Set make option BUILD_MIMETIC=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(PLATFORM),windows)
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
@@ -64,5 +60,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 

@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := poco
+PRJ_DEPS := poco
 PRJ_TYPE := lib
 PRJ_INCS := poco/Poco/Foundation/include poco/Poco/Net/include \
 			poco/Poco/Crypto/include poco/Poco/WebWidgets/include \
@@ -19,11 +20,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifndef BUILD_POCO
-UNSUPPORTED := Set make option BUILD_POCO=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 #ifeq ($(PLATFORM),windows)
 #	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
@@ -84,6 +80,5 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 
 

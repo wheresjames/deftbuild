@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := cximage
+PRJ_DEPS := CxImage
 PRJ_TYPE := lib
 PRJ_INCS := zlib tiff
 PRJ_LIBS := 

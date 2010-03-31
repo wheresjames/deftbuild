@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := curl
+PRJ_DEPS := curl
 PRJ_TYPE := lib
 PRJ_INCS := curl/include curl/include/curl
 PRJ_LIBS := 
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(BUILD_CURL),)
-UNSUPPORTED := Set BUILD_CURL=1 to build this project
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(PLATFORM),windows)
 # HAVE_CONFIG_H 
@@ -55,7 +51,5 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 

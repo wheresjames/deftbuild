@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := openldap
+PRJ_DEPS := openldap
 PRJ_TYPE := lib
 PRJ_INCS := openldap/include
 PRJ_LIBS := 
@@ -16,11 +17,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(BUILD_CURL),)
-UNSUPPORTED := Set BUILD_CURL=1 to build this project
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) HAVE_WINSOCK2
@@ -40,7 +36,5 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 

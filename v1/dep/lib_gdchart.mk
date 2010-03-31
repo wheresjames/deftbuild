@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := gdchart
+PRJ_DEPS := gdchart
 PRJ_TYPE := lib
 PRJ_INCS := gdchart/gd1.3
 PRJ_LIBS := 

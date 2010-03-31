@@ -7,6 +7,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := WebKit
+PRJ_DEPS := WebKit
 PRJ_TYPE := lib
 PRJ_INCS := \
 			freetype/include libxml/include curl/include sqlite libxslt \
@@ -45,10 +46,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(BUILD_WEBKIT),)
-UNSUPPORTED := Set make option BUILD_WEBKIT=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
+#EXISTS_LIBSRC := $(wildcard $(CFG_LIBROOT)/$(PRJ_NAME))
+#ifeq ($(strip $(EXISTS_LIBSRC)),) 
+#UNSUPPORTED := $(PRJ_NAME) is not checked out
+#include $(PRJ_LIBROOT)/unsupported.mk
+#else
 
 ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) NDEBUG=1
@@ -379,5 +381,5 @@ endif
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
+#endif
 

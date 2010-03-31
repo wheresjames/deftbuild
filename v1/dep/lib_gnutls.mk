@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := gnutls
+PRJ_DEPS := gnutls
 PRJ_TYPE := lib
 PRJ_INCS := gnutls/lib gnutls/lib/includes gnutls/libextra/includes \
 			gnutls/lib/minitasn1 gnutls/lib/gl gnutls/lib/x509 libgcrypt/src

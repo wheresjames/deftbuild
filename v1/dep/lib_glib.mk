@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := glib
+PRJ_DEPS := glib
 PRJ_TYPE := lib
 PRJ_INCS := glib glib/glib
 PRJ_LIBS := 
@@ -20,11 +21,6 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/glib/inc/posix
-
-ifndef BUILD_GSTREAMER
-UNSUPPORTED := Set make option BUILD_GSTREAMER=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 #-------------------------------------------------------------------
 # File locations
@@ -72,5 +68,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 

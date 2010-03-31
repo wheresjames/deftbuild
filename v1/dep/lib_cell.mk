@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := cell
+PRJ_DEPS := cell
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(PLC),)
-UNSUPPORTED := Set make option PLC=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifeq ($(TOOLS),iphone)
 UNSUPPORTED := TOOLS=$(TOOLS) is not supported
@@ -44,4 +40,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
+

@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := jpeg
+PRJ_DEPS := jpeg
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 

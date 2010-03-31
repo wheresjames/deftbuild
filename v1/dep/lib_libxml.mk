@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := xml
+PRJ_DEPS := xml
 PRJ_TYPE := lib
 PRJ_INCS := libxml/include zlib
 PRJ_LIBS := 

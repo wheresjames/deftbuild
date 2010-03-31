@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := fftw_rdft
+PRJ_DEPS := fftw
 PRJ_TYPE := lib
 PRJ_INCS := fftw/kernel fftw/dft fftw/rdft fftw/rdft/scalar fftw/reodft
 PRJ_LIBS := 

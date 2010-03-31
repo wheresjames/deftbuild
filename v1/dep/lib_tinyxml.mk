@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := tinyxml
+PRJ_DEPS := tinyxml
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 
