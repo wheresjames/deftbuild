@@ -23,14 +23,30 @@
 
 # Shortcuts
 CMD=$1
-if [ ${CMD} == "-" ]; 		then CMD=show; fi
-if [ ${CMD} == "co" ]; 		then CMD=checkout; fi
-if [ ${CMD} == "up" ]; 		then CMD=update; fi
-if [ ${CMD} == "arc" ]; 	then CMD=archive; fi
-if [ ${CMD} == "dif" ]; 	then CMD=diff; fi
-if [ ${CMD} == "mp" ]; 		then CMD=makepatch; fi
-if [ ${CMD} == "ap" ]; 		then CMD=applypatch; fi
-if [ ${CMD} == "bld" ];		then CMD=build; fi
+if [ ${CMD} == "-" ]; then 
+	CMD=show; 
+fi
+if [ ${CMD} == "co" ]; then
+	CMD=checkout; 
+fi
+if [ ${CMD} == "up" ]; then 
+	CMD=update; 
+fi
+if [ ${CMD} == "arc" ]; then
+	CMD=archive;
+fi
+if [ ${CMD} == "dif" ]; then
+	CMD=diff;
+fi
+if [ ${CMD} == "mp" ]; then
+CMD=makepatch;
+fi
+if [ ${CMD} == "ap" ]; then
+	CMD=applypatch;
+fi
+if [ ${CMD} == "bld" ]; then
+	CMD=build;
+fi
 
 # Get directory roots
 if [ $2 ] && [ $2 != "-" ]; then
