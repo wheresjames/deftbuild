@@ -43,7 +43,7 @@ cd deftbuild
 deftbuild checkout core,img -
 deftbuild applypatch - -
 cd v1
-make BUILDDEP=1
+make
 
 // To update, do this from the deftbuild directory
 
