@@ -34,6 +34,7 @@ ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),arm)
 			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/arm $(PRJ_INCS) zlib
 		else
+			PRJ_DEFS := $(PRJ_DEFS) usleep(usec)=(Sleep((usec)/1000),0)
 			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
 		endif
 	endif
