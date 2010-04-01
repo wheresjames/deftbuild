@@ -505,6 +505,8 @@ else
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
+			CFG_ASMFLAGS := -f elf32 -a x86
+			
 		endif
 
 	endif
@@ -558,6 +560,8 @@ else
 	CFG_AR := $(CFG_TOOLPREFIX)ar
 	CFG_DT := $(CFG_TOOLPREFIX)dlltool
 	CFG_DP := $(CFG_TOOLPREFIX)makedepend
+	
+	CFG_AS := yasm
 
 	CFG_MD := mkdir -p
 	CFG_RM := rm -rf

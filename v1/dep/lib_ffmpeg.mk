@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := ffmpeg
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
-PRJ_INCS := ffmpeg
+PRJ_INCS := ffmpeg x264
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 FFMPEG_LICENSE=""
 
@@ -103,14 +103,14 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  libamr libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libx264 libxvidff libxvid_rc \
+					  libvorbis libxvidff libxvid_rc \
 					  \
 					  beosthread g729dec imgconvert_template motion_est_template \
 					  mpegvideo_xvmc os2thread vdpau \
 					  \
 					  dxva2 dxva2_h264 dxva2_vc1 \
 					  \
-					  dv_tablegen
+					  dv_tablegen \
 
 ifeq ($(PROC),arm)
 	ifeq ($(PLATFORM),windows)

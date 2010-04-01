@@ -182,7 +182,7 @@
 #define CONFIG_FFSERVER 1
 #define CONFIG_FFT 1
 #define CONFIG_GOLOMB 1
-#define CONFIG_GPL 0
+#define CONFIG_GPL 1
 #define CONFIG_GPROF 0
 #define CONFIG_GRAY 0
 #define CONFIG_H264DSP 1
