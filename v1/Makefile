@@ -1,5 +1,9 @@
 BUILDDIRS := dep
 
+ifdef APPS
+	BUILDDIRS := $(BUILDDIRS) app
+endif
+
 .PHONY all: $(BUILDDIRS)
 
 .PHONY $(BUILDDIRS) :

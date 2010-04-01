@@ -22,9 +22,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C .. BUILD=vs BUILDDEP=1 SQMOD=1 DBG=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1 FREETYPE2=1"
-				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs BUILDDEP=1 SQMOD=1 DBG=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1"
-				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs BUILDDEP=1 SQMOD=1 DBG=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1"
+				BuildCommandLine="make -C .. BUILD=vs DBG=1 APPS=1 SQMOD=1"
+				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs DBG=1 APPS=1 SQMOD=1"
+				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs DBG=1 APPS=1 SQMOD=1"
 				Output=""
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				IncludeSearchPath=""
@@ -42,9 +42,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C ../.. BUILD=vs BUILDDEP=1 SQMOD=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1 FREETYPE2=1"
-				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs BUILDDEP=1 SQMOD=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1"
-				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs BUILDDEP=1 SQMOD=1 3D=1 BUILD_CURL=1 BUILD_FFMPEG=1 BUILD_LIVE555=1 FTGL=1"
+				BuildCommandLine="make -C ../.. BUILD=vs APPS=1 SQMOD=1"
+				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs APPS=1 SQMOD=1"
+				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs APPS=1 SQMOD=1"
 				Output=""
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				IncludeSearchPath=""
