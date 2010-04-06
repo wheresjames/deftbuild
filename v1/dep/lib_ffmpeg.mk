@@ -34,7 +34,6 @@ ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),arm)
 			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/arm $(PRJ_INCS) zlib
 		else
-			PRJ_DEFS := $(PRJ_DEFS) usleep(usec)=(Sleep((usec)/1000),0)
 			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
 		endif
 	endif
@@ -103,7 +102,7 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  libamr libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libxvidff libxvid_rc \
+					  libvorbis libx264 libxvidff libxvid_rc \
 					  \
 					  beosthread g729dec imgconvert_template motion_est_template \
 					  mpegvideo_xvmc os2thread vdpau \

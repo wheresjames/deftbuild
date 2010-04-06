@@ -125,10 +125,10 @@ endif
 
 endif
 
-all: $(BLD_ALL) $(BLD_PATH_EXE) 
-rebuild: $(BLD_REBUILD) $(BLD_PATH_EXE)
-setup: $(BLD_SETUP)
-clean: $(BLD_CLEAN)
+all: cfg_init $(BLD_ALL) $(BLD_PATH_EXE) 
+rebuild: cfg_init $(BLD_REBUILD) $(BLD_PATH_EXE)
+setup: cfg_init $(BLD_SETUP)
+clean: cfg_init $(BLD_CLEAN)
 
 endif
 

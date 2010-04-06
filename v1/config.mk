@@ -12,6 +12,29 @@ else
 	CFG_DESC := $(PRJ_DESC)
 endif
 
+ifdef PRJ_NAME
+ifdef PRJ_DESC
+
+.PHONY cfg_init:
+	@echo =======================================================
+	@echo = $(PRJ_NAME) - $(PRJ_DESC)
+	@echo =======================================================
+	
+else
+
+.PHONY cfg_init:
+	@echo =======================================================
+	@echo = $(PRJ_NAME)
+	@echo =======================================================
+	
+endif
+else
+
+.PHONY cfg_init:
+	@echo =======================================================
+	
+endif
+
 BUILD	 := gcc
 #BUILD	 := vs
 
@@ -461,12 +484,13 @@ else
 			PLATFORM := windows
 
 			# Cross compile for windows
-			CFG_TOOLPREFIX := i586-mingw32msvc-
+			# CFG_TOOLPREFIX := i586-mingw32msvc-
+			CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
 
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
-										-DOEX_NODSHOW -DOEX_NOVFW -DOEX_NOCRTDEBUG -D__int64="long long"
+										-DOEX_NODSHOW -DOEX_NOVFW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 

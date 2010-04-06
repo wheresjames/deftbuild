@@ -5,6 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := irrlicht
+PRJ_DEPS := irrlicht
 PRJ_TYPE := lib
 PRJ_INCS := irrlicht/include jpeg png tiff zlib bzip2
 PRJ_LIBS := 
@@ -17,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifeq ($(3D),)
-UNSUPPORTED := Set make option 3D=1 to build
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifneq ($(PROC),i386)
 UNSUPPORTED := PROC=$(PROC) is not supported
@@ -59,8 +55,6 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 endif
 

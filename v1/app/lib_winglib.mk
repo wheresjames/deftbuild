@@ -1,4 +1,6 @@
 
+default_target: all
+
 PRJ_LIBROOT := ..
 include $(PRJ_LIBROOT)/config.mk
 
