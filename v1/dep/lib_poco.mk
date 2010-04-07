@@ -21,7 +21,14 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+
+
 ifeq ($(PLATFORM),windows)
+
+	ifneq ($(UNICODE),)
+		PRJ_DEFS := $(PRJ_DEFS) POCO_WIN32_UTF8
+	endif
+
 	ifeq ($(BUILD),gcc)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mingw/inc $(PRJ_INCS)
 		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
