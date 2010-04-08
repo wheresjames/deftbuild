@@ -67,7 +67,7 @@ else
 fi
 
 echo "---"
-echo " Index    : $5"
+echo " Index    : ${DIR_IDX}"
 echo " Command  : ${CMD}"
 echo " Groups   : ${DIRLIST[@]}"
 if [ $4 ]; then
