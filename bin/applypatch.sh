@@ -38,7 +38,7 @@ fi
 if [ "${REPO}" == "targz" ]; then	
 
 	cd ${LIBPATH}
-	patch -p1 < "${PATCH}"							
+	patch -l -p1 < "${PATCH}"							
 	
 fi
 
