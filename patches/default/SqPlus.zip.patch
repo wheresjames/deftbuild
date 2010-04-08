@@ -1,6 +1,6 @@
-diff -rupwN ../dnl3/SqPlus/include/sqstdstring.h SqPlus/include/sqstdstring.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/include/sqstdstring.h SqPlus/include/sqstdstring.h
 --- ../dnl3/SqPlus/include/sqstdstring.h	2005-09-25 17:56:20.000000000 -0400
-+++ SqPlus/include/sqstdstring.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/include/sqstdstring.h	2010-03-26 09:57:54.000000000 -0400
 @@ -6,9 +6,6 @@
  extern "C" {
  #endif
@@ -11,9 +11,9 @@ diff -rupwN ../dnl3/SqPlus/include/sqstdstring.h SqPlus/include/sqstdstring.h
  typedef unsigned int SQRexBool;
  typedef struct SQRex SQRex;
  
-diff -rupwN ../dnl3/SqPlus/include/squirrel.h SqPlus/include/squirrel.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/include/squirrel.h SqPlus/include/squirrel.h
 --- ../dnl3/SqPlus/include/squirrel.h	2006-04-25 13:38:08.000000000 -0400
-+++ SqPlus/include/squirrel.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/include/squirrel.h	2010-03-26 09:57:54.000000000 -0400
 @@ -1,5 +1,5 @@
  /*
 -Copyright (c) 2003-2006 Alberto Demichelis
@@ -32,23 +32,7 @@ diff -rupwN ../dnl3/SqPlus/include/squirrel.h SqPlus/include/squirrel.h
  #ifdef _SQ64
  #ifdef _MSC_VER
  typedef __int64 SQInteger;
-@@ -57,6 +61,7 @@ typedef unsigned int SQUnsignedInteger;
- typedef unsigned int SQHash; /*should be the same size of a pointer*/
- #endif
- 
-+
- typedef float SQFloat;
- typedef void* SQUserPointer;
- typedef SQUnsignedInteger SQBool;
-@@ -65,7 +70,6 @@ typedef SQInteger SQRESULT;
- #define SQTrue	(1)
- #define SQFalse	(0)
- 
--
- struct SQVM;
- struct SQTable;
- struct SQArray;
-@@ -85,33 +89,32 @@ struct SQDelegable;
+@@ -85,22 +89,16 @@ struct SQDelegable;
  #endif
  
  #ifdef SQUNICODE
@@ -73,10 +57,7 @@ diff -rupwN ../dnl3/SqPlus/include/squirrel.h SqPlus/include/squirrel.h
  #endif
  
  typedef wchar_t SQChar;
--
- #define _SC(a) L##a
- #define	scstrcmp	wcscmp
- #define scsprintf	swprintf
+@@ -111,7 +108,13 @@ typedef wchar_t SQChar;
  #define scstrlen	wcslen
  #define scstrtod	wcstod
  #define scstrtol	wcstol
@@ -148,7 +129,7 @@ diff -rupwN ../dnl3/SqPlus/include/squirrel.h SqPlus/include/squirrel.h
  
  /*calls*/
  SQUIRREL_API SQRESULT sq_call(HSQUIRRELVM v,SQInteger params,SQBool retval,SQBool raiseerror);
-diff -rupwN ../dnl3/SqPlus/sq/Makefile SqPlus/sq/Makefile
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sq/Makefile SqPlus/sq/Makefile
 --- ../dnl3/SqPlus/sq/Makefile	2006-03-19 14:32:58.000000000 -0500
 +++ SqPlus/sq/Makefile	1969-12-31 19:00:00.000000000 -0500
 @@ -1,21 +0,0 @@
@@ -174,7 +155,7 @@ diff -rupwN ../dnl3/SqPlus/sq/Makefile SqPlus/sq/Makefile
 -sq64:
 -	g++ -O2 -fno-rtti -D_SQ64 -o $(OUT) $(SRCS) $(INCZ) $(LIBZ) $(LIB)
 \ No newline at end of file
-diff -rupwN ../dnl3/SqPlus/sq/sq71.vcproj SqPlus/sq/sq71.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sq/sq71.vcproj SqPlus/sq/sq71.vcproj
 --- ../dnl3/SqPlus/sq/sq71.vcproj	2006-05-29 15:10:46.000000000 -0400
 +++ SqPlus/sq/sq71.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,317 +0,0 @@
@@ -495,7 +476,7 @@ diff -rupwN ../dnl3/SqPlus/sq/sq71.vcproj SqPlus/sq/sq71.vcproj
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/sq/sq.c SqPlus/sq/sq.c
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sq/sq.c SqPlus/sq/sq.c
 --- ../dnl3/SqPlus/sq/sq.c	2006-04-25 13:38:08.000000000 -0400
 +++ SqPlus/sq/sq.c	1969-12-31 19:00:00.000000000 -0500
 @@ -1,325 +0,0 @@
@@ -824,7 +805,7 @@ diff -rupwN ../dnl3/SqPlus/sq/sq.c SqPlus/sq/sq.c
 -	return 0;
 -}
 -
-diff -rupwN ../dnl3/SqPlus/sq/sq.cbp SqPlus/sq/sq.cbp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sq/sq.cbp SqPlus/sq/sq.cbp
 --- ../dnl3/SqPlus/sq/sq.cbp	2006-04-25 17:05:30.000000000 -0400
 +++ SqPlus/sq/sq.cbp	1969-12-31 19:00:00.000000000 -0500
 @@ -1,129 +0,0 @@
@@ -957,7 +938,7 @@ diff -rupwN ../dnl3/SqPlus/sq/sq.cbp SqPlus/sq/sq.cbp
 -		</Unit>
 -	</Project>
 -</CodeBlocks_project_file>
-diff -rupwN ../dnl3/SqPlus/sq/sq.vcproj SqPlus/sq/sq.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sq/sq.vcproj SqPlus/sq/sq.vcproj
 --- ../dnl3/SqPlus/sq/sq.vcproj	2006-03-26 18:21:16.000000000 -0500
 +++ SqPlus/sq/sq.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,454 +0,0 @@
@@ -1415,9 +1396,9 @@ diff -rupwN ../dnl3/SqPlus/sq/sq.vcproj SqPlus/sq/sq.vcproj
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/sqplus/sqplus.h SqPlus/sqplus/sqplus.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqplus/sqplus.h SqPlus/sqplus/sqplus.h
 --- ../dnl3/SqPlus/sqplus/sqplus.h	2006-07-08 02:28:32.000000000 -0400
-+++ SqPlus/sqplus/sqplus.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqplus/sqplus.h	2010-03-26 09:57:54.000000000 -0400
 @@ -18,7 +18,7 @@
    #include <malloc.h>
  #endif
@@ -1660,9 +1641,9 @@ diff -rupwN ../dnl3/SqPlus/sqplus/sqplus.h SqPlus/sqplus/sqplus.h
  // === Example SQClassDef usage (see testSqPlus2.cpp): ===
  
  #if 0
-diff -rupwN ../dnl3/SqPlus/sqplus/SquirrelObject.h SqPlus/sqplus/SquirrelObject.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqplus/SquirrelObject.h SqPlus/sqplus/SquirrelObject.h
 --- ../dnl3/SqPlus/sqplus/SquirrelObject.h	2006-07-08 01:43:40.000000000 -0400
-+++ SqPlus/sqplus/SquirrelObject.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqplus/SquirrelObject.h	2010-03-26 09:57:54.000000000 -0400
 @@ -1,6 +1,7 @@
  #ifndef _SQUIRREL_OBJECT_H_
  #define _SQUIRREL_OBJECT_H_
@@ -1671,9 +1652,9 @@ diff -rupwN ../dnl3/SqPlus/sqplus/SquirrelObject.h SqPlus/sqplus/SquirrelObject.
  class SquirrelObject
  {
  	friend class SquirrelVM;
-diff -rupwN ../dnl3/SqPlus/sqplus/SquirrelVM.cpp SqPlus/sqplus/SquirrelVM.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqplus/SquirrelVM.cpp SqPlus/sqplus/SquirrelVM.cpp
 --- ../dnl3/SqPlus/sqplus/SquirrelVM.cpp	2006-07-08 02:37:02.000000000 -0400
-+++ SqPlus/sqplus/SquirrelVM.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqplus/SquirrelVM.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -14,8 +14,12 @@
  #ifdef _MSC_VER
  #define STRLEN(n) _tcslen(n)
@@ -1702,9 +1683,9 @@ diff -rupwN ../dnl3/SqPlus/sqplus/SquirrelVM.cpp SqPlus/sqplus/SquirrelVM.cpp
  }
  
  SquirrelObject SquirrelVM::CompileScript(const SQChar* s)
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdaux.cpp SqPlus/sqstdlib/sqstdaux.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdaux.cpp SqPlus/sqstdlib/sqstdaux.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdaux.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdaux.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdaux.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -65,7 +65,7 @@ void sqstd_printcallstack(HSQUIRRELVM v)
  					pf(v,_SC("[%s] NATIVECLOSURE\n"),name);
  					break;
@@ -1723,9 +1704,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdaux.cpp SqPlus/sqstdlib/sqstdaux.cpp
  					break;
  				case OT_BOOL:{
  					sq_getinteger(v,-1,&i);
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdblob.cpp SqPlus/sqstdlib/sqstdblob.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdblob.cpp SqPlus/sqstdlib/sqstdblob.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdblob.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdblob.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdblob.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -237,7 +237,6 @@ SQUserPointer sqstd_createblob(HSQUIRREL
  		if(SQ_SUCCEEDED(sq_call(v,2,SQTrue,SQFalse))
  			&& SQ_SUCCEEDED(sq_getinstanceup(v,-1,(SQUserPointer *)&blob,(SQUserPointer)SQSTD_BLOB_TYPE_TAG))) {
@@ -1734,9 +1715,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdblob.cpp SqPlus/sqstdlib/sqstdblob.cpp
  			return blob->GetBuf();
  		}
  	}
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdio.cpp SqPlus/sqstdlib/sqstdio.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdio.cpp SqPlus/sqstdlib/sqstdio.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdio.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdio.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdio.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -1,6 +1,8 @@
  /* see copyright notice in squirrel.h */
  #include <new>
@@ -1773,7 +1754,7 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdio.cpp SqPlus/sqstdlib/sqstdio.cpp
  #endif
  }
  
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib71.vcproj SqPlus/sqstdlib/sqstdlib71.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdlib71.vcproj SqPlus/sqstdlib/sqstdlib71.vcproj
 --- ../dnl3/SqPlus/sqstdlib/sqstdlib71.vcproj	2006-05-29 15:10:46.000000000 -0400
 +++ SqPlus/sqstdlib/sqstdlib71.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,503 +0,0 @@
@@ -2280,7 +2261,7 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib71.vcproj SqPlus/sqstdlib/sqstdlib71
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.cbp SqPlus/sqstdlib/sqstdlib.cbp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdlib.cbp SqPlus/sqstdlib/sqstdlib.cbp
 --- ../dnl3/SqPlus/sqstdlib/sqstdlib.cbp	2006-04-25 17:05:30.000000000 -0400
 +++ SqPlus/sqstdlib/sqstdlib.cbp	1969-12-31 19:00:00.000000000 -0500
 @@ -1,166 +0,0 @@
@@ -2450,9 +2431,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.cbp SqPlus/sqstdlib/sqstdlib.cbp
 -		</Unit>
 -	</Project>
 -</CodeBlocks_project_file>
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.dsp SqPlus/sqstdlib/sqstdlib.dsp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdlib.dsp SqPlus/sqstdlib/sqstdlib.dsp
 --- ../dnl3/SqPlus/sqstdlib/sqstdlib.dsp	1969-12-31 19:00:00.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdlib.dsp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdlib.dsp	2010-03-26 09:57:54.000000000 -0400
 @@ -0,0 +1,131 @@
 +# Microsoft Developer Studio Project File - Name="sqstdlib" - Package Owner=<4>
 +# Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -2585,7 +2566,7 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.dsp SqPlus/sqstdlib/sqstdlib.dsp
 +# End Group
 +# End Target
 +# End Project
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.vcproj SqPlus/sqstdlib/sqstdlib.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdlib.vcproj SqPlus/sqstdlib/sqstdlib.vcproj
 --- ../dnl3/SqPlus/sqstdlib/sqstdlib.vcproj	2006-03-26 18:21:16.000000000 -0500
 +++ SqPlus/sqstdlib/sqstdlib.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,666 +0,0 @@
@@ -3255,9 +3236,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdlib.vcproj SqPlus/sqstdlib/sqstdlib.vcp
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdmath.cpp SqPlus/sqstdlib/sqstdmath.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdmath.cpp SqPlus/sqstdlib/sqstdmath.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdmath.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdmath.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdmath.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -22,7 +22,8 @@
  static SQInteger math_srand(HSQUIRRELVM v)
  {
@@ -3268,9 +3249,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdmath.cpp SqPlus/sqstdlib/sqstdmath.cpp
  	srand((unsigned int)i);
  	return 0;
  }
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdrex.cpp SqPlus/sqstdlib/sqstdrex.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdrex.cpp SqPlus/sqstdlib/sqstdrex.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdrex.cpp	2006-03-19 14:42:14.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdrex.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdrex.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -1,8 +1,11 @@
  /* see copyright notice in squirrel.h */
  #include <squirrel.h>
@@ -3559,9 +3540,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdrex.cpp SqPlus/sqstdlib/sqstdrex.cpp
  		sqstd_rex_free(exp);
  		return NULL;
  	}
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdstream.cpp SqPlus/sqstdlib/sqstdstream.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdstream.cpp SqPlus/sqstdlib/sqstdstream.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdstream.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdstream.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdstream.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -163,7 +163,7 @@ SQInteger _stream_writen(HSQUIRRELVM v)
  	case 'f': {
  		float f;
@@ -3571,9 +3552,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdstream.cpp SqPlus/sqstdlib/sqstdstream.
  		self->Write(&f, sizeof(float));
  			  }
  		break;
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdstring.cpp SqPlus/sqstdlib/sqstdstring.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdstring.cpp SqPlus/sqstdlib/sqstdstring.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdstring.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdstring.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdstring.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -2,15 +2,16 @@
  #include <squirrel.h>
  #include <sqstdstring.h>
@@ -3638,9 +3619,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdstring.cpp SqPlus/sqstdlib/sqstdstring.
  	}
  	return 1;
  }
-diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdsystem.cpp SqPlus/sqstdlib/sqstdsystem.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/sqstdlib/sqstdsystem.cpp SqPlus/sqstdlib/sqstdsystem.cpp
 --- ../dnl3/SqPlus/sqstdlib/sqstdsystem.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/sqstdlib/sqstdsystem.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/sqstdlib/sqstdsystem.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -22,29 +22,41 @@
  
  static SQInteger _system_getenv(HSQUIRRELVM v)
@@ -3716,9 +3697,9 @@ diff -rupwN ../dnl3/SqPlus/sqstdlib/sqstdsystem.cpp SqPlus/sqstdlib/sqstdsystem.
  }
  
  static void _set_integer_slot(HSQUIRRELVM v,const SQChar *name,SQInteger val)
-diff -rupwN ../dnl3/SqPlus/squirrel/sqapi.cpp SqPlus/squirrel/sqapi.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqapi.cpp SqPlus/squirrel/sqapi.cpp
 --- ../dnl3/SqPlus/squirrel/sqapi.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqapi.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqapi.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -39,7 +39,11 @@ SQInteger sq_aux_throwobject(HSQUIRRELVM
  
  SQInteger sq_aux_invalidtype(HSQUIRRELVM v,SQObjectType type)
@@ -3866,14 +3847,6 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqapi.cpp SqPlus/squirrel/sqapi.cpp
  void sq_setforeignptr(HSQUIRRELVM v,SQUserPointer p)
  {
  	v->_foreignptr = p;
-@@ -432,6 +495,7 @@ SQObjectType sq_gettype(HSQUIRRELVM v,SQ
- 	return type(stack_get(v, idx));
- }
- 
-+
- void sq_tostring(HSQUIRRELVM v,SQInteger idx)
- {
- 	SQObjectPtr &o = stack_get(v, idx);
 @@ -572,6 +636,16 @@ SQRESULT sq_setinstanceup(HSQUIRRELVM v,
  	return SQ_OK;
  }
@@ -4024,17 +3997,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqapi.cpp SqPlus/squirrel/sqapi.cpp
  		v->Push(realkey);
  		v->Push(val);
  		return SQ_OK;
-@@ -1197,6 +1263,7 @@ void *sq_realloc(void* p,SQUnsignedInteg
- {
- 	return SQ_REALLOC(p,oldsize,newsize);
- }
-+
- void sq_free(void *p,SQUnsignedInteger size)
- {
- 	SQ_FREE(p,size);
-diff -rupwN ../dnl3/SqPlus/squirrel/sqarray.h SqPlus/squirrel/sqarray.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqarray.h SqPlus/squirrel/sqarray.h
 --- ../dnl3/SqPlus/squirrel/sqarray.h	2005-09-25 17:56:20.000000000 -0400
-+++ SqPlus/squirrel/sqarray.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqarray.h	2010-03-26 09:57:54.000000000 -0400
 @@ -61,14 +61,22 @@ public:
  	void Extend(const SQArray *a);
  	SQObjectPtr &Top(){return _values.top();}
@@ -4060,9 +4025,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqarray.h SqPlus/squirrel/sqarray.h
  	}
  	void Release()
  	{
-diff -rupwN ../dnl3/SqPlus/squirrel/sqbaselib.cpp SqPlus/squirrel/sqbaselib.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqbaselib.cpp SqPlus/squirrel/sqbaselib.cpp
 --- ../dnl3/SqPlus/squirrel/sqbaselib.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqbaselib.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqbaselib.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -30,6 +30,11 @@ bool str2num(const SQChar *s,SQObjectPtr
  	}
  }
@@ -4144,14 +4109,6 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqbaselib.cpp SqPlus/squirrel/sqbaselib.cpp
  static SQInteger number_delegate_tochar(HSQUIRRELVM v)
  {
  	SQObject &o=stack_get(v,1);
-@@ -353,6 +385,7 @@ static SQInteger table_rawget(HSQUIRRELV
- 	return SQ_SUCCEEDED(sq_rawget(v,-2))?1:SQ_ERROR;
- }
- 
-+
- SQRegFunction SQSharedState::_table_default_delegate_funcz[]={
- 	{_SC("len"),default_delegate_len,1, _SC("t")},
- 	{_SC("rawget"),table_rawget,2, _SC("t")},
 @@ -361,6 +394,7 @@ SQRegFunction SQSharedState::_table_defa
  	{_SC("rawin"),container_rawexists,2, _SC("t")},
  	{_SC("weakref"),obj_delegate_weakref,1, NULL },
@@ -4279,9 +4236,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqbaselib.cpp SqPlus/squirrel/sqbaselib.cpp
  		return SQ_ERROR;
  	}
  	return sq_throwerror(v,_SC("wrong parameter"));
-diff -rupwN ../dnl3/SqPlus/squirrel/sqclass.cpp SqPlus/squirrel/sqclass.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqclass.cpp SqPlus/squirrel/sqclass.cpp
 --- ../dnl3/SqPlus/squirrel/sqclass.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqclass.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqclass.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -12,6 +12,7 @@ SQClass::SQClass(SQSharedState *ss,SQCla
  	_base = base;
  	_typetag = 0;
@@ -4350,9 +4307,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqclass.cpp SqPlus/squirrel/sqclass.cpp
  }
  
  bool SQInstance::GetMetaMethod(SQVM *v,SQMetaMethod mm,SQObjectPtr &res)
-diff -rupwN ../dnl3/SqPlus/squirrel/sqclass.h SqPlus/squirrel/sqclass.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqclass.h SqPlus/squirrel/sqclass.h
 --- ../dnl3/SqPlus/squirrel/sqclass.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqclass.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqclass.h	2010-03-26 09:57:54.000000000 -0400
 @@ -4,9 +4,9 @@
  
  struct SQInstance;
@@ -4437,9 +4394,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqclass.h SqPlus/squirrel/sqclass.h
  	SQInteger _memsize;
  	SQObjectPtr _values[1];
  };
-diff -rupwN ../dnl3/SqPlus/squirrel/sqclosure.h SqPlus/squirrel/sqclosure.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqclosure.h SqPlus/squirrel/sqclosure.h
 --- ../dnl3/SqPlus/squirrel/sqclosure.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqclosure.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqclosure.h	2010-03-26 09:57:54.000000000 -0400
 @@ -22,6 +22,7 @@ public:
  		SQClosure * ret = SQClosure::Create(_opt_ss(this),_funcproto(_function));
  		ret->_env = _env;
@@ -4498,9 +4455,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqclosure.h SqPlus/squirrel/sqclosure.h
  };
  
  
-diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.cpp SqPlus/squirrel/sqcompiler.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqcompiler.cpp SqPlus/squirrel/sqcompiler.cpp
 --- ../dnl3/SqPlus/squirrel/sqcompiler.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqcompiler.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqcompiler.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -3,7 +3,9 @@
  */
  #include "sqpcheader.h"
@@ -4601,7 +4558,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.cpp SqPlus/squirrel/sqcompiler.cp
  				switch(_token) {
  					case TK_IDENTIFIER: id = _fs->CreateString(_lex._svalue); break;
  					case TK_THIS: id = _fs->CreateString(_SC("this")); break;
-@@ -612,13 +649,43 @@ public:
+@@ -612,7 +649,36 @@ public:
  						_exst._deref = _fs->PushTarget();
  						_fs->AddInstruction(_OP_LOADFREEVAR, _exst._deref ,pos);	
  						_exst._freevar = true;
@@ -4639,13 +4596,6 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.cpp SqPlus/squirrel/sqcompiler.cp
  						_fs->PushTarget(0);
  						_fs->AddInstruction(_OP_LOAD, _fs->PushTarget(), _fs->GetConstant(id));
  						if(NeedGet()) Emit2ArgsOP(_OP_GET);
- 						_exst._deref = DEREF_FIELD;
- 					}
- 				}
-+
- 				else{
- 					_fs->PushTarget(pos);
- 					_exst._deref = pos;
 @@ -648,7 +715,12 @@ public:
  						 }
  			break;
@@ -4781,9 +4731,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.cpp SqPlus/squirrel/sqcompiler.cp
  	SQVM *_vm;
  };
  
-diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.h SqPlus/squirrel/sqcompiler.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqcompiler.h SqPlus/squirrel/sqcompiler.h
 --- ../dnl3/SqPlus/squirrel/sqcompiler.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqcompiler.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqcompiler.h	2010-03-26 09:57:54.000000000 -0400
 @@ -68,6 +68,8 @@ struct SQVM;
  #define TK_ATTR_OPEN 320
  #define TK_ATTR_CLOSE 321
@@ -4793,9 +4743,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqcompiler.h SqPlus/squirrel/sqcompiler.h
  
  
  typedef void(*CompilerErrorFunc)(void *ud, const SQChar *s);
-diff -rupwN ../dnl3/SqPlus/squirrel/sqdebug.cpp SqPlus/squirrel/sqdebug.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqdebug.cpp SqPlus/squirrel/sqdebug.cpp
 --- ../dnl3/SqPlus/squirrel/sqdebug.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqdebug.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqdebug.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -10,7 +10,7 @@
  
  SQRESULT sq_stackinfos(HSQUIRRELVM v, SQInteger level, SQStackInfos *si)
@@ -4837,9 +4787,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqdebug.cpp SqPlus/squirrel/sqdebug.cpp
  		return SQString::Create(_ss(this), _spval);
  		break;
  	default:
-diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncproto.h SqPlus/squirrel/sqfuncproto.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqfuncproto.h SqPlus/squirrel/sqfuncproto.h
 --- ../dnl3/SqPlus/squirrel/sqfuncproto.h	2005-09-25 17:56:20.000000000 -0400
-+++ SqPlus/squirrel/sqfuncproto.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqfuncproto.h	2010-03-26 09:57:54.000000000 -0400
 @@ -53,6 +53,23 @@ typedef sqvector<SQOuterVar> SQOuterVarV
  typedef sqvector<SQLocalVarInfo> SQLocalVarInfoVec;
  typedef sqvector<SQLineInfo> SQLineInfoVec;
@@ -4960,9 +4910,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncproto.h SqPlus/squirrel/sqfuncproto.h
  };
  
  #endif //_SQFUNCTION_H_
-diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncstate.cpp SqPlus/squirrel/sqfuncstate.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqfuncstate.cpp SqPlus/squirrel/sqfuncstate.cpp
 --- ../dnl3/SqPlus/squirrel/sqfuncstate.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqfuncstate.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqfuncstate.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -14,6 +14,7 @@ SQInstructionDesc g_InstrDesc[]={
  	{_SC("_OP_LINE")},
  	{_SC("_OP_LOAD")},
@@ -5085,9 +5035,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncstate.cpp SqPlus/squirrel/sqfuncstate.
  	f->_varparams = _varparams;
  
  	return f;
-diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncstate.h SqPlus/squirrel/sqfuncstate.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqfuncstate.h SqPlus/squirrel/sqfuncstate.h
 --- ../dnl3/SqPlus/squirrel/sqfuncstate.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqfuncstate.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqfuncstate.h	2010-03-26 09:57:54.000000000 -0400
 @@ -22,6 +22,8 @@ struct SQFuncState
  	void PopInstructions(SQInteger size){for(SQInteger i=0;i<size;i++)_instructions.pop_back();}
  	void SetStackSize(SQInteger n);
@@ -5114,9 +5064,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqfuncstate.h SqPlus/squirrel/sqfuncstate.h
  	SQInteger _lastline;
  	SQInteger _traps; //contains number of nested exception traps
  	bool _optimization;
-diff -rupwN ../dnl3/SqPlus/squirrel/sqlexer.cpp SqPlus/squirrel/sqlexer.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqlexer.cpp SqPlus/squirrel/sqlexer.cpp
 --- ../dnl3/SqPlus/squirrel/sqlexer.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqlexer.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqlexer.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -66,6 +66,8 @@ void SQLexer::Init(SQSharedState *ss, SQ
  	ADD_KEYWORD(true,TK_TRUE);
  	ADD_KEYWORD(false,TK_FALSE);
@@ -5189,9 +5139,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqlexer.cpp SqPlus/squirrel/sqlexer.cpp
  	}
  	return 0;
  }
-diff -rupwN ../dnl3/SqPlus/squirrel/sqlexer.h SqPlus/squirrel/sqlexer.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqlexer.h SqPlus/squirrel/sqlexer.h
 --- ../dnl3/SqPlus/squirrel/sqlexer.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqlexer.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqlexer.h	2010-03-26 09:57:54.000000000 -0400
 @@ -2,7 +2,7 @@
  #ifndef _SQLEXER_H_
  #define _SQLEXER_H_
@@ -5201,9 +5151,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqlexer.h SqPlus/squirrel/sqlexer.h
  typedef SQChar LexChar;
  #else
  typedef	unsigned char LexChar;
-diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
 --- ../dnl3/SqPlus/squirrel/sqobject.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqobject.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqobject.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -11,6 +11,40 @@
  #include "sqclass.h"
  #include "sqclosure.h"
@@ -5322,7 +5272,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
  #define _CHECK_IO(exp)  { if(!exp)return false; }
  bool SafeWrite(HSQUIRRELVM v,SQWRITEFUNC write,SQUserPointer up,SQUserPointer dest,SQInteger size)
  {
-@@ -286,62 +323,72 @@ bool SQClosure::Save(SQVM *v,SQUserPoint
+@@ -286,36 +323,47 @@ bool SQClosure::Save(SQVM *v,SQUserPoint
  	return true;
  }
  
@@ -5381,6 +5331,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
  		_CHECK_IO(SafeWrite(v,write,up,&_outervalues[i]._type,sizeof(SQUnsignedInteger)));
  		_CHECK_IO(WriteObject(v,up,write,_outervalues[i]._src));
  		_CHECK_IO(WriteObject(v,up,write,_outervalues[i]._name));
+@@ -320,10 +368,9 @@ bool SQFunctionProto::Save(SQVM *v,SQUse
+ 		_CHECK_IO(WriteObject(v,up,write,_outervalues[i]._src));
+ 		_CHECK_IO(WriteObject(v,up,write,_outervalues[i]._name));
  	}
 +
  	_CHECK_IO(WriteTag(v,write,up,SQ_CLOSURESTREAM_PART));
@@ -5391,6 +5344,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
  		SQLocalVarInfo &lvi=_localvarinfos[i];
  		_CHECK_IO(WriteObject(v,up,write,lvi._name));
  		_CHECK_IO(SafeWrite(v,write,up,&lvi._pos,sizeof(SQUnsignedInteger)));
+@@ -330,18 +377,18 @@ bool SQFunctionProto::Save(SQVM *v,SQUse
  		_CHECK_IO(SafeWrite(v,write,up,&lvi._start_op,sizeof(SQUnsignedInteger)));
  		_CHECK_IO(SafeWrite(v,write,up,&lvi._end_op,sizeof(SQUnsignedInteger)));
  	}
@@ -5561,9 +5515,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.cpp SqPlus/squirrel/sqobject.cpp
  	END_MARK()
  }
  
-diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.h SqPlus/squirrel/sqobject.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqobject.h SqPlus/squirrel/sqobject.h
 --- ../dnl3/SqPlus/squirrel/sqobject.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqobject.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqobject.h	2010-03-26 09:57:54.000000000 -0400
 @@ -258,9 +258,27 @@ struct SQObjectPtr : public SQObject
  	}
  	inline void Null()
@@ -5603,9 +5557,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqobject.h SqPlus/squirrel/sqobject.h
  
  
  #endif //_SQOBJECT_H_
-diff -rupwN ../dnl3/SqPlus/squirrel/sqopcodes.h SqPlus/squirrel/sqopcodes.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqopcodes.h SqPlus/squirrel/sqopcodes.h
 --- ../dnl3/SqPlus/squirrel/sqopcodes.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqopcodes.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqopcodes.h	2010-03-26 09:57:54.000000000 -0400
 @@ -7,7 +7,7 @@
  
  enum BitWiseOP {
@@ -5745,9 +5699,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqopcodes.h SqPlus/squirrel/sqopcodes.h
  };							  
  
  struct SQInstructionDesc {	  
-diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
 --- ../dnl3/SqPlus/squirrel/sqstate.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqstate.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqstate.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -145,6 +145,7 @@ void SQSharedState::Init()
  
  	_constructoridx = SQString::Create(this,_SC("constructor"));
@@ -5782,14 +5736,6 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
  	SQCollectable *t=_gc_chain;
  	SQCollectable *nx=NULL;
  	while(t){
-@@ -203,6 +202,7 @@ SQSharedState::~SQSharedState()
- 		_gc_chain->Release();
- 	}
- #endif
-+
- 	sq_delete(_types,SQObjectPtrVec);
- 	sq_delete(_systemstrings,SQObjectPtrVec);
- 	sq_delete(_metamethods,SQObjectPtrVec);
 @@ -251,6 +251,7 @@ SQInteger SQSharedState::CollectGarbage(
  	SQInteger x = _table(_thread(_root_vm)->_roottable)->CountUsed();
  	_refs_table.Mark(&tchain);
@@ -5807,7 +5753,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
  	for(SQUnsignedInteger n = 0; n < _numofslots; n++) {
  		nodes->obj = _null_;
  		nodes++;
-@@ -341,12 +342,13 @@ void RefTable::Finalize()
+@@ -341,8 +342,9 @@ void RefTable::Finalize()
  
  RefTable::~RefTable()
  {
@@ -5818,19 +5764,15 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
  #ifndef NO_GARBAGE_COLLECTOR
  void RefTable::Mark(SQCollectable **chain)
  {
+@@ -346,7 +348,7 @@ RefTable::~RefTable()
+ #ifndef NO_GARBAGE_COLLECTOR
+ void RefTable::Mark(SQCollectable **chain)
+ {
 -	RefNode *nodes = (RefNode *)&_buckets[_numofslots];
 +	RefNode *nodes = (RefNode *)_nodes;
  	for(SQUnsignedInteger n = 0; n < _numofslots; n++) {
  		if(type(nodes->obj) != OT_NULL) {
  			SQSharedState::MarkObject(nodes->obj,chain);
-@@ -355,6 +357,7 @@ void RefTable::Mark(SQCollectable **chai
- 	}
- }
- #endif
-+
- void RefTable::AddRef(SQObject &obj)
- {
- 	SQHash mainpos;
 @@ -370,7 +373,7 @@ SQBool RefTable::Release(SQObject &obj)
  	RefNode *ref = Get(obj,mainpos,&prev,false);
  	if(ref) {
@@ -5933,9 +5875,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.cpp SqPlus/squirrel/sqstate.cpp
  	_strings=(SQString**)SQ_MALLOC(sizeof(SQString*)*_numofslots);
  	memset(_strings,0,sizeof(SQString*)*_numofslots);
  }
-diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.h SqPlus/squirrel/sqstate.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqstate.h SqPlus/squirrel/sqstate.h
 --- ../dnl3/SqPlus/squirrel/sqstate.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqstate.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqstate.h	2010-03-26 09:57:54.000000000 -0400
 @@ -44,7 +44,7 @@ private:
  	void AllocNodes(SQUnsignedInteger size);
  	SQUnsignedInteger _numofslots;
@@ -5953,9 +5895,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqstate.h SqPlus/squirrel/sqstate.h
  	SQObjectPtr _constructoridx;
  #ifndef NO_GARBAGE_COLLECTOR
  	SQCollectable *_gc_chain;
-diff -rupwN ../dnl3/SqPlus/squirrel/sqtable.cpp SqPlus/squirrel/sqtable.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqtable.cpp SqPlus/squirrel/sqtable.cpp
 --- ../dnl3/SqPlus/squirrel/sqtable.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqtable.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqtable.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -177,8 +177,20 @@ bool SQTable::Set(const SQObjectPtr &key
  	return false;
  }
@@ -5978,9 +5920,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqtable.cpp SqPlus/squirrel/sqtable.cpp
 +	_usednodes = 0;
 +	Rehash(true);
 +}
-diff -rupwN ../dnl3/SqPlus/squirrel/sqtable.h SqPlus/squirrel/sqtable.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqtable.h SqPlus/squirrel/sqtable.h
 --- ../dnl3/SqPlus/squirrel/sqtable.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqtable.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqtable.h	2010-03-26 09:57:54.000000000 -0400
 @@ -41,6 +41,7 @@ private:
  	void AllocNodes(SQInteger nSize);
  	void Rehash(bool force);
@@ -5997,7 +5939,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqtable.h SqPlus/squirrel/sqtable.h
  	void Release()
  	{
  		sq_delete(this, SQTable);
-diff -rupwN ../dnl3/SqPlus/squirrel/squirrel71.vcproj SqPlus/squirrel/squirrel71.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squirrel71.vcproj SqPlus/squirrel/squirrel71.vcproj
 --- ../dnl3/SqPlus/squirrel/squirrel71.vcproj	2006-05-29 15:10:46.000000000 -0400
 +++ SqPlus/squirrel/squirrel71.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,750 +0,0 @@
@@ -6751,7 +6693,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squirrel71.vcproj SqPlus/squirrel/squirrel71
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.cbp SqPlus/squirrel/squirrel.cbp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squirrel.cbp SqPlus/squirrel/squirrel.cbp
 --- ../dnl3/SqPlus/squirrel/squirrel.cbp	2006-04-25 17:05:30.000000000 -0400
 +++ SqPlus/squirrel/squirrel.cbp	1969-12-31 19:00:00.000000000 -0500
 @@ -1,324 +0,0 @@
@@ -7079,9 +7021,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.cbp SqPlus/squirrel/squirrel.cbp
 -		</Unit>
 -	</Project>
 -</CodeBlocks_project_file>
-diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.dsp SqPlus/squirrel/squirrel.dsp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squirrel.dsp SqPlus/squirrel/squirrel.dsp
 --- ../dnl3/SqPlus/squirrel/squirrel.dsp	1969-12-31 19:00:00.000000000 -0500
-+++ SqPlus/squirrel/squirrel.dsp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/squirrel.dsp	2010-03-26 09:57:54.000000000 -0400
 @@ -0,0 +1,302 @@
 +# Microsoft Developer Studio Project File - Name="squirrel" - Package Owner=<4>
 +# Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -7385,7 +7327,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.dsp SqPlus/squirrel/squirrel.dsp
 +# End Group
 +# End Target
 +# End Project
-diff -rupwN ../dnl3/SqPlus/squirrel/squirrellib.cbp SqPlus/squirrel/squirrellib.cbp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squirrellib.cbp SqPlus/squirrel/squirrellib.cbp
 --- ../dnl3/SqPlus/squirrel/squirrellib.cbp	2006-04-25 17:05:30.000000000 -0400
 +++ SqPlus/squirrel/squirrellib.cbp	1969-12-31 19:00:00.000000000 -0500
 @@ -1,20 +0,0 @@
@@ -7409,7 +7351,7 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squirrellib.cbp SqPlus/squirrel/squirrellib.
 -		</Build>
 -	</Project>
 -</CodeBlocks_project_file>
-diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.vcproj SqPlus/squirrel/squirrel.vcproj
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squirrel.vcproj SqPlus/squirrel/squirrel.vcproj
 --- ../dnl3/SqPlus/squirrel/squirrel.vcproj	2006-03-26 18:21:16.000000000 -0500
 +++ SqPlus/squirrel/squirrel.vcproj	1969-12-31 19:00:00.000000000 -0500
 @@ -1,971 +0,0 @@
@@ -8384,9 +8326,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squirrel.vcproj SqPlus/squirrel/squirrel.vcp
 -	<Globals>
 -	</Globals>
 -</VisualStudioProject>
-diff -rupwN ../dnl3/SqPlus/squirrel/squtils.h SqPlus/squirrel/squtils.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/squtils.h SqPlus/squirrel/squtils.h
 --- ../dnl3/SqPlus/squirrel/squtils.h	2005-09-25 17:56:20.000000000 -0400
-+++ SqPlus/squirrel/squtils.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/squtils.h	2010-03-26 09:57:54.000000000 -0400
 @@ -4,9 +4,9 @@
  
  #define sq_new(__ptr,__type) {__ptr=(__type *)sq_vm_malloc(sizeof(__type));new (__ptr) __type;}
@@ -8400,9 +8342,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/squtils.h SqPlus/squirrel/squtils.h
  
  //sqvector mini vector class, supports objects by value
  template<typename T> class sqvector
-diff -rupwN ../dnl3/SqPlus/squirrel/sqvm.cpp SqPlus/squirrel/sqvm.cpp
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqvm.cpp SqPlus/squirrel/sqvm.cpp
 --- ../dnl3/SqPlus/squirrel/sqvm.cpp	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqvm.cpp	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqvm.cpp	2010-03-26 09:57:54.000000000 -0400
 @@ -14,7 +14,7 @@
  #include "sqarray.h"
  #include "sqclass.h"
@@ -9166,9 +9108,9 @@ diff -rupwN ../dnl3/SqPlus/squirrel/sqvm.cpp SqPlus/squirrel/sqvm.cpp
  		case OT_THREAD:			scprintf(_SC("THREAD [%p]"),_thread(obj));break;
  		case OT_USERPOINTER:	scprintf(_SC("USERPOINTER %p"),_userpointer(obj));break;
  		case OT_CLASS:			scprintf(_SC("CLASS %p"),_class(obj));break;
-diff -rupwN ../dnl3/SqPlus/squirrel/sqvm.h SqPlus/squirrel/sqvm.h
+diff -rupwbBEN --strip-trailing-cr ../dnl3/SqPlus/squirrel/sqvm.h SqPlus/squirrel/sqvm.h
 --- ../dnl3/SqPlus/squirrel/sqvm.h	2006-03-19 14:32:58.000000000 -0500
-+++ SqPlus/squirrel/sqvm.h	2010-03-23 16:24:42.000000000 -0400
++++ SqPlus/squirrel/sqvm.h	2010-03-26 09:57:54.000000000 -0400
 @@ -32,23 +32,21 @@ struct SQVM : public CHAINABLE_OBJ
  {
  	struct VarArgs {
