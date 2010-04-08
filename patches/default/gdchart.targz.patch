@@ -1,6 +1,6 @@
-diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
---- ../dnl3/gdchart/gd1.3/gd.c	1998-03-13 16:29:28.000000000 -0500
-+++ gdchart/gd1.3/gd.c	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
+--- ../dnl5/gdchart/gd1.3/gd.c	1998-03-13 16:29:28.000000000 -0500
++++ gdchart/gd1.3/gd.c	2010-04-08 10:12:25.000000000 -0400
 @@ -5,6 +5,38 @@
  #include "gd.h"
  #include "mtables.c"
@@ -154,9 +154,9 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.c gdchart/gd1.3/gd.c
  	memcpy(im->style, style, sizeof(int) * noOfPixels);
  	im->styleLength = noOfPixels;
  	im->stylePos = 0;
-diff -rupwN ../dnl3/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
---- ../dnl3/gdchart/gd1.3/gd.h	1998-03-13 16:13:45.000000000 -0500
-+++ gdchart/gd1.3/gd.h	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
+--- ../dnl5/gdchart/gd1.3/gd.h	1998-03-13 16:13:45.000000000 -0500
++++ gdchart/gd1.3/gd.h	2010-04-08 10:12:25.000000000 -0400
 @@ -14,6 +14,59 @@
  /* stdio is needed for file I/O. */
  #include <stdio.h>
@@ -217,9 +217,9 @@ diff -rupwN ../dnl3/gdchart/gd1.3/gd.h gdchart/gd1.3/gd.h
  /* This can't be changed, it's part of the GIF specification. */
  
  #define gdMaxColors 256
-diff -rupwN ../dnl3/gdchart/gdc.c gdchart/gdc.c
---- ../dnl3/gdchart/gdc.c	1998-11-12 23:00:28.000000000 -0500
-+++ gdchart/gdc.c	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdc.c gdchart/gdc.c
+--- ../dnl5/gdchart/gdc.c	1998-11-12 23:00:28.000000000 -0500
++++ gdchart/gdc.c	2010-04-08 10:12:25.000000000 -0400
 @@ -77,9 +77,9 @@ GDCImageStringNL( gdImagePtr		im,
  {
  	int		i;
@@ -274,9 +274,9 @@ diff -rupwN ../dnl3/gdchart/gdc.c gdchart/gdc.c
  				   lineclr );
  
  	/* usually GDC_generate_gif is used in conjunction with hard or hold options */
-diff -rupwN ../dnl3/gdchart/gdc.h gdchart/gdc.h
---- ../dnl3/gdchart/gdc.h	1998-11-12 23:00:42.000000000 -0500
-+++ gdchart/gdc.h	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdc.h gdchart/gdc.h
+--- ../dnl5/gdchart/gdc.h	1998-11-12 23:00:42.000000000 -0500
++++ gdchart/gdc.h	2010-04-08 10:12:25.000000000 -0400
 @@ -8,6 +8,8 @@ General header common to chart (xy[z]) a
  #define _GDC_H
  
@@ -330,10 +330,10 @@ diff -rupwN ../dnl3/gdchart/gdc.h gdchart/gdc.h
 +				 const char		*str );
  
  #endif /*!_GDC_H*/
-diff -rupwN ../dnl3/gdchart/gdchart.c gdchart/gdchart.c
---- ../dnl3/gdchart/gdchart.c	1999-04-18 18:37:46.000000000 -0400
-+++ gdchart/gdchart.c	2010-03-25 10:47:39.000000000 -0400
-@@ -3,18 +3,22 @@
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdchart.c gdchart/gdchart.c
+--- ../dnl5/gdchart/gdchart.c	1999-04-18 18:37:46.000000000 -0400
++++ gdchart/gdchart.c	2010-04-08 10:12:25.000000000 -0400
+@@ -3,11 +3,16 @@
  
  #include <stdio.h>
  #include <stdlib.h>
@@ -350,13 +350,6 @@ diff -rupwN ../dnl3/gdchart/gdchart.c gdchart/gdchart.c
  
  #define GDC_INCL
  #define GDC_LIB
- #include "gdc.h"
- #include "gdchart.h"
- 
--
- #define HIGHSET		0
- #define LOWSET		1
- #define CLOSESET	2
 @@ -95,13 +99,13 @@ draw_3d_line( gdImagePtr	im,
  {
  #define F(x,i)	(int)( (float)((x)-x1)*slope[i]+(float)y1[i] )
@@ -667,9 +660,9 @@ diff -rupwN ../dnl3/gdchart/gdchart.c gdchart/gdchart.c
 +
  	return 0;
  }
-diff -rupwN ../dnl3/gdchart/gdchart.h gdchart/gdchart.h
---- ../dnl3/gdchart/gdchart.h	1998-11-12 23:02:00.000000000 -0500
-+++ gdchart/gdchart.h	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdchart.h gdchart/gdchart.h
+--- ../dnl5/gdchart/gdchart.h	1998-11-12 23:02:00.000000000 -0500
++++ gdchart/gdchart.h	2010-04-08 10:12:25.000000000 -0400
 @@ -159,6 +159,16 @@ int GDC_out_graph( short		gifwidth,
  				   char			*xlbl[],
  				   int			num_sets,
@@ -687,9 +680,9 @@ diff -rupwN ../dnl3/gdchart/gdchart.h gdchart/gdchart.h
  /* expected params (...) for each chart type:
  GDC_LINE
  GDC_BAR
-diff -rupwN ../dnl3/gdchart/gdc_pie.c gdchart/gdc_pie.c
---- ../dnl3/gdchart/gdc_pie.c	1998-11-12 23:00:55.000000000 -0500
-+++ gdchart/gdc_pie.c	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdc_pie.c gdchart/gdc_pie.c
+--- ../dnl5/gdchart/gdc_pie.c	1998-11-12 23:00:55.000000000 -0500
++++ gdchart/gdc_pie.c	2010-04-08 10:12:25.000000000 -0400
 @@ -1,7 +1,9 @@
  /* GDCHART 0.94b  GDC_PIE.C  12 Nov 1998 */
  
@@ -809,9 +802,9 @@ diff -rupwN ../dnl3/gdchart/gdc_pie.c gdchart/gdc_pie.c
 +	GD_FREE( SliceColorShd );
  	return;
  }
-diff -rupwN ../dnl3/gdchart/gdc_pie_samp.c gdchart/gdc_pie_samp.c
---- ../dnl3/gdchart/gdc_pie_samp.c	1998-11-12 23:01:08.000000000 -0500
-+++ gdchart/gdc_pie_samp.c	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/gdc_pie_samp.c gdchart/gdc_pie_samp.c
+--- ../dnl5/gdchart/gdc_pie_samp.c	1998-11-12 23:01:08.000000000 -0500
++++ gdchart/gdc_pie_samp.c	2010-04-08 10:12:25.000000000 -0400
 @@ -4,7 +4,7 @@
  /*  vi: :set tabstop=4 */
  
@@ -821,9 +814,9 @@ diff -rupwN ../dnl3/gdchart/gdc_pie_samp.c gdchart/gdc_pie_samp.c
  #include <math.h>
  
  #include "gdc.h"
-diff -rupwN ../dnl3/gdchart/price_conv.c gdchart/price_conv.c
---- ../dnl3/gdchart/price_conv.c	1998-11-12 23:02:29.000000000 -0500
-+++ gdchart/price_conv.c	2010-03-25 10:47:39.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr ../dnl5/gdchart/price_conv.c gdchart/price_conv.c
+--- ../dnl5/gdchart/price_conv.c	1998-11-12 23:02:29.000000000 -0500
++++ gdchart/price_conv.c	2010-04-08 10:12:25.000000000 -0400
 @@ -74,7 +74,7 @@ price_to_str( float	price,
  		if( whole<0 && numr<0.0 )
  			numr = -numr;

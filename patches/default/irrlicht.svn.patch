@@ -1,6 +1,6 @@
-diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
---- ../dnl3/irrlicht/include/IrrCompileConfig.h	2010-03-26 16:53:02.000000000 -0400
-+++ irrlicht/include/IrrCompileConfig.h	2010-03-26 14:09:06.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
+--- ../dnl5/irrlicht/include/IrrCompileConfig.h	2010-04-08 12:48:35.000000000 -0400
++++ irrlicht/include/IrrCompileConfig.h	2010-04-08 10:12:24.000000000 -0400
 @@ -348,7 +348,7 @@ ones. */
  /** If this is commented out, Irrlicht will try to compile using the zlib
  installed on the system. This is only used when _IRR_COMPILE_WITH_ZLIB_ is
@@ -19,9 +19,9 @@ diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include
  //! Define _IRR_COMPILE_WITH_LZMA_ if you want to use LZMA compressed zip files.
  /** LZMA is a very efficient compression code, known from 7zip. Irrlicht
  currently only supports zip archives, though. */
-diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
---- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-26 16:52:56.000000000 -0400
-+++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-03-26 09:57:53.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
+--- ../dnl5/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-04-08 12:48:32.000000000 -0400
++++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-04-08 10:12:24.000000000 -0400
 @@ -162,7 +162,7 @@ IImage* CImageLoaderPng::loadImage(io::I
  	if (BitDepth < 8)
  	{
@@ -31,9 +31,9 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlich
  		else
  			png_set_packing(png_ptr);
  	}
-diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
---- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-03-26 16:52:56.000000000 -0400
-+++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-03-26 11:59:32.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
+--- ../dnl5/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-04-08 12:48:32.000000000 -0400
++++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-04-08 10:12:24.000000000 -0400
 @@ -16,8 +16,15 @@
  #if !defined(_IRR_XBOX_PLATFORM_)
  	#include <windows.h>
@@ -50,9 +50,9 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/
  
  namespace irr
  {
-diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-26 16:52:56.000000000 -0400
-+++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-03-26 09:57:53.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
+--- ../dnl5/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-04-08 12:48:32.000000000 -0400
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-04-08 10:12:24.000000000 -0400
 @@ -126,7 +126,7 @@ namespace video
  } // end namespace irr
  

@@ -32,7 +32,7 @@ if [ "${REPO}" == "svn" ]; then
 	fi
 
 	cd ${DIR_LIB}
-	diff -rupwN -x ".svn" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	diff -rupwbBEN --strip-trailing-cr -x ".svn" "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -66,7 +66,7 @@ if [ "${REPO}" == "cvs" ]; then
 	fi
 
 	cd ${DIR_LIB}
-	diff -rupwN -x "CVS" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	diff -rupwbBEN --strip-trailing-cr -x "CVS" "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -101,7 +101,7 @@ if [ "${REPO}" == "targz" ]; then
 	fi		
 	
 	cd ${DIR_LIB}
-	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	diff -rupwbBEN --strip-trailing-cr "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -128,7 +128,7 @@ if [ "${REPO}" == "tarbz2" ]; then
 	fi
 
 	cd ${DIR_LIB}
-	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	diff -rupwbBEN --strip-trailing-cr "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
@@ -156,7 +156,7 @@ if [ "${REPO}" == "zip" ]; then
 	fi
 
 	cd ${DIR_LIB}
-	diff -rupwN "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	diff -rupwbBEN --strip-trailing-cr "${DNLREL}/" "${PROJ}" > "${PATCH}"
 	rm -Rf "${DIR_DNL}/${PROJ}/"							
 fi
 
