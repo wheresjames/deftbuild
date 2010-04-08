@@ -12,6 +12,12 @@ else
 	CFG_DESC := $(PRJ_DESC)
 endif
 
+ifdef DIDX
+	CFG_IDX=$(DIDX)
+else
+	CFG_IDX=3
+endif
+
 ifdef PRJ_NAME
 ifdef PRJ_DESC
 
@@ -62,7 +68,7 @@ TOOLS	 := local
 #TOOLS	 := openmoko
 #TOOLS	 := mac
 
-DEFLIB	:= lib3
+DEFLIB	:= lib$(CFG_IDX)
 
 #OS := $(shell uname -o)
 #ifeq $(OS) GNU/Linux
@@ -158,7 +164,7 @@ ifeq ($(BUILD),vs)
 	OS := win32
 	PLATFORM := windows
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin/windows-vs-win32-i386-local-static
+	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-i386-local-static
 	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld.exe"
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
@@ -233,7 +239,7 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin/posix-gcc-linux-i386-local-shared
+	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/posix-gcc-linux-i386-local-shared
 	CFG_LOCAL_TOOL_RESCMP 	:= $(CFG_LOCAL_BUILD_TYPE)/resbld
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
@@ -636,11 +642,11 @@ else
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-shared
 endif
 
-CFG_BINROOT  := $(CFG_ROOT)/bin/$(CFG_BUILD_TYPE)
-CFG_LOCAL_BINROOT  := $(CFG_ROOT)/bin/$(CFG_LOCAL_BUILD_TYPE)
+CFG_BINROOT  := $(CFG_ROOT)/bin$(CFG_IDX)/$(CFG_BUILD_TYPE)
+CFG_LOCAL_BINROOT  := $(CFG_ROOT)/bin$(CFG_IDX)/$(CFG_LOCAL_BUILD_TYPE)
 
 ifdef PRJ_BINROOT
-	CFG_OUTROOT := $(PRJ_BINROOT)/bin/$(CFG_BUILD_TYPE)
+	CFG_OUTROOT := $(PRJ_BINROOT)/bin$(CFG_IDX)/$(CFG_BUILD_TYPE)
 else
 	CFG_OUTROOT  := $(CFG_BINROOT)
 endif

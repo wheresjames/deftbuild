@@ -5,7 +5,10 @@ EXT_REPO=repo
 EXT_DIFF=diff
 EXT_PTCH=patch
 
-DIR_IDX=3
+if [ ! ${DIR_IDX} ]; then
+	DIR_IDX=3
+fi
+
 DIR_CURRENT=$PWD
 
 DIR_LPRJ=${DIR_CURRENT}/repo

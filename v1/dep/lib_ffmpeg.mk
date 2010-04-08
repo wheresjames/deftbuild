@@ -64,7 +64,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := libavformat
 LOC_CXX_libavformat := c
 LOC_SRC_libavformat := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_EXC_libavformat := avisynth libnut librtmp
+LOC_EXC_libavformat := avisynth libnut librtmp rtpdec_theora
 #LOC_EXC_libavformat := avisynth libnut matroskadec mov
 #ifeq ($(PROC),arm)
 #	LOC_EXC_libavformat := $(LOC_EXC_libavformat) ipmovie mpegts sierravmd

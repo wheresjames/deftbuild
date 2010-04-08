@@ -4,18 +4,27 @@
 #
 # Parameters
 #
-# $1 = Command      - show, checkout, update, archive, diff,
+# $1 = idx			- value postfixed to output directories
+#
+# $2 = Command      - show, checkout, update, archive, diff,
 #                     makepatch, applypatch, build
 #
-# $2 = Group list   - Project group
+# $3 = Group list   - Project group
 #
-# $3 = Project list -
+# $4 = Project list -
+#
+# $5 = Tag			- Unique tag for archives, diffs, or patches
 #
 #-------------------------------------------------------------------
 
 #-------------------------------------------------------------------
 # Configuration
 #-------------------------------------------------------------------
+
+if [ $1 ] && [ $1 != "-" ]; then
+	DIR_IDX=$1
+fi
+
 . ./config.sh
 
 #-------------------------------------------------------------------
@@ -23,7 +32,7 @@
 #-------------------------------------------------------------------
 
 # Shortcuts
-CMD=$1
+CMD=$2
 if [ ${CMD} == "-" ]; then 
 	CMD=show 
 fi
@@ -50,18 +59,22 @@ if [ ${CMD} == "bld" ]; then
 fi
 
 # Get directory roots
-if [ $2 ] && [ $2 != "-" ]; then
-	IFS=","; DIRLIST=($2); unset IFS
+if [ $3 ] && [ $3 != "-" ]; then
+	IFS=","; DIRLIST=($3); unset IFS
 else
 	cd ${DIR_LPRJ}
 	for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
 fi
 
 echo "---"
+echo " Index    : $5"
 echo " Command  : ${CMD}"
 echo " Groups   : ${DIRLIST[@]}"
-if [ $3 ]; then
-	echo " Projects : $3"
+if [ $4 ]; then
+	echo " Projects : $4"
+fi
+if [ $5 ]; then
+	echo " Tag      : $5"
 fi
 echo "---"
 
@@ -71,7 +84,7 @@ if [ ! -d ${DIR_LIB} ]; then
 fi
 
 # Extra parameter
-EXTPARAM=$4
+EXTPARAM=$5
 
 # Unique field
 if [ ! -z ${EXTPARAM} ] && [ ${EXTPARAM} != "-" ]; then
@@ -84,21 +97,21 @@ fi
 # Initialize
 #-------------------------------------------------------------------
 
-if [ $1 == "archive" ]; then
+if [ ${CMD} == "archive" ]; then
 	ARCHPATH="${DIR_ARC}/${UNIQUENAME}"
 	if [ ! -d ${ARCHPATH} ]; then
 		mkdir -p ${ARCHPATH}
 	fi
 fi
 
-if [ $1 == "diff" ]; then
+if [ ${CMD} == "diff" ]; then
 	ARCHPATH="${DIR_DIF}/${UNIQUENAME}"
 	if [ ! -d ${ARCHPATH} ]; then
 		mkdir -p ${ARCHPATH}
 	fi
 fi
 
-if [ $1 == "makepatch" ]; then
+if [ ${CMD} == "makepatch" ]; then
 	if [ -z ${EXTPARAM} ]; then
 		EXTPARAM=default
 	fi
@@ -108,7 +121,7 @@ if [ $1 == "makepatch" ]; then
 	fi
 fi
 
-if [ $1 == "applypatch" ]; then
+if [ ${CMD} == "applypatch" ]; then
 	if [ -z ${EXTPARAM} ]; then
 		EXTPARAM=default
 	fi
@@ -121,8 +134,8 @@ fi
 for DR in ${DIRLIST[@]} 
 do
 
-	if [ $3 ] && [ $3 != "-" ]; then
-		IFS=","; FILELIST=($3); unset IFS
+	if [ $4 ] && [ $4 != "-" ]; then
+		IFS=","; FILELIST=($4); unset IFS
 	else	
 		FILELIST=
 		for i in $( find ${DIR_LPRJ}/${DR} -maxdepth 1 -type f -name '*'.${EXT_REPO} ); do FILELIST="${FILELIST} ${i##*/}"; done
