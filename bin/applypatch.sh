@@ -14,7 +14,7 @@ echo " *** Applying patch : ${PATCH}"
 if [ "${REPO}" == "svn" ]; then	
 
 	cd ${LIBPATH}
-	patch -p1 < "${PATCH}"
+	patch -l -p1 < "${PATCH}"
 
 fi
 
@@ -23,7 +23,7 @@ if [ "${REPO}" == "cvs" ]; then
 
 	# Save the diff anyway
 	cd ${LIBPATH}
-	patch -p1 < "${PATCH}"
+	patch -l -p1 < "${PATCH}"
 fi
 
 # git
@@ -46,7 +46,7 @@ fi
 if [ "${REPO}" == "tarbz2" ]; then	
 
 	cd ${LIBPATH}
-	patch -p1 < "${PATCH}"
+	patch -l -p1 < "${PATCH}"
 	
 fi
 
@@ -54,7 +54,7 @@ fi
 if [ "${REPO}" == "zip" ]; then	
 
 	cd ${LIBPATH}
-	patch -p1 < "${PATCH}"
+	patch -l -p1 < "${PATCH}"
 	
 fi
 
