@@ -1,7 +1,7 @@
 
 BUILDDIRS := dep
 
-ifdef APPS
+ifndef NOAPPS
 	BUILDDIRS := $(BUILDDIRS) app
 endif
 

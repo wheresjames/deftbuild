@@ -1,6 +1,6 @@
-diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h264dspenc.c
---- ../dnl3/ffmpeg/libavcodec/h264dspenc.c	2010-03-26 16:59:27.000000000 -0400
-+++ ffmpeg/libavcodec/h264dspenc.c	2010-03-26 09:57:54.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h264dspenc.c
+--- ../dnl5/ffmpeg/libavcodec/h264dspenc.c	2010-04-13 12:40:06.000000000 -0400
++++ ffmpeg/libavcodec/h264dspenc.c	2010-04-08 10:12:25.000000000 -0400
 @@ -73,6 +73,6 @@ static void h264_dct_c(DCTELEM block[4][
  
  av_cold void ff_h264dspenc_init(DSPContext* c, AVCodecContext *avctx)
@@ -9,21 +9,30 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h26
 +//    c->h264_dct = h264_dct_c;
  }
  
-diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/h264enc.c ffmpeg/libavcodec/h264enc.c
---- ../dnl3/ffmpeg/libavcodec/h264enc.c	2010-03-26 16:59:27.000000000 -0400
-+++ ffmpeg/libavcodec/h264enc.c	2010-03-26 09:57:54.000000000 -0400
-@@ -184,7 +184,7 @@ static inline int quantize_c(DCTELEM *bl
-                              int intra, int separate_dc)
- {
-     int i;
--    const int * const quant_3Btable = quant_coeff[qscale];
-+    const int * const quant_table = quant_coeff[qscale];
-     const int bias = intra ? (1 << QUANT_SHIFT) / 3 : (1 << QUANT_SHIFT) / 6;
-     const unsigned int threshold1 = (1 << QUANT_SHIFT) - bias - 1;
-     const unsigned int threshold2 = (threshold1 << 1);
-diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c ffmpeg/libavcodec/mpegaudio_tablegen.c
---- ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-26 16:59:27.000000000 -0400
-+++ ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-03-26 09:57:54.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavcodec/h264enc.c.rej ffmpeg/libavcodec/h264enc.c.rej
+--- ../dnl5/ffmpeg/libavcodec/h264enc.c.rej	1969-12-31 19:00:00.000000000 -0500
++++ ffmpeg/libavcodec/h264enc.c.rej	2010-04-08 10:12:49.000000000 -0400
+@@ -0,0 +1,17 @@
++*************** static inline int quantize_c(DCTELEM *bl
++*** 184,190 ****
++                               int intra, int separate_dc)
++  {
++      int i;
++-     const int * const quant_3Btable = quant_coeff[qscale];
++      const int bias = intra ? (1 << QUANT_SHIFT) / 3 : (1 << QUANT_SHIFT) / 6;
++      const unsigned int threshold1 = (1 << QUANT_SHIFT) - bias - 1;
++      const unsigned int threshold2 = (threshold1 << 1);
++--- 184,190 ----
++                               int intra, int separate_dc)
++  {
++      int i;
+++     const int * const quant_table = quant_coeff[qscale];
++      const int bias = intra ? (1 << QUANT_SHIFT) / 3 : (1 << QUANT_SHIFT) / 6;
++      const unsigned int threshold1 = (1 << QUANT_SHIFT) - bias - 1;
++      const unsigned int threshold2 = (threshold1 << 1);
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavcodec/mpegaudio_tablegen.c ffmpeg/libavcodec/mpegaudio_tablegen.c
+--- ../dnl5/ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-04-13 12:40:06.000000000 -0400
++++ ffmpeg/libavcodec/mpegaudio_tablegen.c	2010-04-08 10:12:49.000000000 -0400
 @@ -22,6 +22,7 @@
  
  #include <stdlib.h>
@@ -32,10 +41,10 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavcodec/mpegaudio_tablegen.c ffmpeg/libavc
  #include "mpegaudio_tablegen.h"
  #include "tableprint.h"
  
-diff -rupwN -x .svn ../dnl3/ffmpeg/libavformat/rtpdec_theora.c ffmpeg/libavformat/rtpdec_theora.c
---- ../dnl3/ffmpeg/libavformat/rtpdec_theora.c	2010-03-26 16:59:30.000000000 -0400
-+++ ffmpeg/libavformat/rtpdec_theora.c	2010-03-26 16:40:44.000000000 -0400
-@@ -349,7 +349,7 @@ static int theora_parse_sdp_line(AVForma
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavformat/rtpdec_xiph.c ffmpeg/libavformat/rtpdec_xiph.c
+--- ../dnl5/ffmpeg/libavformat/rtpdec_xiph.c	2010-04-13 12:40:09.000000000 -0400
++++ ffmpeg/libavformat/rtpdec_xiph.c	2010-04-13 12:35:42.000000000 -0400
+@@ -351,7 +351,7 @@ static int xiph_parse_sdp_line(AVFormatC
      int value_size = strlen(line), attr_size = sizeof(attr), res = 0;
      AVCodecContext* codec = s->streams[st_index]->codec;
  
@@ -44,9 +53,34 @@ diff -rupwN -x .svn ../dnl3/ffmpeg/libavformat/rtpdec_theora.c ffmpeg/libavforma
      assert(data);
  
      if (!(value = av_malloc(value_size))) {
-diff -rupwN -x .svn ../dnl3/ffmpeg/libavutil/avconfig.h ffmpeg/libavutil/avconfig.h
---- ../dnl3/ffmpeg/libavutil/avconfig.h	1969-12-31 19:00:00.000000000 -0500
-+++ ffmpeg/libavutil/avconfig.h	2010-03-26 09:57:54.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavformat/rtsp.c ffmpeg/libavformat/rtsp.c
+--- ../dnl5/ffmpeg/libavformat/rtsp.c	2010-04-13 12:40:09.000000000 -0400
++++ ffmpeg/libavformat/rtsp.c	2010-04-08 11:33:19.000000000 -0400
+@@ -1692,7 +1692,7 @@ static int udp_read_packet(AVFormatConte
+             }
+ #endif
+         } else if (n == 0 && ++timeout_cnt >= MAX_TIMEOUTS) {
+-            return AVERROR(ETIMEDOUT);
++            return AVERROR(FF_NETERROR(ETIMEDOUT));
+         } else if (n < 0 && errno != EINTR)
+             return AVERROR(errno);
+     }
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavformat/udp.c ffmpeg/libavformat/udp.c
+--- ../dnl5/ffmpeg/libavformat/udp.c	2010-04-13 12:40:09.000000000 -0400
++++ ffmpeg/libavformat/udp.c	2010-04-13 12:18:57.000000000 -0400
+@@ -58,7 +58,8 @@ typedef struct {
+ } UDPContext;
+ 
+ #define UDP_TX_BUF_SIZE 32768
+-#define UDP_MAX_PKT_SIZE 65536
++//#define UDP_MAX_PKT_SIZE 65536
++#define UDP_MAX_PKT_SIZE 2 * 1024 * 1024
+ 
+ static int udp_set_multicast_ttl(int sockfd, int mcastTTL,
+                                  struct sockaddr *addr)
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavutil/avconfig.h ffmpeg/libavutil/avconfig.h
+--- ../dnl5/ffmpeg/libavutil/avconfig.h	1969-12-31 19:00:00.000000000 -0500
++++ ffmpeg/libavutil/avconfig.h	2010-04-08 10:13:16.000000000 -0400
 @@ -0,0 +1,4 @@
 +#ifndef AVUTIL_AVCONFIG_H
 +#define AVUTIL_AVCONFIG_H
