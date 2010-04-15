@@ -39,7 +39,7 @@ ifeq ($(PLATFORM),windows)
 	endif
 else
 	ifeq ($(PROC),arm)
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/arm $(PRJ_INCS) zlib
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix/arm $(PRJ_INCS) zlib
 	else
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix $(PRJ_INCS) zlib
 	endif

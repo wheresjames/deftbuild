@@ -490,8 +490,8 @@ else
 			PLATFORM := windows
 
 			# Cross compile for windows
-			# CFG_TOOLPREFIX := i586-mingw32msvc-
-			CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
+			CFG_TOOLPREFIX := i586-mingw32msvc-
+			# CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
 
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
