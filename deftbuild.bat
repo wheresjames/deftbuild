@@ -1,10 +1,5 @@
 @echo off
 
-REM ----------------------------------------------------------------
-REM Configure
-REM ----------------------------------------------------------------
-
-CALL %~dp0\config.bat
 SETLOCAL EnableDelayedExpansion
 
 REM ----------------------------------------------------------------
@@ -18,31 +13,41 @@ REM Process the command line
 REM ----------------------------------------------------------------
 
 FOR /F "tokens=1-8" %%a in ("%*") do (
-set CMD=%%a
-set GRP=%%b
-set PRJ=%%c
-set EXT=%%d
+set IDX=%%a
+set CMD=%%b
+set GRP=%%c
+set PRJ=%%d
+set EXT=%%e
 )
 
-set LTIMESTAMP=!EXT!
-IF /I !LTIMESTAMP! EQU 0 (
-CALL !DIR_LBAT!\timestamp.bat
-)
-
+IF /I !IDX! EQU 0 SET /P IDX=Which IDX?
 IF /I !CMD! EQU 0 SET /P CMD=Which Command? 
 IF /I !GRP! EQU 0 SET /P GRP=Which Groups? 
 IF /I !PRJ! EQU 0 SET /P PRJ=Which Projects? 
 
+IF !IDX!==- set IDX=3
 IF !CMD!==- set CMD=
 IF !GRP!==- set GRP=
 IF !PRJ!==- set PRJ=
 
 IF /I !CMD! EQU 0 (
+echo IDX : !IDX!
 echo CMD : !CMD!
 echo GRP : !GRP!
 echo PRJ : !PRJ!
 echo EXT : !EXT!
 echo LTIMESTAMP : !LTIMESTAMP!
+)
+
+REM ----------------------------------------------------------------
+REM Configure
+REM ----------------------------------------------------------------
+
+CALL %~dp0\config.bat
+
+set LTIMESTAMP=!EXT!
+IF /I !LTIMESTAMP! EQU 0 (
+CALL !DIR_LBAT!\timestamp.bat
 )
 
 REM ----------------------------------------------------------------

@@ -43,7 +43,7 @@ cd deftbuild
 deftbuild 3 checkout core,img -
 deftbuild 3 applypatch - -
 cd v1
-make DIDX=3 APPS=1 [DBG=1] [UNICODE=1]
+make DIDX=3 [DBG=1] [UNICODE=1]
 
 // To update, do this from the deftbuild directory
 
@@ -74,35 +74,31 @@ Following directory structure is assumed
 
 // To checkout default projects
 
-	deftbuild checkout
+	deftbuild 3 checkout
 
 // To checkout all projects
 
-	deftbuild checkout -
+	deftbuild 3 checkout - -
 
 // Checkout specific project
 
-	deftbuild checkout - libpng
+	deftbuild 3 checkout - libpng
 
 // Chcekout specific project version
 
-	deftbuild checkout - poco:1300
-
-// Force checkout
-
-	deftbuild checkout - tinyxml 1
+	deftbuild 3 checkout - poco:1300
 
 // Multiple projects
 
-	deftbuild checkout - libpng,ffmpeg,poco:1300
+	deftbuild 3 checkout - libpng,ffmpeg,poco:1300
 
 // Checkout group
 
-	deftbuild checkout 3d
+	deftbuild 3 checkout 3d
 
 // Multiple groups
 
-	deftbuild checkout 3d,scripting
+	deftbuild 3 checkout 3d,scripting
 
 //------------------------------------------------------------------
 // dependencies

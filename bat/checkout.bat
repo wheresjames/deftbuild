@@ -44,7 +44,7 @@ REM cvs
 REM ----------------------------------------------------------------
 IF %%b==cvs (
 IF %%c==- (
-cvs -Q -z3 -d "%%f%%d" co -d %%a "%%e"
+cvs -Q -z3 -d %%f%%d co -d %%a %%e
 ) ELSE (
 cvs -Q -z3 -d "%%f%%d" co -r %%c -d %%a "%%e"
 )

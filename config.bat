@@ -6,7 +6,7 @@ REM ----------------------------------------------------------------
 set EXT_REPO=repo
 set EXT_PATCH=patch
 
-set DIR_IDX=3
+set DIR_IDX=!IDX!
 set DIR_CURRENT=%~dp0
 
 set DIR_LPRJ=%DIR_CURRENT%repo

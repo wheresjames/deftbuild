@@ -23,8 +23,9 @@ include $(PRJ_LIBROOT)/config.mk
 #-------------------------------------------------------------------
 export LOC_TAG := def
 LOC_CXX_def := c
-LOC_INC_def := $(CFG_LIBROOT)/tiff
-LOC_SRC_def := $(CFG_LIBROOT)/tiff
+LOC_INC_def := $(CFG_LIBROOT)/tiff/libtiff
+LOC_SRC_def := $(CFG_LIBROOT)/tiff/libtiff
+LOC_EXC_def := tif_vms tif_wince tif_unix
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

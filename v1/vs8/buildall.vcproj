@@ -22,9 +22,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C .. BUILD=vs DBG=1 APPS=1 SQMOD=1"
-				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs DBG=1 APPS=1 SQMOD=1"
-				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs DBG=1 APPS=1 SQMOD=1"
+				BuildCommandLine="make -C .. BUILD=vs DBG=1"
+				ReBuildCommandLine="make -C .. BUILDTYPE=rebuild BUILD=vs DBG=1"
+				CleanCommandLine="make -C .. BUILDTYPE=clean BUILD=vs DBG=1"
 				Output=""
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				IncludeSearchPath=""
@@ -42,9 +42,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C ../.. BUILD=vs APPS=1 SQMOD=1"
-				ReBuildCommandLine="make -C ../.. BUILDTYPE=rebuild BUILD=vs APPS=1 SQMOD=1"
-				CleanCommandLine="make -C ../.. BUILDTYPE=clean BUILD=vs APPS=1 SQMOD=1"
+				BuildCommandLine="make -C .. BUILD=vs"
+				ReBuildCommandLine="make -C .. BUILDTYPE=rebuild BUILD=vs"
+				CleanCommandLine="make -C .. BUILDTYPE=clean BUILD=vs"
 				Output=""
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				IncludeSearchPath=""
