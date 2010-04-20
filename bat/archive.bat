@@ -19,9 +19,9 @@ echo *** Archiving : %2
 
 cd "!DIR_LIB!"
 
-REM tar -czf "!ARCHDIR!\%%a.tgz" "%%a"
+REM tar -hczf "!ARCHDIR!\%%a.tgz" "%%a"
 
-tar -c %%a | bzip2 > "!ARCHDIR!\%%a.bz2"
+tar -hc %%a | bzip2 > "!ARCHDIR!\%%a.bz2"
 
 zip -q -r "!ARCHDIR!\%%a.zip" %%a
 
