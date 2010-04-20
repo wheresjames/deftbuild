@@ -39,6 +39,9 @@ fi
 if [ ${CMD} == "co" ]; then
 	CMD=checkout 
 fi
+if [ ${CMD} == "cop" ]; then
+	CMD=checkoutpatch
+fi
 if [ ${CMD} == "up" ]; then 
 	CMD=update 
 fi
@@ -128,6 +131,13 @@ if [ ${CMD} == "applypatch" ]; then
 	ARCHPATH="${DIR_LPAT}/${EXTPARAM}"
 fi
 
+if [ ${CMD} == "checkoutpatch" ]; then
+	if [ -z ${EXTPARAM} ]; then
+		EXTPARAM=default
+	fi
+	ARCHPATH="${DIR_LPAT}/${EXTPARAM}"
+fi
+
 #-------------------------------------------------------------------
 # Process each group/project
 #-------------------------------------------------------------------
@@ -198,6 +208,12 @@ do
 					# Checkout
 					if [ ${CMD} == "checkout" ]; then
 						. ${DIR_LBIN}/checkout.sh
+					fi
+					
+					# Checkout and patch
+					if [ ${CMD} == "checkout" ]; then
+						. ${DIR_LBIN}/checkout.sh
+						. ${DIR_LBIN}/applypatch.sh
 					fi
 
 					# Update

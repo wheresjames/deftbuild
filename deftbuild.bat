@@ -3,12 +3,6 @@
 SETLOCAL EnableDelayedExpansion
 
 REM ----------------------------------------------------------------
-REM Ensure directories
-REM ----------------------------------------------------------------
-
-IF NOT EXIST !DIR_LIB! md !DIR_LIB!
-
-REM ----------------------------------------------------------------
 REM Process the command line
 REM ----------------------------------------------------------------
 
@@ -49,6 +43,12 @@ set LTIMESTAMP=!EXT!
 IF /I !LTIMESTAMP! EQU 0 (
 CALL !DIR_LBAT!\timestamp.bat
 )
+
+REM ----------------------------------------------------------------
+REM Ensure directories
+REM ----------------------------------------------------------------
+
+IF NOT EXIST !DIR_LIB! mkdir !DIR_LIB!
 
 REM ----------------------------------------------------------------
 REM Find group files if not specified
@@ -124,6 +124,15 @@ REM ----------------------------------------------------------------
 IF !CMD!==checkout set CMD=co
 IF !CMD!==co (
 call %DIR_LBAT%\checkout.bat !REPOPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
+REM Checkout And patch
+REM ----------------------------------------------------------------
+IF !CMD!==checkoutpatch set CMD=cop
+IF !CMD!==cop (
+call %DIR_LBAT%\checkout.bat !REPOPATH! !LIBPATH!
+call %DIR_LBAT%\applypatch.bat !REPOPATH! !LIBPATH! !EXT!
 )
 
 REM ----------------------------------------------------------------
