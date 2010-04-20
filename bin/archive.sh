@@ -6,9 +6,9 @@ fi
 
 echo " *** Archiving ${PROJ}"
 
-#tar -czf "${ARCHPATH}/${PROJ}.tgz" ${PROJ}
+#tar -hczf "${ARCHPATH}/${PROJ}.tgz" ${PROJ}
 
-tar -c ${PROJ} | bzip2 > "${ARCHPATH}/${PROJ}.bz2"
+tar -hc ${PROJ} | bzip2 > "${ARCHPATH}/${PROJ}.bz2"
 
 zip -q -r "${ARCHPATH}/${PROJ}.zip" ${PROJ}
 
