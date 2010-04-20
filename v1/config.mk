@@ -534,8 +534,7 @@ else
 #			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
-
-			CFG_ASMFLAGS := -f elf32 -a x86
+			CFG_ASFLAGS := -f elf32 -a x86
 			
 		endif
 
@@ -590,8 +589,9 @@ else
 	CFG_AR := $(CFG_TOOLPREFIX)ar
 	CFG_DT := $(CFG_TOOLPREFIX)dlltool
 	CFG_DP := $(CFG_TOOLPREFIX)makedepend
+	CFG_AS := $(CFG_TOOLPREFIX)as
 	
-	CFG_AS := yasm
+	CFG_ASM := yasm
 
 	CFG_MD := mkdir -p
 	CFG_RM := rm -rf

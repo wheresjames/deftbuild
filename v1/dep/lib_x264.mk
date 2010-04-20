@@ -55,6 +55,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := common_asm
 LOC_CXX_common_asm := asm
 LOC_BLD_common_asm := asm
+LOC_ASM_common_asm := yasm -f elf32 -a x86
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
 LOC_EXC_common_asm := dct-64
 include $(PRJ_LIBROOT)/build.mk

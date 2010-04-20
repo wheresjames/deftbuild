@@ -35,10 +35,14 @@ endif
 ifeq ($(LOC_BLD_$(LOC_TAG)),c)
 	BLD_COMPILER := $(CFG_CC)
 else
-	ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
+	ifeq ($(LOC_BLD_$(LOC_TAG)),as)
 		BLD_COMPILER := $(CFG_AS)
 	else
-		BLD_COMPILER := $(CFG_PP)
+		ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
+			BLD_COMPILER := $(LOC_ASM_$(LOC_TAG)
+		else
+			BLD_COMPILER := $(CFG_PP)
+		endif
 	endif
 endif
 
@@ -160,13 +164,23 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $@
-	$(CFG_AS) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(LOC_ASM_$(LOC_TAG) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+
+else
+
+ifeq ($(LOC_BLD_$(LOC_TAG)),as)
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	- $(CFG_DEL) $@
+	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $@
 	$(BLD_COMPILER) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+endif
+
 endif
 
 endif
