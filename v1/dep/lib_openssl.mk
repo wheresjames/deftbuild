@@ -20,9 +20,9 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-#ifeq ($(PLATFORM),windows)
-#	PRJ_DEFS := $(PRJ_DEFS) HAVE_WINSOCK2
-#endif
+ifeq ($(PLATFORM),windows)
+	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM
+endif
 
 #-------------------------------------------------------------------
 # File locations
@@ -38,6 +38,22 @@ LOC_CXX_crypto := c
 LOC_SRC_crypto := $(CFG_LIBROOT)/openssl/crypto
 LOC_EXC_crypto := cversion \
 				  LPdir_nyi LPdir_unix LPdir_vms LPdir_win32 LPdir_win LPdir_wince
+ifeq ($(PLATFORM),windows)
+	LOC_EXC_crypto := $(LOC_EXC_crypto) ppccap s390xcap
+endif
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_asm
+LOC_CXX_crypto_asm := asm
+LOC_BLD_crypto_asm := as
+LOC_SRC_crypto_asm := $(CFG_LIBROOT)/openssl/crypto
+LOC_EXC_crypto_asm := 
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_aes
+LOC_CXX_crypto_aes := c
+LOC_SRC_crypto_aes := $(CFG_LIBROOT)/openssl/crypto/aes
+LOC_EXC_crypto_aes :=
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_asn1
@@ -70,6 +86,18 @@ LOC_SRC_crypto_cmac := $(CFG_LIBROOT)/openssl/crypto/cmac
 LOC_EXC_crypto_cmac := 
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_cms
+LOC_CXX_crypto_cms := c
+LOC_SRC_crypto_cms := $(CFG_LIBROOT)/openssl/crypto/cms
+LOC_EXC_crypto_cms := 
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_conf
+LOC_CXX_crypto_conf := c
+LOC_SRC_crypto_conf := $(CFG_LIBROOT)/openssl/crypto/conf
+LOC_EXC_crypto_conf := cnf_save test
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_dh
 LOC_CXX_crypto_dh := c
 LOC_SRC_crypto_dh := $(CFG_LIBROOT)/openssl/crypto/dh
@@ -82,10 +110,28 @@ LOC_SRC_crypto_dsa := $(CFG_LIBROOT)/openssl/crypto/dsa
 LOC_EXC_crypto_dsa :=
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_dso
+LOC_CXX_crypto_dso := c
+LOC_SRC_crypto_dso := $(CFG_LIBROOT)/openssl/crypto/dso
+LOC_EXC_crypto_dso :=
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_ec
 LOC_CXX_crypto_ec := c
 LOC_SRC_crypto_ec := $(CFG_LIBROOT)/openssl/crypto/ec
 LOC_EXC_crypto_ec :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_ecdh
+LOC_CXX_crypto_ecdh := c
+LOC_SRC_crypto_ecdh := $(CFG_LIBROOT)/openssl/crypto/ecdh
+LOC_EXC_crypto_ecdh :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_ecdsa
+LOC_CXX_crypto_ecdsa := c
+LOC_SRC_crypto_ecdsa := $(CFG_LIBROOT)/openssl/crypto/ecdsa
+LOC_EXC_crypto_ecdsa :=
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_engine
@@ -176,6 +222,12 @@ export LOC_TAG := crypto_stack
 LOC_CXX_crypto_stack := c
 LOC_SRC_crypto_stack := $(CFG_LIBROOT)/openssl/crypto/stack
 LOC_EXC_crypto_stack :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_ui
+LOC_CXX_crypto_ui := c
+LOC_SRC_crypto_ui := $(CFG_LIBROOT)/openssl/crypto/ui
+LOC_EXC_crypto_ui :=
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_x509
