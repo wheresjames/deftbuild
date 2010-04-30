@@ -20,7 +20,7 @@ ifeq ($(BUILD),vs)
 	NSIS_PATH := "C:\Program Files\NSIS\makensis"
 	NSIS_SCRIPT := windows-installer.nsi
 else
-	NSIS_PATH := wine "${NSISROOT}/makensis.exe"
+	NSIS_PATH := wine "${NSISROOT}makensis.exe"
 	NSIS_SCRIPT := windows-installer-gcc.nsi
 endif
 
