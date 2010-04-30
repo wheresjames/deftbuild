@@ -18,15 +18,17 @@ include $(PRJ_LIBROOT)/config.mk
 #-------------------------------------------------------------------
 ifeq ($(BUILD),vs)
 	NSIS_PATH := "C:\Program Files\NSIS\makensis"
+	NSIS_SCRIPT := windows-installer.nsi
 else
-	NSIS_PATH := makensis.exe
+	NSIS_PATH := wine "${NSISROOT}/makensis.exe"
+	NSIS_SCRIPT := windows-installer-gcc.nsi
 endif
 
 ifeq ($(PLATFORM),windows)
 
 all:
 	echo *** Building Squirrel Engine Installer
-	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" windows-installer.nsi
+	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" $(NSIS_SCRIPT)
 
 else
 
