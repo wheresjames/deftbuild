@@ -10,7 +10,7 @@ PRJ_TYPE := lib
 PRJ_INCS := openssl openssl/include openssl/crypto \
 			openssl/crypto/asn1 openssl/crypto/evp
 PRJ_LIBS := 
-PRJ_DEFS :=
+PRJ_DEFS := 
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -21,7 +21,7 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM
+	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM OPENSSL_NO_ERR
 endif
 ifeq ($(BUILD),vs)
 	PRJ_DEFS := $(PRJ_DEFS) ssize_t=long
@@ -41,9 +41,11 @@ export LOC_TAG := crypto
 LOC_CXX_crypto := c
 LOC_SRC_crypto := $(CFG_LIBROOT)/openssl/crypto
 LOC_EXC_crypto := cversion \
-				  LPdir_nyi LPdir_unix LPdir_vms LPdir_win32 LPdir_win LPdir_wince
+				  LPdir_nyi LPdir_unix LPdir_vms LPdir_wince LPdir_win32 LPdir_win
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_crypto := $(LOC_EXC_crypto) ppccap s390xcap sparcv9cap
+else
+	LOC_EXC_crypto := $(LOC_EXC_crypto) 
 endif
 include $(PRJ_LIBROOT)/build.mk
 
