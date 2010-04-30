@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := tiff
 PRJ_DEPS := tiff
 PRJ_TYPE := lib
-PRJ_INCS := zlib
+PRJ_INCS := zlib jpeg
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
