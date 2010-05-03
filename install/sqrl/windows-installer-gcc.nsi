@@ -9,7 +9,7 @@ Name "Squirrel Script Engine"
 ; The file to write
 OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
 
-; The default installation directory
+; The default installation director
 InstallDir "$PROGRAMFILES\Squirrel Script Engine"
 
 ; Registry key to check for directory (so if you install again, it will 
