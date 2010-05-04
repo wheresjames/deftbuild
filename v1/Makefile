@@ -1,5 +1,7 @@
 
-BUILDDIRS := dep
+ifndef NODEPS
+	BUILDDIRS := dep
+endif
 
 ifndef NOAPPS
 	BUILDDIRS := $(BUILDDIRS) app
