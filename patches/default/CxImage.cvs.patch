@@ -1,6 +1,42 @@
-diff -rupwN -x CVS ../dnl3/CxImage/ximacfg.h CxImage/ximacfg.h
---- ../dnl3/CxImage/ximacfg.h	2004-10-13 15:33:21.000000000 -0400
-+++ CxImage/ximacfg.h	2010-03-26 09:57:53.000000000 -0400
+diff -rupwN -x CVS ../dnl3/CxImage\tif_xfile.cpp CxImage\tif_xfile.cpp
+--- ../dnl3/CxImage\tif_xfile.cpp	Wed Oct 13 15:32:56 2004
++++ CxImage\tif_xfile.cpp	Mon May 10 18:14:25 2010
+@@ -112,13 +112,13 @@ extern	char* realloc();
+ tdata_t
+ _TIFFmalloc(tsize_t s)
+ {
+-	return (malloc((size_t) s));
++	return (CX_MALLOC((size_t) s));
+ }
+ 
+ void
+ _TIFFfree(tdata_t p)
+ {
+-	free(p);
++	CX_FREE(p);
+ }
+ 
+ tdata_t
+diff -rupwN -x CVS ../dnl3/CxImage\ximabmp.cpp CxImage\ximabmp.cpp
+--- ../dnl3/CxImage\ximabmp.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximabmp.cpp	Mon May 10 16:13:35 2010
+@@ -104,11 +104,11 @@ bool CxImageBMP::Decode(CxFile * hFile)
+ 			if (bf.bfOffBits != 0L) hFile->Seek(off + bf.bfOffBits,SEEK_SET);
+ 			if (dwCompression == BI_BITFIELDS || dwCompression == BI_RGB){
+ 				long imagesize=4*head.biHeight*head.biWidth;
+-				BYTE* buff32=(BYTE*)malloc(imagesize);
++				BYTE* buff32=(BYTE*)CX_MALLOC(imagesize);
+ 				if (buff32){
+ 					hFile->Read(buff32, imagesize,1); // read in the pixels
+ 					Bitfield2RGB(buff32,0,0,0,32);
+-					free(buff32);
++					CX_FREE(buff32);
+ 				} else throw "can't allocate memory";
+ 			} else throw "unknown compression";
+ 			break;
+diff -rupwN -x CVS ../dnl3/CxImage\ximacfg.h CxImage\ximacfg.h
+--- ../dnl3/CxImage\ximacfg.h	Wed Oct 13 15:33:21 2004
++++ CxImage\ximacfg.h	Thu Apr 08 10:12:25 2010
 @@ -23,7 +23,7 @@
  #define CXIMAGE_SUPPORT_PNG 1
  #define CXIMAGE_SUPPORT_MNG 0
@@ -27,10 +63,10 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximacfg.h CxImage/ximacfg.h
  
  
  /////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage/ximadef.h CxImage/ximadef.h
---- ../dnl3/CxImage/ximadef.h	2004-10-13 15:32:58.000000000 -0400
-+++ CxImage/ximadef.h	2010-03-26 09:57:53.000000000 -0400
-@@ -194,4 +194,37 @@ typedef struct tagcomplex {
+diff -rupwN -x CVS ../dnl3/CxImage\ximadef.h CxImage\ximadef.h
+--- ../dnl3/CxImage\ximadef.h	Wed Oct 13 15:32:58 2004
++++ CxImage\ximadef.h	Tue May 11 10:43:39 2010
+@@ -194,4 +194,43 @@ typedef struct tagcomplex {
  
  #endif
  
@@ -47,10 +83,14 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximadef.h CxImage/ximadef.h
 +extern "C" t_cx_free cximage_free;
 +
 +#ifndef CX_NEW
++#	include <new>
 +#	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
 +#endif
 +#ifndef CX_DELETE
 +#	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
++#endif
++#ifndef CX_FREE
++#	define CX_FREE(__ptr) (__ptr?cximage_free(__ptr):0)
 +#endif
 +#ifndef CX_MALLOC
 +#	define CX_MALLOC(__sz) cximage_malloc(__sz)
@@ -58,19 +98,115 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximadef.h CxImage/ximadef.h
 +#ifndef CX_CALLOC
 +#	define CX_CALLOC(__num,__sz) cximage_calloc(__num,__sz)
 +#endif
++#ifndef CX_REALLOC
++#	define CX_REALLOC(__ptr,__sz) cximage_realloc(__ptr,__sz)
++#endif
 +
 +#ifdef CX_FORCE_CUSTOM_ALLOCATOR
 +#	define malloc please_use_CX_MALLOC
 +#	define calloc please_use_CX_CALLOC
-+#	define free please_use_CX_DELETE
-+#	define new please_use_CX_NEW
-+#	define delete please_use_CX_DELETE
++#	define realloc please_use_CX_REALLOC
++#	define free please_use_CX_FREE
 +#endif
 +
  #endif //__ximadefs
-diff -rupwN -x CVS ../dnl3/CxImage/ximaexif.cpp CxImage/ximaexif.cpp
---- ../dnl3/CxImage/ximaexif.cpp	2004-10-17 13:34:26.000000000 -0400
-+++ CxImage/ximaexif.cpp	2010-03-26 11:06:12.000000000 -0400
+diff -rupwN -x CVS ../dnl3/CxImage\ximadsp.cpp CxImage\ximadsp.cpp
+--- ../dnl3/CxImage\ximadsp.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximadsp.cpp	Mon May 10 16:14:59 2010
+@@ -1182,7 +1182,7 @@ bool CxImage::Median(long Ksize)
+ 	long kmax= Ksize-k2;
+ 	long i,j,k;
+ 
+-	RGBQUAD* kernel = (RGBQUAD*)malloc(Ksize*Ksize*sizeof(RGBQUAD));
++	RGBQUAD* kernel = (RGBQUAD*)CX_MALLOC(Ksize*Ksize*sizeof(RGBQUAD));
+ 
+ 	CxImage tmp(*this,pSelection!=0,true,true);
+ 	if (!tmp.IsValid()) return false;
+@@ -1213,7 +1213,7 @@ bool CxImage::Median(long Ksize)
+ 			}
+ 		}
+ 	}
+-	free(kernel);
++	CX_FREE(kernel);
+ 	Transfer(tmp);
+ 	return true;
+ }
+@@ -1353,9 +1353,9 @@ bool CxImage::FFT2(CxImage* srcReal, CxI
+ 	_complex **grid;
+ 	//double mean = tmpReal->Mean();
+ 	/* Allocate memory for the grid */
+-	grid = (_complex **)malloc(w * sizeof(_complex));
++	grid = (_complex **)CX_MALLOC(w * sizeof(_complex));
+ 	for (k=0;k<w;k++) {
+-		grid[k] = (_complex *)malloc(h * sizeof(_complex));
++		grid[k] = (_complex *)CX_MALLOC(h * sizeof(_complex));
+ 	}
+ 	for (j=0;j<h;j++) {
+ 		for (k=0;k<w;k++) {
+@@ -1366,12 +1366,12 @@ bool CxImage::FFT2(CxImage* srcReal, CxI
+ 
+ 	//DFT buffers
+ 	double *real2,*imag2;
+-	real2 = (double*)malloc(max(w,h) * sizeof(double));
+-	imag2 = (double*)malloc(max(w,h) * sizeof(double));
++	real2 = (double*)CX_MALLOC(max(w,h) * sizeof(double));
++	imag2 = (double*)CX_MALLOC(max(w,h) * sizeof(double));
+ 
+ 	/* Transform the rows */
+-	real = (double *)malloc(w * sizeof(double));
+-	imag = (double *)malloc(w * sizeof(double));
++	real = (double *)CX_MALLOC(w * sizeof(double));
++	imag = (double *)CX_MALLOC(w * sizeof(double));
+ 
+ 	m=0;
+ 	while((1<<m)<w) m++;
+@@ -1390,12 +1390,12 @@ bool CxImage::FFT2(CxImage* srcReal, CxI
+ 			grid[k][j].y = imag[k];
+ 		}
+ 	}
+-	free(real);
+-	free(imag);
++	CX_FREE(real);
++	CX_FREE(imag);
+ 
+ 	/* Transform the columns */
+-	real = (double *)malloc(h * sizeof(double));
+-	imag = (double *)malloc(h * sizeof(double));
++	real = (double *)CX_MALLOC(h * sizeof(double));
++	imag = (double *)CX_MALLOC(h * sizeof(double));
+ 
+ 	m=0;
+ 	while((1<<m)<h) m++;
+@@ -1414,11 +1414,11 @@ bool CxImage::FFT2(CxImage* srcReal, CxI
+ 			grid[k][j].y = imag[j];
+ 		}
+ 	}
+-	free(real);
+-	free(imag);
++	CX_FREE(real);
++	CX_FREE(imag);
+ 
+-	free(real2);
+-	free(imag2);
++	CX_FREE(real2);
++	CX_FREE(imag2);
+ 
+ 	/* converting from double to byte, there is a HUGE loss in the dynamics
+ 	  "nn" tries to keep an acceptable SNR, but 8bit=48dB: don't ask more */
+@@ -1444,8 +1444,8 @@ bool CxImage::FFT2(CxImage* srcReal, CxI
+ 		}
+ 	}
+ 
+-	for (k=0;k<w;k++) free (grid[k]);
+-	free (grid);
++	for (k=0;k<w;k++) CX_FREE(grid[k]);
++	CX_FREE(grid);
+ 
+ 	if (srcReal==0 && dstReal==0) delete tmpReal;
+ 	if (srcImag==0 && dstImag==0) delete tmpImag;
+diff -rupwN -x CVS ../dnl3/CxImage\ximaexif.cpp CxImage\ximaexif.cpp
+--- ../dnl3/CxImage\ximaexif.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximaexif.cpp	Mon May 10 15:29:42 2010
 @@ -8,6 +8,10 @@
  
  #include "ximajpg.h"
@@ -82,10 +218,73 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximaexif.cpp CxImage/ximaexif.cpp
  #if CXIMAGEJPG_SUPPORT_EXIF
  
  ////////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage/ximage.cpp CxImage/ximage.cpp
---- ../dnl3/CxImage/ximage.cpp	2004-10-17 13:34:26.000000000 -0400
-+++ CxImage/ximage.cpp	2010-03-26 09:57:53.000000000 -0400
-@@ -5,6 +5,33 @@
+@@ -30,7 +34,7 @@ CxImageJPG::CxExifInfo::CxExifInfo(EXIFI
+ ////////////////////////////////////////////////////////////////////////////////
+ CxImageJPG::CxExifInfo::~CxExifInfo()
+ {
+-	for(int i=0;i<MAX_SECTIONS;i++) if(Sections[i].Data) free(Sections[i].Data);
++	for(int i=0;i<MAX_SECTIONS;i++) if(Sections[i].Data) CX_FREE(Sections[i].Data);
+ 	if (freeinfo) delete m_exifinfo;
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -87,7 +91,7 @@ bool CxImageJPG::CxExifInfo::DecodeExif(
+ 
+         Sections[SectionsRead].Size = itemlen;
+ 
+-        Data = (BYTE *)malloc(itemlen);
++        Data = (BYTE *)CX_MALLOC(itemlen);
+         if (Data == NULL){
+             strcpy(m_szLastError,"Could not allocate memory");
+ 			return false;
+@@ -118,7 +122,7 @@ bool CxImageJPG::CxExifInfo::DecodeExif(
+                     hFile->Seek(cp, SEEK_SET);
+ 
+                     size = ep-cp;
+-                    Data = (BYTE *)malloc(size);
++                    Data = (BYTE *)CX_MALLOC(size);
+                     if (Data == NULL){
+                         strcpy(m_szLastError,"could not allocate data for entire image");
+ 						return false;
+@@ -144,7 +148,7 @@ bool CxImageJPG::CxExifInfo::DecodeExif(
+             case M_COM: // Comment section
+                 if (HaveCom || ((nReadMode & EXIF_READ_EXIF) == 0)){
+                     // Discard this section.
+-                    free(Sections[--SectionsRead].Data);
++                    CX_FREE(Sections[--SectionsRead].Data);
+ 					Sections[SectionsRead].Data=0;
+                 }else{
+                     process_COM(Data, itemlen);
+@@ -157,7 +161,7 @@ bool CxImageJPG::CxExifInfo::DecodeExif(
+                 // marker instead, althogh ACDsee will write images with both markers.
+                 // this program will re-create this marker on absence of exif marker.
+                 // hence no need to keep the copy from the file.
+-                free(Sections[--SectionsRead].Data);
++                CX_FREE(Sections[--SectionsRead].Data);
+ 				Sections[SectionsRead].Data=0;
+                 break;
+ 
+@@ -169,7 +173,7 @@ bool CxImageJPG::CxExifInfo::DecodeExif(
+                     m_exifinfo->IsExif = process_EXIF((BYTE *)Data+2, itemlen);
+                 }else{
+                     // Discard this section.
+-                    free(Sections[--SectionsRead].Data);
++                    CX_FREE(Sections[--SectionsRead].Data);
+ 					Sections[SectionsRead].Data=0;
+                 }
+                 break;
+@@ -844,7 +848,7 @@ void CxImageJPG::CxExifInfo::DiscardAllB
+         }else if (Sections[a].Type == M_COM && CommentKeeper.Type == 0){
+             CommentKeeper = Sections[a];
+         }else{
+-            free(Sections[a].Data);
++            CX_FREE(Sections[a].Data);
+ 			Sections[a].Data = 0;
+         }
+     }
+diff -rupwN -x CVS ../dnl3/CxImage\ximage.cpp CxImage\ximage.cpp
+--- ../dnl3/CxImage\ximage.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximage.cpp	Tue May 11 10:43:14 2010
+@@ -5,6 +5,35 @@
  
  #include "ximage.h"
  
@@ -94,6 +293,7 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximage.cpp CxImage/ximage.cpp
 +#	ifdef CX_CUSTOM_MEMORY_ONLY
 +#		undef malloc
 +#		undef calloc
++#		undef realloc
 +#		undef free
 +#		undef new
 +#		undef delete
@@ -109,6 +309,7 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximage.cpp CxImage/ximage.cpp
 +#	ifdef CX_CUSTOM_MEMORY_ONLY
 +#		define malloc please_use_CX_MALLOC
 +#		define calloc please_use_CX_CALLOC
++#		define calloc please_use_CX_REALLOC
 +#		define free please_use_CX_DELETE
 +#		define new please_use_CX_NEW
 +#		define delete please_use_CX_DELETE
@@ -119,9 +320,504 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximage.cpp CxImage/ximage.cpp
  ////////////////////////////////////////////////////////////////////////////////
  // CxImage 
  ////////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage/ximapng.cpp CxImage/ximapng.cpp
---- ../dnl3/CxImage/ximapng.cpp	2004-10-17 13:34:26.000000000 -0400
-+++ CxImage/ximapng.cpp	2010-03-26 09:57:53.000000000 -0400
+@@ -50,11 +79,11 @@ bool CxImage::Destroy()
+ 	if (info.pGhost==NULL){
+ 		if (pLayers) { 
+ 			for(long n=0; n<info.nNumLayers;n++){ delete pLayers[n]; }
+-			free(pLayers); pLayers=0;
++			CX_FREE(pLayers); pLayers=0;
+ 		}
+-		if (pSelection) {free(pSelection); pSelection=0;}
+-		if (pAlpha) {free(pAlpha); pAlpha=0;}
+-		if (pDib) {free(pDib); pDib=0;}
++		if (pSelection) {CX_FREE(pSelection); pSelection=0;}
++		if (pAlpha) {CX_FREE(pAlpha); pAlpha=0;}
++		if (pDib) {CX_FREE(pDib); pDib=0;}
+ 		return true;
+ 	}
+ 	return false;
+@@ -106,14 +135,14 @@ void CxImage::Copy(const CxImage &src, b
+ 	long nSize = head.biWidth * head.biHeight;
+ 	//copy the selection
+ 	if (copyselection && src.pSelection){
+-		if (pSelection) free(pSelection);
+-		pSelection = (BYTE*)malloc(nSize);
++		if (pSelection) CX_FREE(pSelection);
++		pSelection = (BYTE*)CX_MALLOC(nSize);
+ 		memcpy(pSelection,src.pSelection,nSize);
+ 	}
+ 	//copy the alpha channel
+ 	if (copyalpha && src.pAlpha){
+-		if (pAlpha) free(pAlpha);
+-		pAlpha = (BYTE*)malloc(nSize);
++		if (pAlpha) CX_FREE(pAlpha);
++		pAlpha = (BYTE*)CX_MALLOC(nSize);
+ 		memcpy(pAlpha,src.pAlpha,nSize);
+ 	}
+ }
+@@ -197,7 +226,7 @@ void* CxImage::Create(DWORD dwWidth, DWO
+ //    head.biYPelsPerMeter = 0; See SetYDPI
+     head.biClrImportant = 0;
+ 
+-	pDib = malloc(GetSize()); // alloc memory block to store our bitmap
++	pDib = CX_MALLOC(GetSize()); // alloc memory block to store our bitmap
+     if (!pDib){
+ 		strcpy(info.szLastError,"CxImage::Create can't allocate memory");
+ 		return NULL;
+@@ -492,7 +521,7 @@ int CxImage::CompareColors(const void *e
+ void CxImage::FreeMemory(void* memblock)
+ {
+ 	if (memblock)
+-		free(memblock);
++		CX_FREE(memblock);
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+ //EOF
+diff -rupwN -x CVS ../dnl3/CxImage\ximagif.cpp CxImage\ximagif.cpp
+--- ../dnl3/CxImage\ximagif.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximagif.cpp	Mon May 10 15:30:42 2010
+@@ -283,7 +283,7 @@ bool CxImageGIF::DecodeExtension(CxFile 
+ 					if (bContinue) {
+ 						bContinue = (1 == fp->Read(&count, sizeof(count), 1));
+ 						if (bContinue) {
+-							BYTE* dati = (BYTE*)malloc(count);
++							BYTE* dati = (BYTE*)CX_MALLOC(count);
+ 							bContinue = (dati!=NULL);
+ 							if (bContinue){
+ 								bContinue = (1 == fp->Read(dati, count, 1));
+@@ -291,7 +291,7 @@ bool CxImageGIF::DecodeExtension(CxFile 
+ 									m_loops = dati[1]+256*dati[2];
+ 								}
+ 							}
+-							free(dati);
++							CX_FREE(dati);
+ 		}	}	}	}	}
+ 
+ 		while (bContinue && fp->Read(&count, sizeof(count), 1) && count) {
+diff -rupwN -x CVS ../dnl3/CxImage\ximaico.cpp CxImage\ximaico.cpp
+--- ../dnl3/CxImage\ximaico.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximaico.cpp	Mon May 10 15:31:31 2010
+@@ -26,7 +26,7 @@ bool CxImageICO::Decode(CxFile *hFile)
+ 		info.nNumFrames = icon_header.idCount;
+ 
+ 		// load the icon descriptions
+-		ICONDIRENTRY *icon_list = (ICONDIRENTRY *)malloc(icon_header.idCount * sizeof(ICONDIRENTRY));
++		ICONDIRENTRY *icon_list = (ICONDIRENTRY *)CX_MALLOC(icon_header.idCount * sizeof(ICONDIRENTRY));
+ 		int c;
+ 		for (c = 0; c < icon_header.idCount; c++)
+ 			hFile->Read(icon_list + c, sizeof(ICONDIRENTRY), 1);
+@@ -52,7 +52,7 @@ bool CxImageICO::Decode(CxFile *hFile)
+ 				hFile->Read(info.pImage, head.biSizeImage, 1);
+ 			} else { // 32 bit icon
+ 				BYTE* dst = info.pImage;
+-				BYTE* buf=(BYTE*)malloc(4*head.biHeight*head.biWidth);
++				BYTE* buf=(BYTE*)CX_MALLOC(4*head.biHeight*head.biWidth);
+ 				BYTE* src = buf;
+ 				hFile->Read(buf, 4*head.biHeight*head.biWidth, 1);
+ #if CXIMAGE_SUPPORT_ALPHA
+@@ -69,12 +69,12 @@ bool CxImageICO::Decode(CxFile *hFile)
+ 						src+=4;
+ 					}
+ 				}
+-				free(buf);
++				CX_FREE(buf);
+ 			}
+ 			// apply the AND and XOR masks
+ 			int maskwdt = ((head.biWidth+31) / 32) * 4;	//line width of AND mask (always 1 Bpp)
+ 			int masksize = head.biHeight * maskwdt;				//size of mask
+-			BYTE *mask = (BYTE *)malloc(masksize);
++			BYTE *mask = (BYTE *)CX_MALLOC(masksize);
+ 			if (hFile->Read(mask, masksize, 1)){
+ 
+ 				bool bGoodMask=false;
+@@ -181,13 +181,13 @@ bool CxImageICO::Decode(CxFile *hFile)
+ 					Negative();
+ 				}
+ 			} 
+-			free(mask);
++			CX_FREE(mask);
+ 
+-			free(icon_list);
++			CX_FREE(icon_list);
+ 			// icon has been loaded successfully!
+ 			return true;
+ 		}
+-		free(icon_list);
++		CX_FREE(icon_list);
+ 	}
+ 	return false;
+ }
+@@ -236,7 +236,7 @@ bool CxImageICO::Encode(CxFile * hFile)
+ #if CXIMAGE_SUPPORT_ALPHA
+ 	if (AlphaIsValid() && head.biClrUsed==0){
+ 		BYTE* src = info.pImage;
+-		BYTE* buf=(BYTE*)malloc(imagesize);
++		BYTE* buf=(BYTE*)CX_MALLOC(imagesize);
+ 		BYTE* dst = buf;
+ 		for (long y = 0; y < head.biHeight; y++) {
+ 			for(long x=0;x<head.biWidth;x++){
+@@ -247,7 +247,7 @@ bool CxImageICO::Encode(CxFile * hFile)
+ 			}
+ 		}
+ 		hFile->Write(buf,imagesize, 1);
+-		free(buf);
++		CX_FREE(buf);
+ 	} else {
+ 		hFile->Write(info.pImage,imagesize,1);	//write image
+ 	}
+@@ -256,7 +256,7 @@ bool CxImageICO::Encode(CxFile * hFile)
+ #endif
+ 
+ 	//save transparency mask
+-	BYTE* mask=(BYTE*)calloc(masksize,1);	//create empty AND/XOR masks
++	BYTE* mask=(BYTE*)CX_CALLOC(masksize,1);	//create empty AND/XOR masks
+ 	if (!mask) return false;
+ 
+ 	//prepare the variables to build the mask
+@@ -289,7 +289,7 @@ bool CxImageICO::Encode(CxFile * hFile)
+ 	}
+ 	//write AND/XOR masks
+ 	hFile->Write(mask,masksize,1);
+-	free(mask);
++	CX_FREE(mask);
+ 	return true;
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+diff -rupwN -x CVS ../dnl3/CxImage\ximaj2k.cpp CxImage\ximaj2k.cpp
+--- ../dnl3/CxImage\ximaj2k.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximaj2k.cpp	Mon May 10 18:12:21 2010
+@@ -25,15 +25,15 @@ bool CxImageJ2K::Decode(CxFile *hFile)
+ 	long i,x,y,w,h,max;
+ 
+ 	len=hFile->Size();
+-	src=(BYTE*)malloc(len);
++	src=(BYTE*)CX_MALLOC(len);
+ 	hFile->Read(src, len, 1);
+ 
+ 	if (!j2k_decode(src, len, &img, &cp)) {
+-		free(src);
++		CX_FREE(src);
+ 		throw "failed to decode J2K image!";
+ 	}
+ 
+-	free(src);
++	CX_FREE(src);
+ 
+     if (img->numcomps==3 &&
+ 		img->comps[0].dx==img->comps[1].dx &&
+@@ -195,7 +195,7 @@ bool CxImageJ2K::Encode(CxFile * hFile)
+ 		hFile->Write(dest, len, 1);
+ 	}
+ 	
+-	free(dest);
++	CX_FREE(dest);
+ 	j2k_destroy(&img,&cp);
+ 
+ 	return (len!=0);
+diff -rupwN -x CVS ../dnl3/CxImage\ximajas.cpp CxImage\ximajas.cpp
+--- ../dnl3/CxImage\ximajas.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximajas.cpp	Mon May 10 18:15:57 2010
+@@ -119,7 +119,7 @@ bool CxImageJAS::Decode(CxFile *hFile, D
+ 
+ 	if (bufs) {
+ 		for (i = 0; i < image->numcmpts_; ++i){	if (bufs[i]) jas_matrix_destroy(bufs[i]);}
+-		free(bufs);
++		CX_FREE(bufs);
+ 	}
+ 	jas_cleanup();
+ 	if (image) jas_image_destroy(image);
+diff -rupwN -x CVS ../dnl3/CxImage\ximajbg.cpp CxImage\ximajbg.cpp
+--- ../dnl3/CxImage\ximajbg.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximajbg.cpp	Mon May 10 18:12:51 2010
+@@ -29,7 +29,7 @@ bool CxImageJBG::Decode(CxFile *hFile)
+ 	jbg_dec_init(&jbig_state);
+ 	jbg_dec_maxsize(&jbig_state, xmax, ymax);
+ 
+-	buffer = (BYTE*)malloc(JBIG_BUFSIZE);
++	buffer = (BYTE*)CX_MALLOC(JBIG_BUFSIZE);
+ 	if (!buffer) throw "Sorry, not enough memory available!";
+ 
+ 	result = JBG_EAGAIN;
+@@ -83,11 +83,11 @@ bool CxImageJBG::Decode(CxFile *hFile)
+ 	}
+ 
+ 	jbg_dec_free(&jbig_state);
+-	free(buffer);
++	CX_FREE(buffer);
+ 
+   } catch (char *message) {
+ 	jbg_dec_free(&jbig_state);
+-	if (buffer) free(buffer);
++	if (buffer) CX_FREE(buffer);
+ 	strncpy(info.szLastError,message,255);
+ 	return FALSE;
+   }
+@@ -115,7 +115,7 @@ bool CxImageJBG::Encode(CxFile * hFile)
+ 	RGBQUAD *rgb = GetPalette();
+ 	if (CompareColors(&rgb[0],&rgb[1])<0) mask=255; else mask=0;
+ 
+-	BYTE *buffer = (BYTE*)malloc(ew*h*2);
++	BYTE *buffer = (BYTE*)CX_MALLOC(ew*h*2);
+ 	if (!buffer) {
+ 		strcpy(info.szLastError,"Sorry, not enough memory available!");
+ 		return false;
+@@ -148,7 +148,7 @@ bool CxImageJBG::Encode(CxFile * hFile)
+ 	// give encoder a chance to free its temporary data structures
+ 	jbg_enc_free(&jbig_state);
+ 
+-	free(buffer);
++	CX_FREE(buffer);
+ 
+ 	if (hFile->Error()){
+ 		strcpy(info.szLastError,"Problem while writing JBG file");
+diff -rupwN -x CVS ../dnl3/CxImage\ximalpha.cpp CxImage\ximalpha.cpp
+--- ../dnl3/CxImage\ximalpha.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximalpha.cpp	Mon May 10 15:32:12 2010
+@@ -72,14 +72,14 @@ void CxImage::AlphaSet(BYTE level)
+ void CxImage::AlphaCreate()
+ {
+ 	if (pAlpha==NULL) {
+-		pAlpha = (BYTE*)malloc(head.biWidth * head.biHeight);
++		pAlpha = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 		if (pAlpha) memset(pAlpha,255,head.biWidth * head.biHeight);
+ 	}
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+ void CxImage::AlphaDelete()
+ {
+-	if (pAlpha) { free(pAlpha); pAlpha=0; }
++	if (pAlpha) { CX_FREE(pAlpha); pAlpha=0; }
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+ void CxImage::AlphaInvert()
+@@ -100,7 +100,7 @@ void CxImage::AlphaInvert()
+ bool CxImage::AlphaCopy(CxImage &from)
+ {
+ 	if (from.pAlpha == NULL || head.biWidth != from.head.biWidth || head.biHeight != from.head.biHeight) return false;
+-	if (pAlpha==NULL) pAlpha = (BYTE*)malloc(head.biWidth * head.biHeight);
++	if (pAlpha==NULL) pAlpha = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 	if (pAlpha==NULL) return false;
+ 	memcpy(pAlpha,from.pAlpha,head.biWidth * head.biHeight);
+ 	info.nAlphaMax=from.info.nAlphaMax;
+@@ -113,7 +113,7 @@ bool CxImage::AlphaCopy(CxImage &from)
+ bool CxImage::AlphaSet(CxImage &from)
+ {
+ 	if (!from.IsGrayScale() || head.biWidth != from.head.biWidth || head.biHeight != from.head.biHeight) return false;
+-	if (pAlpha==NULL) pAlpha = (BYTE*)malloc(head.biWidth * head.biHeight);
++	if (pAlpha==NULL) pAlpha = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 	BYTE* src = from.info.pImage;
+ 	BYTE* dst = pAlpha;
+ 	if (src==NULL || dst==NULL) return false;
+@@ -239,7 +239,7 @@ void CxImage::AlphaStrip()
+ bool CxImage::AlphaFlip()
+ {
+ 	if (!pAlpha) return false;
+-	BYTE* pAlpha2 = (BYTE*)malloc(head.biWidth * head.biHeight);
++	BYTE* pAlpha2 = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 	if (!pAlpha2) return false;
+ 	BYTE *iSrc,*iDst;
+ 	iSrc=pAlpha + (head.biHeight-1)*head.biWidth;
+@@ -249,7 +249,7 @@ bool CxImage::AlphaFlip()
+ 		iSrc-=head.biWidth;
+ 		iDst+=head.biWidth;
+ 	}
+-	free(pAlpha);
++	CX_FREE(pAlpha);
+ 	pAlpha=pAlpha2;
+ 	return true;
+ }
+@@ -257,7 +257,7 @@ bool CxImage::AlphaFlip()
+ bool CxImage::AlphaMirror()
+ {
+ 	if (!pAlpha) return false;
+-	BYTE* pAlpha2 = (BYTE*)malloc(head.biWidth * head.biHeight);
++	BYTE* pAlpha2 = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 	if (!pAlpha2) return false;
+ 	BYTE *iSrc,*iDst;
+ 	long wdt=head.biWidth-1;
+@@ -269,7 +269,7 @@ bool CxImage::AlphaMirror()
+ 		iSrc+=head.biWidth;
+ 		iDst+=head.biWidth;
+ 	}
+-	free(pAlpha);
++	CX_FREE(pAlpha);
+ 	pAlpha=pAlpha2;
+ 	return true;
+ }
+diff -rupwN -x CVS ../dnl3/CxImage\ximalyr.cpp CxImage\ximalyr.cpp
+--- ../dnl3/CxImage\ximalyr.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximalyr.cpp	Mon May 10 15:32:42 2010
+@@ -31,7 +31,7 @@ bool CxImage::LayerCreate(long position)
+ {
+ 	if ( position < 0 || position > info.nNumLayers ) position = info.nNumLayers;
+ 
+-	CxImage** ptmp = (CxImage**)malloc((info.nNumLayers + 1)*sizeof(CxImage**));
++	CxImage** ptmp = (CxImage**)CX_MALLOC((info.nNumLayers + 1)*sizeof(CxImage**));
+ 	if (ptmp==0) return false;
+ 
+ 	int i=0;
+@@ -47,12 +47,12 @@ bool CxImage::LayerCreate(long position)
+ 	if (ptmp[position]){
+ 		ptmp[position]->info.pParent = this;
+ 	} else {
+-		free(ptmp);
++		CX_FREE(ptmp);
+ 		return false;
+ 	}
+ 
+ 	info.nNumLayers++;
+-	if (pLayers) free(pLayers);
++	if (pLayers) CX_FREE(pLayers);
+ 	pLayers = ptmp;
+ 	return true;
+ }
+@@ -65,7 +65,7 @@ bool CxImage::LayerDelete(long position)
+ 	if ( position >= info.nNumLayers ) return false;
+ 	if ( position < 0) position = info.nNumLayers - 1;
+ 
+-	CxImage** ptmp = (CxImage**)malloc((info.nNumLayers - 1)*sizeof(CxImage**));
++	CxImage** ptmp = (CxImage**)CX_MALLOC((info.nNumLayers - 1)*sizeof(CxImage**));
+ 	if (ptmp==0) return false;
+ 
+ 	int i=0;
+@@ -79,7 +79,7 @@ bool CxImage::LayerDelete(long position)
+ 	if (i==0) delete pLayers[info.nNumLayers - 1];
+ 
+ 	info.nNumLayers--;
+-	if (pLayers) free(pLayers);
++	if (pLayers) CX_FREE(pLayers);
+ 	pLayers = ptmp;
+ 	return true;
+ }
+@@ -88,7 +88,7 @@ void CxImage::LayerDeleteAll()
+ {
+ 	if (pLayers) { 
+ 		for(long n=0; n<info.nNumLayers;n++){ delete pLayers[n]; }
+-		free(pLayers); pLayers=0;
++		CX_FREE(pLayers); pLayers=0;
+ 	}
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+diff -rupwN -x CVS ../dnl3/CxImage\ximamng.cpp CxImage\ximamng.cpp
+--- ../dnl3/CxImage\ximamng.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximamng.cpp	Mon May 10 18:13:26 2010
+@@ -25,7 +25,7 @@ mymngalloc( mng_uint32 size )
+ // memory deallocation
+ static void mymngfree(mng_ptr p, mng_uint32 size)
+ {
+-	free(p);
++	CX_FREE(p);
+ }
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -77,7 +77,7 @@ static mng_bool mymngprocessheader( mng_
+ 		mymng->nBkgndColor.rgbBlue = mng->iBGblue >> 8;
+ 	}
+ 
+-	mymng->image = (BYTE*)malloc(height * mymng->effwdt);
++	mymng->image = (BYTE*)CX_MALLOC(height * mymng->effwdt);
+ 
+ 	// tell the mng decoder about our bit-depth choice
+ 	mng_set_canvasstyle( mng, MNG_CANVAS_BGR8 );
+@@ -148,7 +148,7 @@ CxImageMNG::~CxImageMNG()
+ 		CloseHandle(mnginfo.thread);
+ 	}
+ 	// free objects
+-	if (mnginfo.image) free(mnginfo.image);
++	if (mnginfo.image) CX_FREE(mnginfo.image);
+ 	if (hmng) mng_cleanup(&hmng); //be sure it's not needed any more. (active timers ?)
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -266,7 +266,7 @@ bool CxImageMNG::Encode(CxFile *hFile)
+ 		mnginfo.height = head.biHeight;
+ 		mnginfo.width =  head.biWidth;
+ 
+-		mnginfo.image = (BYTE*)malloc(head.biSizeImage);
++		mnginfo.image = (BYTE*)CX_MALLOC(head.biSizeImage);
+ 		if (mnginfo.image == NULL) throw "could not allocate memory for MNG";
+ 		memcpy(mnginfo.image,info.pImage, head.biSizeImage);
+ 
+diff -rupwN -x CVS ../dnl3/CxImage\ximapcx.cpp CxImage\ximapcx.cpp
+--- ../dnl3/CxImage\ximapcx.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximapcx.cpp	Mon May 10 15:33:29 2010
+@@ -65,7 +65,7 @@ bool CxImagePCX::Decode(CxFile *hFile)
+ 
+ 	//Read the image and check if it's ok
+     nbytes = pcxHeader.BytesPerLine * pcxHeader.ColorPlanes * Height;
+-    lpHead1 = pcximage = (BYTE*)malloc(nbytes);
++    lpHead1 = pcximage = (BYTE*)CX_MALLOC(nbytes);
+     while (nbytes > 0){
+ 		if (hFile == NULL || hFile->Eof()) throw "corrupted PCX";
+ 
+@@ -107,7 +107,7 @@ bool CxImagePCX::Decode(CxFile *hFile)
+ 
+ 	for (DWORD idx=0; idx<head.biClrUsed; idx++) SetPaletteColor((BYTE)idx,ColorMap[idx][0],ColorMap[idx][1],ColorMap[idx][2]);
+ 
+-    lpHead2 = pcxpixels = (BYTE *)malloc(Width + pcxHeader.BytesPerLine * 8);
++    lpHead2 = pcxpixels = (BYTE *)CX_MALLOC(Width + pcxHeader.BytesPerLine * 8);
+     // Convert the image
+     for (y = 0; y < Height; y++){
+ 
+@@ -141,12 +141,12 @@ bool CxImagePCX::Decode(CxFile *hFile)
+ 
+   } catch (char *message) {
+ 	strncpy(info.szLastError,message,255);
+-	if (lpHead1){ free(lpHead1); lpHead1 = NULL; }
+-    if (lpHead2){ free(lpHead2); lpHead2 = NULL; }
++	if (lpHead1){ CX_FREE(lpHead1); lpHead1 = NULL; }
++    if (lpHead2){ CX_FREE(lpHead2); lpHead2 = NULL; }
+ 	return false;
+   }
+-	if (lpHead1){ free(lpHead1); lpHead1 = NULL; }
+-    if (lpHead2){ free(lpHead2); lpHead2 = NULL; }
++	if (lpHead1){ CX_FREE(lpHead1); lpHead1 = NULL; }
++    if (lpHead2){ CX_FREE(lpHead2); lpHead2 = NULL; }
+ 	return true;
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -249,7 +249,7 @@ bool CxImagePCX::Encode(CxFile * hFile)
+ 
+ 		if (head.biBitCount == 8){
+ 			hFile->PutC(0x0C);
+-			BYTE* pal = (BYTE*)malloc(768);
++			BYTE* pal = (BYTE*)CX_MALLOC(768);
+ 			RGBQUAD c;
+ 			for (int i=0;i<256;i++){
+ 				c=GetPaletteColor(i);
+@@ -258,7 +258,7 @@ bool CxImagePCX::Encode(CxFile * hFile)
+ 				pal[3*i+2] = c.rgbBlue;
+ 			}
+ 			hFile->Write(pal,768,1);
+-			free(pal);
++			CX_FREE(pal);
+ 		}
+ 	} else { //(head.biBitCount==4) || (head.biBitCount==1)
+ 
+@@ -266,8 +266,8 @@ bool CxImagePCX::Encode(CxFile * hFile)
+ 		bool binvert = false;
+ 		if (CompareColors(&rgb[0],&rgb[1])>0) binvert=(head.biBitCount==1);
+ 		
+-		BYTE* plane = (BYTE*)malloc(pcxHeader.BytesPerLine);
+-		BYTE* raw = (BYTE*)malloc(head.biWidth);
++		BYTE* plane = (BYTE*)CX_MALLOC(pcxHeader.BytesPerLine);
++		BYTE* raw = (BYTE*)CX_MALLOC(head.biWidth);
+ 
+ 		for(y = head.biHeight-1; y >=0 ; y--) {
+ 
+@@ -281,8 +281,8 @@ bool CxImagePCX::Encode(CxFile * hFile)
+ 			}
+ 		}
+ 
+-		free(plane);
+-		free(raw);
++		CX_FREE(plane);
++		CX_FREE(raw);
+ 
+ 		hFile->Write(buffer.GetBuffer(false),buffer.Size(),1);
+ 
+diff -rupwN -x CVS ../dnl3/CxImage\ximapng.cpp CxImage\ximapng.cpp
+--- ../dnl3/CxImage\ximapng.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximapng.cpp	Mon May 10 15:33:38 2010
 @@ -142,7 +142,7 @@ bool CxImagePNG::Decode(CxFile *hFile)
  		if (pal){
  			DWORD ip;
@@ -131,6 +827,15 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximapng.cpp CxImage/ximapng.cpp
  			if (info_ptr->num_trans==1 && pal[0].rgbReserved==0){
  				info.nBkgndIndex = 0;
  			} else {
+@@ -297,7 +297,7 @@ bool CxImagePNG::Encode(CxFile *hFile)
+     */
+ 	if (setjmp(png_ptr->jmpbuf)){
+ 		/* If we get here, we had a problem reading the file */
+-		if (info_ptr->palette) free(info_ptr->palette);
++		if (info_ptr->palette) CX_FREE(info_ptr->palette);
+ 		png_destroy_write_struct(&png_ptr,  (png_infopp)&info_ptr);
+ 		throw "Error saving PNG file";
+ 	}
 @@ -355,7 +355,7 @@ bool CxImagePNG::Encode(CxFile *hFile)
  			trans[0]=0;
  			info_ptr->num_trans = 1;
@@ -149,9 +854,220 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximapng.cpp CxImage/ximapng.cpp
  		}
  
  		// copy the palette colors
-diff -rupwN -x CVS ../dnl3/CxImage/ximatran.cpp CxImage/ximatran.cpp
---- ../dnl3/CxImage/ximatran.cpp	2004-10-17 13:34:26.000000000 -0400
-+++ CxImage/ximatran.cpp	2010-03-26 09:57:53.000000000 -0400
+diff -rupwN -x CVS ../dnl3/CxImage\ximasel.cpp CxImage\ximasel.cpp
+--- ../dnl3/CxImage\ximasel.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximasel.cpp	Mon May 10 15:34:23 2010
+@@ -45,7 +45,7 @@ bool CxImage::SelectionClear()
+ bool CxImage::SelectionCreate()
+ {
+ 	SelectionDelete();
+-	pSelection = (BYTE*)calloc(head.biWidth * head.biHeight, 1);
++	pSelection = (BYTE*)CX_CALLOC(head.biWidth * head.biHeight, 1);
+ 	return (pSelection!=0);
+ }
+ ////////////////////////////////////////////////////////////////////////////////
+@@ -54,7 +54,7 @@ bool CxImage::SelectionCreate()
+  */
+ bool CxImage::SelectionDelete()
+ {
+-	if (pSelection){ free(pSelection); pSelection=NULL; }
++	if (pSelection){ CX_FREE(pSelection); pSelection=NULL; }
+ 	info.rSelectionBox.left = head.biWidth;
+ 	info.rSelectionBox.bottom = head.biHeight;
+ 	info.rSelectionBox.right = info.rSelectionBox.top = 0;
+@@ -165,7 +165,7 @@ bool CxImage::SelectionInvert()
+ bool CxImage::SelectionCopy(CxImage &from)
+ {
+ 	if (from.pSelection == NULL || head.biWidth != from.head.biWidth || head.biHeight != from.head.biHeight) return false;
+-	if (pSelection==NULL) pSelection = (BYTE*)malloc(head.biWidth * head.biHeight);
++	if (pSelection==NULL) pSelection = (BYTE*)CX_MALLOC(head.biWidth * head.biHeight);
+ 	if (pSelection==NULL) return false;
+ 	memcpy(pSelection,from.pSelection,head.biWidth * head.biHeight);
+ 	memcpy(&info.rSelectionBox,&from.info.rSelectionBox,sizeof(RECT));
+@@ -184,7 +184,7 @@ bool CxImage::SelectionAddPolygon(POINT 
+ 	if (pSelection==NULL) SelectionCreate();
+ 	if (pSelection==NULL) return false;
+ 
+-	BYTE* plocal = (BYTE*)calloc(head.biWidth*head.biHeight, 1);
++	BYTE* plocal = (BYTE*)CX_CALLOC(head.biWidth*head.biHeight, 1);
+ 	RECT localbox = {head.biWidth,0,0,head.biHeight};
+ 
+ 	long x,y,i=0;
+@@ -244,7 +244,7 @@ bool CxImage::SelectionAddPolygon(POINT 
+ 
+ 	//fill the outer region
+ 	long npix=(localbox.right - localbox.left)*(localbox.top - localbox.bottom);
+-	POINT* pix = (POINT*)calloc(npix,sizeof(POINT));
++	POINT* pix = (POINT*)CX_CALLOC(npix,sizeof(POINT));
+ 	BYTE back=0, mark=1;
+ 	long fx, fy, fxx, fyy, first, last,xmin,xmax,ymin,ymax;
+ 
+@@ -350,8 +350,8 @@ bool CxImage::SelectionAddPolygon(POINT 
+ 	if (info.rSelectionBox.right < localbox.right) info.rSelectionBox.right = localbox.right+1;
+ 	if (info.rSelectionBox.bottom > localbox.bottom) info.rSelectionBox.bottom = localbox.bottom;
+ 
+-	free(plocal);
+-	free(pix);
++	CX_FREE(plocal);
++	CX_FREE(pix);
+ 
+ 	return true;
+ }
+diff -rupwN -x CVS ../dnl3/CxImage\ximatga.cpp CxImage\ximatga.cpp
+--- ../dnl3/CxImage\ximatga.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximatga.cpp	Mon May 10 15:34:37 2010
+@@ -160,7 +160,7 @@ bool CxImageTGA::Encode(CxFile * hFile)
+ 			hFile->Write(pDest,tgaHead.ImageWidth * (head.biBitCount >> 3),1);
+ 		}
+ 	} else {
+-		pDest = (BYTE*)malloc(4*tgaHead.ImageWidth);
++		pDest = (BYTE*)CX_MALLOC(4*tgaHead.ImageWidth);
+ 		RGBQUAD c;
+ 		for (int y=0; y < tgaHead.ImageHeight; y++){
+ 			for(int x=0, x4=0;x<tgaHead.ImageWidth;x++, x4+=4){
+@@ -176,7 +176,7 @@ bool CxImageTGA::Encode(CxFile * hFile)
+ 			}
+ 			hFile->Write(pDest,4*tgaHead.ImageWidth,1);
+ 		}
+-		free(pDest);
++		CX_FREE(pDest);
+ 	}
+ 	return true;
+ }
+diff -rupwN -x CVS ../dnl3/CxImage\ximatif.cpp CxImage\ximatif.cpp
+--- ../dnl3/CxImage\ximatif.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximatif.cpp	Mon May 10 18:14:24 2010
+@@ -240,7 +240,7 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 				break;
+ 		}
+ 		SetPalette(pal,head.biClrUsed);	//palette assign
+-		free(pal);
++		CX_FREE(pal);
+ 
+ 		// read the tiff lines and save them in the DIB
+ 		uint32 nrow;
+@@ -258,10 +258,10 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 			TIFFGetField(m_tif, TIFFTAG_TILELENGTH, &tl);
+ 			rowsperstrip = tl;
+ 			bitsize = TIFFTileSize(m_tif) * (int)(1+width/tw);
+-			tilebuf = (BYTE*)malloc(TIFFTileSize(m_tif));
++			tilebuf = (BYTE*)CX_MALLOC(TIFFTileSize(m_tif));
+ 		}
+ 		
+-		bits = (BYTE*)malloc(bitsize);
++		bits = (BYTE*)CX_MALLOC(bitsize);
+ 		if (bits==NULL){
+ 			throw "CxImageTIF can't allocate memory";
+ 		}
+@@ -269,7 +269,7 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 		for (ys = 0; ys < height; ys += rowsperstrip) {
+ 
+ 			if (info.nEscape){ // <vho> - cancel decoding
+-				free(bits);
++				CX_FREE(bits);
+ 				throw "Cancelled";
+ 			}
+ 
+@@ -284,8 +284,8 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 				uint32 colb = 0;
+ 				for (uint32 col = 0; col < width; col += tw) {
+ 					if (TIFFReadTile(m_tif, tilebuf, col, ys, 0, 0) < 0){
+-						free(tilebuf);
+-						free(bits);
++						CX_FREE(tilebuf);
++						CX_FREE(bits);
+ 						throw "Corrupted tiled TIFF file!";
+ 					}
+ 
+@@ -301,7 +301,7 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 
+ 			} else {
+ 				if (TIFFReadEncodedStrip(m_tif, TIFFComputeStrip(m_tif, ys, 0), bits, nrow * line) == -1) {
+-					free(bits);
++					CX_FREE(bits);
+ 					throw "Corrupted TIFF file!";
+ 				}
+ 			}
+@@ -387,8 +387,8 @@ bool CxImageTIF::Decode(CxFile * hFile)
+ 				}
+ 			}
+ 		}
+-		free(bits);
+-		if (tiled_image) free(tilebuf);
++		CX_FREE(bits);
++		if (tiled_image) CX_FREE(tilebuf);
+ 
+ 		switch(orientation){
+ 		case ORIENTATION_TOPRIGHT: /* row 0 top, col 0 rhs */
+@@ -662,7 +662,7 @@ bool CxImageTIF::EncodeBody(TIFF *m_tif,
+ 			}
+ #if CXIMAGE_SUPPORT_ALPHA
+ 			else { //8bpp + alpha layer
+-				bits = (BYTE*)malloc(2*width);
++				bits = (BYTE*)CX_MALLOC(2*width);
+ 				if (!bits) return false;
+ 				for (y = 0; y < height; y++) {
+ 					for (x=0;x<width;x++){
+@@ -670,18 +670,18 @@ bool CxImageTIF::EncodeBody(TIFF *m_tif,
+ 						bits[2*x+1]=AlphaGet(x,height - y - 1);
+ 					}
+ 					if (TIFFWriteScanline(m_tif,bits, y, 0)==-1) {
+-						free(bits);
++						CX_FREE(bits);
+ 						return false;
+ 					}
+ 				}
+-				free(bits);
++				CX_FREE(bits);
+ 			}
+ #endif //CXIMAGE_SUPPORT_ALPHA
+ 			break;
+ 		}				
+ 		case 24:
+ 		{
+-			BYTE *buffer = (BYTE *)malloc(info.dwEffWidth);
++			BYTE *buffer = (BYTE *)CX_MALLOC(info.dwEffWidth);
+ 			if (!buffer) return false;
+ 			for (y = 0; y < height; y++) {
+ 				// get a pointer to the scanline
+@@ -696,17 +696,17 @@ bool CxImageTIF::EncodeBody(TIFF *m_tif,
+ 				}
+ 				// write the scanline to disc
+ 				if (TIFFWriteScanline(m_tif, buffer, y, 0)==-1){
+-					free(buffer);
++					CX_FREE(buffer);
+ 					return false;
+ 				}
+ 			}
+-			free(buffer);
++			CX_FREE(buffer);
+ 			break;
+ 		}				
+ 		case 32 :
+ 		{
+ #if CXIMAGE_SUPPORT_ALPHA
+-			BYTE *buffer = (BYTE *)malloc((info.dwEffWidth*4)/3);
++			BYTE *buffer = (BYTE *)CX_MALLOC((info.dwEffWidth*4)/3);
+ 			if (!buffer) return false;
+ 			for (y = 0; y < height; y++) {
+ 				// get a pointer to the scanline
+@@ -724,11 +724,11 @@ bool CxImageTIF::EncodeBody(TIFF *m_tif,
+ 				}
+ 				// write the scanline to disc
+ 				if (TIFFWriteScanline(m_tif, buffer, y, 0)==-1){
+-					free(buffer);
++					CX_FREE(buffer);
+ 					return false;
+ 				}
+ 			}
+-			free(buffer);
++			CX_FREE(buffer);
+ #endif //CXIMAGE_SUPPORT_ALPHA
+ 			break;
+ 		}				
+diff -rupwN -x CVS ../dnl3/CxImage\ximatran.cpp CxImage\ximatran.cpp
+--- ../dnl3/CxImage\ximatran.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximatran.cpp	Mon May 10 15:34:52 2010
 @@ -180,7 +180,7 @@ bool CxImage::RotateLeft(CxImage* iDst)
  		imgDest.Clear(0);
  		for (y = 0; y < head.biHeight; y++) {
@@ -170,9 +1086,80 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximatran.cpp CxImage/ximatran.cpp
  			// set bit pos of src column byte				
  			bitpos = 128 >> div_r.rem;
  			srcdisp = bsrc + y * info.dwEffWidth;
-diff -rupwN -x CVS ../dnl3/CxImage/ximawnd.cpp CxImage/ximawnd.cpp
---- ../dnl3/CxImage/ximawnd.cpp	2004-10-17 13:34:26.000000000 -0400
-+++ CxImage/ximawnd.cpp	2010-03-26 11:09:15.000000000 -0400
+@@ -1781,7 +1781,7 @@ bool CxImage::Dither(long method)
+ 		//create Bayer matrix
+ 		if (order>4) order = 4;
+ 		int size = (1 << (2*order));
+-		BYTE* Bmatrix = (BYTE*) malloc(size * sizeof(BYTE));
++		BYTE* Bmatrix = (BYTE*) CX_MALLOC(size * sizeof(BYTE));
+ 		for(int i = 0; i < size; i++) {
+ 			int n = order;
+ 			int x = i / n;
+@@ -1810,7 +1810,7 @@ bool CxImage::Dither(long method)
+ 			}
+ 		}
+ 
+-		free(Bmatrix);
++		CX_FREE(Bmatrix);
+ 
+ 		break;
+ 	}
+diff -rupwN -x CVS ../dnl3/CxImage\ximawmf.cpp CxImage\ximawmf.cpp
+--- ../dnl3/CxImage\ximawmf.cpp	Wed Oct 13 15:32:56 2004
++++ CxImage\ximawmf.cpp	Mon May 10 15:35:27 2010
+@@ -321,14 +321,14 @@ HENHMETAFILE CxImageWMF::ConvertWmfFilet
+ 	if (len > lenFile) return (hMeta);
+ 
+ 	// Allocate memory for the metafile bits 
+-	p = (BYTE *)malloc(len);
++	p = (BYTE *)CX_MALLOC(len);
+ 	if (!p)	return (hMeta);
+ 
+ 	// seek back to METAHEADER and read all the stuff at once
+ 	fp->Seek(seekpos, SEEK_SET);
+ 	lenFile = fp->Read(p, 1, len);
+ 	if (lenFile != len)	{
+-		free(p);
++		CX_FREE(p);
+ 		return (hMeta);
+ 	}
+ 
+@@ -380,7 +380,7 @@ HENHMETAFILE CxImageWMF::ConvertWmfFilet
+ 	::ReleaseDC(0, hDC);
+ 
+ 	// Free Memory
+-	free(p);
++	CX_FREE(p);
+ 
+ 	return (hMeta);
+ }
+@@ -390,20 +390,20 @@ HENHMETAFILE CxImageWMF::ConvertEmfFilet
+ 	HENHMETAFILE	hMeta;
+ 	long iLen = pFile->Size();
+ 
+-	BYTE* pBuff = (BYTE *)malloc(iLen);
++	BYTE* pBuff = (BYTE *)CX_MALLOC(iLen);
+ 	if (!pBuff)	return (FALSE);
+ 
+ 	// Read the Enhanced Metafile
+ 	long iLenRead = pFile->Read(pBuff, 1, iLen);
+ 	if (iLenRead != iLen) {
+-		free(pBuff);
++		CX_FREE(pBuff);
+ 		return (FALSE);
+ 	}
+ 
+ 	// Make it a Memory Metafile
+ 	hMeta = SetEnhMetaFileBits(iLen, pBuff);
+ 
+-	free(pBuff);	// finished with this one
++	CX_FREE(pBuff);	// finished with this one
+ 
+ 	if (!hMeta)	return (FALSE);	// oops.
+ 
+diff -rupwN -x CVS ../dnl3/CxImage\ximawnd.cpp CxImage\ximawnd.cpp
+--- ../dnl3/CxImage\ximawnd.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\ximawnd.cpp	Mon May 10 15:35:42 2010
 @@ -8,6 +8,10 @@
  #include "ximaiter.h" 
  #include "ximabmp.h"
@@ -184,3 +1171,53 @@ diff -rupwN -x CVS ../dnl3/CxImage/ximawnd.cpp CxImage/ximawnd.cpp
  ////////////////////////////////////////////////////////////////////////////////
  #if CXIMAGE_SUPPORT_WINCE
  ////////////////////////////////////////////////////////////////////////////////
+@@ -846,7 +850,7 @@ long CxImage::DrawString(HDC hdc, long x
+ 		//choose the font
+ 		HFONT m_Font;
+ 		LOGFONT* m_pLF;
+-		m_pLF=(LOGFONT*)calloc(1,sizeof(LOGFONT));
++		m_pLF=(LOGFONT*)CX_CALLOC(1,sizeof(LOGFONT));
+ 		_tcsncpy(m_pLF->lfFaceName,font,31);	// For UNICODE support
+ 		//strncpy(m_pLF->lfFaceName,font,31);
+ 		m_pLF->lfHeight=lSize;
+@@ -904,7 +908,7 @@ long CxImage::DrawString(HDC hdc, long x
+ 		//cleanup
+ 		if (pOldFont) SelectObject(TmpDC,pOldFont);
+ 		DeleteObject(m_Font);
+-		free(m_pLF);
++		CX_FREE(m_pLF);
+ 		DeleteObject(SelectObject(TmpDC,TmpObj));
+ 		DeleteDC(TmpDC);
+ 	}
+diff -rupwN -x CVS ../dnl3/CxImage\xmemfile.cpp CxImage\xmemfile.cpp
+--- ../dnl3/CxImage\xmemfile.cpp	Sun Oct 17 13:34:26 2004
++++ CxImage\xmemfile.cpp	Tue May 11 10:41:09 2010
+@@ -17,7 +17,7 @@ CxMemFile::~CxMemFile()
+ bool CxMemFile::Close()
+ {
+ 	if ( (m_pBuffer) && (m_bFreeOnClose) ){
+-		free(m_pBuffer);
++		CX_FREE(m_pBuffer);
+ 		m_pBuffer = NULL;
+ 		m_Size = 0;
+ 	}
+@@ -29,7 +29,7 @@ bool CxMemFile::Open()
+ 	if (m_pBuffer) return false;	// Can't re-open without closing first
+ 
+ 	m_Position = m_Size = m_Edge = 0;
+-	m_pBuffer=(BYTE*)malloc(1);
++	m_pBuffer=(BYTE*)CX_MALLOC(1);
+ 	m_bFreeOnClose = true;
+ 
+ 	return (m_pBuffer!=0);
+@@ -156,8 +156,8 @@ void CxMemFile::Alloc(DWORD dwNewLen)
+ 		DWORD dwNewBufferSize = (DWORD)(((dwNewLen>>12)+1)<<12);
+ 
+ 		// allocate new buffer
+-		if (m_pBuffer == NULL) m_pBuffer = (BYTE*)malloc(dwNewBufferSize);
+-		else	m_pBuffer = (BYTE*)realloc(m_pBuffer, dwNewBufferSize);
++		if (m_pBuffer == NULL) m_pBuffer = (BYTE*)CX_MALLOC(dwNewBufferSize);
++		else	m_pBuffer = (BYTE*)CX_REALLOC(m_pBuffer, dwNewBufferSize);
+ 		// I own this buffer now (caller knows nothing about it)
+ 		m_bFreeOnClose = true;
+ 
