@@ -1,6 +1,6 @@
-diff -rupwN -x CVS ../dnl3/CxImage\tif_xfile.cpp CxImage\tif_xfile.cpp
---- ../dnl3/CxImage\tif_xfile.cpp	Wed Oct 13 15:32:56 2004
-+++ CxImage\tif_xfile.cpp	Mon May 10 18:14:25 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/tif_xfile.cpp CxImage/tif_xfile.cpp
+--- ../dnl5/CxImage/tif_xfile.cpp	2004-10-13 15:32:56.000000000 -0400
++++ CxImage/tif_xfile.cpp	2010-05-10 18:14:25.000000000 -0400
 @@ -112,13 +112,13 @@ extern	char* realloc();
  tdata_t
  _TIFFmalloc(tsize_t s)
@@ -17,9 +17,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\tif_xfile.cpp CxImage\tif_xfile.cpp
  }
  
  tdata_t
-diff -rupwN -x CVS ../dnl3/CxImage\ximabmp.cpp CxImage\ximabmp.cpp
---- ../dnl3/CxImage\ximabmp.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximabmp.cpp	Mon May 10 16:13:35 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximabmp.cpp CxImage/ximabmp.cpp
+--- ../dnl5/CxImage/ximabmp.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximabmp.cpp	2010-05-13 12:47:26.000000000 -0400
 @@ -104,11 +104,11 @@ bool CxImageBMP::Decode(CxFile * hFile)
  			if (bf.bfOffBits != 0L) hFile->Seek(off + bf.bfOffBits,SEEK_SET);
  			if (dwCompression == BI_BITFIELDS || dwCompression == BI_RGB){
@@ -34,9 +34,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximabmp.cpp CxImage\ximabmp.cpp
  				} else throw "can't allocate memory";
  			} else throw "unknown compression";
  			break;
-diff -rupwN -x CVS ../dnl3/CxImage\ximacfg.h CxImage\ximacfg.h
---- ../dnl3/CxImage\ximacfg.h	Wed Oct 13 15:33:21 2004
-+++ CxImage\ximacfg.h	Thu Apr 08 10:12:25 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximacfg.h CxImage/ximacfg.h
+--- ../dnl5/CxImage/ximacfg.h	2004-10-13 15:33:21.000000000 -0400
++++ CxImage/ximacfg.h	2010-04-08 10:12:25.000000000 -0400
 @@ -23,7 +23,7 @@
  #define CXIMAGE_SUPPORT_PNG 1
  #define CXIMAGE_SUPPORT_MNG 0
@@ -63,10 +63,29 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximacfg.h CxImage\ximacfg.h
  
  
  /////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage\ximadef.h CxImage\ximadef.h
---- ../dnl3/CxImage\ximadef.h	Wed Oct 13 15:32:58 2004
-+++ CxImage\ximadef.h	Tue May 11 10:43:39 2010
-@@ -194,4 +194,43 @@ typedef struct tagcomplex {
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximadef.h CxImage/ximadef.h
+--- ../dnl5/CxImage/ximadef.h	2004-10-13 15:32:58.000000000 -0400
++++ CxImage/ximadef.h	2010-05-13 13:10:39.000000000 -0400
+@@ -43,18 +43,6 @@
+  #define CXIMAGE_SUPPORT_WINDOWS 0
+ #endif
+ 
+-#ifndef min
+-#define min(a,b) (((a)<(b))?(a):(b))
+-#endif
+-#ifndef max
+-#define max(a,b) (((a)>(b))?(a):(b))
+-#endif
+-
+-#ifndef PI
+- #define PI 3.141592653589793f
+-#endif
+-
+-
+ #ifdef WIN32
+ #include <windows.h>
+ #include <tchar.h>
+@@ -194,4 +182,54 @@ typedef struct tagcomplex {
  
  #endif
  
@@ -87,10 +106,10 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximadef.h CxImage\ximadef.h
 +#	define CX_NEW(__type) new ((__type*)cximage_malloc(sizeof(__type))) __type
 +#endif
 +#ifndef CX_DELETE
-+#	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)):0)
++#	define CX_DELETE(__ptr,__type) (__ptr?cximage_free((__ptr->~__type(),__ptr)),1:0)
 +#endif
 +#ifndef CX_FREE
-+#	define CX_FREE(__ptr) (__ptr?cximage_free(__ptr):0)
++#	define CX_FREE(__ptr) (__ptr?cximage_free(__ptr),1:0)
 +#endif
 +#ifndef CX_MALLOC
 +#	define CX_MALLOC(__sz) cximage_malloc(__sz)
@@ -109,10 +128,21 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximadef.h CxImage\ximadef.h
 +#	define free please_use_CX_FREE
 +#endif
 +
++#ifndef min
++#define min(a,b) (((a)<(b))?(a):(b))
++#endif
++#ifndef max
++#define max(a,b) (((a)>(b))?(a):(b))
++#endif
++
++#ifndef PI
++ #define PI 3.141592653589793f
++#endif
++
  #endif //__ximadefs
-diff -rupwN -x CVS ../dnl3/CxImage\ximadsp.cpp CxImage\ximadsp.cpp
---- ../dnl3/CxImage\ximadsp.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximadsp.cpp	Mon May 10 16:14:59 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximadsp.cpp CxImage/ximadsp.cpp
+--- ../dnl5/CxImage/ximadsp.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximadsp.cpp	2010-05-10 16:14:59.000000000 -0400
 @@ -1182,7 +1182,7 @@ bool CxImage::Median(long Ksize)
  	long kmax= Ksize-k2;
  	long i,j,k;
@@ -204,9 +234,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximadsp.cpp CxImage\ximadsp.cpp
  
  	if (srcReal==0 && dstReal==0) delete tmpReal;
  	if (srcImag==0 && dstImag==0) delete tmpImag;
-diff -rupwN -x CVS ../dnl3/CxImage\ximaexif.cpp CxImage\ximaexif.cpp
---- ../dnl3/CxImage\ximaexif.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximaexif.cpp	Mon May 10 15:29:42 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximaexif.cpp CxImage/ximaexif.cpp
+--- ../dnl5/CxImage/ximaexif.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximaexif.cpp	2010-05-10 15:29:42.000000000 -0400
 @@ -8,6 +8,10 @@
  
  #include "ximajpg.h"
@@ -281,9 +311,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximaexif.cpp CxImage\ximaexif.cpp
  			Sections[a].Data = 0;
          }
      }
-diff -rupwN -x CVS ../dnl3/CxImage\ximage.cpp CxImage\ximage.cpp
---- ../dnl3/CxImage\ximage.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximage.cpp	Tue May 11 10:43:14 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximage.cpp CxImage/ximage.cpp
+--- ../dnl5/CxImage/ximage.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximage.cpp	2010-05-11 10:43:14.000000000 -0400
 @@ -5,6 +5,35 @@
  
  #include "ximage.h"
@@ -373,9 +403,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximage.cpp CxImage\ximage.cpp
  }
  ////////////////////////////////////////////////////////////////////////////////
  //EOF
-diff -rupwN -x CVS ../dnl3/CxImage\ximagif.cpp CxImage\ximagif.cpp
---- ../dnl3/CxImage\ximagif.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximagif.cpp	Mon May 10 15:30:42 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximagif.cpp CxImage/ximagif.cpp
+--- ../dnl5/CxImage/ximagif.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximagif.cpp	2010-05-10 15:30:42.000000000 -0400
 @@ -283,7 +283,7 @@ bool CxImageGIF::DecodeExtension(CxFile 
  					if (bContinue) {
  						bContinue = (1 == fp->Read(&count, sizeof(count), 1));
@@ -394,9 +424,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximagif.cpp CxImage\ximagif.cpp
  		}	}	}	}	}
  
  		while (bContinue && fp->Read(&count, sizeof(count), 1) && count) {
-diff -rupwN -x CVS ../dnl3/CxImage\ximaico.cpp CxImage\ximaico.cpp
---- ../dnl3/CxImage\ximaico.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximaico.cpp	Mon May 10 15:31:31 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximaico.cpp CxImage/ximaico.cpp
+--- ../dnl5/CxImage/ximaico.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximaico.cpp	2010-05-10 15:31:31.000000000 -0400
 @@ -26,7 +26,7 @@ bool CxImageICO::Decode(CxFile *hFile)
  		info.nNumFrames = icon_header.idCount;
  
@@ -483,9 +513,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximaico.cpp CxImage\ximaico.cpp
  	return true;
  }
  ////////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage\ximaj2k.cpp CxImage\ximaj2k.cpp
---- ../dnl3/CxImage\ximaj2k.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximaj2k.cpp	Mon May 10 18:12:21 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximaj2k.cpp CxImage/ximaj2k.cpp
+--- ../dnl5/CxImage/ximaj2k.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximaj2k.cpp	2010-05-10 18:12:21.000000000 -0400
 @@ -25,15 +25,15 @@ bool CxImageJ2K::Decode(CxFile *hFile)
  	long i,x,y,w,h,max;
  
@@ -514,9 +544,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximaj2k.cpp CxImage\ximaj2k.cpp
  	j2k_destroy(&img,&cp);
  
  	return (len!=0);
-diff -rupwN -x CVS ../dnl3/CxImage\ximajas.cpp CxImage\ximajas.cpp
---- ../dnl3/CxImage\ximajas.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximajas.cpp	Mon May 10 18:15:57 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximajas.cpp CxImage/ximajas.cpp
+--- ../dnl5/CxImage/ximajas.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximajas.cpp	2010-05-10 18:15:57.000000000 -0400
 @@ -119,7 +119,7 @@ bool CxImageJAS::Decode(CxFile *hFile, D
  
  	if (bufs) {
@@ -526,9 +556,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximajas.cpp CxImage\ximajas.cpp
  	}
  	jas_cleanup();
  	if (image) jas_image_destroy(image);
-diff -rupwN -x CVS ../dnl3/CxImage\ximajbg.cpp CxImage\ximajbg.cpp
---- ../dnl3/CxImage\ximajbg.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximajbg.cpp	Mon May 10 18:12:51 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximajbg.cpp CxImage/ximajbg.cpp
+--- ../dnl5/CxImage/ximajbg.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximajbg.cpp	2010-05-10 18:12:51.000000000 -0400
 @@ -29,7 +29,7 @@ bool CxImageJBG::Decode(CxFile *hFile)
  	jbg_dec_init(&jbig_state);
  	jbg_dec_maxsize(&jbig_state, xmax, ymax);
@@ -570,9 +600,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximajbg.cpp CxImage\ximajbg.cpp
  
  	if (hFile->Error()){
  		strcpy(info.szLastError,"Problem while writing JBG file");
-diff -rupwN -x CVS ../dnl3/CxImage\ximalpha.cpp CxImage\ximalpha.cpp
---- ../dnl3/CxImage\ximalpha.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximalpha.cpp	Mon May 10 15:32:12 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximalpha.cpp CxImage/ximalpha.cpp
+--- ../dnl5/CxImage/ximalpha.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximalpha.cpp	2010-05-10 15:32:12.000000000 -0400
 @@ -72,14 +72,14 @@ void CxImage::AlphaSet(BYTE level)
  void CxImage::AlphaCreate()
  {
@@ -644,9 +674,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximalpha.cpp CxImage\ximalpha.cpp
  	pAlpha=pAlpha2;
  	return true;
  }
-diff -rupwN -x CVS ../dnl3/CxImage\ximalyr.cpp CxImage\ximalyr.cpp
---- ../dnl3/CxImage\ximalyr.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximalyr.cpp	Mon May 10 15:32:42 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximalyr.cpp CxImage/ximalyr.cpp
+--- ../dnl5/CxImage/ximalyr.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximalyr.cpp	2010-05-10 15:32:42.000000000 -0400
 @@ -31,7 +31,7 @@ bool CxImage::LayerCreate(long position)
  {
  	if ( position < 0 || position > info.nNumLayers ) position = info.nNumLayers;
@@ -698,9 +728,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximalyr.cpp CxImage\ximalyr.cpp
  	}
  }
  ////////////////////////////////////////////////////////////////////////////////
-diff -rupwN -x CVS ../dnl3/CxImage\ximamng.cpp CxImage\ximamng.cpp
---- ../dnl3/CxImage\ximamng.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximamng.cpp	Mon May 10 18:13:26 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximamng.cpp CxImage/ximamng.cpp
+--- ../dnl5/CxImage/ximamng.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximamng.cpp	2010-05-10 18:13:26.000000000 -0400
 @@ -25,7 +25,7 @@ mymngalloc( mng_uint32 size )
  // memory deallocation
  static void mymngfree(mng_ptr p, mng_uint32 size)
@@ -737,9 +767,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximamng.cpp CxImage\ximamng.cpp
  		if (mnginfo.image == NULL) throw "could not allocate memory for MNG";
  		memcpy(mnginfo.image,info.pImage, head.biSizeImage);
  
-diff -rupwN -x CVS ../dnl3/CxImage\ximapcx.cpp CxImage\ximapcx.cpp
---- ../dnl3/CxImage\ximapcx.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximapcx.cpp	Mon May 10 15:33:29 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximapcx.cpp CxImage/ximapcx.cpp
+--- ../dnl5/CxImage/ximapcx.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximapcx.cpp	2010-05-10 15:33:29.000000000 -0400
 @@ -65,7 +65,7 @@ bool CxImagePCX::Decode(CxFile *hFile)
  
  	//Read the image and check if it's ok
@@ -815,9 +845,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximapcx.cpp CxImage\ximapcx.cpp
  
  		hFile->Write(buffer.GetBuffer(false),buffer.Size(),1);
  
-diff -rupwN -x CVS ../dnl3/CxImage\ximapng.cpp CxImage\ximapng.cpp
---- ../dnl3/CxImage\ximapng.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximapng.cpp	Mon May 10 15:33:38 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximapng.cpp CxImage/ximapng.cpp
+--- ../dnl5/CxImage/ximapng.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximapng.cpp	2010-05-10 15:33:38.000000000 -0400
 @@ -142,7 +142,7 @@ bool CxImagePNG::Decode(CxFile *hFile)
  		if (pal){
  			DWORD ip;
@@ -854,9 +884,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximapng.cpp CxImage\ximapng.cpp
  		}
  
  		// copy the palette colors
-diff -rupwN -x CVS ../dnl3/CxImage\ximasel.cpp CxImage\ximasel.cpp
---- ../dnl3/CxImage\ximasel.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximasel.cpp	Mon May 10 15:34:23 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximasel.cpp CxImage/ximasel.cpp
+--- ../dnl5/CxImage/ximasel.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximasel.cpp	2010-05-10 15:34:23.000000000 -0400
 @@ -45,7 +45,7 @@ bool CxImage::SelectionClear()
  bool CxImage::SelectionCreate()
  {
@@ -913,9 +943,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximasel.cpp CxImage\ximasel.cpp
  
  	return true;
  }
-diff -rupwN -x CVS ../dnl3/CxImage\ximatga.cpp CxImage\ximatga.cpp
---- ../dnl3/CxImage\ximatga.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximatga.cpp	Mon May 10 15:34:37 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximatga.cpp CxImage/ximatga.cpp
+--- ../dnl5/CxImage/ximatga.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximatga.cpp	2010-05-10 15:34:37.000000000 -0400
 @@ -160,7 +160,7 @@ bool CxImageTGA::Encode(CxFile * hFile)
  			hFile->Write(pDest,tgaHead.ImageWidth * (head.biBitCount >> 3),1);
  		}
@@ -934,9 +964,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximatga.cpp CxImage\ximatga.cpp
  	}
  	return true;
  }
-diff -rupwN -x CVS ../dnl3/CxImage\ximatif.cpp CxImage\ximatif.cpp
---- ../dnl3/CxImage\ximatif.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximatif.cpp	Mon May 10 18:14:24 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximatif.cpp CxImage/ximatif.cpp
+--- ../dnl5/CxImage/ximatif.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximatif.cpp	2010-05-10 18:14:24.000000000 -0400
 @@ -240,7 +240,7 @@ bool CxImageTIF::Decode(CxFile * hFile)
  				break;
  		}
@@ -1065,9 +1095,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximatif.cpp CxImage\ximatif.cpp
  #endif //CXIMAGE_SUPPORT_ALPHA
  			break;
  		}				
-diff -rupwN -x CVS ../dnl3/CxImage\ximatran.cpp CxImage\ximatran.cpp
---- ../dnl3/CxImage\ximatran.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximatran.cpp	Mon May 10 15:34:52 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximatran.cpp CxImage/ximatran.cpp
+--- ../dnl5/CxImage/ximatran.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximatran.cpp	2010-05-10 15:34:52.000000000 -0400
 @@ -180,7 +180,7 @@ bool CxImage::RotateLeft(CxImage* iDst)
  		imgDest.Clear(0);
  		for (y = 0; y < head.biHeight; y++) {
@@ -1104,9 +1134,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximatran.cpp CxImage\ximatran.cpp
  
  		break;
  	}
-diff -rupwN -x CVS ../dnl3/CxImage\ximawmf.cpp CxImage\ximawmf.cpp
---- ../dnl3/CxImage\ximawmf.cpp	Wed Oct 13 15:32:56 2004
-+++ CxImage\ximawmf.cpp	Mon May 10 15:35:27 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximawmf.cpp CxImage/ximawmf.cpp
+--- ../dnl5/CxImage/ximawmf.cpp	2004-10-13 15:32:56.000000000 -0400
++++ CxImage/ximawmf.cpp	2010-05-10 15:35:27.000000000 -0400
 @@ -321,14 +321,14 @@ HENHMETAFILE CxImageWMF::ConvertWmfFilet
  	if (len > lenFile) return (hMeta);
  
@@ -1157,9 +1187,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximawmf.cpp CxImage\ximawmf.cpp
  
  	if (!hMeta)	return (FALSE);	// oops.
  
-diff -rupwN -x CVS ../dnl3/CxImage\ximawnd.cpp CxImage\ximawnd.cpp
---- ../dnl3/CxImage\ximawnd.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\ximawnd.cpp	Mon May 10 15:35:42 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/ximawnd.cpp CxImage/ximawnd.cpp
+--- ../dnl5/CxImage/ximawnd.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/ximawnd.cpp	2010-05-10 15:35:42.000000000 -0400
 @@ -8,6 +8,10 @@
  #include "ximaiter.h" 
  #include "ximabmp.h"
@@ -1189,9 +1219,9 @@ diff -rupwN -x CVS ../dnl3/CxImage\ximawnd.cpp CxImage\ximawnd.cpp
  		DeleteObject(SelectObject(TmpDC,TmpObj));
  		DeleteDC(TmpDC);
  	}
-diff -rupwN -x CVS ../dnl3/CxImage\xmemfile.cpp CxImage\xmemfile.cpp
---- ../dnl3/CxImage\xmemfile.cpp	Sun Oct 17 13:34:26 2004
-+++ CxImage\xmemfile.cpp	Tue May 11 10:41:09 2010
+diff -rupwbBEN --strip-trailing-cr -x CVS ../dnl5/CxImage/xmemfile.cpp CxImage/xmemfile.cpp
+--- ../dnl5/CxImage/xmemfile.cpp	2004-10-17 13:34:26.000000000 -0400
++++ CxImage/xmemfile.cpp	2010-05-11 10:41:09.000000000 -0400
 @@ -17,7 +17,7 @@ CxMemFile::~CxMemFile()
  bool CxMemFile::Close()
  {

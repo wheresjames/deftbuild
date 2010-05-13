@@ -1,0 +1,12 @@
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/portaudio/src/os/win/pa_x86_plain_converters.c portaudio/src/os/win/pa_x86_plain_converters.c
+--- ../dnl5/portaudio/src/os/win/pa_x86_plain_converters.c	2010-05-13 14:11:51.000000000 -0400
++++ portaudio/src/os/win/pa_x86_plain_converters.c	2010-05-13 13:38:21.000000000 -0400
+@@ -130,7 +130,7 @@ static const float const_float_dither_sc
+ 
+ /* -------------------------------------------------------------------------- */
+ 
+-#if defined(_WIN64) || defined(_WIN32_WCE)
++#if defined(_WIN64) || defined(_WIN32_WCE) || defined(__MINGW32__)
+ 
+ /*
+ 	-EMT64/AMD64 uses different asm

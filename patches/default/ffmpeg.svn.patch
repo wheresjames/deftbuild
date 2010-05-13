@@ -1,3 +1,27 @@
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavformat/avio.c ffmpeg/libavformat/avio.c
+--- ../dnl5/ffmpeg/libavformat/avio.c	2010-05-13 13:12:32.000000000 -0400
++++ ffmpeg/libavformat/avio.c	2010-05-13 11:25:51.000000000 -0400
+@@ -126,6 +126,12 @@ int url_open(URLContext **puc, const cha
+ 
+     p = filename;
+     q = proto_str;
++
++    /* Check for dos drive */
++    if (*p && ':' == p[ 1 ])
++        strcpy(proto_str, "file");
++
++    else {
+     while (*p != '\0' && *p != ':') {
+         /* protocols can only contain alphabetic chars */
+         if (!isalpha(*p))
+@@ -141,6 +148,7 @@ int url_open(URLContext **puc, const cha
+     } else {
+         *q = '\0';
+     }
++    }
+ 
+     up = first_protocol;
+     while (up != NULL) {
 diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/ffmpeg/libavcodec/h264dspenc.c ffmpeg/libavcodec/h264dspenc.c
 --- ../dnl5/ffmpeg/libavcodec/h264dspenc.c	2010-04-13 12:40:06.000000000 -0400
 +++ ffmpeg/libavcodec/h264dspenc.c	2010-04-08 10:12:25.000000000 -0400
