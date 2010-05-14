@@ -62,6 +62,7 @@ Section "Squirrel Script Engine (required)"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
@@ -109,6 +110,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_live555.dll
   Delete $INSTDIR\modules\sqmod_mysql.dll
   Delete $INSTDIR\modules\sqmod_poco.dll
+  Delete $INSTDIR\modules\sqmod_portaudio.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
   Delete $INSTDIR\modules\sqmod_vmime.dll
 
