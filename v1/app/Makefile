@@ -9,4 +9,3 @@ makefiles   = $(wildcard *.mk)
 
 .PHONY $(makefiles) :
 	$(MAKE) -f $@ $(BUILDTYPE)
-

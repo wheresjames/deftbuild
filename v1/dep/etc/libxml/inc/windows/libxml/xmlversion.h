@@ -17,11 +17,9 @@
 extern "C" {
 #endif
 
-#define LIBXML_STATIC
-
-#define LIBXML_OUTPUT_ENABLED
-
-#define LIBXML_PUSH_ENABLED
+#if 1
+#define LIBXML_SAX1_ENABLED
+#endif
 
 /*
  * use those to be sure nothing nasty will happen if
@@ -36,28 +34,21 @@ extern void xmlCheckVersion(int version);
  *
  * the version string like "1.2.3"
  */
-#define LIBXML_DOTTED_VERSION "@VERSION@"
+#define LIBXML_DOTTED_VERSION "2.4.26"
 
 /**
  * LIBXML_VERSION:
  *
  * the version number: 1.2.3 value is 1002003
  */
-#define LIBXML_VERSION 2007000
+#define LIBXML_VERSION 20426
 
 /**
  * LIBXML_VERSION_STRING:
  *
  * the version number string, 1.2.3 value is "1002003"
  */
-#define LIBXML_VERSION_STRING "@LIBXML_VERSION_NUMBER@"
-
-/**
- * LIBXML_VERSION_EXTRA:
- *
- * extra version information, used to show a CVS compilation
- */
-#define LIBXML_VERSION_EXTRA "-win32"
+#define LIBXML_VERSION_STRING "20426"
 
 /**
  * LIBXML_TEST_VERSION:
@@ -65,7 +56,9 @@ extern void xmlCheckVersion(int version);
  * Macro to check that the libxml version in use is compatible with
  * the version the software has been compiled against
  */
-#define LIBXML_TEST_VERSION xmlCheckVersion(@LIBXML_VERSION_NUMBER@);
+#define LIBXML_TEST_VERSION xmlCheckVersion(20426);
+
+#define LIBXML_VERSION_EXTRA
 
 #if 0
 /**
@@ -174,30 +167,12 @@ extern void xmlCheckVersion(int version);
 #endif
 
 /**
- * LIBXML_SCHEMATRON_ENABLED:
- *
- * Whether the Schematron validation interfaces are compiled in
- */
-#if 1
-#define LIBXML_SCHEMATRON_ENABLED
-#endif
-
-/**
  * LIBXML_ICONV_ENABLED:
  *
  * Whether iconv support is available
  */
 #if 0
 #define LIBXML_ICONV_ENABLED
-#endif
-
-/**
- * LIBXML_ISO8859X_ENABLED:
- *
- * Whether ISO-8859-* support is made available in case iconv is not
- */
-#if 1
-#define LIBXML_ISO8859X_ENABLED
 #endif
 
 /**
@@ -216,15 +191,6 @@ extern void xmlCheckVersion(int version);
  */
 #if 0
 #define DEBUG_MEMORY_LOCATION
-#endif
-
-/**
- * LIBXML_DEBUG_RUNTIME:
- *
- * Whether the runtime debugging is configured in
- */
-#if 0
-#define LIBXML_DEBUG_RUNTIME
 #endif
 
 /**
@@ -250,42 +216,31 @@ extern void xmlCheckVersion(int version);
 #endif
 #endif
 
-#ifdef __GNUC__
-#ifdef HAVE_ANSIDECL_H
-#include <ansidecl.h>
-#endif
-
 /**
  * ATTRIBUTE_UNUSED:
  *
  * Macro used to signal to GCC unused function parameters
  */
-
+#ifdef __GNUC__
+#ifdef HAVE_ANSIDECL_H
+#include <ansidecl.h>
+#endif
 #ifndef ATTRIBUTE_UNUSED
 #define ATTRIBUTE_UNUSED
 #endif
-
-/**
- * ATTRIBUTE_ALLOC_SIZE:
- *
- * Macro used to indicate to GCC this is an allocator function
- */
-
-#ifndef ATTRIBUTE_ALLOC_SIZE
-# if ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
-#  define ATTRIBUTE_ALLOC_SIZE(x) __attribute__((alloc_size(x)))
-# else
-#  define ATTRIBUTE_ALLOC_SIZE(x)
-# endif
 #else
-# define ATTRIBUTE_ALLOC_SIZE(x)
+#define ATTRIBUTE_UNUSED
 #endif
 
-/**
- * LIBXML_ATTR_FORMAT:
- *
- * Macro used to indicate to GCC the parameter are printf like
- */
+#ifndef LIBXML_ATTR_ALLOC_SIZE
+# if ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 3)))
+#  define LIBXML_ATTR_ALLOC_SIZE(x) __attribute__((alloc_size(x)))
+# else
+#  define LIBXML_ATTR_ALLOC_SIZE(x)
+# endif
+#else
+# define LIBXML_ATTR_ALLOC_SIZE(x)
+#endif
 
 #ifndef LIBXML_ATTR_FORMAT
 # if ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
@@ -297,11 +252,6 @@ extern void xmlCheckVersion(int version);
 # define LIBXML_ATTR_FORMAT(fmt,args)
 #endif
 
-#else /* !__GNUC__ */
-#define ATTRIBUTE_UNUSED
-#define LIBXML_ATTR_FORMAT(fmt,args)
-#define ATTRIBUTE_ALLOC_SIZE(x)
-#endif /* __GNUC__ */
 
 /*
  * #pragma comment(lib, "iconv.lib")
@@ -312,18 +262,6 @@ extern void xmlCheckVersion(int version);
 #ifdef _MSC_VER
 #if defined LIBXML_ICONV_ENABLED && !defined LIBXML2_COMPILING_MSCCDEF
 #pragma comment(lib, "iconv.lib")
-#endif
-#endif
-
-/*
- * #pragma comment(lib, "kernel32.lib")
- *
- * pragma understood my MS compiler which enables a conditional link with
- * kernel32.
- */
-#ifdef _MSC_VER
-#if defined LIBXML_MODULES_ENABLED
-#pragma comment(lib, "kernel32.lib")
 #endif
 #endif
 

@@ -4,10 +4,10 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := libxml
-PRJ_DEPS := libxml
+PRJ_NAME := libxml2
+PRJ_DEPS := libxml2
 PRJ_TYPE := lib
-PRJ_INCS := libxml/include zlib
+PRJ_INCS := libxml2/include zlib
 PRJ_LIBS := 
 PRJ_DEFS := LIBXML_THREAD_ENABLED=1
 
@@ -35,7 +35,7 @@ endif
 #-------------------------------------------------------------------
 export LOC_TAG := def
 LOC_CXX_def := c
-LOC_SRC_def := $(CFG_LIBROOT)/libxml
+LOC_SRC_def := $(CFG_LIBROOT)/libxml2
 LOC_EXC_def := rngparser schematron testapi testchar testdict \
 			   testC14N testdso testHTML testModule testOOM testOOMlib testReader \
 			   testrecurse testRegexp testRelax testSAX testSchemas \
