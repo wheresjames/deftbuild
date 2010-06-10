@@ -126,6 +126,7 @@ ifdef PRJ_SQRL
 	PRJ_INCS := $(PRJ_INCS) winglib/lib/oexlib winglib/lib/sqbind SqPlus/include SqPlus/sqplus
 	PRJ_LIBS := $(PRJ_LIBS) sqbind oexlib sqplus sqstdlib squirrel cximage jpeg png tiff zlib
 	PRJ_RESD := sq
+	PRJ_SQRL := *.nut
 	ifeq ($(PRJ_SQRL),service)
 		PRJ_DEFS := $(PRJ_DEFS) OEX_SERVICE
 	endif
@@ -165,8 +166,13 @@ ifeq ($(BUILD),vs)
 	PLATFORM := windows
 
 	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-i386-local-static
-	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld.exe"
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
+	
+	ifdef PRJ_SQRL
+		CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/sqrbld.exe"
+	else
+		CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld.exe"
+	endif
 
 	ifdef DBG
 		ifeq ($(LIBLINK),static)
@@ -240,8 +246,13 @@ else
 	# --with-headers
 
 	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/posix-gcc-linux-i386-local-shared
-	CFG_LOCAL_TOOL_RESCMP 	:= $(CFG_LOCAL_BUILD_TYPE)/resbld
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
+
+	ifdef PRJ_SQRL
+		CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/sqrbld"
+	else
+		CFG_LOCAL_TOOL_RESCMP 	:= $(CFG_LOCAL_BUILD_TYPE)/resbld
+	endif
 
 	ifdef DBG
 		CFG_CEXTRA	 := -g -DDEBUG -D_DEBUG $(CFG_CEXTRA)
@@ -680,14 +691,14 @@ CFG_RES_MAK := $(CFG_RES_OUT)/oexres.mk
 
 .PRECIOUS: $(CFG_RES_MAK)
 $(CFG_RES_MAK):
-	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)"
+	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQRL)"
 
 include $(CFG_RES_MAK)
 CFG_RES_OBJ := $(subst .cpp,.$(CFG_OBJ_EXT),$(RES_CPP))
 
 .PRECIOUS: $(CFG_RES_DEP)
 $(CFG_RES_DEP):
-	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)"
+	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQRL)"
 
 include $(CFG_RES_DEP)
 
@@ -697,7 +708,7 @@ endif
 
 #.PRECIOUS: $(CFG_RES_OUT)/%.cpp: $(RES_CPP)
 $(CFG_RES_OUT)/%.cpp:
-	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)"
+	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQRL)"
 
 .PRECIOUS: $(CFG_RES_OUT)/%.$(CFG_OBJ_EXT)
 $(CFG_RES_OUT)/%.$(CFG_OBJ_EXT): $(CFG_RES_OUT)/%.cpp
