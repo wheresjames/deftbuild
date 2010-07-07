@@ -503,6 +503,7 @@ else
 			# Cross compile for windows
 			CFG_TOOLPREFIX := i586-mingw32msvc-
 			# CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
+			# --whole-archive -rdynamic
 
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
@@ -537,7 +538,8 @@ else
 			CFG_TOOLPREFIX :=
 
 			# -lregex -lpng -ljpeg -lzlib -ltiff -lstdc++ -lgcc -lodbc32 -lwsock32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lodbc32 -ladvapi32 -lodbc32 -lwsock32 -lopengl32 -lglu32 -lole32 -loleaut32
-
+			# --whole-archive
+			
 			CFG_STDLIB := -lrt -pthread
 			CFG_LFLAGS := $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
 #			CFG_LFLAGS := $(CFG_LEXTRA)

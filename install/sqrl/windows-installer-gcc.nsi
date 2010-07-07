@@ -3,18 +3,22 @@
 
 ;--------------------------------
 
+!define APPNAME "OSV Squirrel Script Engine"
+
+!define APPKEY "OSVSquirrelScript"
+
 ; The name of the installer
-Name "Squirrel Script Engine"
+Name "${APPNAME}"
 
 ; The file to write
-OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
+OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}.exe"
 
 ; The default installation director
-InstallDir "$PROGRAMFILES\Squirrel Script Engine"
+InstallDir "$PROGRAMFILES\${APPNAME}"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\SquirrelScript" "Install_Dir"
+InstallDirRegKey HKLM "Software\${APPKEY}" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -35,7 +39,7 @@ UninstPage instfiles
 ;--------------------------------
 
 ; The stuff to install
-Section "Squirrel Script Engine (required)"
+Section "${APPNAME} (required)"
 
   SectionIn RO
   
@@ -57,7 +61,7 @@ Section "Squirrel Script Engine (required)"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
-  File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
+  ;File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
@@ -67,13 +71,13 @@ Section "Squirrel Script Engine (required)"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
   ; Write the installation path into the registry
-  WriteRegStr HKLM SOFTWARE\SquirrelScript "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" "Squirrel Script Engine"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "Squirrel Script Engine"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
   
 SectionEnd
@@ -81,8 +85,8 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
 
-  CreateDirectory "$SMPROGRAMS\Squirrel Script Engine"
-  CreateShortCut "$SMPROGRAMS\Squirrel Script Engine\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateDirectory "$SMPROGRAMS\${APPNAME}"
+  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   
 SectionEnd
 
@@ -93,8 +97,8 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript"
-  DeleteRegKey HKLM SOFTWARE\SquirrelScript
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
+  DeleteRegKey HKLM SOFTWARE\${APPKEY}
 
   ; Remove files and uninstaller
   Delete $INSTDIR\InstallSquirrelScript.nsi
@@ -115,10 +119,10 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_vmime.dll
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\Squirrel Script Engine\*.*"
+  Delete "$SMPROGRAMS\${APPNAME}\*.*"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\Squirrel Script Engine"
+  RMDir "$SMPROGRAMS\${APPNAME}"
   RMDir "$INSTDIR\modules"
   RMDir "$INSTDIR"
 
