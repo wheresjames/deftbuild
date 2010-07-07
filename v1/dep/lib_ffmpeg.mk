@@ -9,7 +9,7 @@ PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
 PRJ_INCS := ffmpeg x264
 PRJ_LIBS := 
-PRJ_DEFS := HAVE_AV_CONFIG_H=1 FFMPEG_LICENSE=""
+PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 
 # sux, but can't define -fPIC for ffmpeg, at least atm
 PRJ_NPIC := 1
@@ -102,7 +102,7 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  libamr libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libx264 libxvidff libxvid_rc \
+					  libvorbis libvpxdec libvpxenc libx264 libxvidff libxvid_rc \
 					  \
 					  beosthread g729dec imgconvert_template motion_est_template \
 					  mpegvideo_xvmc os2thread vdpau \
@@ -110,6 +110,8 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  dxva2 dxva2_h264 dxva2_vc1 \
 					  \
 					  dv_tablegen \
+					  \
+					  aacpsdata dct32 dxva2_mpeg2
 
 ifeq ($(PROC),arm)
 	ifeq ($(PLATFORM),windows)
@@ -128,6 +130,15 @@ endif
 include $(PRJ_LIBROOT)/build.mk
 
 ifeq ($(PROC),i386)
+
+	export LOC_TAG := libavcodecx86_asm
+	LOC_CXX_libavcodecx86_asm := asm
+#	LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86
+	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
+	LOC_EXC_libavcodecx86_asm := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
+				   			 	 dsputil_mmx_qns_template dsputil_mmx_rnd_template h264dsp_mmx \
+				   			 	 mpegvideo_mmx_template
+	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := libavcodecx86
 	LOC_CXX_libavcodecx86 := c

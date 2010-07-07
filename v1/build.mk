@@ -39,7 +39,11 @@ else
 		BLD_COMPILER := $(CFG_AS)
 	else
 		ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
-			BLD_COMPILER := $(LOC_ASM_$(LOC_TAG)
+			ifeq ($(LOC_ASM_$(LOC_TAG)),)
+				BLD_COMPILER := $(CFG_ASM)
+			else
+				BLD_COMPILER := $(LOC_ASM_$(LOC_TAG))
+			endif
 		else
 			BLD_COMPILER := $(CFG_PP)
 		endif
@@ -164,8 +168,11 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $@
-	$(LOC_ASM_$(LOC_TAG) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-
+	yasm -f elf32 -a x86 $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	
+# +++ WTF ??? Why doesn't this work ??? $(LOC_ASM_$(LOC_TAG)) is ALWAYS EMPTY!!!
+#	$(LOC_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	
 else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
