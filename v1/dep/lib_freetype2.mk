@@ -31,7 +31,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := base
 LOC_CXX_base := c
 LOC_SRC_base := $(CFG_LIBROOT)/freetype2/src/base
-LOC_LST_base := ftbase ftinit ftsystem ftdebug
+LOC_LST_base := ftbase ftinit ftsystem ftdebug ftglyph ftbitmap
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := bdf
