@@ -61,6 +61,7 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
@@ -109,6 +110,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
   Delete $INSTDIR\modules\sqmod_fftw.dll
+  Delete $INSTDIR\modules\sqmod_freetype2.dll
   Delete $INSTDIR\modules\sqmod_gdchart.dll
   Delete $INSTDIR\modules\sqmod_irrlicht.dll
   Delete $INSTDIR\modules\sqmod_live555.dll
