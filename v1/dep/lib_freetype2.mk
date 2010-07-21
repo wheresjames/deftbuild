@@ -148,12 +148,10 @@ LOC_SRC_type42 := $(CFG_LIBROOT)/freetype2/src/type42
 LOC_LST_type42 := type42
 include $(PRJ_LIBROOT)/build.mk
 
-ifeq ($(PLATFORM),windows)
-	export LOC_TAG := winfonts
-	LOC_CXX_winfonts := c
-	LOC_SRC_winfonts := $(CFG_LIBROOT)/freetype2/src/winfonts
-	include $(PRJ_LIBROOT)/build.mk
-endif
+export LOC_TAG := winfonts
+LOC_CXX_winfonts := c
+LOC_SRC_winfonts := $(CFG_LIBROOT)/freetype2/src/winfonts
+include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
 # Execute the build
