@@ -48,7 +48,7 @@ Section "${APPNAME} (required)"
   
   ; Put file there
   SetOverwrite on
-  File "windows-installer.nsi"
+  File "windows-installer-gcc.nsi"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
   
@@ -70,6 +70,27 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
+  
+  ; Scripts
+  ;File "${OUTROOT}\scripts\irr_bouncing_ball.nut"
+  File "${OUTROOT}\scripts\irr_editor.nut"
+  File "${OUTROOT}\scripts\test_capture.nut"
+  File "${OUTROOT}\scripts\test_curl.nut"
+  File "${OUTROOT}\scripts\test_ffmpeg.nut"
+  File "${OUTROOT}\scripts\test_freetype2.nut"
+  File "${OUTROOT}\scripts\test_http.nut"
+  File "${OUTROOT}\scripts\test_irrlicht.nut"
+  File "${OUTROOT}\scripts\test_irrlicht2.nut"
+  File "${OUTROOT}\scripts\test_memshare.nut"
+  File "${OUTROOT}\scripts\test_openssl.nut"
+  File "${OUTROOT}\scripts\test_portaudio.nut"
+  File "${OUTROOT}\scripts\test_sockets.nut"
+  File "${OUTROOT}\scripts\test_sockets_server.nut"
+  File "${OUTROOT}\scripts\test_sockets_session.nut"
+  File "${OUTROOT}\scripts\test_sqlite.nut"
+  File "${OUTROOT}\scripts\test_threads.nut"
+  File "${OUTROOT}\scripts\test_tinyxml.nut"
+  File "${OUTROOT}\scripts\z_primes.nut"
   
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"

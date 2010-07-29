@@ -7,13 +7,16 @@ FOR /f "tokens=1-8 delims= " %%a IN (%1) DO (
 
 IF NOT %%a==# (
 
-IF EXIST %2 (
+set LPATH=!DIR_LIB!\%%a
+set LPATH=!LPATH:/=\!
 
-echo  .  Ignoring %%a : %%c : %2
+IF EXIST !LPATH! (
+
+echo  .  Ignoring %%a : %%c : !LPATH!
 
 ) ELSE (
 
-echo *** Checking out %%a : %%c : %2
+echo *** Checking out %%a : %%c : !LPATH!
 
 cd "!DIR_LIB!"
 
@@ -23,7 +26,7 @@ REM ----------------------------------------------------------------
 IF %%b==git (
 git clone %%d %%a
 IF NOT %%c==- (
-cd %2
+cd !LPATH!
 git checkout %%c
 )
 )
@@ -33,9 +36,9 @@ REM svn
 REM ----------------------------------------------------------------
 IF %%b==svn (
 IF %%c==- (
-svn co -q "%%d" "%2"
+svn co -q "%%d" "!LPATH!"
 ) ELSE (
-svn co -q -r %%c "%%d" "%2"
+svn co -q -r %%c "%%d" "!LPATH!"
 )
 )
 
