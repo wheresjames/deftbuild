@@ -68,6 +68,12 @@ LOC_SRC_crypto_asn1 := $(CFG_LIBROOT)/openssl/crypto/asn1
 LOC_EXC_crypto_asn1 :=
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_bf
+LOC_CXX_crypto_bf := c
+LOC_SRC_crypto_bf := $(CFG_LIBROOT)/openssl/crypto/bf
+LOC_EXC_crypto_bf := bf_cbc bf_opts bfspeed bftest
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_bio
 LOC_CXX_crypto_bio := c
 LOC_SRC_crypto_bio := $(CFG_LIBROOT)/openssl/crypto/bio
@@ -92,6 +98,12 @@ LOC_SRC_crypto_camellia := $(CFG_LIBROOT)/openssl/crypto/camellia
 LOC_EXC_crypto_camellia := 
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_cast
+LOC_CXX_crypto_cast := c
+LOC_SRC_crypto_cast := $(CFG_LIBROOT)/openssl/crypto/cast
+LOC_EXC_crypto_cast := castopts cast_spd casttest
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_comp
 LOC_CXX_crypto_comp := c
 LOC_SRC_crypto_comp := $(CFG_LIBROOT)/openssl/crypto/comp
@@ -114,6 +126,12 @@ export LOC_TAG := crypto_conf
 LOC_CXX_crypto_conf := c
 LOC_SRC_crypto_conf := $(CFG_LIBROOT)/openssl/crypto/conf
 LOC_EXC_crypto_conf := cnf_save test
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_des
+LOC_CXX_crypto_des := c
+LOC_SRC_crypto_des := $(CFG_LIBROOT)/openssl/crypto/des
+LOC_EXC_crypto_des := des_opts destest read_pwd speed
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_dh
