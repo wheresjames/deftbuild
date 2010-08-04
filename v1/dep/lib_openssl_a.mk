@@ -34,7 +34,7 @@ endif
 export LOC_TAG := ssl
 LOC_CXX_ssl := c
 LOC_SRC_ssl := $(CFG_LIBROOT)/openssl/ssl
-LOC_EXC_ssl := ssl_ciph ssl_sess ssl_task ssltest t1_lib
+LOC_EXC_ssl := ssl_task ssltest
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto
@@ -84,6 +84,18 @@ export LOC_TAG := crypto_buffer
 LOC_CXX_crypto_buffer := c
 LOC_SRC_crypto_buffer := $(CFG_LIBROOT)/openssl/crypto/buffer
 LOC_EXC_crypto_buffer := 
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_camellia
+LOC_CXX_crypto_camellia := c
+LOC_SRC_crypto_camellia := $(CFG_LIBROOT)/openssl/crypto/camellia
+LOC_EXC_crypto_camellia := 
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_comp
+LOC_CXX_crypto_comp := c
+LOC_SRC_crypto_comp := $(CFG_LIBROOT)/openssl/crypto/comp
+LOC_EXC_crypto_comp := 
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_cmac
@@ -149,7 +161,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_err
 LOC_CXX_crypto_err := c
 LOC_SRC_crypto_err := $(CFG_LIBROOT)/openssl/crypto/err
-LOC_EXC_crypto_err := err_all
+LOC_EXC_crypto_err :=
 include $(PRJ_LIBROOT)/build.mk
 
 

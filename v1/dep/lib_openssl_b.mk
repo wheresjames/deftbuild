@@ -55,6 +55,12 @@ LOC_SRC_crypto_md5 := $(CFG_LIBROOT)/openssl/crypto/md5
 LOC_EXC_crypto_md5 := md5test
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_modes
+LOC_CXX_crypto_modes := c
+LOC_SRC_crypto_modes := $(CFG_LIBROOT)/openssl/crypto/modes
+LOC_EXC_crypto_modes := 
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_objects
 LOC_CXX_crypto_objects := c
 LOC_SRC_crypto_objects := $(CFG_LIBROOT)/openssl/crypto/objects
@@ -91,6 +97,12 @@ LOC_SRC_crypto_rand := $(CFG_LIBROOT)/openssl/crypto/rand
 LOC_EXC_crypto_rand := randtest
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_rc4
+LOC_CXX_crypto_rsa := c
+LOC_SRC_crypto_rsa := $(CFG_LIBROOT)/openssl/crypto/rsa
+LOC_EXC_crypto_rsa := rc4test
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_rsa
 LOC_CXX_crypto_rsa := c
 LOC_SRC_crypto_rsa := $(CFG_LIBROOT)/openssl/crypto/rsa
@@ -107,6 +119,12 @@ export LOC_TAG := crypto_stack
 LOC_CXX_crypto_stack := c
 LOC_SRC_crypto_stack := $(CFG_LIBROOT)/openssl/crypto/stack
 LOC_EXC_crypto_stack :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_ts
+LOC_CXX_crypto_ts := c
+LOC_SRC_crypto_ts := $(CFG_LIBROOT)/openssl/crypto/ts
+LOC_EXC_crypto_ts :=
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_ui
