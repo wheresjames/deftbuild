@@ -21,7 +21,8 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM OPENSSL_NO_ERR
+	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM OPENSSL_NO_ERR \
+				OPENSSL_SYS_MSDOS
 endif
 ifeq ($(BUILD),vs)
 	PRJ_DEFS := $(PRJ_DEFS) ssize_t=long
@@ -30,6 +31,18 @@ endif
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+
+export LOC_TAG := crypto_engine
+LOC_CXX_crypto_engine := c
+LOC_SRC_crypto_engine := $(CFG_LIBROOT)/openssl/crypto/engine
+LOC_EXC_crypto_engine :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_err
+LOC_CXX_crypto_err := c
+LOC_SRC_crypto_err := $(CFG_LIBROOT)/openssl/crypto/err
+LOC_EXC_crypto_err :=
+include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_evp
 LOC_CXX_crypto_evp := c
