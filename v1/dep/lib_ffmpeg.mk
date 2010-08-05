@@ -102,7 +102,7 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  libamr libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libvpxdec libvpxenc libx264 libxvidff libxvid_rc \
+					  libvorbis libvpxdec libvpxenc libxvidff libxvid_rc \
 					  \
 					  beosthread g729dec imgconvert_template motion_est_template \
 					  mpegvideo_xvmc os2thread vdpau \
