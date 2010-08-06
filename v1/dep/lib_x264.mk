@@ -20,13 +20,11 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
+UNSUPPORTED := BUILD=$(BUILD) is invalid, x264 can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer
-
-CFG_CFLAGS := $(CFG_CFLAGS) -std=c99
+CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
 ifdef DBG
 	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
 endif
