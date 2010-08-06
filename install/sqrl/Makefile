@@ -28,7 +28,7 @@ ifeq ($(PLATFORM),windows)
 
 all:
 	echo *** Building Squirrel Engine Installer
-	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" $(NSIS_SCRIPT)
+	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_SCRIPT)
 
 else
 

@@ -26,19 +26,15 @@ else
 
 CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer
 
+CFG_CFLAGS := $(CFG_CFLAGS) -std=c99
 ifdef DBG
-	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1 -std=c99
+	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
 endif
+
 
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
-
-#export LOC_TAG := def
-#LOC_CXX_def := c
-#LOC_SRC_def := $(CFG_LIBROOT)/x264
-#LOC_EXC_def := x264dll
-#include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := common
 LOC_CXX_common := c
@@ -49,7 +45,6 @@ ifeq ($(PLATFORM),windows)
 endif
 include $(PRJ_LIBROOT)/build.mk
 
-
 export LOC_TAG := common_x86
 LOC_CXX_common_x86 := c
 LOC_SRC_common_x86 := $(CFG_LIBROOT)/x264/common/x86
@@ -59,7 +54,11 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := common_asm
 LOC_CXX_common_asm := asm
 LOC_BLD_common_asm := asm
-#LOC_ASM_common_asm := yasm -f elf32 -a x86
+ifeq ($(PLATFORM),windows)
+	LOC_ASM_common_asm := yasm -f win32 -a x86 -DPREFIX
+else
+	LOC_ASM_common_asm := yasm -f elf32 -a x86
+endif
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
 LOC_EXC_common_asm := dct-64
 include $(PRJ_LIBROOT)/build.mk
