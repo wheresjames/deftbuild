@@ -44,7 +44,11 @@ export LOC_TAG := common
 LOC_CXX_common := c
 LOC_SRC_common := $(CFG_LIBROOT)/x264/common
 LOC_EXC_common := visualize
+ifeq ($(PLATFORM),windows)
+	LOC_EXC_common := $(LOC_EXC_common) display-x11 threadpool
+endif
 include $(PRJ_LIBROOT)/build.mk
+
 
 export LOC_TAG := common_x86
 LOC_CXX_common_x86 := c
@@ -55,7 +59,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := common_asm
 LOC_CXX_common_asm := asm
 LOC_BLD_common_asm := asm
-LOC_ASM_common_asm := yasm -f elf32 -a x86
+#LOC_ASM_common_asm := yasm -f elf32 -a x86
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
 LOC_EXC_common_asm := dct-64
 include $(PRJ_LIBROOT)/build.mk

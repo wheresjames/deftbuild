@@ -44,7 +44,6 @@ if [ "${REPO}" == "cvs" ]; then
 #	cd ${LIBPATH}
 #	cvs -Q -w diff -N -u > "${PATCH}"
 
-
 	# ensure download directory
 	if [ ! -d ${DIR_DNL} ]; then
 		mkdir -p ${DIR_DNL}
@@ -74,8 +73,24 @@ fi
 # git
 if [ "${REPO}" == "git" ]; then	
 
-	cd ${LIBPATH}
-	git -w diff > "${PATCH}"
+#	Is it too much to ask for a built in diff function that picks up new files?
+#	cd ${LIBPATH}
+#	git diff -w > "${PATCH}"
+
+	# ensure download directory
+	if [ ! -d ${DIR_DNL} ]; then
+		mkdir -p ${DIR_DNL}
+	fi
+	
+	git clone "${LINK}" "${DIR_DNL}/${PROJ}"
+	if [ "${REVN}" != "-" ]; then
+		cd "${DIR_DNL}/${PROJ}"
+		git checkout "${REVN}"
+	fi
+
+	cd ${DIR_LIB}
+	diff -rupwbBEN --strip-trailing-cr -x ".svn" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	rm -Rf "${DIR_DNL}/${PROJ}/"							
 
 fi
 

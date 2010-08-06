@@ -166,10 +166,18 @@ else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
+ifeq ($(PLATFORM),windows)
+
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $@
-	yasm -f elf32 -a x86 $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-	
+	yasm -f win32 -a x86 -DPREFIX $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+else
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	- $(CFG_DEL) $@
+	yasm -f elf32 -a x86 $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@	
+endif
+
 # +++ WTF ??? Why doesn't this work ??? $(LOC_ASM_$(LOC_TAG)) is ALWAYS EMPTY!!!
 #	$(LOC_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 	
