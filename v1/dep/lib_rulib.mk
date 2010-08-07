@@ -9,7 +9,7 @@ PRJ_DEPS := rulib
 PRJ_TYPE := lib
 PRJ_INCS := rulib/inc SqPlus/include
 PRJ_LIBS := 
-PRJ_DEFS := 
+PRJ_DEFS := ENABLE_SOCKETS
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
