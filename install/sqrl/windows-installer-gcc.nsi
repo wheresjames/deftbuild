@@ -72,6 +72,8 @@ Section "${APPNAME} (required)"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
   ; Scripts
+  SetOutPath $INSTDIR\scripts
+  SetOverwrite off
   ;File "${OUTROOT}\scripts\irr_bouncing_ball.nut"
   File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
