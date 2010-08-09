@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := cvaux
-PRJ_DEPS := opencv
+PRJ_DEPS := _old_opencv
 PRJ_TYPE := lib
 PRJ_INCS := opencv/include/opencv opencv/src/cv
 PRJ_LIBS := 
