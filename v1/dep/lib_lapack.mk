@@ -4,11 +4,10 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := opencv
+PRJ_NAME := lapack
 PRJ_DEPS := opencv
 PRJ_TYPE := lib
-PRJ_INCS := opencv/include/opencv opencv/src/cv \
-			opencv/3rdparty/include zlib
+PRJ_INCS := opencv/3rdparty/include
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
@@ -28,18 +27,9 @@ else
 # File locations
 #-------------------------------------------------------------------
 
-export LOC_TAG := cxcore
-LOC_SRC_cxcore := $(CFG_LIBROOT)/opencv/src/cxcore
-LOC_EXC_cxcore := cxflann
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := cv
-LOC_SRC_cv := $(CFG_LIBROOT)/opencv/src/cv
-LOC_EXC_cv := 
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := cvaux
-LOC_SRC_cvaux := $(CFG_LIBROOT)/opencv/src/cvaux
+export LOC_TAG := lapack
+LOC_CXX_lapack := c
+LOC_SRC_lapack := $(CFG_LIBROOT)/opencv/3rdparty/lapack
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

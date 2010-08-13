@@ -22,8 +22,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C .. BUILD=vs DBG=1"
-				ReBuildCommandLine="make -C .. BUILDTYPE=rebuild BUILD=vs DBG=1"
+				BuildCommandLine="make -C .. BUILD=vs DBG=1 NODEPS=1"
+				ReBuildCommandLine="make -C .. BUILD=vs DBG=1"
 				CleanCommandLine="make -C .. BUILDTYPE=clean BUILD=vs DBG=1"
 				Output=""
 				PreprocessorDefinitions="WIN32;_DEBUG"
