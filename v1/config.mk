@@ -165,6 +165,9 @@ ifeq ($(BUILD),vs)
 	OS := win32
 	PLATFORM := windows
 
+	PRJ_SYSI := $(PRJ_SYSI) $(DXINC)
+	PRJ_LIBP := $(PRJ_LIBP) $(DXLIB)
+
 	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-i386-local-static
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 	
