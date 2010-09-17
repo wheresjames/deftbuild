@@ -35,17 +35,21 @@ endif
 ifeq ($(LOC_BLD_$(LOC_TAG)),c)
 	BLD_COMPILER := $(CFG_CC)
 else
-	ifeq ($(LOC_BLD_$(LOC_TAG)),as)
-		BLD_COMPILER := $(CFG_AS)
-	else
-		ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
-			ifeq ($(LOC_ASM_$(LOC_TAG)),)
-				BLD_COMPILER := $(CFG_ASM)
-			else
-				BLD_COMPILER := $(LOC_ASM_$(LOC_TAG))
-			endif
+	ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
+		BLD_COMPILER := $(CFG_RC)
+	else	
+		ifeq ($(LOC_BLD_$(LOC_TAG)),as)
+			BLD_COMPILER := $(CFG_AS)
 		else
-			BLD_COMPILER := $(CFG_PP)
+			ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
+				ifeq ($(LOC_ASM_$(LOC_TAG)),)
+					BLD_COMPILER := $(CFG_ASM)
+				else
+					BLD_COMPILER := $(LOC_ASM_$(LOC_TAG))
+				endif
+			else
+				BLD_COMPILER := $(CFG_PP)
+			endif
 		endif
 	endif
 endif
@@ -158,9 +162,19 @@ ifeq ($(BUILD),vs)
 #	echo # makedepend -o.obj $(subst /,\,$(BLD_DEPENDS_INCS)) -p$(BLD_PATH_OBJ_$(LOC_TAG))/ -f$@ $< >> $@
 #	$(CFG_DP) -o.obj $(subst /,\,$(BLD_DEPENDS_INCS)) -f$@ $<
 
+ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	- $(CFG_DEL) $(subst /,\,$@)
+	echo $(CFG_RC) /fo $< $@
+
+else
+
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $(subst /,\,$@)
 	$(BLD_COMPILER) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) $< $(CFG_CC_OUT)$@
+	
+endif
 	
 else
 

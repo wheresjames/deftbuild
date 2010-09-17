@@ -212,6 +212,7 @@ ifeq ($(BUILD),vs)
 	CFG_PP := cl /nologo /DWIN32 /wd4996
 	CFG_LD := link /NOLOGO
 	CFG_CC := cl /nologo /DWIN32 /wd4996
+	CFG_RC := rc
 	CFG_AR := lib /nologo
 
 	CFG_DP := makedepend
@@ -625,6 +626,7 @@ endif
 ifeq ($(PLATFORM),windows)
 
 	CFG_OBJ_EXT  := obj
+	CFG_RES_EXT  := res
 	CFG_DEP_EXT  := d
 	CFG_LIB_PRE	 :=
 	CFG_LIB_POST := .lib

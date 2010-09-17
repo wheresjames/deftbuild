@@ -39,6 +39,12 @@ export LOC_TAG := opc
 LOC_SRC_opc := $(CFG_LIBROOT)/Vp/opc
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := rc
+LOC_CXX_def := rc
+LOC_BLD_def := rc
+LOC_SRC_opc := $(CFG_LIBROOT)/Vp
+include $(PRJ_LIBROOT)/build.mk
+
 #-------------------------------------------------------------------
 # Execute the build
 #-------------------------------------------------------------------
