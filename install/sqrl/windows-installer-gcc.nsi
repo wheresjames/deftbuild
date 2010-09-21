@@ -69,29 +69,50 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
+  ;File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
+  ; Media
+  SetOutPath $INSTDIR\media
+  SetOverwrite off
+  File "${OUTROOT}\media\wall_street.jpg"
+  File "${OUTROOT}\media\nurse_shark.avi"
+  File "${OUTROOT}\media\tennis.jpg"
+  File "${OUTROOT}\media\softball.jpg"
+  File "${OUTROOT}\media\basketball.jpg"
+  File "${OUTROOT}\media\440hz.ogg"  
+  File "${OUTROOT}\media\car.png"  
+
   ; Scripts
   SetOutPath $INSTDIR\scripts
   SetOverwrite off
-  ;File "${OUTROOT}\scripts\irr_bouncing_ball.nut"
+  File "${OUTROOT}\scripts\irr_bouncing_ball.nut"
   File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_ffmpeg.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_freetype2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_http.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_https.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_memshare.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_mysql.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_openssl.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_poco.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_portaudio.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_serial_port.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_sntp_client.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_sntp_server.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sockets.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sockets_server.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sockets_session.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sqlite.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_threads.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_threads_1.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_threads_2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_tinyxml.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_usb.nut"
   File "${LIBROOT}\winglib\etc\scripts\z_primes.nut"
   
   ; Write the installation path into the registry
@@ -141,6 +162,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_poco.dll
   Delete $INSTDIR\modules\sqmod_portaudio.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
+  Delete $INSTDIR\modules\sqmod_usb.dll
   Delete $INSTDIR\modules\sqmod_vmime.dll
 
   ; Remove shortcuts, if any

@@ -105,7 +105,10 @@ Following directory structure is assumed
 //------------------------------------------------------------------
 
 // CURL	
-	sudo apt-get install libldap-dev libidn11-dev libssl-dev
+	sudo apt-get install libldap-dev libidn11-dev libssl-dev 
+	
+// ALSA
+	sudo apt-get install libasound2-dev
 	
 	
 
