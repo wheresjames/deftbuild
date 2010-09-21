@@ -75,18 +75,18 @@ Section "${APPNAME} (required)"
   ; Media
   SetOutPath $INSTDIR\media
   SetOverwrite off
-  File "${OUTROOT}\media\wall_street.jpg"
-  File "${OUTROOT}\media\nurse_shark.avi"
-  File "${OUTROOT}\media\tennis.jpg"
-  File "${OUTROOT}\media\softball.jpg"
-  File "${OUTROOT}\media\basketball.jpg"
-  File "${OUTROOT}\media\440hz.ogg"  
-  File "${OUTROOT}\media\car.png"  
+  File "${LIBROOT}\winglib\etc\media\wall_street.jpg"
+  File "${LIBROOT}\winglib\etc\media\nurse_shark.avi"
+  File "${LIBROOT}\winglib\etc\media\tennis.jpg"
+  File "${LIBROOT}\winglib\etc\media\softball.jpg"
+  File "${LIBROOT}\winglib\etc\media\basketball.jpg"
+  File "${LIBROOT}\winglib\etc\media\440hz.ogg"  
+  File "${LIBROOT}\winglib\etc\media\car.png"  
 
   ; Scripts
   SetOutPath $INSTDIR\scripts
   SetOverwrite off
-  File "${OUTROOT}\scripts\irr_bouncing_ball.nut"
+  File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
