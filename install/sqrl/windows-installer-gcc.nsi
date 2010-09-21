@@ -67,7 +67,8 @@ Section "${APPNAME} (required)"
   ;File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_openssl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
@@ -88,8 +89,8 @@ Section "${APPNAME} (required)"
   ; Scripts
   SetOutPath $INSTDIR\scripts
   SetOverwrite off
-  File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
-  File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
+  ;File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
+  ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_ffmpeg.nut"
@@ -128,7 +129,7 @@ Section "${APPNAME} (required)"
   WriteUninstaller "uninstall.exe"
   
   ; Associate extension
-  ExecShell "open" "${OUTROOT}\sqrl.exe reg_squirrel.nut"
+  ExecShell "open" "$INSTDIR\sqrl.exe reg_squirrel.nut"
   
 SectionEnd
 
