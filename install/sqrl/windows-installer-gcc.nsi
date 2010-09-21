@@ -51,6 +51,8 @@ Section "${APPNAME} (required)"
   File "windows-installer-gcc.nsi"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
+  File "${LIBROOT}\winglib\etc\scripts\reg_squirrel.nut"
+  File "${LIBROOT}\winglib\etc\scripts\unreg_squirrel.nut"
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR\modules
@@ -125,6 +127,9 @@ Section "${APPNAME} (required)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
   
+  ; Associate extension
+  ExecShell "open" "${OUTROOT}\sqrl.exe reg_squirrel.nut"
+  
 SectionEnd
 
 ; Optional section (can be disabled by the user)
@@ -141,6 +146,9 @@ SectionEnd
 
 Section "Uninstall"
   
+  ; Unassociate extension
+  ExecShell "open" "${OUTROOT}\sqrl.exe unreg_squirrel.nut"
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
   DeleteRegKey HKLM SOFTWARE\${APPKEY}
