@@ -21,7 +21,7 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifneq ($(PLATFORM),windows)
-UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid, rulib can only be built on Windows
+UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid, Vp can only be built on Windows
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

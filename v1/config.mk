@@ -293,15 +293,62 @@ else
 			OS := android
 			PLATFORM := posix
 
-			# Google Android
 			CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/arm/bin/arm-none-eabi-
 			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/arm/arm-none-eabi
 
 			CFG_STDLIB := -lc -lstdc++ -lg
 			CFG_LFLAGS := $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT
+			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT -DOEX_NODL
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
+			
+			CFG_NODL := 1
+
+		endif
+		ifeq ($(CFG_TOOLS),android)
+
+			OS := android
+			PLATFORM := posix
+
+			# ./download-toolchain-sources.sh --release=atc --package --verbose
+			# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
+
+			# Google Android
+			CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
+			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm
+
+			CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm/usr/lib
+			CFG_LFLAGS := $(CFG_LEXTRA)
+			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT \
+									    -DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX \
+									    -DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
+			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+			CFG_AFLAGS := cq
+
+			ifeq ($(LIBLINK),static)
+				CFG_NODL := 1
+			endif
+			
+		endif
+		ifeq ($(CFG_TOOLS),crystax)
+
+			OS := android
+			PLATFORM := posix
+
+			CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
+			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/build/platforms/android-8/arch-arm
+
+			CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_TOOLROOT)/$(CFG_TOOLS)/build/platforms/android-8/arch-arm/usr/lib
+			CFG_LFLAGS := $(CFG_LEXTRA)
+			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT \
+									    -DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX \
+									    -DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
+			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+			CFG_AFLAGS := cq
+			
+			ifeq ($(LIBLINK),static)
+				CFG_NODL := 1
+			endif
 
 		endif
 		ifeq ($(CFG_TOOLS),nihilism)
@@ -577,7 +624,9 @@ else
 	# http://www.qnx.com/developers/docs/6.3.2/neutrino/lib_ref/d/dlopen.html
 	ifeq ($(PLATFORM),posix)
 #		ifeq ($(LIBLINK),shared)
+		ifndef CFG_NODL
 			CFG_STDLIB := $(CFG_STDLIB) -ldl
+		endif
 #		endif
 	endif
 
