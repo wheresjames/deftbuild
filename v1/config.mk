@@ -114,6 +114,7 @@ endif
 ifeq ($(strip $(EXISTS_LIBSRC)),) 
 UNSUPPORTED := $(PRJ_DEPS) is not checked out
 include $(PRJ_LIBROOT)/unsupported.mk
+PLATFORM := none
 else
 
 ifeq ($(BUILD),vs)
