@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := curl
 PRJ_DEPS := curl
 PRJ_TYPE := lib
-PRJ_INCS := curl/include curl/include/curl
+PRJ_INCS := curl/include curl/include/curl openssl/include
 PRJ_LIBS := 
 PRJ_DEFS := USE_OPENSSL USE_SSLEAY
 
@@ -28,7 +28,7 @@ ifeq ($(PLATFORM),windows)
 # HAVE_CONFIG_H 
 	PRJ_DEFS := $(PRJ_DEFS) CURL_STATICLIB CURL_DISABLE_LDAP HAVE_SELECT
 	ifeq ($(BUILD),vs)
-		PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99 openssl/include
+		PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
 	endif
 else
 	PRJ_DEFS := $(PRJ_DEFS) OS=\"posix\" HAVE_STRUCT_TIMEVAL HTTP_ONLY HAVE_SYS_TYPES_H \
