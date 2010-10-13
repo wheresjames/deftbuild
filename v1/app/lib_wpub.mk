@@ -40,9 +40,9 @@ LOC_SRC_opc := $(CFG_LIBROOT)/Vp/opc
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := rc
-LOC_CXX_def := rc
-LOC_BLD_def := rc
-LOC_SRC_opc := $(CFG_LIBROOT)/Vp
+LOC_CXX_rc := rc
+LOC_BLD_rc := rc
+LOC_SRC_rc := $(CFG_LIBROOT)/Vp
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

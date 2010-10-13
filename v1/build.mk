@@ -32,23 +32,25 @@ else
 	endif
 endif
 
+BLD_EXT_$(LOC_TAG) := $(CFG_OBJ_EXT)
 ifeq ($(LOC_BLD_$(LOC_TAG)),c)
-	BLD_COMPILER := $(CFG_CC)
+	BLD_COMPILER_$(LOC_TAG) := $(CFG_CC)
 else
 	ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
-		BLD_COMPILER := $(CFG_RC)
+		BLD_COMPILER_$(LOC_TAG) := $(CFG_RC)
+		BLD_EXT_$(LOC_TAG) := $(CFG_RES_EXT)
 	else	
 		ifeq ($(LOC_BLD_$(LOC_TAG)),as)
-			BLD_COMPILER := $(CFG_AS)
+			BLD_COMPILER_$(LOC_TAG) := $(CFG_AS)
 		else
 			ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 				ifeq ($(LOC_ASM_$(LOC_TAG)),)
-					BLD_COMPILER := $(CFG_ASM)
+					BLD_COMPILER_$(LOC_TAG) := $(CFG_ASM)
 				else
-					BLD_COMPILER := $(LOC_ASM_$(LOC_TAG))
+					BLD_COMPILER_$(LOC_TAG) := $(LOC_ASM_$(LOC_TAG))
 				endif
 			else
-				BLD_COMPILER := $(CFG_PP)
+				BLD_COMPILER_$(LOC_TAG) := $(CFG_PP)
 			endif
 		endif
 	endif
@@ -96,7 +98,7 @@ ifneq ($(LOC_EXC_$(LOC_TAG)),)
 	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_EXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
 endif
 
-BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(CFG_OBJ_EXT)) )
+BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
 BLD_INCS			    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 ifneq ($(PRJ_SYSI),)
 	BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)$(inc))
@@ -166,16 +168,16 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $(subst /,\,$@)
-	echo $(CFG_RC) /fo $< $@
+	$(CFG_RC) /fo $@ $<
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $(subst /,\,$@)
-	$(BLD_COMPILER) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) $< $(CFG_CC_OUT)$@
-	
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) $< $(CFG_CC_OUT)$@
+
 endif
-	
+
 else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
@@ -194,7 +196,7 @@ endif
 
 # +++ WTF ??? Why doesn't this work ??? $(LOC_ASM_$(LOC_TAG)) is ALWAYS EMPTY!!!
 #	$(LOC_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-	
+
 else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
@@ -207,7 +209,7 @@ else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	- $(CFG_DEL) $@
-	$(BLD_COMPILER) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(BLD_COMPILER_$(LOC_TAG)) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 endif
 
 endif

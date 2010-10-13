@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="make -C .. BUILD=vs NODEPS=1"
-				ReBuildCommandLine="make -C .. BUILD=vs"
+				ReBuildCommandLine="make -C .. BUILD=vs DOX=1"
 				CleanCommandLine="make -C .. BUILDTYPE=clean BUILD=vs"
 				Output=""
 				PreprocessorDefinitions="WIN32;NDEBUG"
