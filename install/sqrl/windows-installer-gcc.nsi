@@ -139,7 +139,7 @@ Section "${APPVNAME} (required)"
   WriteUninstaller "uninstall.exe"
   
   ; Associate extension
-  ExecShell "open" "$INSTDIR\sqrl.exe" "$INSTDIR\reg_winglib.nut"
+  ExecWait "$INSTDIR\sqrl.exe" "$INSTDIR\reg_winglib.nut"
   
 SectionEnd
 
@@ -158,7 +158,7 @@ SectionEnd
 Section "Uninstall"
   
   ; Unassociate extension
-  ExecShell "open" "$INSTDIR\sqrl.exe" "$INSTDIR\unreg_winglib.nut"
+  ExecWait "$INSTDIR\sqrl.exe" "$INSTDIR\unreg_winglib.nut"
 
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
