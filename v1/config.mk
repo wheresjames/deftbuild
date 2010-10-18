@@ -21,10 +21,18 @@ else
 endif
 
 ifdef FVER
-	CFG_FVER := $(subst .,_,$(FVER))
+	ifneq ($(FVER),)
+		CFG_FVER := $(subst .,_,$(FVER))
+	else
+		CFG_FVER := $(subst .,_,$(VER))
+	endif
 else
 	ifdef PRJ_FVERSION
-		CFG_FVER := $(subst .,_,$(PRJ_FVERSION))
+		ifneq ($(PRJ_FVERSION),)
+			CFG_FVER := $(subst .,_,$(PRJ_FVERSION))
+		else
+			CFG_FVER := $(subst .,_,$(PRJ_VERSION))
+		endif
 	endif
 endif
 
@@ -133,13 +141,15 @@ include $(PRJ_LIBROOT)/unsupported.mk
 PLATFORM := none
 else
 
-ifneq ($(CFG_VER),)
-	CFG_VER_DEF := /DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
-endif
-
 ifeq ($(BUILD),vs)
+	ifneq ($(CFG_VER),)
+		CFG_VER_DEF := /DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
+	endif
 	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 else
+	ifneq ($(CFG_VER),)
+		CFG_VER_DEF := -DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
+	endif
 	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 endif
 
