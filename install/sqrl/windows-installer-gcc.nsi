@@ -1,11 +1,11 @@
-; InstallSquirrelScript.nsi
+; InstallWinglibScriptEngine.nsi
 ;
 
 ;--------------------------------
 
-!define APPNAME "OSV Squirrel Script Engine"
+!define APPNAME "Winglib Script Engine"
 
-!define APPKEY "OSVSquirrelScript"
+!define APPKEY "WinglibScriptEngine"
 
 ; The name of the installer
 
@@ -57,11 +57,10 @@ Section "${APPNAME} (required)"
   
   ; Put file there
   SetOverwrite on
-  File "windows-installer-gcc.nsi"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
-  File "${LIBROOT}\winglib\etc\scripts\reg_squirrel.nut"
-  File "${LIBROOT}\winglib\etc\scripts\unreg_squirrel.nut"
+  File "${LIBROOT}\winglib\etc\scripts\reg_winglib.nut"
+  File "${LIBROOT}\winglib\etc\scripts\unreg_winglib.nut"
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR\modules
@@ -138,7 +137,7 @@ Section "${APPNAME} (required)"
   WriteUninstaller "uninstall.exe"
   
   ; Associate extension
-  ExecShell "open" "$INSTDIR\sqrl.exe reg_squirrel.nut"
+  ExecShell "open" "$INSTDIR\sqrl.exe reg_winglib.nut"
   
 SectionEnd
 
@@ -157,14 +156,13 @@ SectionEnd
 Section "Uninstall"
   
   ; Unassociate extension
-  ExecShell "open" "${OUTROOT}\sqrl.exe unreg_squirrel.nut"
+  ExecShell "open" "${OUTROOT}\sqrl.exe unreg_winglib.nut"
 
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
   DeleteRegKey HKLM SOFTWARE\${APPKEY}
 
   ; Remove files and uninstaller
-  Delete $INSTDIR\InstallSquirrelScript.nsi
   Delete $INSTDIR\uninstall.exe
   
   Delete $INSTDIR\sqrl.exe  

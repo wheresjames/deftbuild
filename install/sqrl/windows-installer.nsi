@@ -51,7 +51,6 @@ Section "Squirrel Script Engine (required)"
   
   ; Put file there
   SetOverwrite on
-  File "windows-installer.nsi"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
   
@@ -105,7 +104,6 @@ Section "Uninstall"
   DeleteRegKey HKLM SOFTWARE\SquirrelScript
 
   ; Remove files and uninstaller
-  Delete $INSTDIR\InstallSquirrelScript.nsi
   Delete $INSTDIR\uninstall.exe
   
   Delete $INSTDIR\sqrl.exe  

@@ -12,27 +12,25 @@ else
 	CFG_DESC := $(PRJ_DESC)
 endif
 
-ifdef VER
+ifneq ($(VER),)
 	CFG_VER := $(VER)
+	ifndef FVER
+		FVER := $(VER)
+	endif
 else
-	ifdef PRJ_VERSION
+	ifneq ($(PRJ_VERSION),)
 		CFG_VER := $(PRJ_VERSION)
+		ifndef PRJ_FVERSION
+			PRJ_FVERSION := $(PRJ_VERSION)
+		endif
 	endif
 endif
 
-ifdef FVER
-	ifneq ($(FVER),)
-		CFG_FVER := $(subst .,_,$(FVER))
-	else
-		CFG_FVER := $(subst .,_,$(VER))
-	endif
+ifneq ($(FVER),)
+	CFG_FVER := $(subst .,_,$(FVER))
 else
-	ifdef PRJ_FVERSION
-		ifneq ($(PRJ_FVERSION),)
-			CFG_FVER := $(subst .,_,$(PRJ_FVERSION))
-		else
-			CFG_FVER := $(subst .,_,$(PRJ_VERSION))
-		endif
+	ifneq ($(PRJ_FVERSION),)
+		CFG_FVER := $(subst .,_,$(PRJ_FVERSION))
 	endif
 endif
 
@@ -142,13 +140,19 @@ PLATFORM := none
 else
 
 ifeq ($(BUILD),vs)
-	ifneq ($(CFG_VER),)
+	ifdef CFG_VER
 		CFG_VER_DEF := /DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
+	endif
+	ifdef CFG_FVER
+		CFG_VER_DEF := $(CFG_VER_DEF) /DOEX_PROJECT_FILEVERSION="\"$(CFG_FVER)\""
 	endif
 	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 else
-	ifneq ($(CFG_VER),)
+	ifdef CFG_VER
 		CFG_VER_DEF := -DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
+	endif
+	ifdef CFG_FVER
+		CFG_VER_DEF := $(CFG_VER_DEF) -DOEX_PROJECT_FILEVERSION="\"$(CFG_FVER)\""
 	endif
 	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 endif
