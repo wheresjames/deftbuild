@@ -5,10 +5,12 @@
 
 ; The name of the installer and output file
 !ifdef DVER
-	Name "Squirrel Script Engine ${DVER}"
+	!define APPNAME "Squirrel Script Engine ${DVER}"
 !else
-	Name "Squirrel Script Engine"
+	!define APPNAME "Squirrel Script Engine"
 !endif
+
+Name "${APPNAME}"
 
 !ifdef FVER
 	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${FVER}.exe"
@@ -42,7 +44,7 @@ UninstPage instfiles
 ;--------------------------------
 
 ; The stuff to install
-Section "${Name} (required)"
+Section "${APPNAME} (required)"
 
   SectionIn RO
   
@@ -77,7 +79,7 @@ Section "${Name} (required)"
   WriteRegStr HKLM SOFTWARE\SquirrelScript "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" ${Name}
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" ${APPNAME}
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoRepair" 1

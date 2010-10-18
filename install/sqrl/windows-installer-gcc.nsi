@@ -11,9 +11,9 @@
 
 ; The file to write
 !ifdef DVER
-	APPVNAME "${APPNAME} ${DVER}"
+	!define APPVNAME "${APPNAME} ${DVER}"
 !else
-	APPVNAME "${APPNAME}"
+	!define APPVNAME "${APPNAME}"
 !endif
 
 Name "${APPVNAME}"
