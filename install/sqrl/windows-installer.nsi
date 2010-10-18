@@ -42,7 +42,7 @@ UninstPage instfiles
 ;--------------------------------
 
 ; The stuff to install
-Section "Squirrel Script Engine (required)"
+Section "${Name} (required)"
 
   SectionIn RO
   
@@ -77,7 +77,7 @@ Section "Squirrel Script Engine (required)"
   WriteRegStr HKLM SOFTWARE\SquirrelScript "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" "Squirrel Script Engine"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" ${Name}
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoRepair" 1

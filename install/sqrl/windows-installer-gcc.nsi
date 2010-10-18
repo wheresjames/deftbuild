@@ -11,10 +11,12 @@
 
 ; The file to write
 !ifdef DVER
-	Name "${APPNAME} ${DVER}"
+	APPVNAME "${APPNAME} ${DVER}"
 !else
-	Name "${APPNAME}"
+	APPVNAME "${APPNAME}"
 !endif
+
+Name "${APPVNAME}"
 
 !ifdef FVER
 	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${FVER}.exe"
@@ -48,7 +50,7 @@ UninstPage instfiles
 ;--------------------------------
 
 ; The stuff to install
-Section "${APPNAME} (required)"
+Section "${APPVNAME} (required)"
 
   SectionIn RO
   
@@ -130,7 +132,7 @@ Section "${APPNAME} (required)"
   WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPNAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPVNAME}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
