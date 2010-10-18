@@ -158,7 +158,7 @@ SectionEnd
 Section "Uninstall"
   
   ; Unassociate extension
-  ExecShell "open" "${OUTROOT}\sqrl.exe unreg_winglib.nut"
+  ExecShell "open" "$INSTDIR\sqrl.exe unreg_winglib.nut"
 
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
