@@ -8,10 +8,19 @@
 !define APPKEY "OSVSquirrelScript"
 
 ; The name of the installer
-Name "${APPNAME}"
 
 ; The file to write
-OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}.exe"
+!ifdef DVER
+	Name "${APPNAME} ${DVER}"
+!else
+	Name "${APPNAME}"
+!endif
+
+!ifdef FVER
+	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${FVER}.exe"
+!else
+	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}.exe"
+!endif
 
 ; The default installation director
 InstallDir "$PROGRAMFILES\${APPNAME}"

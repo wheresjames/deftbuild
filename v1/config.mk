@@ -12,6 +12,22 @@ else
 	CFG_DESC := $(PRJ_DESC)
 endif
 
+ifdef VER
+	CFG_VER := $(VER)
+else
+	ifdef PRJ_VERSION
+		CFG_VER := $(PRJ_VERSION)
+	endif
+endif
+
+ifdef FVER
+	CFG_FVER := $(subst .,_,$(FVER))
+else
+	ifdef PRJ_FVERSION
+		CFG_FVER := $(subst .,_,$(PRJ_FVERSION))
+	endif
+endif
+
 ifdef DIDX
 	CFG_IDX=$(DIDX)
 else
@@ -117,10 +133,14 @@ include $(PRJ_LIBROOT)/unsupported.mk
 PLATFORM := none
 else
 
+ifneq ($(CFG_VER),)
+	CFG_VER_DEF := /DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
+endif
+
 ifeq ($(BUILD),vs)
-	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\""
+	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 else
-	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\""
+	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 endif
 
 ifdef PRJ_SQRL

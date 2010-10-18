@@ -24,11 +24,19 @@ else
 	NSIS_SCRIPT := windows-installer-gcc.nsi
 endif
 
+ifneq ($(CFG_VER),)
+	NSIS_VER_STR := /DDVER="$(CFG_VER)"
+endif
+
+ifneq ($(CFG_FVER),)
+	NSIS_VER_STR := $(NSIS_VER_STR) /DFVER="$(CFG_FVER)"
+endif
+
 ifeq ($(PLATFORM),windows)
 
 all:
 	echo *** Building Squirrel Engine Installer
-	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_SCRIPT)
+	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_SCRIPT)
 
 else
 

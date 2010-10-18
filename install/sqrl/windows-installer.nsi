@@ -3,11 +3,18 @@
 
 ;--------------------------------
 
-; The name of the installer
-Name "Squirrel Script Engine"
+; The name of the installer and output file
+!ifdef DVER
+	Name "Squirrel Script Engine ${DVER}"
+!else
+	Name "Squirrel Script Engine"
+!endif
 
-; The file to write
-OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
+!ifdef FVER
+	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${FVER}.exe"
+!else
+	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
+!endif
 
 ; The default installation directory
 InstallDir "$PROGRAMFILES\Squirrel Script Engine"
