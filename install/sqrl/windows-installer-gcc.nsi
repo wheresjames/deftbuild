@@ -64,6 +64,31 @@ Section "${APPVNAME} (required)"
   File "${LIBROOT}\winglib\etc\scripts\reg_winglib.nut"
   File "${LIBROOT}\winglib\etc\scripts\unreg_winglib.nut"
   
+  ; Write the installation path into the registry
+  WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"
+  
+  ; Write the uninstall keys for Windows
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPVNAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
+  WriteUninstaller "uninstall.exe"
+  
+  ; Associate extension
+  ExecWait '"$INSTDIR\sqrl.exe" "$INSTDIR\reg_winglib.nut"'
+  
+SectionEnd
+
+; Optional section (can be disabled by the user)
+Section "Start Menu Shortcuts"
+
+  CreateDirectory "$SMPROGRAMS\${APPNAME}"
+  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  
+SectionEnd
+
+Section "Squirrel Modules"
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR\modules
   
@@ -74,7 +99,7 @@ Section "${APPVNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
@@ -85,8 +110,13 @@ Section "${APPVNAME} (required)"
   ;File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
+SectionEnd
+
+Section "Media Files"
+
   ; Media
   SetOutPath $INSTDIR\media
+  
   SetOverwrite off
   File "${LIBROOT}\winglib\etc\media\wall_street.jpg"
   File "${LIBROOT}\winglib\etc\media\nurse_shark.avi"
@@ -96,8 +126,13 @@ Section "${APPVNAME} (required)"
   File "${LIBROOT}\winglib\etc\media\440hz.ogg"  
   File "${LIBROOT}\winglib\etc\media\car.png"  
 
+SectionEnd
+
+Section "Example Scripts"
+
   ; Scripts
   SetOutPath $INSTDIR\scripts
+  
   SetOverwrite off
   ;File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
@@ -105,6 +140,7 @@ Section "${APPVNAME} (required)"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_ffmpeg.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_freetype2.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_gdchart.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_http.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_https.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht.nut"
@@ -127,27 +163,6 @@ Section "${APPVNAME} (required)"
   File "${LIBROOT}\winglib\etc\scripts\test_tinyxml.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_usb.nut"
   File "${LIBROOT}\winglib\etc\scripts\z_primes.nut"
-  
-  ; Write the installation path into the registry
-  WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"
-  
-  ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPVNAME}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
-  WriteUninstaller "uninstall.exe"
-  
-  ; Associate extension
-  ExecWait '"$INSTDIR\sqrl.exe" "$INSTDIR\reg_winglib.nut"'
-  
-SectionEnd
-
-; Optional section (can be disabled by the user)
-Section "Start Menu Shortcuts"
-
-  CreateDirectory "$SMPROGRAMS\${APPNAME}"
-  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   
 SectionEnd
 
