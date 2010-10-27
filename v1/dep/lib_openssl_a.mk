@@ -40,7 +40,8 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto
 LOC_CXX_crypto := c
 LOC_SRC_crypto := $(CFG_LIBROOT)/openssl/crypto
-LOC_EXC_crypto := LPdir_nyi LPdir_unix LPdir_vms LPdir_wince LPdir_win32 LPdir_win
+LOC_EXC_crypto := LPdir_nyi LPdir_unix LPdir_vms LPdir_wince LPdir_win32 LPdir_win \
+				  o_dir_test
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_crypto := $(LOC_EXC_crypto) ppccap s390xcap sparcv9cap
 else
@@ -58,7 +59,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_aes
 LOC_CXX_crypto_aes := c
 LOC_SRC_crypto_aes := $(CFG_LIBROOT)/openssl/crypto/aes
-LOC_EXC_crypto_aes :=
+LOC_EXC_crypto_aes := aes_core
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_asn1
@@ -82,7 +83,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_bn
 LOC_CXX_crypto_bn := c
 LOC_SRC_crypto_bn := $(CFG_LIBROOT)/openssl/crypto/bn
-LOC_EXC_crypto_bn := exp
+LOC_EXC_crypto_bn := exp bntest bnspeed divtest expspeed exptest
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_buffer
@@ -130,19 +131,19 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_des
 LOC_CXX_crypto_des := c
 LOC_SRC_crypto_des := $(CFG_LIBROOT)/openssl/crypto/des
-LOC_EXC_crypto_des := des_opts destest read_pwd speed
+LOC_EXC_crypto_des := des des_opts destest ncbc_enc read_pwd speed
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_dh
 LOC_CXX_crypto_dh := c
 LOC_SRC_crypto_dh := $(CFG_LIBROOT)/openssl/crypto/dh
-LOC_EXC_crypto_dh := dhtest
+LOC_EXC_crypto_dh := dhtest p192 p512 p1024
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_dsa
 LOC_CXX_crypto_dsa := c
 LOC_SRC_crypto_dsa := $(CFG_LIBROOT)/openssl/crypto/dsa
-LOC_EXC_crypto_dsa :=
+LOC_EXC_crypto_dsa :=  dsatest dsagen
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_dso
@@ -154,19 +155,19 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_ec
 LOC_CXX_crypto_ec := c
 LOC_SRC_crypto_ec := $(CFG_LIBROOT)/openssl/crypto/ec
-LOC_EXC_crypto_ec :=
+LOC_EXC_crypto_ec := ectest
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_ecdh
 LOC_CXX_crypto_ecdh := c
 LOC_SRC_crypto_ecdh := $(CFG_LIBROOT)/openssl/crypto/ecdh
-LOC_EXC_crypto_ecdh :=
+LOC_EXC_crypto_ecdh := ecdhtest
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_ecdsa
 LOC_CXX_crypto_ecdsa := c
 LOC_SRC_crypto_ecdsa := $(CFG_LIBROOT)/openssl/crypto/ecdsa
-LOC_EXC_crypto_ecdsa :=
+LOC_EXC_crypto_ecdsa := ecdsatest
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

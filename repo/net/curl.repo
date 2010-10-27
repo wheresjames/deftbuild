@@ -1,1 +1,3 @@
-curl cvs - anonymous@cool.haxx.se:/cvsroot/curl curl :pserver:
+curl git - git://github.com/bagder/curl.git
+
+# curl cvs - anonymous@cool.haxx.se:/cvsroot/curl curl :pserver:
