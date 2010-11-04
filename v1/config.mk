@@ -12,6 +12,12 @@ else
 	CFG_DESC := $(PRJ_DESC)
 endif
 
+ifndef PRJ_LNAME
+	CFG_LNAME := $(CFG_DESC)
+else
+	CFG_LNAME := $(PRJ_LNAME)
+endif
+
 ifneq ($(VER),)
 	CFG_VER := $(VER)
 	ifndef FVER
@@ -146,7 +152,7 @@ ifeq ($(BUILD),vs)
 	ifdef CFG_FVER
 		CFG_VER_DEF := $(CFG_VER_DEF) /DOEX_PROJECT_FILEVERSION="\"$(CFG_FVER)\""
 	endif
-	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
+	CFG_DEFS := /DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" /DOEX_PROJECT_LNAME="\"$(CFG_LNAME)\"" /DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 else
 	ifdef CFG_VER
 		CFG_VER_DEF := -DOEX_PROJECT_VERSION="\"$(CFG_VER)\""
@@ -154,14 +160,14 @@ else
 	ifdef CFG_FVER
 		CFG_VER_DEF := $(CFG_VER_DEF) -DOEX_PROJECT_FILEVERSION="\"$(CFG_FVER)\""
 	endif
-	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
+	CFG_DEFS := -DOEX_PROJECT_NAME="\"$(CFG_NAME)\"" -DOEX_PROJECT_LNAME="\"$(CFG_LNAME)\"" -DOEX_PROJECT_DESC="\"$(CFG_DESC)\"" $(CFG_VER_DEF)
 endif
 
 ifdef PRJ_SQRL
 	PRJ_INCS := $(PRJ_INCS) winglib/lib/oexlib winglib/lib/sqbind SqPlus/include SqPlus/sqplus
 	PRJ_LIBS := $(PRJ_LIBS) sqbind oexlib sqplus sqstdlib squirrel cximage jpeg png tiff zlib
 	PRJ_RESD := sq
-	PRJ_SQEX := $(PRJ_SQEX);*.nut
+	PRJ_SQEX := $(PRJ_SQEX);*.nut;*.squ
 	ifeq ($(PRJ_SQRL),service)
 		PRJ_DEFS := $(PRJ_DEFS) OEX_SERVICE
 	endif
