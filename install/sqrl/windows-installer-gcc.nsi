@@ -117,7 +117,7 @@ Section "Media Files"
   ; Media
   SetOutPath $INSTDIR\media
   
-  SetOverwrite off
+  SetOverwrite on
   File "${LIBROOT}\winglib\etc\media\wall_street.jpg"
   File "${LIBROOT}\winglib\etc\media\nurse_shark.avi"
   File "${LIBROOT}\winglib\etc\media\tennis.jpg"
@@ -133,7 +133,7 @@ Section "Example Scripts"
   ; Scripts
   SetOutPath $INSTDIR\scripts
   
-  SetOverwrite off
+  SetOverwrite on
   ;File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
@@ -143,6 +143,8 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_gdchart.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_http.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_https.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_inline.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_inline.squ"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_memshare.nut"
@@ -183,6 +185,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   
   Delete $INSTDIR\sqrl.exe  
+  Delete $INSTDIR\License.txt  
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
