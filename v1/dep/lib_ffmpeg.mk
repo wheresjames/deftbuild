@@ -12,7 +12,7 @@ PRJ_LIBS :=
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 
 # Don't forget to set CONFIG_SHARED to 1 on Linux
-#PRJ_NPIC := 1 
+PRJ_NPIC := 1 
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
