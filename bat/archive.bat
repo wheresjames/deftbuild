@@ -21,9 +21,9 @@ cd "!DIR_LIB!"
 
 REM tar -hczf "!ARCHDIR!\%%a.tgz" "%%a"
 
-tar -hc %%a | bzip2 > "!ARCHDIR!\%%a.bz2"
+tar -hc %%a | bzip2 > "!ARCHDIR!\%%a.tar.bz2"
 
-zip -q -r "!ARCHDIR!\%%a.zip" %%a
+REM zip -q -r "!ARCHDIR!\%%a.zip" %%a
 
 )
 )
