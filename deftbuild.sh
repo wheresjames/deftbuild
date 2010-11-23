@@ -52,7 +52,7 @@ if [ ${CMD} == "dif" ]; then
 	CMD=diff
 fi
 if [ ${CMD} == "mp" ]; then
-CMD=makepatch
+	CMD=makepatch
 fi
 if [ ${CMD} == "ap" ]; then
 	CMD=applypatch
