@@ -19,10 +19,10 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
+	PRJ_INCS := libusb-win32/libusb $(PRJ_INCS)		
 	ifeq ($(BUILD),vs)
 		PRJ_DEFS := ssize_t=unsigned
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs \
-					libusb-win32/libusb $(PRJ_INCS)		
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)		
 	endif
 endif
 
