@@ -98,6 +98,7 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_freenect${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
@@ -107,7 +108,7 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
 SectionEnd
@@ -139,6 +140,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_ffmpeg.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_freenect.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_freetype2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_gdchart.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_http.nut"
@@ -191,6 +193,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
   Delete $INSTDIR\modules\sqmod_fftw.dll
+  Delete $INSTDIR\modules\sqmod_freenect.dll
   Delete $INSTDIR\modules\sqmod_freetype2.dll
   Delete $INSTDIR\modules\sqmod_gdchart.dll
   Delete $INSTDIR\modules\sqmod_irrlicht.dll
