@@ -53,6 +53,11 @@ include $(PRJ_LIBROOT)/config.mk
 #else
 
 ifeq ($(PLATFORM),windows)
+
+	ifeq ($(BUILD),vs)
+		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/WebKit/inc/windows/vs $(PRJ_INCS)
+	endif
+
 	PRJ_DEFS := $(PRJ_DEFS) NDEBUG=1
 
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/WebKit/inc/windows $(CFG_LIB2BLD)/dep/etc/libxml/inc/windows \
