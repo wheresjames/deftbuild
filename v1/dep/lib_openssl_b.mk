@@ -10,7 +10,7 @@ PRJ_TYPE := lib
 PRJ_INCS := openssl openssl/include openssl/crypto \
 			openssl/crypto/asn1 openssl/crypto/evp
 PRJ_LIBS := 
-PRJ_DEFS :=
+PRJ_DEFS := NO_WINDOWS_BRAINDEATH OPENSSL_NO_ENGINE
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -31,11 +31,22 @@ endif
 # File locations
 #-------------------------------------------------------------------
 
-export LOC_TAG := crypto_engine
-LOC_CXX_crypto_engine := c
-LOC_SRC_crypto_engine := $(CFG_LIBROOT)/openssl/crypto/engine
-LOC_EXC_crypto_engine := enginetest
-include $(PRJ_LIBROOT)/build.mk
+#export LOC_TAG := engines
+#LOC_CXX_engines := c
+#LOC_SRC_engines := $(CFG_LIBROOT)/openssl/engines
+#include $(PRJ_LIBROOT)/build.mk
+
+#export LOC_TAG := engines_gost
+#LOC_CXX_engines_gost := c
+#LOC_SRC_engines_gost := $(CFG_LIBROOT)/openssl/engines/ccgost
+#LOC_EXC_engines_gost := gostsum
+#include $(PRJ_LIBROOT)/build.mk
+
+#export LOC_TAG := crypto_engine
+#LOC_CXX_crypto_engine := c
+#LOC_SRC_crypto_engine := $(CFG_LIBROOT)/openssl/crypto/engine
+#LOC_EXC_crypto_engine := enginetest
+#include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_err
 LOC_CXX_crypto_err := c

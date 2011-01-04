@@ -4,14 +4,14 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := poco
+PRJ_NAME := poco_a
 PRJ_DEPS := poco
 PRJ_TYPE := lib
 PRJ_INCS := poco/Foundation/include poco/Net/include \
-			poco/Crypto/include poco/WebWidgets/include \
-			poco/Xml/include poco/Zip/include
+			openssl/include poco/Crypto/include poco/WebWidgets/include \
+			poco/Util/include poco/Xml/include poco/Zip/include
 PRJ_LIBS := 
-PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS
+PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -20,8 +20,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-
 
 ifeq ($(PLATFORM),windows)
 
@@ -47,47 +45,35 @@ endif
 export LOC_TAG := def
 LOC_SRC_def := $(CFG_LIBROOT)/poco/Foundation/src
 LOC_EXC_def := DirectoryIterator_UNIX DirectoryIterator_VMS DirectoryIterator_WIN32 DirectoryIterator_WIN32U \
-			   Environment_UNIX Environment_VMS Environment_WIN32 Environment_WIN32U \
-			   Event_POSIX Event_WIN32 File_UNIX File_VMS File_WIN32 File_WIN32U \
+			   Environment_UNIX Environment_VMS Environment_WIN32 Environment_WIN32U Environment_WINCE \
+			   Event_POSIX Event_WIN32 File_UNIX File_VMS File_WIN32 File_WIN32U File_WINCE \
 			   FileStream_POSIX FileStream_WIN32 \
 			   FPEnvironment_C99 FPEnvironment_DEC FPEnvironment_DUMMY FPEnvironment_SUN FPEnvironment_WIN32 \
-			   LogFile_STD LogFile_VMS LogFile_WIN32 LogFile_WIN32U Mutex_POSIX Mutex_WIN32 \
+			   LogFile_STD LogFile_VMS LogFile_WIN32 LogFile_WIN32U Mutex_POSIX Mutex_WIN32 Mutex_WINCE \
 			   NamedEvent_UNIX NamedEvent_VMS NamedEvent_WIN32 NamedEvent_WIN32U \
 			   NamedMutex_UNIX NamedMutex_VMS NamedMutex_WIN32 NamedMutex_WIN32U \
-			   Path_UNIX Path_VMS Path_WIN32 Path_WIN32U \
+			   Path_UNIX Path_VMS Path_WIN32 Path_WIN32U Path_WINCE \
 			   PipeImpl_DUMMY PipeImpl_POSIX PipeImpl_WIN32 \
-			   Process_UNIX Process_VMS Process_WIN32 Process_WIN32U \
-			   RWLock_POSIX RWLock_WIN32 Semaphore_POSIX Semaphore_WIN32 \
+			   Process_UNIX Process_VMS Process_WIN32 Process_WIN32U Process_WINCE \
+			   RWLock_POSIX RWLock_WIN32 RWLock_WINCE Semaphore_POSIX Semaphore_WIN32 \
 			   SharedLibrary_HPUX SharedLibrary_UNIX SharedLibrary_VMS \
 			   SharedLibrary_WIN32 SharedLibrary_WIN32U \
 			   SharedMemory_DUMMY SharedMemory_POSIX SharedMemory_WIN32 SharedMemory_WIN32U \
-			   Thread_POSIX Thread_WIN32 Thread_WIN32U Timezone_UNIX Timezone_WIN32 \
+			   Thread_POSIX Thread_WIN32 Thread_WIN32U Thread_WINCE Timezone_UNIX Timezone_WIN32 Timezone_WINCE \
 			   OpcomChannel	SyslogChannel
 ifneq ($(PLATFORM),windows)
 	LOC_EXC_def := $(LOC_EXC_def) EventLogChannel WindowsConsoleChannel
 endif
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := def_c
+LOC_CXX_def_c := c
+LOC_SRC_def_c := $(CFG_LIBROOT)/poco/Foundation/src
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := net
 LOC_SRC_net := $(CFG_LIBROOT)/poco/Net/src
 include $(PRJ_LIBROOT)/build.mk
-
-#export LOC_TAG := ssl
-#LOC_INC_ssl := $(CFG_LIBROOT)/poco/NetSSL_OpenSSL/include
-#LOC_SRC_ssl := $(CFG_LIBROOT)/poco/NetSSL_OpenSSL/src
-#include $(PRJ_LIBROOT)/build.mk
-
-#export LOC_TAG := web
-#LOC_SRC_web := $(CFG_LIBROOT)/poco/WebWidgets/src
-#include $(PRJ_LIBROOT)/build.mk
-
-#export LOC_TAG := xml
-#LOC_SRC_xml := $(CFG_LIBROOT)/poco/Xml/src
-#include $(PRJ_LIBROOT)/build.mk
-
-#export LOC_TAG := zip
-#LOC_SRC_zip := $(CFG_LIBROOT)/poco/Zip/src
-#include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
 # Execute the build
