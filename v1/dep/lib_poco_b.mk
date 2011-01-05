@@ -7,9 +7,9 @@ default_target: all
 PRJ_NAME := poco_b
 PRJ_DEPS := poco
 PRJ_TYPE := lib
-PRJ_INCS := poco/Foundation/include poco/Net/include \
+PRJ_INCS := poco/Foundation/include poco/Net/include zlib \
 			openssl/include poco/NetSSL_OpenSSL/include poco/Crypto/include \
-			poco/WebWidgets/include poco/Util/include poco/Xml/include poco/Zip/include
+			poco/WebWidgets/include poco/Util/include poco/XML/include poco/Zip/include
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE
 
@@ -33,12 +33,6 @@ ifeq ($(PLATFORM),windows)
 	endif
 endif
 
-#ifeq ($(PLATFORM),windows)
-#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
-#else
-#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/posix $(PRJ_INCS)
-#endif
-
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
@@ -54,6 +48,9 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := util
 LOC_SRC_util := $(CFG_LIBROOT)/poco/Util/src
+ifneq ($(PLATFORM),windows)
+	LOC_EXC_util := WinRegistryConfiguration WinRegistryKey WinService
+endif
 include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := web
@@ -61,12 +58,12 @@ include $(PRJ_LIBROOT)/build.mk
 #include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := xml
-LOC_SRC_xml := $(CFG_LIBROOT)/poco/Xml/src
+LOC_SRC_xml := $(CFG_LIBROOT)/poco/XML/src
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := xml_c
 LOC_CXX_xml_c := c
-LOC_SRC_xml_c := $(CFG_LIBROOT)/poco/Xml/src
+LOC_SRC_xml_c := $(CFG_LIBROOT)/poco/XML/src
 include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := zip

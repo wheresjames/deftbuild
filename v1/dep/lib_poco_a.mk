@@ -7,9 +7,9 @@ default_target: all
 PRJ_NAME := poco_a
 PRJ_DEPS := poco
 PRJ_TYPE := lib
-PRJ_INCS := poco/Foundation/include poco/Net/include \
+PRJ_INCS := poco/Foundation/include poco/Net/include zlib \
 			openssl/include poco/Crypto/include poco/WebWidgets/include \
-			poco/Util/include poco/Xml/include poco/Zip/include
+			poco/Util/include poco/XML/include poco/Zip/include
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE
 
@@ -32,12 +32,6 @@ ifeq ($(PLATFORM),windows)
 		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
 	endif
 endif
-
-#ifeq ($(PLATFORM),windows)
-#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
-#else
-#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/posix $(PRJ_INCS)
-#endif
 
 #-------------------------------------------------------------------
 # File locations
@@ -69,6 +63,9 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := def_c
 LOC_CXX_def_c := c
 LOC_SRC_def_c := $(CFG_LIBROOT)/poco/Foundation/src
+LOC_EXC_def_c := adler32 compress crc32 deflate gzio \
+			 	 infback inffast inffixed inflate inftrees \
+			   	 trees ucp zutil
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := net
