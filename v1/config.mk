@@ -201,6 +201,14 @@ ifdef NOIMAGE
 	CFG_CEXTRA := $(CFG_CEXTRA) -DOEX_NOIMAGE
 endif
 
+ifneq ($(CXX_INCS),)
+	PRJ_SYSI := $(PRJ_SYSI) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_INCS))))
+endif
+
+ifneq ($(CXX_LIBP),)
+	PRJ_LIBP := $(PRJ_LIBP) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_LIBP))))
+endif
+
 ifeq ($(BUILD),vs)
 
 	OS := win32
