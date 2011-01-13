@@ -9,11 +9,6 @@ PRJ_DEPS := mimetic
 PRJ_TYPE := lib
 PRJ_INCS := mimetic
 PRJ_LIBS := 
-ifeq ($(PLATFORM),windows)
-	PRJ_DEFS := uint32_t=unsigned
-else
-	PRJ_DEFS :=
-endif
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -24,6 +19,7 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
+	PRJ_DEFS := uint32_t=unsigned
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/windows $(PRJ_INCS)
 else
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mimetic/inc/posix $(PRJ_INCS)
