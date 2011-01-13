@@ -26,7 +26,9 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/windows $(CFG_LIB2BLD)/dep/etc/gnutls/inc/windows $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/windows \
+				$(CFG_LIB2BLD)/dep/etc/gnutls/inc/windows \
+				$(PRJ_INCS)
 else
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/posix $(CFG_LIB2BLD)/dep/etc/gnutls/inc/posix $(PRJ_INCS)
 endif
@@ -87,13 +89,21 @@ include $(PRJ_LIBROOT)/build.mk
 #include $(PRJ_LIBROOT)/build.mk
 
 ifeq ($(PLATFORM),windows)
+	
 	export LOC_TAG := platform_windows
 	LOC_SRC_platform_windows := $(CFG_LIBROOT)/vmime/vmime/src/platforms/windows
 	include $(PRJ_LIBROOT)/build.mk
+	
+	export LOC_TAG := win
+	LOC_SRC_win := etc/vmime/src/windows
+	include $(PRJ_LIBROOT)/build.mk
+	
 else
+
 	export LOC_TAG := platform_posix
 	LOC_SRC_platform_posix := $(CFG_LIBROOT)/vmime/vmime/src/platforms/posix
 	include $(PRJ_LIBROOT)/build.mk
+	
 endif
 
 export LOC_TAG := security
