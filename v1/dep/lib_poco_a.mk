@@ -11,7 +11,7 @@ PRJ_INCS := poco/Foundation/include poco/Net/include zlib \
 			openssl/include poco/Crypto/include poco/WebWidgets/include \
 			poco/Util/include poco/XML/include poco/Zip/include
 PRJ_LIBS := 
-PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE
+PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE OPENSSL_NOWINSOCK2
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
