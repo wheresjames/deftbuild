@@ -74,9 +74,11 @@ BUILD	 := gcc
 
 #OS		 := linux
 #OS		 := win32
+#OS		 := win64
 #OS		 := wince
 
 PROC	 := i386
+#PROC	 := x64
 #PROC	 := arm
 
 TOOLS	 := local
@@ -211,7 +213,11 @@ endif
 
 ifeq ($(BUILD),vs)
 
-	OS := win32
+	ifeq ($(PROC),x64)
+		OS := win64
+	else
+		OS := win32
+	endif
 	PLATFORM := windows
 
 	PRJ_SYSI := $(PRJ_SYSI) $(DXINC)
@@ -258,11 +264,19 @@ ifeq ($(BUILD),vs)
 	endif
 
 	# Tools
-	CFG_PP := cl /nologo /DWIN32 /wd4996
-	CFG_LD := link /NOLOGO
-	CFG_CC := cl /nologo /DWIN32 /wd4996
-	CFG_RC := rc
-	CFG_AR := lib /nologo
+	ifeq ($(PROC),x64)
+		CFG_PP := cl /nologo /DWIN64 /wd4996
+		CFG_LD := link /NOLOGO
+		CFG_CC := cl /nologo /DWIN64 /wd4996
+		CFG_RC := rc
+		CFG_AR := lib /nologo
+	else
+		CFG_PP := cl /nologo /DWIN32 /wd4996
+		CFG_LD := link /NOLOGO
+		CFG_CC := cl /nologo /DWIN32 /wd4996
+		CFG_RC := rc
+		CFG_AR := lib /nologo
+	endif
 
 	CFG_DP := makedepend
 	CFG_RM := rmdir /s /q
