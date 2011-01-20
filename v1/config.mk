@@ -627,6 +627,24 @@ else
 			CFG_AFLAGS := cq
 
 		endif
+		ifeq ($(CFG_TOOLS),mingw64)
+
+			OS := win64
+			PLATFORM := windows
+
+			# Cross compile for windows
+			CFG_TOOLPREFIX := amd64-mingw32msvc-
+			# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
+			# --whole-archive -rdynamic
+
+			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
+			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
+			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
+										-DOEX_NODSHOW -DOEX_NOVFW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT
+			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+			CFG_AFLAGS := cq
+
+		endif
 		ifeq ($(CFG_TOOLS),mac)
 
 			OS := apple
