@@ -44,7 +44,7 @@ endif
 # File locations
 #-------------------------------------------------------------------
 
-ifeq ($(OS),win32)
+ifeq ($(PLATFORM),windows)
 CFG_CFLAGS := $(CFG_CFLAGS) /DIRRLICHT_EXPORTS
 endif
 

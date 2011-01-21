@@ -206,22 +206,29 @@ endif
 ifneq ($(CXX_INCS),)
 	PRJ_SYSI := $(PRJ_SYSI) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_INCS))))
 endif
-
 ifneq ($(CXX_LIBP),)
 	PRJ_LIBP := $(PRJ_LIBP) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_LIBP))))
 endif
 
+ifneq ($(CXX_INCS_$(PROC)),)
+	PRJ_SYSI := $(PRJ_SYSI) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_INCS_$(PROC)))))
+endif
+ifneq ($(CXX_LIBP_$(PROC)),)
+	PRJ_LIBP := $(PRJ_LIBP) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_LIBP_$(PROC)))))
+endif
+
 ifeq ($(BUILD),vs)
 
-	ifeq ($(PROC),x64)
+	ifeq ($(PROC),amd64)
 		OS := win64
 	else
-		OS := win32
+		ifeq ($(PROC),ia64)
+			OS := win64
+		else
+			OS := win32
+		endif
 	endif
 	PLATFORM := windows
-
-	PRJ_SYSI := $(PRJ_SYSI) $(DXINC)
-	PRJ_LIBP := $(PRJ_LIBP) $(DXLIB)
 
 	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-i386-local-static
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
@@ -263,11 +270,11 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
-	# Tools
-	ifeq ($(PROC),x64)
-		CFG_PP := cl /nologo /DWIN64 /wd4996
+	# Tools	
+	ifeq ($(OS),win64)
+		CFG_PP := cl /nologo /DWIN64 /D_M_AMD64 /wd4996
 		CFG_LD := link /NOLOGO
-		CFG_CC := cl /nologo /DWIN64 /wd4996
+		CFG_CC := cl /nologo /DWIN64 /D_M_AMD64 /wd4996
 		CFG_RC := rc
 		CFG_AR := lib /nologo
 	else
@@ -630,6 +637,7 @@ else
 		ifeq ($(CFG_TOOLS),mingw64)
 
 			OS := win64
+			PROC := amd64
 			PLATFORM := windows
 
 			# Cross compile for windows
@@ -762,6 +770,36 @@ ifeq ($(PLATFORM),windows)
 	CFG_LIB_POST := .lib
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
+	
+	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
+	ifneq ($(strip $(EXISTS_MSPSDK)),)
+		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
+		PRJ_SYSI := $(PRJ_SYSI) $(CFG_MSPSDK)/Include CFG_MSPSDK/Samples/Multimedia/DirectShow/BaseClasses
+		ifeq ($(PROC),amd64)
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/AMD64
+		else
+			ifeq ($(PROC),ia64)
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
+			else
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
+			endif
+		endif
+	endif
+
+	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
+	ifneq ($(strip $(EXISTS_DXSDK)),)
+		CFG_DXSDK := $(CFG_LIBROOT)/msdxsdk
+		PRJ_SYSI := $(PRJ_SYSI) $(CFG_DXSDK)/Include
+		ifeq ($(PROC),amd64)
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
+		else
+			ifeq ($(PROC),ia64)
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
+			else
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x86
+			endif
+		endif
+	endif
 
 else
 

@@ -21,7 +21,7 @@ include $(PRJ_LIBROOT)/config.mk
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
-ifeq ($(OS),win32)
+ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) LIBJ2K_EXPORTS
 endif
 

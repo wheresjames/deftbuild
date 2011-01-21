@@ -30,7 +30,7 @@ else
 	PRJ_DEFS := $(PRJ_DEFS) _IRR_USE_LINUX_DEVICE_ 
 endif
 
-ifeq ($(OS),win32)
+ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) IRRLICHT_EXPORTS
 endif
 
