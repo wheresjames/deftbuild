@@ -31,21 +31,16 @@ ifdef PRJ_SQRL
 	endif
 endif
 
-#ifndef PRJ_OSLB
-PRJ_OSLB :=	$(CFG_STDLIBS) $(PRJ_OSLB)
-#endif
-ifdef PRJ_ADDF
-	GO_ADD := $(foreach f,$(PRJ_ADDF),$(CFG_LIBROOT)/$(f))
-endif
-
 ifdef PRJ_EXSY
 	GO_ADD := $(GO_ADD) -Wl,--exclude-symbols$(foreach s,$(PRJ_EXSY),,$(s))
 endif
 
 ifeq ($(BUILD),vs)
 
-GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
-GO_LIBS := $(PRJ_PLIB) $(GO_LIBS) $(PRJ_OSLB)
+	GO_LIBS := $(GO_LIBS) $(CFG_STDLIBS)
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), $(lib)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINL), $(lib)$(CFG_LIB_POST))
 	
 	ifneq ($(PRJ_LIBP),)
 		GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),/LIBPATH:$(lib))
@@ -58,10 +53,9 @@ GO_LIBS := $(PRJ_PLIB) $(GO_LIBS) $(PRJ_OSLB)
 else
 	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_LIBS),-l$(lib)$(CFG_DPOSTFIX))
 	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), -l$(lib))
+	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_POSL), -l$(lib))
 	ifneq ($(PRJ_LIBP),)
-#		GO_LIBPATHS	:= $(GO_LIBPATHS) -L$(CFG_LIBROOT)
 		GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),-L$(lib))
-#		GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_LIBP),-l$(lib))
 	endif
 	GO_LIBPATHS := $(GO_LIBPATHS) -L$(CFG_BINROOT)
 	ifneq ($(CFG_BINROOT),$(CFG_OUTROOT))

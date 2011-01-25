@@ -821,7 +821,7 @@ else
 	CFG_LIB_POST := .a
 	CFG_DLL_PRE	 := lib
 	CFG_DLL_POST := .so
-
+	
 endif
 
 CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(TOOLS)
