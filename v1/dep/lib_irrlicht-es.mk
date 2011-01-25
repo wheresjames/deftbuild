@@ -20,7 +20,7 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(PROC),i386)
+ifneq ($(PROC),arm)
 UNSUPPORTED := PROC=$(PROC) not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else

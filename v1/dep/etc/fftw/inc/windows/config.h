@@ -251,7 +251,11 @@
 #undef HAVE_TIME_BASE_TO_TIME
 
 /* Define to 1 if the system has the type `uintptr_t'. */
-#undef HAVE_UINTPTR_T
+#if defined( WIN64 )
+#	define HAVE_UINTPTR_T 1
+#else
+#	undef HAVE_UINTPTR_T
+#endif
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H

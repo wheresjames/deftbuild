@@ -13,9 +13,9 @@
 Name "${APPNAME}"
 
 !ifdef FVER
-	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${FVER}.exe"
+	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${FVER}_${PROC}.exe"
 !else
-	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
+	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${PROC}.exe"
 !endif
 
 ; The default installation directory

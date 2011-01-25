@@ -77,7 +77,7 @@ BUILD	 := gcc
 #OS		 := win64
 #OS		 := wince
 
-PROC	 := i386
+PROC	 := x86
 #PROC	 := x64
 #PROC	 := arm
 
@@ -167,7 +167,7 @@ endif
 
 ifdef PRJ_SQRL
 	PRJ_INCS := $(PRJ_INCS) winglib/lib/oexlib winglib/lib/sqbind SqPlus/include SqPlus/sqplus
-	PRJ_LIBS := $(PRJ_LIBS) sqbind oexlib sqplus sqstdlib squirrel cximage jpeg png tiff zlib
+	PRJ_LIBS := $(PRJ_LIBS) sqbind oexlib dshowbase sqplus sqstdlib squirrel cximage jpeg png tiff zlib
 	PRJ_RESD := sq
 	PRJ_SQEX := $(PRJ_SQEX);*.nut;*.squ
 	ifeq ($(PRJ_SQRL),service)
@@ -219,18 +219,22 @@ endif
 
 ifeq ($(BUILD),vs)
 
-	ifeq ($(PROC),amd64)
+	ifeq ($(PROC),x64)
 		OS := win64
 	else
-		ifeq ($(PROC),ia64)
+		ifeq ($(PROC),amd64)
 			OS := win64
 		else
-			OS := win32
+			ifeq ($(PROC),ia64)
+				OS := win64
+			else
+				OS := win32
+			endif
 		endif
 	endif
 	PLATFORM := windows
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-i386-local-static
+	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 	
 	ifdef PRJ_SQEX
@@ -272,9 +276,9 @@ ifeq ($(BUILD),vs)
 
 	# Tools	
 	ifeq ($(OS),win64)
-		CFG_PP := cl /nologo /DWIN64 /D_M_AMD64 /wd4996
+		CFG_PP := cl /nologo /DWIN64 /wd4996
 		CFG_LD := link /NOLOGO
-		CFG_CC := cl /nologo /DWIN64 /D_M_AMD64 /wd4996
+		CFG_CC := cl /nologo /DWIN64 /wd4996 /Tc
 		CFG_RC := rc
 		CFG_AR := lib /nologo
 	else
@@ -319,7 +323,7 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/posix-gcc-linux-i386-local-shared
+	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/posix-gcc-linux-x86-local-shared
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
 	ifdef PRJ_SQEX
@@ -774,14 +778,18 @@ ifeq ($(PLATFORM),windows)
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-		PRJ_SYSI := $(PRJ_SYSI) $(CFG_MSPSDK)/Include CFG_MSPSDK/Samples/Multimedia/DirectShow/BaseClasses
-		ifeq ($(PROC),amd64)
-			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/AMD64
+		PRJ_SYSI := $(PRJ_SYSI) $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include
+		ifeq ($(PROC),x64)
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/x64
 		else
-			ifeq ($(PROC),ia64)
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
+			ifeq ($(PROC),amd64)
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/x64
 			else
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
+				ifeq ($(PROC),ia64)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
+				else
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
+				endif
 			endif
 		endif
 	endif
@@ -790,13 +798,17 @@ ifeq ($(PLATFORM),windows)
 	ifneq ($(strip $(EXISTS_DXSDK)),)
 		CFG_DXSDK := $(CFG_LIBROOT)/msdxsdk
 		PRJ_SYSI := $(PRJ_SYSI) $(CFG_DXSDK)/Include
-		ifeq ($(PROC),amd64)
+		ifeq ($(PROC),x64)
 			PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
 		else
-			ifeq ($(PROC),ia64)
+			ifeq ($(PROC),amd64)
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
 			else
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x86
+				ifeq ($(PROC),ia64)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
+				else
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x86
+				endif
 			endif
 		endif
 	endif
@@ -843,7 +855,7 @@ endif
 
 CFG_INCS := $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 
-#ifneq ($(PROC),i386)
+#ifneq ($(PROC),x86)
 	CFG_TOOL_RESCMP  := $(CFG_LOCAL_TOOL_RESCMP)
 	CFG_TOOL_JOIN  := $(CFG_LOCAL_TOOL_JOIN)
 #else

@@ -4,12 +4,12 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := abel
-PRJ_DEPS := abel
+PRJ_NAME := dshowbase
+PRJ_DEPS := msdxsdk
 PRJ_TYPE := lib
 PRJ_INCS := 
-PRJ_LIBS := 
-PRJ_DEFS :=
+PRJ_LIBS :=
+
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
 
@@ -18,27 +18,16 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(PROC),x86)
-UNSUPPORTED := PROC=$(PROC) is not supported
-include $(PRJ_LIBROOT)/unsupported.mk
-else
-
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
 export LOC_TAG := def
-LOC_CXX_def := c
-LOC_BLD_def := cpp
-LOC_INC_def := $(CFG_LIBROOT)/abel/lib
-LOC_SRC_def := $(CFG_LIBROOT)/abel/lib
-LOC_EXC_def := serial
+LOC_SRC_def := $(CFG_LIBROOT)/mspsdk/Samples/multimedia/directshow/baseclasses
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 

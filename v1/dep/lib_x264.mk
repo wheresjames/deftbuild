@@ -53,13 +53,13 @@ export LOC_TAG := common_asm
 LOC_CXX_common_asm := asm
 LOC_BLD_common_asm := asm
 ifeq ($(PLATFORM),windows)
-	ifeq($(PROC),x64)
+	ifeq ($(PROC),x64)
 		LOC_ASM_common_asm := yasm -f win64 -a amd64 -DPREFIX
 	else
 		LOC_ASM_common_asm := yasm -f win32 -a x86 -DPREFIX
 	endif
 else
-	ifeq($(PROC),x64)
+	ifeq ($(PROC),x64)
 		LOC_ASM_common_asm := yasm -f elf64 -a amd64
 	else
 		LOC_ASM_common_asm := yasm -f elf32 -a x86
