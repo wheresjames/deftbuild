@@ -39,28 +39,37 @@ ifeq ($(BUILD),vs)
 
 	GO_LIBS := $(GO_LIBS) $(CFG_STDLIBS)
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
-	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), $(lib)$(CFG_LIB_POST))
-	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINL), $(lib)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_PLIB), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), $(CFG_LIB_PRE)$(lib)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINL), $(CFG_LIB_PRE)$(lib)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINX), $(lib))
 	
-	ifneq ($(PRJ_LIBP),)
-		GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),/LIBPATH:$(lib))
-	endif
+	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_WLBP),/LIBPATH:$(lib))
+	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),/LIBPATH:$(lib))
 	GO_LIBPATHS := $(GO_LIBPATHS) /LIBPATH:$(CFG_BINROOT)
 	ifneq ($(CFG_BINROOT),$(CFG_OUTROOT))
 		GO_LIBPATHS := $(GO_LIBPATHS) /LIBPATH:$(CFG_OUTROOT)
 	endif
 	GO_EXPORTS 	:= $(foreach exp,$(PRJ_EXPORTS), $(CFG_FLAG_EXPORT)$(exp))
+	
 else
-	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_LIBS),-l$(lib)$(CFG_DPOSTFIX))
-	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), -l$(lib))
-	GO_LIBS	 	:= $(GO_LIBS) $(foreach lib,$(PRJ_POSL), -l$(lib))
-	ifneq ($(PRJ_LIBP),)
-		GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),-L$(lib))
+
+	GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), -l$(lib)$(CFG_DPOSTFIX))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_PLIB), -l$(lib)$(CFG_DPOSTFIX))
+	GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), -l$(lib))
+	ifeq ($(PLATFORM),windows)
+		GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_WINL), -l$(lib))
+	else
+		GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_POSL), -l$(lib))
 	endif
+	
+	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_PLBP),-L$(lib))
+	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),-L$(lib))
 	GO_LIBPATHS := $(GO_LIBPATHS) -L$(CFG_BINROOT)
 	ifneq ($(CFG_BINROOT),$(CFG_OUTROOT))
 		GO_LIBPATHS := $(GO_LIBPATHS) -L$(CFG_OUTROOT)
 	endif
+	
 endif
 
 ifeq ($(PRJ_TYPE),lib)
