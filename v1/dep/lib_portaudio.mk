@@ -9,7 +9,7 @@ PRJ_DEPS := portaudio
 PRJ_TYPE := lib
 PRJ_INCS := portaudio/include portaudio/src/common
 PRJ_LIBS := 
-PRJ_DEFS :=
+PRJ_DEFS := TIME_KILL_SYNCHRONOUS=0x0100
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

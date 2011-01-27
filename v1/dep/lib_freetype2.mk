@@ -23,7 +23,8 @@ include $(PRJ_LIBROOT)/config.mk
 # File locations
 #-------------------------------------------------------------------
 export LOC_TAG := autofit
-LOC_CXX_autofit := c
+LOC_CXX_autofit := c		 
+LOC_BLD_autofit := cpp
 LOC_SRC_autofit := $(CFG_LIBROOT)/freetype2/src/autofit
 LOC_LST_autofit := autofit
 include $(PRJ_LIBROOT)/build.mk

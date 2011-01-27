@@ -182,15 +182,6 @@ ifdef SQMOD_STATIC
 	PRJ_DEFS := $(PRJ_DEFS) SQBIND_STATIC $(foreach mod,$(SQMOD_STATIC),SQBIND_STATIC_$(mod) )
 endif
 
-ifdef PRJ_DEFS
-	ifeq ($(BUILD),vs)
-		CFG_DEFS := $(CFG_DEFS) $(foreach def,$(PRJ_DEFS),/D$(def) )
-	else
-		CFG_DEFS := $(CFG_DEFS) $(foreach def,$(PRJ_DEFS),-D$(def) )
-	endif
-	PRJ_DEFS :=
-endif
-
 ifndef PRJ_OPTS
 	PRJ_OPTS := -O3
 endif
@@ -775,6 +766,8 @@ ifeq ($(PLATFORM),windows)
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
 	
+	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501
+		
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
@@ -822,6 +815,15 @@ else
 	CFG_DLL_PRE	 := lib
 	CFG_DLL_POST := .so
 	
+endif
+
+ifdef PRJ_DEFS
+	ifeq ($(BUILD),vs)
+		CFG_DEFS := $(CFG_DEFS) $(foreach def,$(PRJ_DEFS),/D$(def) )
+	else
+		CFG_DEFS := $(CFG_DEFS) $(foreach def,$(PRJ_DEFS),-D$(def) )
+	endif
+	PRJ_DEFS :=
 endif
 
 CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(TOOLS)
