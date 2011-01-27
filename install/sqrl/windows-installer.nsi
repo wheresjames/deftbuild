@@ -120,8 +120,10 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_irrlicht.dll
   Delete $INSTDIR\modules\sqmod_live555.dll
   Delete $INSTDIR\modules\sqmod_mysql.dll
+  Delete $INSTDIR\modules\sqmod_openssl.dll
   Delete $INSTDIR\modules\sqmod_poco.dll
   Delete $INSTDIR\modules\sqmod_portaudio.dll
+  Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
   Delete $INSTDIR\modules\sqmod_vmime.dll
 
