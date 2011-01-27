@@ -766,7 +766,8 @@ ifeq ($(PLATFORM),windows)
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
 	
-	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501
+	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501 _WIN32_WINNT=0x0501
+	#PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
 		
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
