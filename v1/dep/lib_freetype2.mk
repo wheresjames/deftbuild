@@ -7,9 +7,9 @@ default_target: all
 PRJ_NAME := freetype2
 PRJ_DEPS := freetype2
 PRJ_TYPE := lib
-PRJ_INCS := freetype2/include
+PRJ_INCS := freetype2/include zlib
 PRJ_LIBS := 
-PRJ_DEFS := FT2_BUILD_LIBRARY NO_ERRNO_H
+PRJ_DEFS := FT2_BUILD_LIBRARY NO_ERRNO_H FT_CONFIG_OPTION_SYSTEM_ZLIB
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

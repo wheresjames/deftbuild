@@ -19,10 +19,8 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(TOOLS),iphone)
-all:
-	@echo =======================================================
-	@echo = !!! $(TOOLS) not supported
-	@echo =======================================================
+UNSUPPORTED := TOOLS=$(TOOLS) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 #-------------------------------------------------------------------

@@ -17,10 +17,10 @@ include $(PRJ_LIBROOT)/config.mk
 # Build
 #-------------------------------------------------------------------
 ifeq ($(BUILD),vs)
-	NSIS_PATH := "C:\Program Files\NSIS\makensis"
+	NSIS_PATH := $(CFG_LIBROOT)/nsis/makensis.exe
 	NSIS_SCRIPT := windows-installer.nsi
 else
-	NSIS_PATH := wine "${NSISROOT}makensis.exe"
+	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
 	NSIS_SCRIPT := windows-installer-gcc.nsi
 endif
 

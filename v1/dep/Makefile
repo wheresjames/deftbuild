@@ -1,14 +1,21 @@
 
-#SHELL=cmd.exe
-
 # Total dependencies
 
-makefiles   = $(wildcard *.mk)
+makefiles = $(wildcard *.mk)
 
 .PHONY all: $(makefiles)
 .PHONY rebuild: $(makefiles)
 .PHONY clean: $(makefiles)
 
-.PHONY $(makefiles) :
-	$(MAKE) -j2 -f $@ $(BUILDTYPE)
+ifeq ($(NOMULTI),)
+ifeq ($(NUMJOBS),)
+ifdef NUMBER_OF_PROCESSORS
+NUMJOBS := -j$(NUMBER_OF_PROCESSORS)
+else
+NUMJOBS := -j2
+endif
+endif
+endif
 
+.PHONY $(makefiles) :
+	$(MAKE) $(NUMJOBS) -f $@ $(BUILDTYPE)

@@ -5,9 +5,9 @@ ifeq ($(ABORT_UNSUPPORTED),)
 ABORT_UNSUPPORTED := 1
 
 unsupported:
-	@echo =======================================================
-	@echo = !!! $(PRJ_NAME) - $(UNSUPPORTED)
-	@echo =======================================================
+	@echo .=======================================================
+	@echo .= !!! $(PRJ_NAME) - $(UNSUPPORTED)
+	@echo .=======================================================
 	$(warning $(UNSUPPORTED) )
 	exit 0
 

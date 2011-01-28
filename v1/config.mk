@@ -1,6 +1,6 @@
 
-SHELL=/bin/sh
-#SHELL=cmd.exe
+#SHELL=/bin/sh
+#SHELL=CMD.EXE
 
 # config.mk
 # Cross compiler config
@@ -135,6 +135,14 @@ else
 	CFG_LIB2BLD  := ../deftbuild/v1
 endif
 
+# Set tools into path
+ifeq ($(BUILD),vs)
+	EXISTS_MSTOOLS := $(wildcard $(CFG_LIBROOT)/mstools)
+	ifneq ($(strip $(EXISTS_MSTOOLS)),)
+		PATH := $(CFG_LIBROOT)/mstools/bin;$(CFG_LIBROOT)/mstools;$(PATH)
+	endif
+endif
+
 ifneq ($(strip $(PRJ_DEPS)),)
 	EXISTS_LIBSRC := $(wildcard $(CFG_LIBROOT)/$(PRJ_DEPS))
 else
@@ -265,20 +273,51 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
-	# Tools	
-	ifeq ($(OS),win64)
-		CFG_PP := cl /nologo /DWIN64 /wd4996
-		CFG_LD := link /NOLOGO
-		CFG_CC := cl /nologo /DWIN64 /wd4996 /Tc
-		CFG_RC := rc
-		CFG_AR := lib /nologo
-	else
-		CFG_PP := cl /nologo /DWIN32 /wd4996
-		CFG_LD := link /NOLOGO
-		CFG_CC := cl /nologo /DWIN32 /wd4996
-		CFG_RC := rc
-		CFG_AR := lib /nologo
+	ifeq ($(VSVER),)
+		VSVER := msvs10
 	endif
+
+	ifneq ($(VSVER),)
+		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
+		ifneq ($(strip $(EXISTS_VSROOT)),)
+			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include
+			PATH := $(CFG_VSROOT)/Common7/IDE;$(PATH)
+			ifeq ($(PROC),x64)
+				PATH := $(CFG_VSROOT)/VC/bin/x86_amd64;$(PATH)
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/amd64
+				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
+			else
+				ifeq ($(PROC),amd64)
+					PATH := $(CFG_VSROOT)/VC/bin/x86_amd64;$(PATH)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/amd64
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
+				else
+					ifeq ($(PROC),ia64)
+						PATH := $(CFG_VSROOT)/VC/bin/x86_ia6;$(PATH)
+						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/ia64
+						CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_ia6/
+					else
+						PATH := $(CFG_VSROOT)/VC/bin;$(PATH)
+						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
+						CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
+					endif
+				endif
+			endif
+		endif
+	endif
+
+	ifeq ($(OS),win64)
+		PRJ_DEFS := $(PRJ_DEFS) WIN64
+	else
+		PRJ_DEFS := $(PRJ_DEFS) WIN32
+	endif
+	
+	# Tools	
+	CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
+	CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
+	CFG_LD := $(CFG_TOOLPREFIX)link /NOLOGO
+	CFG_AR := $(CFG_TOOLPREFIX)lib /nologo
 
 	CFG_DP := makedepend
 	CFG_RM := rmdir /s /q
@@ -786,6 +825,9 @@ ifeq ($(PLATFORM),windows)
 				endif
 			endif
 		endif
+		CFG_RC := $(CFG_MSPSDK)/Bin/rc
+	else
+		CFG_RC := rc
 	endif
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
