@@ -1,4 +1,6 @@
 
+#SHELL=cmd.exe
+
 # Total dependencies
 
 makefiles   = $(wildcard *.mk)
@@ -8,5 +10,5 @@ makefiles   = $(wildcard *.mk)
 .PHONY clean: $(makefiles)
 
 .PHONY $(makefiles) :
-	$(MAKE) -f $@ $(BUILDTYPE)
+	$(MAKE) -j2 -f $@ $(BUILDTYPE)
 
