@@ -2,6 +2,51 @@
 #SHELL=/bin/sh
 #SHELL=CMD.EXE
 
+# Example
+# make TGT=x86-windows-vs
+# make TGT=x86-windows-msvs10_pro
+# make TGT=x64-windows-vs BLD=x86-windows-vs
+# make TGT=arm-linux-gnu BLD=x86-linux-gnu
+
+# Tuple examples
+# x86-windows-vs
+# x86-windows-gnu
+# x64-windows-vs
+# x64-windows-mingw
+# x86-linux-gnu
+# arm-linux-android
+# powerpc-mac-gnu
+# arm-linux-buildroot
+# arm-iphone-gnu
+
+ifeq ($(TGT),)
+	TGT := x86-linux-gnu
+endif
+
+ifeq ($(BLD),)
+	BLD := TGT
+endif
+
+ifneq ($(findstring vs,$(TGT)),)
+	BUILD := vs
+	ifneq ($(findstring msvs,$(TGT)),)
+		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10,$(findstring $(t),$(TGT))))
+	endif		
+	ifneq ($(findstring vsexp,$(TGT)),)
+		VSVER := $(strip $(foreach t,vsexp8 vsexp9 vsexp10,$(findstring $(t),$(TGT))))
+	endif		
+else
+	ifeq ($(BUILD),)
+		BUILD := gcc
+	endif
+endif
+
+PROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(TGT))))
+ifeq ($(PROC),)
+	PROC := x86
+endif
+
+
 # config.mk
 # Cross compiler config
 
@@ -69,7 +114,7 @@ else
 	
 endif
 
-BUILD	 := gcc
+#BUILD	 := gcc
 #BUILD	 := vs
 
 #OS		 := linux
@@ -77,7 +122,7 @@ BUILD	 := gcc
 #OS		 := win64
 #OS		 := wince
 
-PROC	 := x86
+#PROC	 := x86
 #PROC	 := x64
 #PROC	 := arm
 
@@ -273,37 +318,45 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
-	ifeq ($(VSVER),)
-		VSVER := msvs10
-	endif
-
 	ifneq ($(VSVER),)
+	
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
+			
 			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
-			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include
-			PATH := $(CFG_VSROOT)/Common7/IDE;$(PATH)
-			ifeq ($(PROC),x64)
-				PATH := $(CFG_VSROOT)/VC/bin/x86_amd64;$(PATH)
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/amd64
-				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
+			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
+			
+			ifneq ($(findstring msvs6,$(VSVER)),)
+				PATH := $(CFG_VSROOT)/VC98/Bin;$(CFG_VSROOT)/COMMON/IDE/IDE98;$(PATH)
+				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
+				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
 			else
-				ifeq ($(PROC),amd64)
-					PATH := $(CFG_VSROOT)/VC/bin/x86_amd64;$(PATH)
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/amd64
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
-				else
-					ifeq ($(PROC),ia64)
-						PATH := $(CFG_VSROOT)/VC/bin/x86_ia6;$(PATH)
-						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/ia64
-						CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_ia6/
-					else
-						PATH := $(CFG_VSROOT)/VC/bin;$(PATH)
-						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
-						CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
-					endif
+			
+				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include 
+				ifneq ($(findstring msvs,$(VSVER)),)
+					PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc 
 				endif
+				
+				ifeq ($(PROC),x86)			
+					PATH := $(CFG_VSROOT)/VC/bin;$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
+					ifneq ($(findstring msvs,$(VSVER)),)
+						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
+					endif
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
+				else
+					PATH := $(CFG_VSROOT)/VC/bin/x86_$(PROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(PROC)
+					ifneq ($(findstring msvs,$(VSVER)),)
+						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(PROC)
+					endif
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_$(PROC)/
+				endif
+			
 			endif
+#				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
+			
 		endif
 	endif
 
@@ -812,17 +865,13 @@ ifeq ($(PLATFORM),windows)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
 		PRJ_SYSI := $(PRJ_SYSI) $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include
-		ifeq ($(PROC),x64)
-			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/x64
+		ifeq ($(PROC),x86)			
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
 		else
-			ifeq ($(PROC),amd64)
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/x64
+			ifeq ($(PROC),ia64)			
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
 			else
-				ifeq ($(PROC),ia64)
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
-				else
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
-				endif
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/$(PROC)
 			endif
 		endif
 		CFG_RC := $(CFG_MSPSDK)/Bin/rc
@@ -834,18 +883,10 @@ ifeq ($(PLATFORM),windows)
 	ifneq ($(strip $(EXISTS_DXSDK)),)
 		CFG_DXSDK := $(CFG_LIBROOT)/msdxsdk
 		PRJ_SYSI := $(PRJ_SYSI) $(CFG_DXSDK)/Include
-		ifeq ($(PROC),x64)
-			PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
+		ifeq ($(PROC),x86)			
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x86
 		else
-			ifeq ($(PROC),amd64)
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
-			else
-				ifeq ($(PROC),ia64)
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
-				else
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x86
-				endif
-			endif
+			PRJ_LIBP := $(PRJ_LIBP) $(CFG_DXSDK)/Lib/x64
 		endif
 	endif
 
