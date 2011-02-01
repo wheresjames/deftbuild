@@ -54,6 +54,10 @@ ifneq ($(findstring static,$(TGT)),)
 	LIBLINK := static
 endif
 
+ifneq ($(findstring auto,$(TGT)),)
+	AUTOBLD := 1
+endif
+
 # config.mk
 # Cross compiler config
 
@@ -196,7 +200,7 @@ ifeq ($(BUILD),vs)
 endif
 
 ifneq ($(strip $(PRJ_DEPS)),)
-	EXISTS_LIBSRC := $(wildcard $(CFG_LIBROOT)/$(PRJ_DEPS))
+	EXISTS_LIBSRC := $(wildcard $(foreach dep,$(PRJ_DEPS),$(CFG_LIBROOT)/$(strip $(dep))))
 else
 	EXISTS_LIBSRC := nodeps
 endif
@@ -364,7 +368,9 @@ ifeq ($(BUILD),vs)
 			endif
 
 			# VS can crash if you use forward slashes here
-			#CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			ifneq ($(AUTOBLD),)
+				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			endif
 			
 		endif
 	endif
