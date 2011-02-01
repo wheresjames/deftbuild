@@ -4,7 +4,7 @@
 
 # Example
 # make TGT=x86-windows-vs
-# make TGT=x86-windows-msvs10_pro
+# make TGT=x86-windows-msvs10
 # make TGT=x64-windows-vs BLD=x86-windows-vs
 # make TGT=arm-linux-gnu BLD=x86-linux-gnu
 
@@ -355,7 +355,9 @@ ifeq ($(BUILD),vs)
 				endif
 			
 			endif
-#				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_amd64/
+
+			# VS can crash if you use forward slashes here
+			CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
 			
 		endif
 	endif
