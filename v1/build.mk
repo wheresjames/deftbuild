@@ -60,17 +60,29 @@ endif
 ifneq ($(LOC_SRC_$(LOC_TAG)),)
 BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
 ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
-	BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+	ifeq ($(BUILD),vs)
+		BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))"
+	else
+		BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+	endif
 endif
 else
 	BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
 endif
 
 ifneq ($(LOC_INC_$(LOC_TAG)),)
-	BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))
+	ifeq ($(BUILD),vs)
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))"
+	else
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))
+	endif
 else
 ifeq ($(LOC_SRC_$(LOC_TAG)),)
-	BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)
+	ifeq ($(BUILD),vs)
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)"$(CFG_CUR_ROOT)"
+	else
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)
+	endif
 endif
 endif
 
@@ -101,7 +113,13 @@ endif
 BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
 BLD_INCS			    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 ifneq ($(PRJ_SYSI),)
-	BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)$(inc))
+	ifeq ($(BUILD),vs)
+		BLD_INCS		    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)"$(CFG_LIBROOT)/$(inc)")
+		BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)"$(inc)")
+	else
+		BLD_INCS		    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
+		BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)$(inc))
+	endif
 endif
 ifdef CFG_RES_OUT
 	BLD_INCS			:= $(CFG_CC_INC)$(CFG_RES_OUT) $(BLD_INCS)
@@ -167,14 +185,14 @@ ifeq ($(BUILD),vs)
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $(subst /,\,$@)
+	# - $(CFG_DEL) $(subst /,\,$@)
 	$(CFG_RC) /fo $@ $<
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $(subst /,\,$@)
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) $< $(CFG_CC_OUT)$@
+	# - $(CFG_DEL) $(subst /,\,$@)
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) "$<" $(CFG_CC_OUT)"$@"
 
 endif
 
@@ -185,12 +203,12 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 ifeq ($(PLATFORM),windows)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $@
+	# - $(CFG_DEL) $@
 	yasm -f win32 -a x86 -DPREFIX $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $@
+	# - $(CFG_DEL) $@
 	yasm -f elf32 -a x86 $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@	
 endif
 
@@ -202,13 +220,13 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $@
+	# - $(CFG_DEL) $@
 	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	- $(CFG_DEL) $@
+	# - $(CFG_DEL) $@
 	$(BLD_COMPILER_$(LOC_TAG)) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 endif
 

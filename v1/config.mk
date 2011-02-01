@@ -46,6 +46,13 @@ ifeq ($(PROC),)
 	PROC := x86
 endif
 
+ifneq ($(findstring debug,$(TGT)),)
+	DBG := 1
+endif
+
+ifneq ($(findstring static,$(TGT)),)
+	LIBLINK := static
+endif
 
 # config.mk
 # Cross compiler config
@@ -357,7 +364,7 @@ ifeq ($(BUILD),vs)
 			endif
 
 			# VS can crash if you use forward slashes here
-			CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			#CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
 			
 		endif
 	endif
@@ -866,17 +873,21 @@ ifeq ($(PLATFORM),windows)
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-		PRJ_SYSI := $(PRJ_SYSI) $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include
+		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
-			PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
 		else
 			ifeq ($(PROC),ia64)			
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/IA64
+				PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
 			else
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_MSPSDK)/Lib/$(PROC)
+				PRJ_LIBP := $(CFG_MSPSDK)/Lib/$(PROC) $(PRJ_LIBP)
 			endif
 		endif
-		CFG_RC := $(CFG_MSPSDK)/Bin/rc
+		ifeq ($(BUILD),vs)
+			CFG_RC := $(CFG_MSPSDK)/Bin/rc
+		else
+			CFG_RC := rc
+		endif
 	else
 		CFG_RC := rc
 	endif
@@ -912,7 +923,13 @@ ifdef PRJ_DEFS
 	PRJ_DEFS :=
 endif
 
-CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(TOOLS)
+#ifneq ($(VSVER),)
+#	UTOOLS := $(VSVER)
+#else
+	UTOOLS := $(TOOLS)
+#endif
+
+CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(UTOOLS)
 
 ifdef UNICODE
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-unicode

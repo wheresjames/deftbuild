@@ -69,6 +69,9 @@ Section "${APPVNAME} (required)"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPVNAME}"
+!ifdef DVER
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayVersion" "${DVER}"
+!endif
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "NoRepair" 1
@@ -221,3 +224,16 @@ Section "Uninstall"
   RMDir "$INSTDIR"
 
 SectionEnd
+
+;--------------------------------
+; Remove previous version
+
+Function .onInit
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString"
+  StrCmp $R0 "" done
+    MessageBox MB_YESNOCANCEL|MB_ICONQUESTION  "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" IDNO done IDYES uninst
+      Abort
+uninst:
+    ExecWait $R0
+done: 
+FunctionEnd

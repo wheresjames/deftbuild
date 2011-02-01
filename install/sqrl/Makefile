@@ -13,6 +13,11 @@ PRJ_LIBROOT := ../../v1
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifneq ($(DBG),)
+UNSUPPORTED := Not making installer for debug version
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 #-------------------------------------------------------------------
 # Build
 #-------------------------------------------------------------------
@@ -46,5 +51,7 @@ else
 
 UNSUPPORTED := BUILD=$(BUILD) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
+
+endif
 
 endif

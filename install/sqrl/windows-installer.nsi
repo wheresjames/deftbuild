@@ -2,13 +2,15 @@
 ;
 
 ;--------------------------------
-
 ; The name of the installer and output file
+
 !ifdef DVER
 	!define APPNAME "Squirrel Script Engine ${DVER}"
 !else
 	!define APPNAME "Squirrel Script Engine"
 !endif
+
+!define KEYNAME "SquirrelScript"
 
 Name "${APPNAME}"
 
@@ -29,7 +31,6 @@ InstallDirRegKey HKLM "Software\SquirrelScript" "Install_Dir"
 RequestExecutionLevel admin
 
 ;--------------------------------
-
 ; Pages
 
 Page license
@@ -42,8 +43,8 @@ UninstPage uninstConfirm
 UninstPage instfiles
 
 ;--------------------------------
-
 ; The stuff to install
+
 Section "${APPNAME} (required)"
 
   SectionIn RO
@@ -67,7 +68,7 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_openssl${POSTFIX}.dll"
@@ -75,16 +76,15 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ssh2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
   
   ; Write the installation path into the registry
-  WriteRegStr HKLM SOFTWARE\SquirrelScript "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM "SOFTWARE\${KEYNAME}" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "DisplayName" "${APPNAME}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript" "NoRepair" 1
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "DisplayName" "${APPNAME}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoModify" 1
+  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
   
 SectionEnd
@@ -98,14 +98,13 @@ Section "Start Menu Shortcuts"
 SectionEnd
 
 ;--------------------------------
-
 ; Uninstaller
 
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\SquirrelScript"
-  DeleteRegKey HKLM SOFTWARE\SquirrelScript
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}"
+  DeleteRegKey HKLM "SOFTWARE\${KEYNAME}"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\uninstall.exe
@@ -125,7 +124,6 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_portaudio.dll
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
-  Delete $INSTDIR\modules\sqmod_vmime.dll
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\Squirrel Script Engine\*.*"
@@ -136,3 +134,16 @@ Section "Uninstall"
   RMDir "$INSTDIR"
 
 SectionEnd
+
+;--------------------------------
+; Remove previous version
+
+Function .onInit
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString"
+  StrCmp $R0 "" done
+    MessageBox MB_YESNOCANCEL|MB_ICONQUESTION  "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" IDNO done IDYES uninst
+      Abort
+uninst:
+    ExecWait $R0
+done: 
+FunctionEnd
