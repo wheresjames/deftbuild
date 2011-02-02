@@ -894,7 +894,7 @@ ifeq ($(PLATFORM),windows)
 			ifeq ($(PROC),ia64)			
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
 			else
-				PRJ_LIBP := $(CFG_MSPSDK)/Lib/$(PROC) $(PRJ_LIBP)
+				PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
 			endif
 		endif
 		ifeq ($(BUILD),vs)
