@@ -42,6 +42,7 @@ ifeq ($(BUILD),vs)
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_PLIB), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_OSLB), $(CFG_LIB_PRE)$(lib)$(CFG_LIB_POST))
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINL), $(CFG_LIB_PRE)$(lib)$(CFG_LIB_POST))
+	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_VSLB), $(CFG_LIB_PRE)$(lib)$(CFG_LIB_POST))
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINX), $(lib))
 	
 	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_WLBP),/LIBPATH:$(lib))

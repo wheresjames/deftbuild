@@ -324,7 +324,7 @@ ifeq ($(BUILD),vs)
 		endif
 		CFG_DPOSTFIX := _d
 		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib
+			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 		endif
 	else
 		ifeq ($(LIBLINK),static)
@@ -334,7 +334,7 @@ ifeq ($(BUILD),vs)
 		endif
 		CFG_LEXTRA	 :=
 		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib Advapi32.lib
+			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib Advapi32.lib vfw32.lib
 		endif
 	endif
 
@@ -757,7 +757,7 @@ else
 
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
-			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
+			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
