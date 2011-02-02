@@ -22,7 +22,7 @@ else
 # Build
 #-------------------------------------------------------------------
 ifeq ($(BUILD),vs)
-	NSIS_PATH := $(CFG_LIBROOT)/nsis/makensis.exe
+	NSIS_PATH := "$(CFG_LIBROOT)/nsis/makensis.exe"
 	NSIS_SCRIPT := windows-installer.nsi
 else
 	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
@@ -45,7 +45,7 @@ ifeq ($(PLATFORM),windows)
 
 all:
 	echo *** Building Squirrel Engine Installer
-	"$(NSIS_PATH)" /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_SCRIPT)
+	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_SCRIPT)
 
 else
 
