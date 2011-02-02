@@ -36,10 +36,6 @@ ifneq ($(findstring debug,$(TGT)),)
 	DBG := 1
 endif
 
-ifneq ($(findstring static,$(TGT)),)
-	LIBLINK := static
-endif
-
 ifneq ($(findstring auto,$(TGT)),)
 	AUTOBLD := 1
 endif
@@ -47,6 +43,7 @@ endif
 ifneq ($(findstring vs,$(TGT)),)
 	BUILD := vs
 	TOOLS := local
+	LIBLINK := static
 	ifneq ($(findstring msvs,$(TGT)),)
 		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10,$(findstring $(t),$(TGT))))
 	endif		
@@ -56,21 +53,23 @@ ifneq ($(findstring vs,$(TGT)),)
 else
 	BUILD := gcc
 	ifneq ($(findstring windows,$(TGT)),)
-
-		ifneq ($(findstring shared,$(TGT)),)
-			LIBLINK := shared
-		else
-			LIBLINK := static
-		endif
-
+		LIBLINK := static
 		ifeq ($(PROC),x86)
 			TOOLS := mingw32
 		else
-			TOOLS := mingw-w64
+			TOOLS := mingw64
 		endif
 	else
 		TOOLS := local
+		LIBLINK := shared
  	endif
+endif
+
+ifneq ($(findstring static,$(TGT)),)
+	LIBLINK := static
+endif
+ifneq ($(findstring shared,$(TGT)),)
+	LIBLINK := shared
 endif
 
 
@@ -183,12 +182,6 @@ ifdef PRJ_LOCAL
 else
 	CFG_PROC	 := $(PROC)
 	CFG_TOOLS	 := $(TOOLS)
-endif
-
-ifeq ($(BUILD),vs)
-	LIBLINK	 := static
-else
-	LIBLINK := shared
 endif
 
 ifndef PRJ_TYPE
@@ -752,7 +745,7 @@ else
 			CFG_AFLAGS := cq
 
 		endif
-		ifeq ($(CFG_TOOLS),mingw-w64)
+		ifeq ($(CFG_TOOLS),mingw64)
 
 			OS := win64
 			PLATFORM := windows
