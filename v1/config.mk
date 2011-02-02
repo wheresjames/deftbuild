@@ -737,10 +737,10 @@ else
 			# CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
 			# --whole-archive -rdynamic
 
-			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
+			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
-										-DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
+										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
@@ -755,10 +755,10 @@ else
 			# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
 			# --whole-archive -rdynamic
 
-			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
+			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
-										-DOEX_NODSHOW -DOEX_NOVFW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT
+										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
