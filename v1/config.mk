@@ -27,20 +27,6 @@ ifeq ($(BLD),)
 	BLD := TGT
 endif
 
-ifneq ($(findstring vs,$(TGT)),)
-	BUILD := vs
-	ifneq ($(findstring msvs,$(TGT)),)
-		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10,$(findstring $(t),$(TGT))))
-	endif		
-	ifneq ($(findstring vsexp,$(TGT)),)
-		VSVER := $(strip $(foreach t,vsexp8 vsexp9 vsexp10,$(findstring $(t),$(TGT))))
-	endif		
-else
-	ifeq ($(BUILD),)
-		BUILD := gcc
-	endif
-endif
-
 PROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(TGT))))
 ifeq ($(PROC),)
 	PROC := x86
@@ -57,6 +43,36 @@ endif
 ifneq ($(findstring auto,$(TGT)),)
 	AUTOBLD := 1
 endif
+
+ifneq ($(findstring vs,$(TGT)),)
+	BUILD := vs
+	TOOLS := local
+	ifneq ($(findstring msvs,$(TGT)),)
+		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10,$(findstring $(t),$(TGT))))
+	endif		
+	ifneq ($(findstring vsexp,$(TGT)),)
+		VSVER := $(strip $(foreach t,vsexp8 vsexp9 vsexp10,$(findstring $(t),$(TGT))))
+	endif		
+else
+	BUILD := gcc
+	ifneq ($(findstring windows,$(TGT)),)
+
+		ifneq ($(findstring shared,$(TGT)),)
+			LIBLINK := shared
+		else
+			LIBLINK := static
+		endif
+
+		ifeq ($(PROC),x86)
+			TOOLS := mingw32
+		else
+			TOOLS := mingw-w64
+		endif
+	else
+		TOOLS := local
+ 	endif
+endif
+
 
 # config.mk
 # Cross compiler config
@@ -137,7 +153,7 @@ endif
 #PROC	 := x64
 #PROC	 := arm
 
-TOOLS	 := local
+#TOOLS	 := local
 #TOOLS	 := debian
 #TOOLS	 := codesourcery
 #TOOLS	 := snapgear
@@ -731,15 +747,14 @@ else
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing \
-										-DOEX_NODSHOW -DOEX_NOVFW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
+										-DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
 		endif
-		ifeq ($(CFG_TOOLS),mingw64)
+		ifeq ($(CFG_TOOLS),mingw-w64)
 
 			OS := win64
-			PROC := amd64
 			PLATFORM := windows
 
 			# Cross compile for windows

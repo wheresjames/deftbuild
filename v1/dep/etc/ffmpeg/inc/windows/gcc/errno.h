@@ -91,6 +91,8 @@ extern "C" {
  *       of errors (look at the comment above them).
  */
 
+#ifndef WIN64
+
 /*
  * Definitions of macros for the 'variables' errno, _doserrno, sys_nerr and
  * sys_errlist.
@@ -127,6 +129,8 @@ extern const char*	__sys_errlist[];
 
 #ifdef	__cplusplus
 }
+#endif
+
 #endif
 
 #endif

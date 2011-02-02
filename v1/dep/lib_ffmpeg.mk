@@ -22,7 +22,7 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(PROC),x86)
+ifeq ($(PROC),arm)
 UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
@@ -107,16 +107,18 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  libamr libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libvpxdec libvpxenc libxvidff libxvid_rc \
+					  libvorbis libvpxdec libvpxenc libxavs libxvidff libxvid_rc \
 					  \
-					  beosthread g729dec imgconvert_template motion_est_template \
-					  mpegvideo_xvmc os2thread vdpau \
+					  beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
+					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
 					  \
 					  dxva2 dxva2_h264 dxva2_vc1 \
 					  \
 					  dv_tablegen \
 					  \
-					  aacpsdata dct32 dxva2_mpeg2
+					  aacpsdata dct32 dxva2_mpeg2 \
+					  \
+					  dct-test fft-test motion-test
 
 ifeq ($(PROC),arm)
 	ifeq ($(PLATFORM),windows)

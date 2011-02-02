@@ -1,6 +1,8 @@
 
-ffmpeg svn 24000 svn://svn.ffmpeg.org/ffmpeg/trunk
+ffmpeg git - git://git.ffmpeg.org/ffmpeg.git
+ffmpeg/libswscale git - git://git.ffmpeg.org/libswscale/
 
+# ffmpeg svn 24000 svn://svn.ffmpeg.org/ffmpeg/trunk
 # ffmpeg svn 22873 svn://svn.ffmpeg.org/ffmpeg/trunk
 # ffmpeg svn 22815 svn://svn.ffmpeg.org/ffmpeg/trunk
 # ffmpeg svn 22717 svn://svn.ffmpeg.org/ffmpeg/trunk
@@ -9,4 +11,3 @@ ffmpeg svn 24000 svn://svn.ffmpeg.org/ffmpeg/trunk
 # FATE logs svn versions so not using git :(
 # ffmpeg git - git://git.ffmpeg.org/ffmpeg/
 # ffmpeg/libswscale git - git://git.ffmpeg.org/libswscale/
-
