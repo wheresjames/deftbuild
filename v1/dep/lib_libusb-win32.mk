@@ -18,11 +18,12 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(PLATFORM),windows)
-	PRJ_INCS := $(PRJ_INCS) libusb-win32/libusb libusb-win32/msvc
+ifneq ($(PLATFORM),windows)
+UNSUPPORTED := PLATFORM=$(PLATFORM) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
 else
-	PRJ_INCS := $(PRJ_INCS) libusb/libusb
-endif
+
+PRJ_INCS := $(PRJ_INCS) libusb-win32/libusb libusb-win32/msvc
 
 #-------------------------------------------------------------------
 # File locations
@@ -44,4 +45,6 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
+
+endif
 

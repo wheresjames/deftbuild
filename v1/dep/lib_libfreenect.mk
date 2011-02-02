@@ -24,6 +24,9 @@ ifeq ($(PLATFORM),windows)
 		PRJ_DEFS := ssize_t=unsigned
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)		
 	endif
+else
+	PRJ_INCS := $(PRJ_INCS) libusb libusb/libusb
+	PRJ_LIBS := $(PRJ_LIBS) usb
 endif
 
 #-------------------------------------------------------------------
