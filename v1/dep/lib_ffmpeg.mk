@@ -138,16 +138,26 @@ include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
 
-	ifneq ($(PLATFORM),windows)
-		export LOC_TAG := libavcodecx86_asm
-		LOC_CXX_libavcodecx86_asm := asm
-#		LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86
-		LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
-		LOC_EXC_libavcodecx86_asm := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
-					   			 	 dsputil_mmx_qns_template dsputil_mmx_rnd_template h264dsp_mmx \
-					   			 	 mpegvideo_mmx_template
-		include $(PRJ_LIBROOT)/build.mk
+	export LOC_TAG := libavcodecx86_asm
+	LOC_CXX_libavcodecx86_asm := asm
+	ifeq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_ASM_libavcodecx86_asm := yasm -f win64
+		else
+			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86
+		endif
+	else
+		ifeq ($(PROC),x64)
+			LOC_ASM_libavcodecx86_asm := yasm -f elf64
+		else
+			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86
+		endif
 	endif
+	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
+	LOC_EXC_libavcodecx86_asm := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
+								 dsputil_mmx_qns_template dsputil_mmx_rnd_template h264dsp_mmx \
+								 mpegvideo_mmx_template
+	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := libavcodecx86
 	LOC_CXX_libavcodecx86 := c
