@@ -142,13 +142,13 @@ ifneq ($(PROC),arm)
 	LOC_CXX_libavcodecx86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f win64
+			LOC_ASM_libavcodecx86_asm := yasm -f win64 -DARCH_X86_64
 		else
 			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f elf64
+			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -DARCH_X86_64
 		else
 			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86
 		endif
