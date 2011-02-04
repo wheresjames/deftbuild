@@ -833,7 +833,7 @@ else
 	ifeq ($(LIBLINK),shared)
 		CFG_LFLAGS := $(CFG_LFLAGS)
 		ifndef PRJ_NPIC
-			CFG_CFLAGS := $(CFG_CFLAGS) -fPIC
+			CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC
 		endif
 	endif
 

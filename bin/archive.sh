@@ -8,7 +8,7 @@ echo " *** Archiving ${PROJ}"
 
 #tar -hczf "${ARCHPATH}/${PROJ}.tgz" ${PROJ}
 
-tar -hc ${PROJ} | bzip2 > "${ARCHPATH}/${PROJ}.bz2"
+tar -hc ${PROJ} | bzip2 > "${ARCHPATH}/${PROJ}.tar.bz2"
 
 zip -q -r "${ARCHPATH}/${PROJ}.zip" ${PROJ}
 
