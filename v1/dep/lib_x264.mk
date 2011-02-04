@@ -40,6 +40,8 @@ LOC_SRC_common := $(CFG_LIBROOT)/x264/common
 LOC_EXC_common := visualize
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_common := $(LOC_EXC_common) display-x11
+else
+	LOC_EXC_common := $(LOC_EXC_common) win32thread
 endif
 include $(PRJ_LIBROOT)/build.mk
 

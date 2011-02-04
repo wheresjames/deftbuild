@@ -40,6 +40,10 @@ ifneq ($(findstring auto,$(TGT)),)
 	AUTOBLD := 1
 endif
 
+ifneq ($(findstring xbld,$(TGT)),)
+	XBLD := 1
+endif
+
 ifneq ($(findstring vs,$(TGT)),)
 	BUILD := vs
 	TOOLS := local
@@ -390,23 +394,37 @@ ifeq ($(BUILD),vs)
 		PRJ_DEFS := $(PRJ_DEFS) WIN32
 	endif
 	
+	ifeq ($(XBLD),)
+	
+		CFG_DP 			:= makedepend
+		CFG_RM 			:= rmdir /s /q
+		CFG_DEL			:= del /f /q
+#		CFG_MD 			:= md
+		CFG_MD 			:= $(PRJ_LIBROOT)/make_directory.bat
+		# +++ As to the line above, I have no clue why, but *sometimes*
+		#     make complains that the 'md' command cannot be found on
+		#     Windows.  Moving it to a batch file seems to fix the problem.
+		#     BTW, it's *not* the embedded relative ellipsis, I suspected
+		#     that too.
+		
+		CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
+		CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
+		CFG_LD := $(CFG_TOOLPREFIX)link /NOLOGO
+		CFG_AR := $(CFG_TOOLPREFIX)lib /nologo
+		
+	else
+		CFG_MD 			:= mkdir -p
+		CFG_RM 			:= rm -rf
+		CFG_DEL			:= rm -f
+		CFG_CMDSHELL	:= wine
+		CFG_PP := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
+		CFG_CC := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
+		CFG_LD := wine $(CFG_TOOLPREFIX)link /NOLOGO
+		CFG_AR := wine $(CFG_TOOLPREFIX)lib /nologo
+	endif
+
 	# Tools	
-	CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
-	CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
-	CFG_LD := $(CFG_TOOLPREFIX)link /NOLOGO
-	CFG_AR := $(CFG_TOOLPREFIX)lib /nologo
 
-	CFG_DP := makedepend
-	CFG_RM := rmdir /s /q
-	CFG_DEL:= del /f /q
-#	CFG_MD := md
-	CFG_MD := $(PRJ_LIBROOT)/make_directory.bat
-
-# +++ As to the line above, I have no clue why, but *sometimes*
-#     make complains that the 'md' command cannot be found on
-#     Windows.  Moving it to a batch file seems to fix the problem.
-#     BTW, it's *not* the embedded relative ellipsis, I suspected
-#     that too.
 
 	CFG_CC_OUT := /Fo
 	CFG_LD_OUT := /OUT:
