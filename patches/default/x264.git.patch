@@ -1,41 +1,68 @@
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/x264/config.h x264/config.h
---- ../dnl5/x264/config.h	1969-12-31 19:00:00.000000000 -0500
-+++ x264/config.h	2010-08-06 09:08:52.000000000 -0400
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/x264/config.h x264/config.h
+--- ../dnl3/x264/config.h	1969-12-31 19:00:00.000000000 -0500
++++ x264/config.h	2011-02-03 17:27:05.000000000 -0500
 @@ -0,0 +1,6 @@
 +
-+#if defined( _WIN32 ) || defined( _MSC_VER )
++#if defined( _WIN32 ) || defined( _MSC_VER ) || defined( __MINGW32__ )
 +#	include "config.windows.h"
 +#else
 +#	include "config.posix.h"
 +#endif
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/x264/config.posix.h x264/config.posix.h
---- ../dnl5/x264/config.posix.h	1969-12-31 19:00:00.000000000 -0500
-+++ x264/config.posix.h	2010-08-05 17:10:06.000000000 -0400
-@@ -0,0 +1,11 @@
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/x264/config.posix.h x264/config.posix.h
+--- ../dnl3/x264/config.posix.h	1969-12-31 19:00:00.000000000 -0500
++++ x264/config.posix.h	2011-02-03 17:27:46.000000000 -0500
+@@ -0,0 +1,30 @@
 +#define HAVE_MALLOC_H 1
 +#define HAVE_MMX 1
-+#define ARCH_X86 1
++#if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
++#	define ARCH_X86_64 1
++#else
++#	define ARCH_X86 1
++#endif
 +#define SYS_LINUX 1
-+#define HAVE_PTHREAD 1
++#define HAVE_POSIXTHREAD 1
++#define HAVE_THREAD 1
 +#define HAVE_LOG2F 1
 +#define fseek fseeko
 +#define ftell ftello
-+#define BIT_DEPTH 8
-+#define X264_VERSION " r1688 0b36c6d"
-+#define X264_POINTVER "0.104.1688 0b36c6d"
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/x264/config.windows.h x264/config.windows.h
---- ../dnl5/x264/config.windows.h	1969-12-31 19:00:00.000000000 -0500
-+++ x264/config.windows.h	2010-08-06 10:54:02.000000000 -0400
-@@ -0,0 +1,12 @@
++#define HAVE_GPL 1
++#define HAVE_ALTIVEC 0
++#define HAVE_ALTIVEC_H 0
++#define HAVE_ARMV6 0
++#define HAVE_ARMV6T2 0
++#define HAVE_NEON 0
++#define HAVE_BEOSTHREAD 0
++#define HAVE_WIN32THREAD 0
++#define HAVE_VISUALIZE 0
++#define HAVE_SWSCALE 0
++#define HAVE_LAVF 0
++#define HAVE_FFMS 0
++#define HAVE_GPAC 0
++#define HAVE_GF_MALLOC 0
++#define HAVE_AVS 0
++#define X264_VERSION " r1884 7313bb5"
++#define X264_POINTVER "0.113.1884 7313bb5"
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/x264/config.windows.h x264/config.windows.h
+--- ../dnl3/x264/config.windows.h	1969-12-31 19:00:00.000000000 -0500
++++ x264/config.windows.h	2011-02-03 17:22:18.000000000 -0500
+@@ -0,0 +1,20 @@
 +#define HAVE_MALLOC_H 0
 +#define HAVE_MMX 1
-+#define ARCH_X86 1
++#if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
++#	define ARCH_X86_64 1
++#else
++#	define ARCH_X86 1
++#endif
 +#define SYS_LINUX 0
 +#define HAVE_PTHREAD 0
++#define HAVE_THREAD 1
 +#define HAVE_LOG2F 1
-+//#define fseek fseeko
-+//#define ftell ftello
++#define HAVE_WIN32THREAD 1
++#define strncasecmp strnicmp
++#define strcasecmp stricmp
 +#define fileno(x) ((int)x)
 +#define BIT_DEPTH 8
++#define HAVE_GPL 1
 +#define X264_VERSION " r1688 0b36c6d"
 +#define X264_POINTVER "0.104.1688 0b36c6d"
++

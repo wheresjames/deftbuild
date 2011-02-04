@@ -2,7 +2,7 @@
 #ifndef FFMPEG_CONFIG_H
 #define FFMPEG_CONFIG_H
 
-#ifdef WIN64
+#if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
 #	define INT_BIT 64
 #else
 #	define INT_BIT 32
@@ -44,7 +44,11 @@
 #define CC_VERSION __VERSION__
 #define restrict __restrict__
 #define ASMALIGN(ZEROBITS) ".p2align " #ZEROBITS "\n\t"
+#ifndef WIN64
 #define EXTERN_PREFIX "_"
+#else
+#define EXTERN_PREFIX
+#endif
 #define EXTERN_ASM
 #define ARCH_ALPHA 0
 #define ARCH_ARM 0

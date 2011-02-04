@@ -1,52 +1,49 @@
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
---- ../dnl5/irrlicht/include/IrrCompileConfig.h	2010-08-06 11:18:51.000000000 -0400
-+++ irrlicht/include/IrrCompileConfig.h	2010-08-06 11:10:51.000000000 -0400
-@@ -178,7 +178,7 @@ the engine will no longer read .jpeg ima
- //! Define _IRR_USE_NON_SYSTEM_JPEG_LIB_ to let irrlicht use the jpeglib which comes with irrlicht.
- /** If this is commented out, Irrlicht will try to compile using the jpeg lib installed in the system.
- 	This is only used when _IRR_COMPILE_WITH_LIBJPEG_ is defined. */
--#define _IRR_USE_NON_SYSTEM_JPEG_LIB_
-+//#define _IRR_USE_NON_SYSTEM_JPEG_LIB_
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp	2011-02-04 10:06:25.000000000 -0500
++++ irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp	2011-02-03 10:41:13.000000000 -0500
+@@ -75,6 +75,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(con
+ 	WindowsSTDOut = GetStdHandle(STD_OUTPUT_HANDLE);
+ 	PCOORD Dimensions = 0;
  
- 
- //! Define _IRR_COMPILE_WITH_LIBPNG_ to enable compiling the engine using libpng.
-@@ -189,7 +189,7 @@ the engine will no longer read .png imag
- //! Define _IRR_USE_NON_SYSTEM_LIBPNG_ to let irrlicht use the libpng which comes with irrlicht.
- /** If this is commented out, Irrlicht will try to compile using the libpng installed in the system.
- 	This is only used when _IRR_COMPILE_WITH_LIBPNG_ is defined. */
--#define _IRR_USE_NON_SYSTEM_LIB_PNG_
-+//#define _IRR_USE_NON_SYSTEM_LIB_PNG_
- 
- 
- //! Define _IRR_D3D_NO_SHADER_DEBUGGING to disable shader debugging in D3D9
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
---- ../dnl5/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-08-06 11:18:41.000000000 -0400
-+++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2010-08-06 11:13:48.000000000 -0400
-@@ -16,8 +16,15 @@
++#if _WIN32_WINNT > 0x0501	
+ 	if (CreationParams.Fullscreen)
+ 	{
+ 		if (SetConsoleDisplayMode(WindowsSTDOut, CONSOLE_FULLSCREEN_MODE, Dimensions))
+@@ -84,6 +85,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(con
+ 		}
+ 	}
+ 	else
++#endif
+ 	{
+ 		COORD ConsoleSize;
+ 		ConsoleSize.X = CreationParams.WindowSize.Width;
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
+--- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-02-04 10:06:25.000000000 -0500
++++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-02-04 09:47:55.000000000 -0500
+@@ -16,7 +16,7 @@
  #if !defined(_IRR_XBOX_PLATFORM_)
  	#include <windows.h>
  	#include <mmsystem.h> // For JOYCAPS
-+	#if !defined(__MINGW32__)	
- 	#include <Windowsx.h>
+-	#include <Windowsx.h>
++	#include <windowsx.h>
  #endif
-+#endif
-+
-+#if defined( __MINGW32__ )
-+	#define GET_X_LPARAM(lp) ((int)(short)LOWORD(lp))
-+	#define GET_Y_LPARAM(lp) ((int)(short)HIWORD(lp))
-+#endif
  
  namespace irr
- {
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl5/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl5/irrlicht/source/Irrlicht/Irrlicht.cpp	2010-08-06 11:18:41.000000000 -0400
-+++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-08-06 11:16:08.000000000 -0400
-@@ -126,7 +126,7 @@ namespace video
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2011-02-04 10:06:25.000000000 -0500
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	2011-02-03 17:54:02.000000000 -0500
+@@ -125,7 +125,7 @@ namespace video
+ 
  } // end namespace irr
  
- 
--#if defined(_IRR_WINDOWS_API_)
-+#if defined(_IRR_WINDOWS_API_) && !defined(_IRR_STATIC_LIB_)
+-
++/*
+ #if defined(_IRR_WINDOWS_API_)
  
  BOOL APIENTRY DllMain( HANDLE hModule,
-                        DWORD  ul_reason_for_call,
+@@ -150,4 +150,5 @@ BOOL APIENTRY DllMain( HANDLE hModule,
+ }
+ 
+ #endif // defined(_IRR_WINDOWS_)
++*/
+ 

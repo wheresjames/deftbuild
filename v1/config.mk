@@ -749,16 +749,25 @@ else
 
 			OS := win64
 			PLATFORM := windows
+			
+			EXISTS_MINGW64 := $(wildcard $(CFG_LIBROOT)/mingw64)
+			ifneq ($(strip $(EXISTS_MINGW64)),)
+			
+				CFG_TOOLPREFIX := $(CFG_LIBROOT)/mingw64/bin/x86_64-w64-mingw32-
+				CFG_SYSROOT := $(CFG_LIBROOT)/mingww64/x86_64-w64-mingw32
+				
+			else
 
-			# Cross compile for windows
-			CFG_TOOLPREFIX := amd64-mingw32msvc-
-			# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
-			# --whole-archive -rdynamic
+				# Cross compile for windows
+				CFG_TOOLPREFIX := amd64-mingw32msvc-
+				# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
+			
+			endif
 
-			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lvfw32
+			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lavicap32 -lmsvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
-										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT
+										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 

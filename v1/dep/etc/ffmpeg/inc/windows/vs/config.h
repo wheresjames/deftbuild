@@ -835,7 +835,12 @@
 
 #define restrict __restrict__
 #define ASMALIGN(ZEROBITS) ".align 1 << " #ZEROBITS "\n\t"
+
+#ifndef WIN64
 #define EXTERN_PREFIX "_"
+#else
+#define EXTERN_PREFIX
+#endif
 
 // attribute_align_arg
 //#define attribute_align_arg __attribute__((force_align_arg_pointer))

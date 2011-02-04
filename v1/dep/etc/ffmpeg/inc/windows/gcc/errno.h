@@ -125,12 +125,10 @@ extern const char*	__sys_errlist[];
 
 #endif
 
-
+#endif
 
 #ifdef	__cplusplus
 }
-#endif
-
 #endif
 
 #endif

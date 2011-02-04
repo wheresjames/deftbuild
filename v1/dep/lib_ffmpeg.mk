@@ -136,7 +136,7 @@ endif
 
 include $(PRJ_LIBROOT)/build.mk
 
-ifeq ($(PROC),x86)
+ifneq ($(PROC),arm)
 
 	ifneq ($(PLATFORM),windows)
 		export LOC_TAG := libavcodecx86_asm
