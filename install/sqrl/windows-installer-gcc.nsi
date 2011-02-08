@@ -47,6 +47,17 @@ Page instfiles
 UninstPage uninstConfirm
 UninstPage instfiles
 
+!define MUI_FINISHPAGE_NOAUTOCLOSE
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_CHECKED
+!define MUI_FINISHPAGE_RUN_TEXT "Open Scripts Folder"
+!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
+!insertmacro MUI_PAGE_FINISH
+
+Function OpenScriptsFolder
+	ExecShell "open" "$INSTDIR/scripts"
+FunctionEnd
+
 ;--------------------------------
 
 ; The stuff to install
@@ -87,6 +98,13 @@ Section "Start Menu Shortcuts"
 
   CreateDirectory "$SMPROGRAMS\${APPNAME}"
   CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  
+SectionEnd
+
+; Optional section (can be disabled by the user)
+Section "Set PATH for command line"
+
+	${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
   
 SectionEnd
 
@@ -222,6 +240,9 @@ Section "Uninstall"
   RMDir "$SMPROGRAMS\${APPNAME}"
   RMDir "$INSTDIR\modules"
   RMDir "$INSTDIR"
+  
+  ; Remove from path
+  ${EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR"  
 
 SectionEnd
 
