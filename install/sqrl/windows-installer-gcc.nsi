@@ -3,9 +3,9 @@
 
 ;--------------------------------
 
-!define APPNAME "Winglib Script Engine"
+!define APPNAME "Winglib Script Engine ${PROC}"
 
-!define APPKEY "WinglibScriptEngine"
+!define APPKEY "WinglibScriptEngine_${PROC}"
 
 ; The name of the installer
 
@@ -158,7 +158,7 @@ Section "Example Scripts"
   SetOutPath $INSTDIR\scripts
   
   SetOverwrite on
-  ;File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
+  File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"

@@ -5,12 +5,12 @@
 ; The name of the installer and output file
 
 !ifdef DVER
-	!define APPNAME "Squirrel Script Engine ${DVER}"
+	!define APPNAME "Squirrel Script Engine ${PROC} ${DVER}"
 !else
-	!define APPNAME "Squirrel Script Engine"
+	!define APPNAME "Squirrel Script Engine ${PROC}"
 !endif
 
-!define KEYNAME "SquirrelScript"
+!define KEYNAME "SquirrelScript_${PROC}"
 
 Name "${APPNAME}"
 
