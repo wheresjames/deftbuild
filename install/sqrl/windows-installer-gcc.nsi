@@ -2,8 +2,6 @@
 ;
 ;--------------------------------
 
-!include "EnvVarUpdate.nsh"
-
 !define APPNAME "Winglib Script Engine ${PROC}"
 
 !define APPKEY "WinglibScriptEngine_${PROC}"
@@ -103,7 +101,7 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Set PATH for command line"
 
-	${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
+;	${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
   
 SectionEnd
 
