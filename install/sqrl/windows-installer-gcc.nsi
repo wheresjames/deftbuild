@@ -51,7 +51,7 @@ UninstPage instfiles
 !define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_CHECKED
 !define MUI_FINISHPAGE_RUN_TEXT "Open Scripts Folder"
-!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchLink"
+!define MUI_FINISHPAGE_RUN_FUNCTION "OpenScriptsFolder"
 !insertmacro MUI_PAGE_FINISH
 
 Function OpenScriptsFolder
