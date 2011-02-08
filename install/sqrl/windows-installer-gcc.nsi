@@ -18,9 +18,9 @@
 Name "${APPVNAME}"
 
 !ifdef FVER
-	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${FVER}_${PROC}.exe"
+	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${FVER}.exe"
 !else
-	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${PROC}.exe"
+	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}.exe"
 !endif
 
 ; The default installation director
