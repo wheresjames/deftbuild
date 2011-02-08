@@ -35,14 +35,7 @@ InstallDirRegKey HKLM "Software\${APPKEY}" "Install_Dir"
 RequestExecutionLevel admin
 
 ;--------------------------------
-
 ; Pages
-
-Page license
-LicenseData "License.txt"
-Page components
-Page directory
-Page instfiles
 
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN
@@ -53,6 +46,13 @@ Page instfiles
 Function OpenScriptsFolder
 	ExecShell "open" "$INSTDIR/scripts"
 FunctionEnd
+
+Page license
+LicenseData "License.txt"
+Page components
+Page directory
+Page instfiles
+
 
 UninstPage uninstConfirm
 UninstPage instfiles
