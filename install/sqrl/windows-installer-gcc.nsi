@@ -37,15 +37,14 @@ RequestExecutionLevel admin
 ;--------------------------------
 ; Pages
 
-!define MUI_FINISHPAGE_NOAUTOCLOSE
-!define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Open Scripts Folder"
-!define MUI_FINISHPAGE_RUN_FUNCTION "OpenScriptsFolder"
-!insertmacro MUI_PAGE_FINISH
-
-Function OpenScriptsFolder
-	ExecShell "open" "$INSTDIR/scripts"
-FunctionEnd
+;!define MUI_FINISHPAGE_NOAUTOCLOSE
+;!define MUI_FINISHPAGE_RUN
+;!define MUI_FINISHPAGE_RUN_TEXT "Open Scripts Folder"
+;!define MUI_FINISHPAGE_RUN_FUNCTION "OpenScriptsFolder"
+;!insertmacro MUI_PAGE_FINISH
+;Function OpenScriptsFolder
+;	ExecShell "open" "$INSTDIR/scripts"
+;FunctionEnd
 
 Page license
 LicenseData "License.txt"
