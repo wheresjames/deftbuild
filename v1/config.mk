@@ -36,10 +36,6 @@ ifneq ($(findstring debug,$(TGT)),)
 	DBG := 1
 endif
 
-ifneq ($(findstring auto,$(TGT)),)
-	AUTOBLD := 1
-endif
-
 ifneq ($(findstring xbld,$(TGT)),)
 	XBLD := 1
 endif
@@ -381,7 +377,7 @@ ifeq ($(BUILD),vs)
 			endif
 
 			# VS can crash if you use forward slashes here
-			ifneq ($(AUTOBLD),)
+			ifneq ($(findstring win_back_slashes,$(PRJ_HACK)),)
 				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
 			endif
 			
