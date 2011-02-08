@@ -376,8 +376,11 @@ ifeq ($(BUILD),vs)
 			
 			endif
 
-			# VS can crash if you use forward slashes here
-			ifneq ($(findstring win_back_slashes,$(PRJ_HACK)),)
+			# +++ Not sure of the exact pattern here, but VS 8-10 will crash
+			#     having something to do with the combination of forward or 
+			#     backslashes in the command line invocation, and the use of 
+			#     forward or backslashes in #include statements
+			ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
 				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
 			endif
 			
