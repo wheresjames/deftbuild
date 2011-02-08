@@ -239,7 +239,7 @@ Section "Uninstall"
   RMDir "$INSTDIR"
   
   ; Remove from path
-  ${EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR"  
+  ; ${EnvVarUpdate} $0 "PATH" "R" "HKLM" "$INSTDIR"  
 
 SectionEnd
 
