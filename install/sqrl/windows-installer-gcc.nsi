@@ -44,12 +44,8 @@ Page components
 Page directory
 Page instfiles
 
-UninstPage uninstConfirm
-UninstPage instfiles
-
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_CHECKED
 !define MUI_FINISHPAGE_RUN_TEXT "Open Scripts Folder"
 !define MUI_FINISHPAGE_RUN_FUNCTION "OpenScriptsFolder"
 !insertmacro MUI_PAGE_FINISH
@@ -57,6 +53,9 @@ UninstPage instfiles
 Function OpenScriptsFolder
 	ExecShell "open" "$INSTDIR/scripts"
 FunctionEnd
+
+UninstPage uninstConfirm
+UninstPage instfiles
 
 ;--------------------------------
 
