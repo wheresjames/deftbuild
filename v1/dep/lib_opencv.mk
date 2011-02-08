@@ -10,6 +10,7 @@ PRJ_TYPE := lib
 PRJ_INCS := opencv/include/opencv opencv/src/cv \
 			opencv/3rdparty/include zlib
 PRJ_LIBS := 
+PRJ_HACK := win_fwd_slashes
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
