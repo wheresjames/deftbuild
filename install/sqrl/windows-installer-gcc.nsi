@@ -1,7 +1,8 @@
 ; InstallWinglibScriptEngine.nsi
 ;
-
 ;--------------------------------
+
+!include "EnvVarUpdate.nsh"
 
 !define APPNAME "Winglib Script Engine ${PROC}"
 
