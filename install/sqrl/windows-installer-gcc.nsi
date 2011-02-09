@@ -4,7 +4,9 @@
 
 !define APPNAME "Winglib Script Engine ${PROC}"
 
-!define APPKEY "WinglibScriptEngine_${PROC}"
+!define FILENAME "WinglibScriptEngine"
+
+!define APPKEY "${FILENAME}_${PROC}"
 
 ; The name of the installer
 
@@ -18,9 +20,9 @@
 Name "${APPVNAME}"
 
 !ifdef FVER
-	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}_${FVER}.exe"
+	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${FVER}_${PROC}.exe"
 !else
-	OutFile "${OUTROOT}\Install${APPKEY}${POSTFIX}.exe"
+	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${PROC}.exe"
 !endif
 
 ; The default installation director

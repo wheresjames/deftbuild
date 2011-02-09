@@ -10,22 +10,24 @@
 	!define APPNAME "Squirrel Script Engine ${PROC}"
 !endif
 
-!define KEYNAME "SquirrelScript_${PROC}"
+!define FILENAME "SquirrelScript"
+
+!define KEYNAME "${FILENAME}_${PROC}"
 
 Name "${APPNAME}"
 
 !ifdef FVER
-	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}_${FVER}.exe"
+	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${FVER}_${PROC}.exe"
 !else
-	OutFile "${OUTROOT}\InstallSquirrelScript${POSTFIX}.exe"
+	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${PROC}.exe"
 !endif
 
 ; The default installation directory
-InstallDir "$PROGRAMFILES\Squirrel Script Engine"
+InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\SquirrelScript" "Install_Dir"
+InstallDirRegKey HKLM "Software\${KEYNAME}" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -78,10 +80,13 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   
   ; Write the installation path into the registry
-  WriteRegStr HKLM "SOFTWARE\${KEYNAME}" "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM "Software\${KEYNAME}" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "DisplayName" "${APPNAME}"
+!ifdef DVER
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "DisplayVersion" "${DVER}"
+!endif
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoRepair" 1
@@ -92,8 +97,8 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
 
-  CreateDirectory "$SMPROGRAMS\Squirrel Script Engine"
-  CreateShortCut "$SMPROGRAMS\Squirrel Script Engine\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateDirectory "$SMPROGRAMS\${APPNAME}"
+  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   
 SectionEnd
 
@@ -104,7 +109,7 @@ Section "Uninstall"
   
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}"
-  DeleteRegKey HKLM "SOFTWARE\${KEYNAME}"
+  DeleteRegKey HKLM "Software\${KEYNAME}"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\uninstall.exe
@@ -126,10 +131,10 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
 
   ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\Squirrel Script Engine\*.*"
+  Delete "$SMPROGRAMS\${APPNAME}\*.*"
 
   ; Remove directories used
-  RMDir "$SMPROGRAMS\Squirrel Script Engine"
+  RMDir "$SMPROGRAMS\${APPNAME}"
   RMDir "$INSTDIR\modules"
   RMDir "$INSTDIR"
 
