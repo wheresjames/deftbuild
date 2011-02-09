@@ -186,7 +186,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	# - $(CFG_DEL) $(subst /,\,$@)
-	$(CFG_RC) /fo $@ $<
+	$(CFG_RC) $(BLD_INCS) /fo $@ $<
 
 else
 

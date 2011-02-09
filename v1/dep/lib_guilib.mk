@@ -4,11 +4,12 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := rulib
-PRJ_DEPS := rulib
+PRJ_NAME := guilib
+PRJ_DEPS := guilib
 PRJ_TYPE := lib
-PRJ_INCS := rulib/inc SqPlus/include SqPlus/sqplus opencv/include
-PRJ_DEFS := ENABLE_SOCKETS ENABLE_SQUIRREL ENABLE_OPENCV
+PRJ_INCS := guilib
+PRJ_LIBS := 
+PRJ_DEFS := _GUILIB_NOLIB _GUILIB_STATIC_
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -18,17 +19,18 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(PLATFORM),windows)
-UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid, rulib can only be built on Windows
-include $(PRJ_LIBROOT)/unsupported.mk
-else
-
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
-
 export LOC_TAG := def
-LOC_SRC_def := $(CFG_LIBROOT)/rulib
+LOC_EXC_def := GuiADODB CGuiEditView GuiDockBar GuiGridLayout GuiLib
+LOC_SRC_def := $(CFG_LIBROOT)/guilib
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := rc
+LOC_CXX_rc := rc
+LOC_BLD_rc := rc
+LOC_SRC_rc := 
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
@@ -36,5 +38,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
 
