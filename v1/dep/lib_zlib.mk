@@ -27,7 +27,7 @@ endif
 #-------------------------------------------------------------------
 export LOC_TAG := def
 LOC_CXX_def := c
-LOC_INC_def := $(CFG_LIBROOT)/zlib
+LOC_EXC_def := example inflate minigzip
 LOC_SRC_def := $(CFG_LIBROOT)/zlib
 include $(PRJ_LIBROOT)/build.mk
 
