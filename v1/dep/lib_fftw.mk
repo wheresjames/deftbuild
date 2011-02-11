@@ -9,6 +9,7 @@ PRJ_DEPS := fftw
 PRJ_TYPE := lib
 PRJ_INCS := fftw/kernel fftw/dft fftw/dft/scalar fftw/rdft fftw/reodft
 PRJ_LIBS := 
+PRJ_HACK := win_fwd_slashes
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

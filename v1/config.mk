@@ -300,7 +300,11 @@ ifeq ($(BUILD),vs)
 	endif
 	PLATFORM := windows
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
+	ifneq ($(VSVER),)
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x86-local-static
+	else
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
+	endif
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 	
 	ifdef PRJ_SQEX
@@ -971,7 +975,11 @@ endif
 	UTOOLS := $(TOOLS)
 #endif
 
-CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(UTOOLS)
+ifneq ($(VSVER),)
+	CFG_BUILD_TYPE := $(PLATFORM)-$(VSVER)-$(OS)-$(PROC)-$(UTOOLS)
+else
+	CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(UTOOLS)
+endif
 
 ifdef UNICODE
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-unicode
