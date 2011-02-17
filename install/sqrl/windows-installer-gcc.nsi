@@ -121,6 +121,7 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_freenect${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_haru${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
@@ -166,6 +167,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_freenect.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_freetype2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_gdchart.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_haru.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_http.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_https.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_inline.nut"
@@ -223,6 +225,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_freenect.dll
   Delete $INSTDIR\modules\sqmod_freetype2.dll
   Delete $INSTDIR\modules\sqmod_gdchart.dll
+  Delete $INSTDIR\modules\sqmod_haru.dll
   Delete $INSTDIR\modules\sqmod_irrlicht.dll
   Delete $INSTDIR\modules\sqmod_live555.dll
   Delete $INSTDIR\modules\sqmod_mysql.dll
