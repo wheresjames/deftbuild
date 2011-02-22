@@ -241,7 +241,7 @@ endif
 ifdef PRJ_SQRL
 	PRJ_INCS := $(PRJ_INCS) winglib/lib/oexlib winglib/lib/sqbind SqPlus/include SqPlus/sqplus
 	PRJ_LIBS := $(PRJ_LIBS) sqbind oexlib sqplus sqstdlib squirrel cximage jpeg png tiff zlib
-	PRJ_RESD := sq
+	PRJ_RESD := $(PRJ_RESD) sq
 	PRJ_SQEX := $(PRJ_SQEX);*.nut;*.squ
 	ifeq ($(PRJ_SQRL),service)
 		PRJ_DEFS := $(PRJ_DEFS) OEX_SERVICE
@@ -1013,6 +1013,7 @@ CFG_INCS := $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 #ifneq ($(PROC),x86)
 	CFG_TOOL_RESCMP  := $(CFG_LOCAL_TOOL_RESCMP)
 	CFG_TOOL_JOIN  := $(CFG_LOCAL_TOOL_JOIN)
+	CFG_TOOL_TOUCH := touch
 #else
 #	CFG_TOOL_RESCMP  := $(CFG_OUTROOT)/$(CFG_EXE_PRE)resbld$(CFG_DPOSTFIX)$(CFG_EXE_POST)
 #	CFG_TOOL_JOIN  := $(CFG_OUTROOT)/$(CFG_EXE_PRE)join$(CFG_DPOSTFIX)$(CFG_EXE_POST)
@@ -1031,15 +1032,16 @@ CFG_RES_DEP := $(CFG_RES_OUT)/oexres.dpp
 CFG_RES_INC := $(CFG_RES_OUT)/oexres.h
 CFG_RES_MAK := $(CFG_RES_OUT)/oexres.mk
 
-.PRECIOUS: $(CFG_RES_MAK)
+.PRECIOUS: $(CFG_RES_DEP)
 $(CFG_RES_MAK):
 	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQEX)"
 
+.PRECIOUS: $(CFG_RES_MAK)
 include $(CFG_RES_MAK)
 CFG_RES_OBJ := $(subst .cpp,.$(CFG_OBJ_EXT),$(RES_CPP))
 
 .PRECIOUS: $(CFG_RES_DEP)
-$(CFG_RES_DEP):
+$(CFG_RES_DEP): $(CFG_RES_MAK) $(RES_CPP)
 	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQEX)"
 
 include $(CFG_RES_DEP)
@@ -1050,11 +1052,10 @@ endif
 
 #.PRECIOUS: $(CFG_RES_OUT)/%.cpp: $(RES_CPP)
 $(CFG_RES_OUT)/%.cpp:
-	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQEX)"
+	$(CFG_TOOL_TOUCH) "$@"
 
 .PRECIOUS: $(CFG_RES_OUT)/%.$(CFG_OBJ_EXT)
-$(CFG_RES_OUT)/%.$(CFG_OBJ_EXT): $(CFG_RES_OUT)/%.cpp
-	- $(CFG_DEL) $(subst /,\,$@)
+$(CFG_RES_OUT)/%.$(CFG_OBJ_EXT): $(CFG_RES_OUT)/%.cpp $(CFG_RES_DEP)
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_INCS) $< $(CFG_CC_OUT)$@
 
 endif
