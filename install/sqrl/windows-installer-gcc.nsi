@@ -26,11 +26,15 @@ Name "${APPVNAME}"
 !endif
 
 ; The default installation director
-InstallDir "$PROGRAMFILES\${APPNAME}"
+;!if "${PROC}" == "x64"
+;	InstallDir "$PROGRAMFILES64\${APPNAME}"
+;!else
+	InstallDir "$PROGRAMFILES\${APPNAME}"
+;!endif
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
-InstallDirRegKey HKLM "Software\${APPKEY}" "Install_Dir"
+InstallDirRegKey HKLM "SOFTWARE\${APPKEY}" "Install_Dir"
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -172,6 +176,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_https.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_inline.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_inline.squ"
+  File "${LIBROOT}\winglib\etc\scripts\test_int64.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_irrlicht2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_memshare.nut"

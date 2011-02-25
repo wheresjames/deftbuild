@@ -819,6 +819,7 @@ else
 			# Local platform
 			CFG_TOOLPREFIX :=
 
+			# -mtune=generic -mfpmath=387 -mno-sse2
 			# -lregex -lpng -ljpeg -lzlib -ltiff -lstdc++ -lgcc -lodbc32 -lwsock32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lodbc32 -ladvapi32 -lodbc32 -lwsock32 -lopengl32 -lglu32 -lole32 -loleaut32
 			# --whole-archive
 			
