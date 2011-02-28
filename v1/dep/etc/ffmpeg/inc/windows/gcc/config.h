@@ -24,9 +24,11 @@
 #if ( INT_BIT == 32 )
 #	define ARCH_X86_32 1
 #	define ARCH_X86_64 0
+#	define EXTERN_PREFIX "_"
 #else
 #	define ARCH_X86_32 0
 #	define ARCH_X86_64 1
+#	define EXTERN_PREFIX
 #endif
 
 //#define ASMALIGN(ZEROBITS) ".align 1 << " #ZEROBITS "\n\t"
@@ -44,11 +46,6 @@
 #define CC_VERSION __VERSION__
 #define restrict __restrict__
 #define ASMALIGN(ZEROBITS) ".p2align " #ZEROBITS "\n\t"
-#ifndef WIN64
-#define EXTERN_PREFIX "_"
-#else
-#define EXTERN_PREFIX
-#endif
 #define EXTERN_ASM
 #define ARCH_ALPHA 0
 #define ARCH_ARM 0

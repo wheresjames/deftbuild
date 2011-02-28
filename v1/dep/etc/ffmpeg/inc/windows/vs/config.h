@@ -2,8 +2,22 @@
 #ifndef FFMPEG_CONFIG_H
 #define FFMPEG_CONFIG_H
 
-#define INT_BIT 32
+#if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
+#	define INT_BIT 64
+#else
+#	define INT_BIT 32
+#endif
 //#define BROKEN_RELOCATIONS 1
+
+#if ( INT_BIT == 32 )
+#	define ARCH_X86_32 1
+#	define ARCH_X86_64 0
+#	define EXTERN_PREFIX "_"
+#else
+#	define ARCH_X86_32 0
+#	define ARCH_X86_64 1
+#	define EXTERN_PREFIX
+#endif
 
 #if !defined( INFINITY ) && defined( HUGE_VAL )
 #	define INFINITY HUGE_VAL
@@ -17,8 +31,16 @@
 #	define _WIN32_WINNT 0x0501
 #endif
 
+#define restrict __restrict__
+#define ASMALIGN(ZEROBITS) ".align 1 << " #ZEROBITS "\n\t"
+
+// attribute_align_arg
+//#define attribute_align_arg __attribute__((force_align_arg_pointer))
+#undef attribute_align_arg
+
 #define FFMPEG_CONFIGURATION ""
-#define FFMPEG_DATADIR "/usr/local/share/ffmpeg"
+#define FFMPEG_LICENSE ""
+#define FFMPEG_DATADIR "c:/ffmpeg"
 #define ARCH_ALPHA 0
 #define ARCH_ARM 0
 #define ARCH_AVR32 0
@@ -36,9 +58,7 @@
 #define ARCH_SH4 0
 #define ARCH_SPARC 0
 #define ARCH_SPARC64 0
-#define ARCH_X86 0
-#define ARCH_X86_32 0
-#define ARCH_X86_64 0
+#define ARCH_X86 1
 #define HAVE_ALTIVEC 0
 #define HAVE_AMD3DNOW 1
 #define HAVE_AMD3DNOWEXT 1
@@ -832,19 +852,6 @@
 #define CONFIG_X11_GRAB_DEVICE_INDEV 0
 #define CONFIG_MPEG4_VDPAU_DECODER 0
 #define CONFIG_ALS_DECODER 0
-
-#define restrict __restrict__
-#define ASMALIGN(ZEROBITS) ".align 1 << " #ZEROBITS "\n\t"
-
-#ifndef WIN64
-#define EXTERN_PREFIX "_"
-#else
-#define EXTERN_PREFIX
-#endif
-
-// attribute_align_arg
-//#define attribute_align_arg __attribute__((force_align_arg_pointer))
-#undef attribute_align_arg
 
 // You can uncomment this or modify os_support.c to include this first
 // #include <winsock2.h>

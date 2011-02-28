@@ -145,7 +145,7 @@ ifneq ($(PROC),arm)
 		ifeq ($(PROC),x64)
 			LOC_ASM_libavcodecx86_asm := yasm -f win64 -DARCH_X86_64
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86
+			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86 -DPREFIX
 		endif
 	else
 		ifeq ($(PROC),x64)
