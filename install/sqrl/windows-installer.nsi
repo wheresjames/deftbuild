@@ -22,8 +22,12 @@ Name "${APPNAME}"
 	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${PROC}.exe"
 !endif
 
-; The default installation directory
-InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
+; The default installation director
+!if "${PROC}" == "x64"
+	InstallDir "$PROGRAMFILES64\Squirrel Script Engine ${PROC}"
+!else
+	InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
+!endif
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
@@ -51,6 +55,10 @@ Section "${APPNAME} (required)"
 
   SectionIn RO
   
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
@@ -107,6 +115,10 @@ SectionEnd
 
 Section "Uninstall"
   
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}"
   DeleteRegKey HKLM "Software\${KEYNAME}"
@@ -144,6 +156,9 @@ SectionEnd
 ; Remove previous version
 
 Function .onInit
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString"
   StrCmp $R0 "" done
     MessageBox MB_YESNOCANCEL|MB_ICONQUESTION  "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" IDNO done IDYES uninst

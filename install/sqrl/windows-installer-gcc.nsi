@@ -26,18 +26,18 @@ Name "${APPVNAME}"
 !endif
 
 ; The default installation director
-;!if "${PROC}" == "x64"
-;	InstallDir "$PROGRAMFILES64\${APPNAME}"
-;!else
+!if "${PROC}" == "x64"
+	InstallDir "$PROGRAMFILES64\${APPNAME}"
+!else
 	InstallDir "$PROGRAMFILES\${APPNAME}"
-;!endif
+!endif
+
+; Request application privileges for Windows Vista
+RequestExecutionLevel admin
 
 ; Registry key to check for directory (so if you install again, it will 
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "SOFTWARE\${APPKEY}" "Install_Dir"
-
-; Request application privileges for Windows Vista
-RequestExecutionLevel admin
 
 ;--------------------------------
 ; Pages
@@ -67,6 +67,10 @@ UninstPage instfiles
 Section "${APPVNAME} (required)"
 
   SectionIn RO
+
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
@@ -79,7 +83,7 @@ Section "${APPVNAME} (required)"
   File "${LIBROOT}\winglib\etc\scripts\unreg_winglib.nut"
   
   ; Write the installation path into the registry
-  WriteRegStr HKLM SOFTWARE\${APPKEY} "Install_Dir" "$INSTDIR"
+  WriteRegStr HKLM "SOFTWARE\${APPKEY}" "Install_Dir" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "DisplayName" "${APPVNAME}"
@@ -211,12 +215,16 @@ SectionEnd
 
 Section "Uninstall"
   
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
+
   ; Unassociate extension
   ExecWait '"$INSTDIR\sqrl.exe" "$INSTDIR\unreg_winglib.nut"'
 
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
-  DeleteRegKey HKLM SOFTWARE\${APPKEY}
+  DeleteRegKey HKLM "SOFTWARE\${APPKEY}"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\uninstall.exe
@@ -257,6 +265,9 @@ SectionEnd
 ; Remove previous version
 
 Function .onInit
+!if "${PROC}" == "x64"
+	SetRegView 64
+!endif
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}" "UninstallString"
   StrCmp $R0 "" done
     MessageBox MB_YESNOCANCEL|MB_ICONQUESTION  "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" IDNO done IDYES uninst
