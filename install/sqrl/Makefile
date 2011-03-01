@@ -23,11 +23,17 @@ else
 #-------------------------------------------------------------------
 ifeq ($(BUILD),vs)
 	NSIS_PATH := "$(CFG_LIBROOT)/nsis/makensis.exe"
-	NSIS_SCRIPT := windows-installer.nsi
+	ifeq ($(SQENGINE),)
+		SQENGINE := ss
+	endif
 else
 	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
-	NSIS_SCRIPT := windows-installer-gcc.nsi
+	ifeq ($(SQENGINE),)
+		SQENGINE := os
+	endif
 endif
+
+NSIS_SCRIPT := windows-installer-$(SQENGINE)
 
 ifneq ($(CFG_VER),)
 	NSIS_VER_STR := /DDVER="$(CFG_VER)"
