@@ -24,12 +24,12 @@ else
 ifeq ($(BUILD),vs)
 	NSIS_PATH := "$(CFG_LIBROOT)/nsis/makensis.exe"
 	ifeq ($(SQENGINE),)
-		SQENGINE := ss
+		SQENGINE := SquirrelScipt
 	endif
 else
 	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
 	ifeq ($(SQENGINE),)
-		SQENGINE := os
+		SQENGINE := WinglibScriptEngine
 	endif
 endif
 
