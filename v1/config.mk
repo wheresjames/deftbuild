@@ -372,12 +372,17 @@ ifeq ($(BUILD),vs)
 					endif
 					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
 				else
-					PATH := $(CFG_VSROOT)/VC/bin/x86_$(PROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
-					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(PROC)
-					ifneq ($(findstring msvs,$(VSVER)),)
-						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(PROC)
+					ifeq ($(PROC),x64)
+						MSPROC := amd64
+					else
+						MSPROC := $(PROC)
 					endif
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_$(PROC)/
+					PATH := $(CFG_VSROOT)/VC/bin/x86_$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
+					ifneq ($(findstring msvs,$(VSVER)),)
+						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
+					endif
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_$(MSPROC)/
 				endif
 			
 			endif
