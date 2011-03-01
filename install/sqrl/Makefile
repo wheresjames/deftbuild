@@ -47,11 +47,15 @@ ifneq ($(CFG_PROC),)
 	NSIS_PROC_STR := /DPROC="$(CFG_PROC)"
 endif
 
+ifneq ($(CFG_BUILD),)
+	NSIS_BUILD_STR := /DPROC="$(CFG_BUILD)"
+endif
+
 ifeq ($(PLATFORM),windows)
 
 all:
-	echo *** Building Squirrel Engine Installer
-	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_SCRIPT)
+	echo *** Building Script Engine Installer
+	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $(NSIS_SCRIPT)
 
 else
 
