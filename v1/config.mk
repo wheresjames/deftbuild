@@ -793,7 +793,7 @@ else
 			endif
 
 			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lavicap32 -lmsvfw32
-			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols
+			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols --no-leading-underscore
 			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 										-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
