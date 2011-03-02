@@ -192,6 +192,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_portaudio.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_portaudio_fftw.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_quickfix.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_registry.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_rtspstream.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_serial_port.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sntp_client.nut"
@@ -232,6 +233,9 @@ Section "Uninstall"
   
   Delete $INSTDIR\sqrl.exe  
   Delete $INSTDIR\License.txt  
+  Delete $INSTDIR\reg_winglib.nut
+  Delete $INSTDIR\unreg_winglib.nut
+  
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
@@ -243,8 +247,10 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_irrlicht.dll
   Delete $INSTDIR\modules\sqmod_live555.dll
   Delete $INSTDIR\modules\sqmod_mysql.dll
+  Delete $INSTDIR\modules\sqmod_openssl.dll
   Delete $INSTDIR\modules\sqmod_poco.dll
   Delete $INSTDIR\modules\sqmod_portaudio.dll
+  Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
   Delete $INSTDIR\modules\sqmod_usb.dll
   Delete $INSTDIR\modules\sqmod_vmime.dll
@@ -277,3 +283,4 @@ uninst:
     ExecWait $R0
 done: 
 FunctionEnd
+

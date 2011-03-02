@@ -12,6 +12,7 @@ set CMD=%%b
 set GRP=%%c
 set PRJ=%%d
 set EXT=%%e
+set EX2=%%e
 )
 
 IF /I !IDX! EQU 0 SET /P IDX=Which IDX?
@@ -30,6 +31,7 @@ echo CMD : !CMD!
 echo GRP : !GRP!
 echo PRJ : !PRJ!
 echo EXT : !EXT!
+echo EX2 : !EX2!
 echo LTIMESTAMP : !LTIMESTAMP!
 )
 
@@ -149,6 +151,14 @@ REM ----------------------------------------------------------------
 IF !CMD!==archive set CMD=arc
 IF !CMD!==arc (
 call %DIR_LBAT%\archive.bat !REPOPATH! !LIBPATH!
+)
+
+REM ----------------------------------------------------------------
+REM Restore
+REM ----------------------------------------------------------------
+IF !CMD!==restore set CMD=res
+IF !CMD!==res (
+call %DIR_LBAT%\restore.bat !REPOPATH! !LIBPATH!
 )
 
 REM ----------------------------------------------------------------

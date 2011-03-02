@@ -48,6 +48,9 @@ fi
 if [ ${CMD} == "arc" ]; then
 	CMD=archive
 fi
+if [ ${CMD} == "res" ]; then
+	CMD=restore
+fi
 if [ ${CMD} == "dif" ]; then
 	CMD=diff
 fi
@@ -86,8 +89,9 @@ if [ ! -d ${DIR_LIB} ]; then
 	mkdir -p ${DIR_LIB}
 fi
 
-# Extra parameter
+# Extra parameter(s)
 EXTPARAM=$5
+EXTPARAM2=$6
 
 # Unique field
 if [ ! -z ${EXTPARAM} ] && [ ${EXTPARAM} != "-" ]; then
@@ -105,6 +109,14 @@ if [ ${CMD} == "archive" ]; then
 	if [ ! -d ${ARCHPATH} ]; then
 		mkdir -p ${ARCHPATH}
 	fi
+fi
+
+if [ ${CMD} == "restore" ]; then
+	ARCHPATH="${DIR_ARC}/${UNIQUENAME}"
+	if [ ! -d ${ARCHPATH} ]; then
+		mkdir -p ${ARCHPATH}
+	fi
+	DOWNLOADLINK="${EXTPARAM2}"
 fi
 
 if [ ${CMD} == "diff" ]; then
@@ -224,6 +236,11 @@ do
 					# Archive
 					if [ ${CMD} == "archive" ]; then
 						. ${DIR_LBIN}/archive.sh
+					fi
+	
+					# Restore from archive
+					if [ ${CMD} == "restore" ]; then
+						. ${DIR_LBIN}/restore.sh
 					fi
 	
 					# diff

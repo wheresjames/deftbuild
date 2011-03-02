@@ -68,6 +68,7 @@ if [ "${REPO}" == "targz" ]; then
 		gunzip -c ${FILE} | tar xf -
 		mv "${REVN}" "${PROJ}"
 	else
+		mkdir "${PROJ}"
 		cd "${PROJ}"
 		gunzip -c ${FILE} | tar xf -
 	fi			
@@ -90,6 +91,7 @@ if [ "${REPO}" == "tarbz2" ]; then
 		bunzip2 -c ${FILE} | tar xf -
 		mv "${REVN}" "${PROJ}"
 	else			
+		mkdir "${PROJ}"
 		cd "${PROJ}"
 		bunzip2 -c ${FILE} | tar xf -
 	fi
