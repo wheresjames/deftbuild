@@ -24,7 +24,7 @@ else
 ifeq ($(BUILD),vs)
 	NSIS_PATH := "$(CFG_LIBROOT)/nsis/makensis.exe"
 	ifeq ($(SQENGINE),)
-		SQENGINE := SquirrelScipt
+		SQENGINE := SquirrelScript
 	endif
 else
 	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
@@ -33,7 +33,7 @@ else
 	endif
 endif
 
-NSIS_SCRIPT := windows-installer-$(SQENGINE)
+NSIS_SCRIPT := windows-installer-$(SQENGINE).nsi
 
 ifneq ($(CFG_VER),)
 	NSIS_VER_STR := /DDVER="$(CFG_VER)"
