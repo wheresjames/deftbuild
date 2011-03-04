@@ -327,7 +327,7 @@ ifeq ($(BUILD),vs)
 		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
 	endif
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
-	
+
 	ifdef PRJ_SQEX
 		CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/sqrbld.exe"
 	else
@@ -366,27 +366,31 @@ ifeq ($(BUILD),vs)
 	endif
 
 	ifneq ($(VSVER),)
-	
+
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
-			
-			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+
+#			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+#			CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
+#			CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
+			CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
+			CFG_PATHROOT := $(CFG_VSROOT)
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
-			
+
 			ifneq ($(findstring msvs6,$(VSVER)),)
-				PATH := $(CFG_VSROOT)/VC98/Bin;$(CFG_VSROOT)/COMMON/IDE/IDE98;$(PATH)
+				PATH := $(CFG_PATHROOT)/VC98/Bin;$(CFG_PATHROOT)/COMMON/IDE/IDE98;$(PATH)
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
 				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
 			else
-			
+
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include 
 				ifneq ($(findstring msvs,$(VSVER)),)
 					PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc 
 				endif
-				
+
 				ifeq ($(PROC),x86)			
-					PATH := $(CFG_VSROOT)/VC/bin;$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PATH := $(CFG_PATHROOT)/VC/bin;$(CFG_PATHROOT)/Common7/IDE;$(CFG_PATHROOT)/VC/redist/x86/Microsoft.VC80.CRT;$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
@@ -403,14 +407,13 @@ ifeq ($(BUILD),vs)
 					else
 						MSCROSS := x86_
 					endif
-					PATH := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PATH := $(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC);$(CFG_PATHROOT)/Common7/IDE;$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
 					endif
 					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC)/
 				endif
-
 			endif
 
 			# +++ Not sure of the exact pattern here, but VS 8-10 will crash
@@ -418,7 +421,7 @@ ifeq ($(BUILD),vs)
 			#     backslashes in the command line invocation, and the use of 
 			#     forward or backslashes in #include statements
 			#ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-			#	CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+				#CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
 			#endif
 			
 		endif
@@ -443,16 +446,15 @@ ifeq ($(BUILD),vs)
 		#     BTW, it's *not* the embedded relative ellipsis, I suspected
 		#     that too.
 		
-		#ifneq ($(CFG_TOOLPREFIX),)
-		#	CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
-		#	CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
-		#	CFG_LD := "$(CFG_TOOLPREFIX)link" /nologo
-		#else
-			CFG_PP := cl /nologo /wd4996
-			CFG_CC := cl /nologo /wd4996 /Tc
-		#endif
-		CFG_LD := $(CFG_TOOLPREFIX)link /nologo
-		CFG_AR := $(CFG_TOOLPREFIX)lib /nologo
+		ifneq ($(CFG_TOOLPREFIX),)
+			CFG_PP := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996
+			CFG_CC := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996 /Tc
+		else
+			CFG_PP := cl.exe /nologo /wd4996
+			CFG_CC := cl.exe /nologo /wd4996 /Tc
+		endif
+		CFG_LD := $(CFG_TOOLPREFIX)link.exe /nologo
+		CFG_AR := $(CFG_TOOLPREFIX)lib.exe /nologo
 		
 	else
 		CFG_MD 			:= mkdir -p
@@ -566,7 +568,7 @@ else
 			ifeq ($(LIBLINK),static)
 				CFG_NODL := 1
 			endif
-			
+
 		endif
 		ifeq ($(CFG_TOOLS),crystax)
 
