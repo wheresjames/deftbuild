@@ -122,7 +122,8 @@ endif
 
 ifeq ($(BUILD),vs)
 .PHONE cfg_set_path:
-	$(shell export PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
+	- $(shell set PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
+	- $(shell export PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
 else
 .PHONE cfg_set_path:
 endif
@@ -370,10 +371,10 @@ ifeq ($(BUILD),vs)
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
 
-#			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
 #			CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
 #			CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-			CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
+#			CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
 			CFG_PATHROOT := $(CFG_VSROOT)
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
 
@@ -420,9 +421,9 @@ ifeq ($(BUILD),vs)
 			#     having something to do with the combination of forward or 
 			#     backslashes in the command line invocation, and the use of 
 			#     forward or backslashes in #include statements
-			#ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-				#CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
-			#endif
+			ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
+				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			endif
 			
 		endif
 	endif
