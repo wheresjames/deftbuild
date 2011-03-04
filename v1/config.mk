@@ -73,7 +73,13 @@ ifneq ($(findstring shared,$(TGT)),)
 endif
 
 ifneq ($(findstring cygwin,$(BLD)),)
-	CYGWIN := 1
+	CYGBLD := 1
+endif
+
+ifeq ($(findstring nocyg,$(BLD)),)
+	ifneq ($(findstring cygdrive,$(PATH)),)
+		CYGBLD := 1
+	endif
 endif
 
 # config.mk
@@ -371,11 +377,15 @@ ifeq ($(BUILD),vs)
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
 
-			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
-#			CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-#			CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-#			CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
-			CFG_PATHROOT := $(CFG_VSROOT)
+			ifneq ($(CYGBLD),)
+				CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
+				CFG_PATHROOT := $(CFG_VSROOT)
+#				CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
+#				CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
+			else
+				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+				CFG_PATHROOT := $(CFG_VSROOT)
+			endif
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
 
 			ifneq ($(findstring msvs6,$(VSVER)),)
@@ -417,12 +427,16 @@ ifeq ($(BUILD),vs)
 				endif
 			endif
 
-			# +++ Not sure of the exact pattern here, but VS 8-10 will crash
-			#     having something to do with the combination of forward or 
-			#     backslashes in the command line invocation, and the use of 
-			#     forward or backslashes in #include statements
-			ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			ifneq ($(CYGBLD),)
+				CFG_TOOLPREFIX :=
+			else
+				# +++ Not sure of the exact pattern here, but VS 8-10 will crash
+				#     having something to do with the combination of forward or 
+				#     backslashes in the command line invocation, and the use of 
+				#     forward or backslashes in #include statements
+				ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
+					CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+				endif
 			endif
 			
 		endif

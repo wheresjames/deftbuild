@@ -26,7 +26,9 @@ cd "!DIR_LIB!"
 IF NOT EXIST !ARCHDIR! md !ARCHDIR!
 
 set FILE=!ARCHDIR!\%%a.tar.bz2
-IF NOT EXIST !FILE! !DIR_WBIN!\wget -O "!FILE!" "!EX2!/%%a.tar.bz2"
+!DIR_WBIN!\wget -O "!FILE!" "!EX2!/%%a.tar.bz2"
+
+ECHO !EX2!
 
 IF EXIST !FILE! (
 !DIR_WBIN!\bunzip2 -c !FILE! | !DIR_WBIN!\tar xf -

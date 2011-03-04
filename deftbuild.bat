@@ -12,7 +12,7 @@ set CMD=%%b
 set GRP=%%c
 set PRJ=%%d
 set EXT=%%e
-set EX2=%%e
+set EX2=%%f
 )
 
 IF /I !IDX! EQU 0 SET /P IDX=Which IDX?
