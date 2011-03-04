@@ -399,16 +399,16 @@ ifeq ($(BUILD),vs)
 						MSPROC := $(PROC)
 					endif
 					ifneq ($(findstring x64,$(BLD)),)
-						XBLD :=
+						MSCROSS :=
 					else
-						XBLD := x86_
+						MSCROSS := x86_
 					endif
-					PATH := $(CFG_VSROOT)/VC/bin/$(XBLD)$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					PATH := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
 					endif
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(XBLD)$(MSPROC)/
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC)/
 				endif
 
 			endif
