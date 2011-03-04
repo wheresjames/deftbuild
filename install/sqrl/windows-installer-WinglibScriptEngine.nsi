@@ -132,7 +132,6 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_haru${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_openssl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
@@ -141,6 +140,10 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_vmime${POSTFIX}.dll"
+
+!if "${PROC}" == "x64"
+  File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
+!endif
   
 SectionEnd
 
