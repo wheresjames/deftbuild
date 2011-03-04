@@ -23,9 +23,9 @@ ifeq ($(TGT),)
 	TGT := x86-linux-gnu
 endif
 
-ifeq ($(BLD),)
-	BLD := TGT
-endif
+#ifeq ($(BLD),)
+#	BLD := TGT
+#endif
 
 PROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(TGT))))
 ifeq ($(PROC),)
@@ -72,6 +72,9 @@ ifneq ($(findstring shared,$(TGT)),)
 	LIBLINK := shared
 endif
 
+ifneq ($(findstring cygwin,$(BLD)),)
+	CYGWIN := 1
+endif
 
 # config.mk
 # Cross compiler config
@@ -117,17 +120,24 @@ else
 	CFG_IDX=3
 endif
 
+ifeq ($(BUILD),vs)
+.PHONE cfg_set_path:
+	$(shell export PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
+else
+.PHONE cfg_set_path:
+endif
+
 ifdef PRJ_NAME
 ifdef PRJ_DESC
 
-.PHONY cfg_init:
+.PHONY cfg_init: cfg_set_path
 	@echo .=======================================================
 	@echo .= $(PRJ_NAME) - $(PRJ_DESC)
 	@echo .=======================================================
 	
 else
 
-.PHONY cfg_init:
+.PHONY cfg_init: cfg_set_path
 	@echo .=======================================================
 	@echo .= $(PRJ_NAME)
 	@echo .=======================================================
@@ -135,7 +145,9 @@ else
 endif
 else
 
-.PHONY cfg_init:
+.PHONY cfg_init: cfg_set_path
+	@echo .=======================================================
+	@echo .= PRJ_NAME NOT SPECIFIED
 	@echo .=======================================================
 	
 endif
@@ -291,6 +303,9 @@ endif
 
 ifeq ($(BUILD),vs)
 
+	#CFG_CUR_ROOT := $(shell cd)
+	CFG_CUR_ROOT := $(subst \,/,$(shell pwd))
+
 	ifeq ($(PROC),x64)
 		OS := win64
 	else
@@ -383,23 +398,28 @@ ifeq ($(BUILD),vs)
 					else
 						MSPROC := $(PROC)
 					endif
-					PATH := $(CFG_VSROOT)/VC/bin/x86_$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
+					ifneq ($(findstring x64,$(BLD)),)
+						XBLD :=
+					else
+						XBLD := x86_
+					endif
+					PATH := $(CFG_VSROOT)/VC/bin/$(XBLD)$(MSPROC);$(CFG_VSROOT)/Common7/IDE;$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
 					endif
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/x86_$(MSPROC)/
+					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(XBLD)$(MSPROC)/
 				endif
-			
+
 			endif
 
 			# +++ Not sure of the exact pattern here, but VS 8-10 will crash
 			#     having something to do with the combination of forward or 
 			#     backslashes in the command line invocation, and the use of 
 			#     forward or backslashes in #include statements
-			ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-				CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
-			endif
+			#ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
+			#	CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+			#endif
 			
 		endif
 	endif
@@ -415,17 +435,23 @@ ifeq ($(BUILD),vs)
 		CFG_DP 			:= makedepend
 		CFG_RM 			:= rmdir /s /q
 		CFG_DEL			:= del /f /q
-#		CFG_MD 			:= md
-		CFG_MD 			:= $(PRJ_LIBROOT)/make_directory.bat
+		CFG_MD 			:= mkdir -p
+#		CFG_MD 			:= $(PRJ_LIBROOT)/make_directory.bat
 		# +++ As to the line above, I have no clue why, but *sometimes*
 		#     make complains that the 'md' command cannot be found on
 		#     Windows.  Moving it to a batch file seems to fix the problem.
 		#     BTW, it's *not* the embedded relative ellipsis, I suspected
 		#     that too.
 		
-		CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
-		CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
-		CFG_LD := $(CFG_TOOLPREFIX)link /NOLOGO
+		#ifneq ($(CFG_TOOLPREFIX),)
+		#	CFG_PP := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
+		#	CFG_CC := "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
+		#	CFG_LD := "$(CFG_TOOLPREFIX)link" /nologo
+		#else
+			CFG_PP := cl /nologo /wd4996
+			CFG_CC := cl /nologo /wd4996 /Tc
+		#endif
+		CFG_LD := $(CFG_TOOLPREFIX)link /nologo
 		CFG_AR := $(CFG_TOOLPREFIX)lib /nologo
 		
 	else
@@ -455,9 +481,6 @@ ifeq ($(BUILD),vs)
 	ifeq ($(PRJ_TYPE),dll)
 		CFG_LFLAGS := $(CFG_LFLAGS) /DLL
 	endif
-
-	#CFG_CUR_ROOT := $(shell cd)
-	CFG_CUR_ROOT := $(subst \,/,$(shell pwd))
 
 else
 

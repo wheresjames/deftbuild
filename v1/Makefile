@@ -13,6 +13,11 @@ ifndef NOINSTALL
 	endif
 endif
 
+#default_target: all
+#PRJ_NAME := _v1_build_
+#PRJ_LIBROOT := .
+#include $(PRJ_LIBROOT)/config.mk
+
 .PHONY all: $(BUILDDIRS)
 
 .PHONY $(BUILDDIRS) :

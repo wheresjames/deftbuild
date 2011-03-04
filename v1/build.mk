@@ -148,7 +148,7 @@ setup_$(LOC_TAG): $(BLD_PATH_OBJ_$(LOC_TAG))
 ifeq ($(BUILD),vs)
 
 $(BLD_PATH_OBJ_$(LOC_TAG)):
-	$(CFG_MD) "$(subst /,\,$@)"
+	$(shell $(CFG_MD) "$(subst /,\,$@)")
 	
 clean_$(LOC_TAG):
 	- $(CFG_RM) "$(subst /,\,$(BLD_PATH_OBJ_$(LOC_TAG)))"
@@ -181,17 +181,16 @@ ifeq ($(BUILD),vs)
 #$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_DEP_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 #	echo # makedepend -o.obj $(subst /,\,$(BLD_DEPENDS_INCS)) -p$(BLD_PATH_OBJ_$(LOC_TAG))/ -f$@ $< >> $@
 #	$(CFG_DP) -o.obj $(subst /,\,$(BLD_DEPENDS_INCS)) -f$@ $<
+# - $(CFG_DEL) $(subst /,\,$@)
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	# - $(CFG_DEL) $(subst /,\,$@)
 	$(CFG_RC) $(BLD_INCS) /fo $@ $<
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	# - $(CFG_DEL) $(subst /,\,$@)
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) "$<" $(CFG_CC_OUT)"$@"
 
 endif
@@ -226,13 +225,11 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	# - $(CFG_DEL) $@
 	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
 else
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	# - $(CFG_DEL) $@
 	$(BLD_COMPILER_$(LOC_TAG)) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 endif
 
