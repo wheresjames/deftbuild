@@ -377,22 +377,22 @@ ifeq ($(BUILD),vs)
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
 
-			ifneq ($(CYGBLD),)
-				CFG_VSROOT := $(CFG_CUR_ROOT)/$(CFG_LIBROOT)/$(VSVER)
+#			ifneq ($(CYGBLD),)
+				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
 				CFG_PATHROOT := $(CFG_VSROOT)
 #				CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
 #				CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-			else
-				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
-				CFG_PATHROOT := $(CFG_VSROOT)
-			endif
+#			else
+#				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+#				CFG_PATHROOT := $(CFG_VSROOT)
+#			endif
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
 
 			ifneq ($(findstring msvs6,$(VSVER)),)
 				PATH := $(CFG_PATHROOT)/VC98/Bin;$(CFG_PATHROOT)/COMMON/IDE/IDE98;$(PATH)
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
-				CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
+				#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
 			else
 
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include 
@@ -406,7 +406,7 @@ ifeq ($(BUILD),vs)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
 					endif
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
+					#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
 				else
 					ifeq ($(PROC),x64)
 						MSPROC := amd64
@@ -423,21 +423,21 @@ ifeq ($(BUILD),vs)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
 					endif
-					CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC)/
+					#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC)/
 				endif
 			endif
 
-			ifneq ($(CYGBLD),)
+#			ifneq ($(CYGBLD),)
 				CFG_TOOLPREFIX :=
-			else
+#			else
 				# +++ Not sure of the exact pattern here, but VS 8-10 will crash
 				#     having something to do with the combination of forward or 
 				#     backslashes in the command line invocation, and the use of 
 				#     forward or backslashes in #include statements
-				ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-					CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
-				endif
-			endif
+#				ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
+#					CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
+#				endif
+#			endif
 			
 		endif
 	endif
@@ -464,12 +464,14 @@ ifeq ($(BUILD),vs)
 		ifneq ($(CFG_TOOLPREFIX),)
 			CFG_PP := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996
 			CFG_CC := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996 /Tc
+			CFG_LD := "$(CFG_TOOLPREFIX)link.exe" /nologo
+			CFG_AR := "$(CFG_TOOLPREFIX)lib.exe" /nologo
 		else
-			CFG_PP := cl.exe /nologo /wd4996
-			CFG_CC := cl.exe /nologo /wd4996 /Tc
+			CFG_PP := "cl.exe" /nologo /wd4996
+			CFG_CC := "cl.exe" /nologo /wd4996 /Tc
+			CFG_LD := "link.exe" /nologo
+			CFG_AR := "lib.exe" /nologo
 		endif
-		CFG_LD := $(CFG_TOOLPREFIX)link.exe /nologo
-		CFG_AR := $(CFG_TOOLPREFIX)lib.exe /nologo
 		
 	else
 		CFG_MD 			:= mkdir -p

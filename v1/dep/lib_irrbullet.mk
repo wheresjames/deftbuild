@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := irrbullet
-PRJ_DEPS := bullet
+PRJ_DEPS := irrbullet
 PRJ_TYPE := lib
 PRJ_INCS := irrbullet/include irrbullet/include/bheaders irrlicht/include bullet/src
 PRJ_LIBS := 

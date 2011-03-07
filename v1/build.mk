@@ -58,7 +58,11 @@ endif
 
 # Using full paths helps IDE editors to locate the file when there's an error ;)
 ifneq ($(LOC_SRC_$(LOC_TAG)),)
-BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+#ifeq ($(CYGBLD),)
+#BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+#else
+BLD_PATH_SRC_$(LOC_TAG) := $(LOC_SRC_$(LOC_TAG))
+#endif
 ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
 	ifeq ($(BUILD),vs)
 		BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))"
@@ -67,7 +71,11 @@ ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
 	endif
 endif
 else
-	BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
+	ifeq ($(CYGBLD),)
+		BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
+	else
+		BLD_PATH_SRC_$(LOC_TAG) := .
+	endif
 endif
 
 ifneq ($(LOC_INC_$(LOC_TAG)),)
