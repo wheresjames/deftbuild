@@ -330,17 +330,19 @@ ifeq ($(BUILD),vs)
 
 	ifneq ($(VSVER),)
 		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x64-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win64-x64-local-static
 		else
 			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x86-local-static
 		endif
 	else
 		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x64-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win64-x64-local-static
 		else
 			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
 		endif
 	endif
+	#PATH := $(CFG_LOCAL_BUILD_TYPE);$(PATH)
+	
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
 	ifdef PRJ_SQEX
