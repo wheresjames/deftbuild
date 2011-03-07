@@ -329,9 +329,17 @@ ifeq ($(BUILD),vs)
 	PLATFORM := windows
 
 	ifneq ($(VSVER),)
-		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x86-local-static
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x64-local-static
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x86-local-static
+		endif
 	else
-		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x64-local-static
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
+		endif
 	endif
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
