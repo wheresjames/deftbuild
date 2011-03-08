@@ -23,7 +23,7 @@ include $(PRJ_LIBROOT)/config.mk
 # File locations
 #-------------------------------------------------------------------
 export LOC_TAG := def
-LOC_SRC_def := $(CFG_LIBROOT)/cryptopp/Source
+LOC_SRC_def := $(CFG_LIBROOT)/cryptopp
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
