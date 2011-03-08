@@ -1,0 +1,88 @@
+Index: vmac.cpp
+===================================================================
+--- vmac.cpp	(revision 525)
++++ vmac.cpp	(working copy)
+@@ -389,11 +389,11 @@
+ 	#define AccumulateNH(a, b, c) a += word128(b)*(c)
+ 	#define Multiply128(r, i1, i2) r = word128(word64(i1)) * word64(i2)
+ #else
+-	#if _MSC_VER >= 1400 && !defined(__INTEL_COMPILER)
+-		#define MUL32(a, b) __emulu(word32(a), word32(b))
+-	#else
++//	#if _MSC_VER >= 1400 && !defined(__INTEL_COMPILER)
++//		#define MUL32(a, b) __emulu(word32(a), word32(b))
++//	#else
+ 		#define MUL32(a, b) ((word64)((word32)(a)) * (word32)(b))
+-	#endif
++//	#endif
+ 	#if defined(CRYPTOPP_X64_ASM_AVAILABLE)
+ 		#define DeclareNH(a)			word64 a##0=0, a##1=0
+ 		#define MUL64(rh,rl,i1,i2)		asm ("mulq %3" : "=a"(rl), "=d"(rh) : "a"(i1), "g"(i2) : "cc");
+Index: misc.h
+===================================================================
+--- misc.h	(revision 525)
++++ misc.h	(working copy)
+@@ -258,10 +258,10 @@
+ {
+ #if defined(__GNUC__) && CRYPTOPP_GCC_VERSION >= 30400
+ 	return __builtin_ctz(v);
+-#elif defined(_MSC_VER) && _MSC_VER >= 1400
+-	unsigned long result;
+-	_BitScanForward(&result, v);
+-	return result;
++//#elif defined(_MSC_VER) && _MSC_VER >= 1400
++//	unsigned long result;
++//	_BitScanForward(&result, v);
++//	return result;
+ #else
+ 	// from http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightMultLookup
+ 	static const int MultiplyDeBruijnBitPosition[32] = 
+@@ -277,10 +277,10 @@
+ {
+ #if defined(__GNUC__) && CRYPTOPP_GCC_VERSION >= 30400
+ 	return __builtin_ctzll(v);
+-#elif defined(_MSC_VER) && _MSC_VER >= 1400 && (defined(_M_X64) || defined(_M_IA64))
+-	unsigned long result;
+-	_BitScanForward64(&result, v);
+-	return result;
++//#elif defined(_MSC_VER) && _MSC_VER >= 1400 && (defined(_M_X64) || defined(_M_IA64))
++//	unsigned long result;
++//	_BitScanForward64(&result, v);
++//	return result;
+ #else
+ 	return word32(v) ? TrailingZeros(word32(v)) : 32 + TrailingZeros(word32(v>>32));
+ #endif
+Index: integer.cpp
+===================================================================
+--- integer.cpp	(revision 525)
++++ integer.cpp	(working copy)
+@@ -140,11 +140,11 @@
+ 	#define GetBorrow(u)				u##1
+ #else
+ 	#define Declare2Words(x)			dword x;
+-	#if _MSC_VER >= 1400 && !defined(__INTEL_COMPILER)
+-		#define MultiplyWords(p, a, b)		p = __emulu(a, b);
+-	#else
++//	#if _MSC_VER >= 1400 && !defined(__INTEL_COMPILER)
++//		#define MultiplyWords(p, a, b)		p = __emulu(a, b);
++//	#else
+ 		#define MultiplyWords(p, a, b)		p = (dword)a*b;
+-	#endif
++//	#endif
+ 	#define AssignWord(a, b)			a = b;
+ 	#define Add2WordsBy1(a, b, c)		a = b + c;
+ 	#define Acc2WordsBy2(a, b)			a += b;
+Index: config.h
+===================================================================
+--- config.h	(revision 525)
++++ config.h	(working copy)
+@@ -3,6 +3,9 @@
+ 
+ // ***************** Important Settings ********************
+ 
++#define CRYPTOPP_DISABLE_ASM
++#define CRYPTOPP_DISABLE_X86ASM
++
+ // define this if running on a big-endian CPU
+ #if !defined(IS_LITTLE_ENDIAN) && (defined(__BIG_ENDIAN__) || defined(__sparc) || defined(__sparc__) || defined(__hppa__) || defined(__MIPSEB__) || defined(__ARMEB__) || (defined(__MWERKS__) && !defined(__INTEL__)))
+ #	define IS_BIG_ENDIAN
