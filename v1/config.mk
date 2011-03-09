@@ -27,16 +27,23 @@ endif
 #	BLD := TGT
 #endif
 
+# Target processor
 PROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(TGT))))
 ifeq ($(PROC),)
 	PROC := x86
+endif
+
+# Build Processor
+BLDPROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(BLD))))
+ifeq ($(BLDPROC),)
+	BLDPROC := $(PROC)
 endif
 
 ifneq ($(findstring debug,$(TGT)),)
 	DBG := 1
 endif
 
-ifneq ($(findstring xbld,$(TGT)),)
+ifneq ($(findstring posix,$(BLD)),)
 	XBLD := 1
 endif
 
