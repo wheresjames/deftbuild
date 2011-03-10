@@ -226,6 +226,12 @@ else
 	CFG_LIB2BLD  := ../deftbuild/v1
 endif
 
+ifeq ($(OUT),)
+	CFG_OUT=$(CFG_ROOT)/bin$(CFG_IDX)
+else
+	CFG_OUT=$(strip $(OUT)/bin$(CFG_IDX))
+endif
+
 # Set tools into path
 ifeq ($(BUILD),vs)
 	EXISTS_MSTOOLS := $(wildcard $(CFG_LIBROOT)/mstools)
@@ -337,15 +343,15 @@ ifeq ($(BUILD),vs)
 
 	ifneq ($(VSVER),)
 		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win64-x64-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(VSVER)-win64-x64-local-static
 		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-$(VSVER)-win32-x86-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(VSVER)-win32-x86-local-static
 		endif
 	else
 		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win64-x64-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-vs-win64-x64-local-static
 		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/windows-vs-win32-x86-local-static
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-vs-win32-x86-local-static
 		endif
 	endif
 	#PATH := $(CFG_LOCAL_BUILD_TYPE);$(PATH)
@@ -523,7 +529,7 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_ROOT)/bin$(CFG_IDX)/posix-gcc-linux-x86-local-shared
+	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
 	ifdef PRJ_SQEX
@@ -1067,8 +1073,8 @@ else
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-shared
 endif
 
-CFG_BINROOT  := $(CFG_ROOT)/bin$(CFG_IDX)/$(CFG_BUILD_TYPE)
-CFG_LOCAL_BINROOT  := $(CFG_ROOT)/bin$(CFG_IDX)/$(CFG_LOCAL_BUILD_TYPE)
+CFG_BINROOT  := $(CFG_OUT)/$(CFG_BUILD_TYPE)
+CFG_LOCAL_BINROOT  := $(CFG_OUT)/$(CFG_LOCAL_BUILD_TYPE)
 
 ifdef PRJ_BINROOT
 	CFG_OUTROOT := $(PRJ_BINROOT)/bin$(CFG_IDX)/$(CFG_BUILD_TYPE)
