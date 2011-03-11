@@ -48,9 +48,6 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := common_x86
 LOC_CXX_common_x86 := c
 LOC_SRC_common_x86 := $(CFG_LIBROOT)/x264/common/x86
-#ifeq ($(PROC),x64)
-#	LOC_EXC_common_x86 := mc-c predict-c
-#endif
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := common_asm
