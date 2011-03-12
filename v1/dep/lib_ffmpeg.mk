@@ -66,6 +66,12 @@ LOC_SRC_libavutil := $(CFG_LIBROOT)/ffmpeg/libavutil
 LOC_EXC_libavutil := integer softfloat
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := libavutil_x86
+LOC_CXX_libavutil_x86 := c
+LOC_SRC_libavutil_x86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+LOC_EXC_libavutil_x86 := 
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := libavformat
 LOC_CXX_libavformat := c
 LOC_SRC_libavformat := $(CFG_LIBROOT)/ffmpeg/libavformat
@@ -138,20 +144,22 @@ include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
 
+	ASMOPTS := -DHAVE_MMX2 -DHAVE_SSE
+
 	export LOC_TAG := libavcodecx86_asm
 	LOC_CXX_libavcodecx86_asm := asm
 	LOC_BLD_libavcodecx86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f win64 -DARCH_X86_64
+			LOC_ASM_libavcodecx86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86
+			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -DARCH_X86_64 -DPIC
+			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -DARCH_X86_64 -DPIC $(ASMOPTS)
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86
+			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
 	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
@@ -164,8 +172,8 @@ ifneq ($(PROC),arm)
 	LOC_CXX_libavcodecx86 := c
 	LOC_SRC_libavcodecx86 := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
 	LOC_EXC_libavcodecx86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
-				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template h264dsp_mmx \
-				   			 mpegvideo_mmx_template
+				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
+				   			 mpegvideo_mmx_template h264_qpel_mmx
 	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := libswscalex86
