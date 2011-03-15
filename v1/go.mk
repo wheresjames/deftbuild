@@ -221,8 +221,9 @@ endif
 endif
 
 ifeq ($(GO_FINAL),)
-	GO_FINAL := $(BLD_PATH_EXE)
+GO_FINAL := $(BLD_PATH_EXE)
 endif
+
 all: cfg_init $(BLD_ALL) $(GO_FINAL)
 rebuild: cfg_init $(BLD_REBUILD) $(GO_FINAL)
 setup: cfg_init $(BLD_SETUP)
