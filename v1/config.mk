@@ -2,6 +2,11 @@
 #SHELL=/bin/sh
 #SHELL=CMD.EXE
 
+CFG_COMMA:=,
+CFG_SPACE:=
+CFG_SPACE+=
+CFG_FWD_ESCAPE = $(subst /,\/,$(1))
+
 # Example
 # make TGT=x86-windows-vs
 # make TGT=x86-windows-msvs10
@@ -475,8 +480,11 @@ ifeq ($(BUILD),vs)
 	
 		CFG_DP 			:= makedepend
 		CFG_RM 			:= rmdir /s /q
-		CFG_DEL			:= del /f /q
+#		CFG_DEL			:= del /f /q
+		CFG_DEL			:= rm
 		CFG_MD 			:= mkdir -p
+		CFG_CPY			:= cp
+		CFG_SAR			:= sed -i
 #		CFG_MD 			:= $(PRJ_LIBROOT)/make_directory.bat
 		# +++ As to the line above, I have no clue why, but *sometimes*
 		#     make complains that the 'md' command cannot be found on
@@ -501,6 +509,8 @@ ifeq ($(BUILD),vs)
 		CFG_RM 			:= rm -rf
 		CFG_DEL			:= rm -f
 		CFG_CMDSHELL	:= wine
+		CFG_CPY			:= cp
+		CFG_SAR			:= sed -i
 		CFG_PP := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
 		CFG_CC := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
 		CFG_LD := wine $(CFG_TOOLPREFIX)link /NOLOGO
@@ -971,6 +981,8 @@ else
 	CFG_MD := mkdir -p
 	CFG_RM := rm -rf
 	CFG_DEL:= rm -f
+	CFG_CPY:= cp
+	CFG_SAR:= sed -i
 
 	CFG_CC_OUT := -o $(nullstring)
 	CFG_LD_OUT := -o $(nullstring)
@@ -994,9 +1006,14 @@ ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501 _WIN32_WINNT=0x0501
 	#PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
 		
+	CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
+		
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
+		PATH := $(CFG_MSPSDK)/bin;$(PATH)
+		CFG_SIGNROOT := $(CFG_MSPSDK)
+		CFG_CODESIGN := signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
@@ -1008,12 +1025,12 @@ ifeq ($(PLATFORM),windows)
 			endif
 		endif
 		ifeq ($(BUILD),vs)
-			CFG_RC := $(CFG_MSPSDK)/Bin/rc
+			CFG_RC := $(CFG_MSPSDK)/Bin/rc /nologo
 		else
-			CFG_RC := rc
+			CFG_RC := rc /nologo
 		endif
 	else
-		CFG_RC := rc
+		CFG_RC := rc /nologo
 	endif
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
@@ -1027,6 +1044,14 @@ ifeq ($(PLATFORM),windows)
 		endif
 	endif
 
+	ifeq ($(strip $(EXISTS_MSPSDK)),)
+		EXISTS_MSSIGN := $(wildcard $(CFG_LIBROOT)/mssign)
+		ifneq ($(strip $(EXISTS_MSSIGN)),)
+			CFG_SIGNROOT := $(CFG_LIBROOT)/mssign
+			CFG_CODESIGN := $(CFG_SIGNROOT)/codesign.bat
+		endif
+	endif
+	
 else
 
 	CFG_OBJ_EXT := o
@@ -1116,7 +1141,7 @@ $(CFG_RES_MAK):
 
 .PRECIOUS: $(CFG_RES_MAK)
 include $(CFG_RES_MAK)
-CFG_RES_OBJ := $(subst .cpp,.$(CFG_OBJ_EXT),$(RES_CPP))
+CFG_RES_OBJ := $(CFG_RES_OBJ) $(subst .cpp,.$(CFG_OBJ_EXT),$(RES_CPP))
 
 .PRECIOUS: $(CFG_RES_DEP)
 $(CFG_RES_DEP): $(CFG_RES_MAK) $(RES_CPP)

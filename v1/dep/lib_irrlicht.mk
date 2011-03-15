@@ -31,7 +31,7 @@ else
 endif
 
 ifeq ($(PLATFORM),windows)
-	PRJ_DEFS := $(PRJ_DEFS) IRRLICHT_EXPORTS
+	PRJ_DEFS := $(PRJ_DEFS) IRRLICHT_EXPORTS _STDCALL_SUPPORTED
 endif
 
 #-------------------------------------------------------------------

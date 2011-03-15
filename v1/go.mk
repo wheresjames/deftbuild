@@ -1,7 +1,7 @@
 
 ifndef ABORT_UNSUPPORTED
 
-# go.mk
+# Create file name
 ifndef BLD_FILE_EXE
 	ifdef PRJ_FILE_EXE		 
 		BLD_FILE_EXE := $(PRJ_FILE_EXE)
@@ -19,6 +19,72 @@ ifndef BLD_FILE_EXE
 	BLD_PATH_EXE := $(CFG_OUTROOT)/$(BLD_FILE_EXE)	
 endif
 
+# Windows Version Resource
+ifneq ($(FVER),)
+ifeq ($(PLATFORM),windows)
+ifeq ($(PRJ_NORC),)
+ifneq ($(strip $(foreach t,dll exe,$(findstring $(t),$(PRJ_TYPE)))),)
+
+ifeq ($(PRJ_WVER_NAME),)
+	PRJ_WVER_NAME := $(PRJ_NAME)
+endif
+ifeq ($(PRJ_WVER_FVER),)
+	PRJ_WVER_FVER := $(subst .,\$(CFG_COMMA) ,$(FVER))
+endif
+ifeq ($(PRJ_WVER_PVER),)
+	PRJ_WVER_PVER := $(subst .,\$(CFG_COMMA) ,$(FVER))
+endif
+ifeq ($(PRJ_WVER_FNAME),)
+	PRJ_WVER_FNAME := $(BLD_FILE_EXE)
+endif
+ifeq ($(PRJ_WVER_DESC),)
+	PRJ_WVER_DESC := $(PRJ_DESC)
+endif
+ifeq ($(PRJ_WVER_COMPANY),)
+	PRJ_WVER_COMPANY := $(PRJ_COMPANY)
+endif
+ifeq ($(PRJ_WVER_COPYRIGHT),)
+	PRJ_WVER_COPYRIGHT := $(PRJ_COPYRIGHT)
+endif
+ifeq ($(PRJ_WVER_COMMENTS),)
+	PRJ_WVER_COMMENTS := $(PRJ_URL)
+endif
+ifeq ($(PRJ_TYPE),dll)
+	PRJ_WVER_FTYPE := 0x2L
+else
+	PRJ_WVER_FTYPE := 0x1L
+endif
+CFG_VER_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
+CFG_VER_FSRC := $(PRJ_LIBROOT)/win.vinf.rc
+CFG_VER_FDST := $(CFG_VER_OUT)/ver.rc
+.PRECIOUS: $(CFG_VER_FDST)
+$(CFG_VER_FDST): $(CFG_VER_FSRC)
+	$(shell $(CFG_CPY) "$(CFG_VER_FSRC)" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@NAME/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_NAME))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@FVER/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FVER))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@PVER/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_PVER))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@FTYPE/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FTYPE))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@FNAME/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FNAME))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@DESC/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_DESC))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@COMPANY/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COMPANY))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@COPYRIGHT/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COPYRIGHT))/g" "$(CFG_VER_FDST)")
+	$(shell $(CFG_SAR) "s/@COMMENTS/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COMMENTS))/g" "$(CFG_VER_FDST)")
+
+$(CFG_VER_OUT)/_rc/%.res: $(CFG_VER_OUT)/%.rc
+#GO_DEPENDS 	:= $(GO_DEPENDS) $(CFG_VER_FDST)
+export LOC_TAG := _rc
+LOC_CXX__rc := rc
+LOC_BLD__rc := rc
+LOC_SRC__rc := $(CFG_VER_OUT)
+LOC_LST__rc := ver
+include $(PRJ_LIBROOT)/build.mk
+
+endif
+endif
+endif
+endif
+
+# Squirrel build
 ifdef PRJ_SQRL
 	ifeq ($(PRJ_SQRL),service)
 		export LOC_TAG := sqs
@@ -90,6 +156,7 @@ GO_DEPENDS 	:= $(GO_DEPENDS) $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_
 
 ifeq ($(BUILD),vs)	  
 $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)	
+	- $(GO_DELSIGN)
 	- $(CFG_DEL) $(subst /,\,$@)
 	$(CFG_LD) $(CFG_LFLAGS) $(GO_EXPORTS) $(BLD_OBJECTS_TOTAL) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(GO_ADD)
 else
@@ -99,6 +166,7 @@ $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS)
 	$(CFG_LD) $(CFG_LFLAGS) $(BLD_OBJECTS_TOTAL) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(CFG_STDLIB) $(GO_ADD)
 else
 $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS)	
+	- $(GO_DELSIGN)
 	- $(CFG_DEL) $@
 	$(CFG_LD) $(CFG_LFLAGS) $(BLD_OBJECTS_TOTAL) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(CFG_STDLIB) $(GO_ADD)
 endif
@@ -114,6 +182,7 @@ GO_DEPENDS 	:= $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CF
 ifeq ($(BUILD),vs)	
   
 $(BLD_PATH_EXE): $(CFG_RES_OBJ) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)
+	- $(GO_DELSIGN)
 	- $(CFG_DEL) $(subst /,\,$@)
 	$(CFG_LD) $(CFG_LFLAGS) $(GO_EXPORTS) $(BLD_OBJECTS_TOTAL) $(CFG_RES_OBJ) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(GO_ADD)
 	
@@ -129,8 +198,33 @@ endif
 
 endif
 
-all: cfg_init $(BLD_ALL) $(BLD_PATH_EXE) 
-rebuild: cfg_init $(BLD_REBUILD) $(BLD_PATH_EXE)
+# Code signing
+ifdef PRJ_SIGN
+ifdef PVKPASS
+ifdef CFG_CODESIGN
+GO_SIGN_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
+GO_SIGN := $(GO_SIGN_OUT)/sign.log.txt
+GO_FINAL := $(GO_SIGN)
+GO_DELSIGN := $(CFG_DEL) $(GO_SIGN)
+ifneq ($(strip $(EXISTS_MSPSDK)),)
+do_sign: $(BLD_PATH_EXE)
+	[ "Success" == "$(findstring Success,$(shell $(CFG_CODESIGN) sign /f $(CFG_ROOT)/$(PRJ_SIGN).pfx /p $(PVKPASS) /t $(CFG_SIGN_TIMESTAMP) /d "$(PRJ_DESC)" /du "$(PRJ_URL)" $(BLD_PATH_EXE)))" ]
+	- @echo $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE));
+$(GO_SIGN): do_sign
+	- $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE) > $(GO_SIGN));
+else
+$(GO_SIGN): $(BLD_PATH_EXE)
+	- $(CFG_CODESIGN) $(BLD_PATH_EXE) $(PRJ_NAME) $(CFG_ROOT)/$(PRJ_URL) $(PRJ_SIGN) $(CFG_SIGNROOT)
+endif
+endif
+endif
+endif
+
+ifeq ($(GO_FINAL),)
+	GO_FINAL := $(BLD_PATH_EXE)
+endif
+all: cfg_init $(BLD_ALL) $(GO_FINAL)
+rebuild: cfg_init $(BLD_REBUILD) $(GO_FINAL)
 setup: cfg_init $(BLD_SETUP)
 clean: cfg_init $(BLD_CLEAN)
 
