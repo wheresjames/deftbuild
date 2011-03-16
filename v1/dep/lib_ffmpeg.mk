@@ -22,6 +22,13 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(BUILD),vs)
+	ifeq ($(PROC),x64)
+		UNSUPPORTED := PROC=$(PROC) + BUILD=$(BUILD) is not supported
+		include $(PRJ_LIBROOT)/unsupported.mk
+	endif
+else
+
 ifeq ($(PROC),arm)
 UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
@@ -207,6 +214,8 @@ endif
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
+
+endif
 
 endif
 

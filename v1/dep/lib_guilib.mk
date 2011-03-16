@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := guilib
-PRJ_DEPS := guilib
+PRJ_DEPS := GuiLib
 PRJ_TYPE := lib
 PRJ_INCS := guilib
 PRJ_LIBS := 
@@ -18,11 +18,6 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
-
-ifneq ($(PROC),x86)
-UNSUPPORTED := PROC=$(PROC) is not supported
-include $(PRJ_LIBROOT)/unsupported.mk
-else
 
 ifneq ($(PLATFORM),windows)
 UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid
@@ -47,7 +42,5 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
-
-endif
 
 endif

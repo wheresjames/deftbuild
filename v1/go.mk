@@ -142,7 +142,7 @@ endif
 ifeq ($(PRJ_TYPE),lib)
 ifeq ($(BUILD),vs)	  
 $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL) $(BLD_DEPENDS_TOTAL)
-	- $(CFG_DEL) $(subst /,\,$@)
+	- $(CFG_DEL) $(subst \,/,$@)
 	$(CFG_AR) $(CFG_AFLAGS) $(CFG_AR_OUT)$@ $(BLD_OBJECTS_TOTAL) $(GO_ADDF)
 else
 $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL)
@@ -157,7 +157,7 @@ GO_DEPENDS 	:= $(GO_DEPENDS) $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_
 ifeq ($(BUILD),vs)	  
 $(BLD_PATH_EXE): $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)	
 	- $(GO_DELSIGN)
-	- $(CFG_DEL) $(subst /,\,$@)
+	- $(CFG_DEL) $(subst \,/,$@)
 	$(CFG_LD) $(CFG_LFLAGS) $(GO_EXPORTS) $(BLD_OBJECTS_TOTAL) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(GO_ADD)
 else
 ifneq ($(PLATFORM),windows)
@@ -183,7 +183,7 @@ ifeq ($(BUILD),vs)
   
 $(BLD_PATH_EXE): $(CFG_RES_OBJ) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)
 	- $(GO_DELSIGN)
-	- $(CFG_DEL) $(subst /,\,$@)
+	- $(CFG_DEL) $(subst \,/,$@)
 	$(CFG_LD) $(CFG_LFLAGS) $(GO_EXPORTS) $(BLD_OBJECTS_TOTAL) $(CFG_RES_OBJ) $(CFG_LD_OUT)$@ $(GO_LIBPATHS) $(GO_LIBS) $(GO_ADD)
 	
 else
