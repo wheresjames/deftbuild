@@ -2,6 +2,10 @@
 #SHELL=/bin/sh
 #SHELL=CMD.EXE
 
+# iii. I'm permanently giving up on the Windows command line,
+#      there are just too many bugs and limitations.
+#	   You will need to use cygwin on Windows.
+
 CFG_COMMA:=,
 CFG_SPACE:=
 CFG_SPACE+=
@@ -86,11 +90,11 @@ endif
 
 ifneq ($(findstring cygwin,$(BLD)),)
 	CYGBLD := 1
-endif
-
-ifeq ($(findstring nocyg,$(BLD)),)
-	ifneq ($(findstring cygdrive,$(PATH)),)
-		CYGBLD := 1
+else
+	ifeq ($(findstring nocyg,$(BLD)),)
+		ifneq ($(findstring cygdrive,$(PATH)),)
+			CYGBLD := 1
+		endif
 	endif
 endif
 
@@ -140,8 +144,8 @@ endif
 
 ifeq ($(BUILD),vs)
 .PHONE cfg_set_path:
-	- $(shell set PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
-	- $(shell export PATH='$(subst :,':',$(subst ;,:,$(subst \,/,$(PATH))))')
+	$(shell set PATH=$(PATH))
+	$(shell export PATH=$(PATH))
 else
 .PHONE cfg_set_path:
 endif
@@ -241,7 +245,7 @@ endif
 ifeq ($(BUILD),vs)
 	EXISTS_MSTOOLS := $(wildcard $(CFG_LIBROOT)/mstools)
 	ifneq ($(strip $(EXISTS_MSTOOLS)),)
-		PATH := $(CFG_LIBROOT)/mstools/bin;$(CFG_LIBROOT)/mstools;$(PATH)
+		PATH := $(CFG_LIBROOT)/mstools/bin:$(CFG_LIBROOT)/mstools:$(PATH)
 	endif
 endif
 
@@ -359,7 +363,7 @@ ifeq ($(BUILD),vs)
 			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-vs-win32-x86-local-static
 		endif
 	endif
-	#PATH := $(CFG_LOCAL_BUILD_TYPE);$(PATH)
+	#PATH := $(CFG_LOCAL_BUILD_TYPE):$(PATH)
 	
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
@@ -417,7 +421,7 @@ ifeq ($(BUILD),vs)
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
 
 			ifneq ($(findstring msvs6,$(VSVER)),)
-				PATH := $(CFG_PATHROOT)/VC98/Bin;$(CFG_PATHROOT)/COMMON/IDE/IDE98;$(PATH)
+				PATH := $(CFG_PATHROOT)/VC98/Bin:$(CFG_PATHROOT)/COMMON/IDE/IDE98:$(PATH)
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
 				#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
@@ -429,7 +433,7 @@ ifeq ($(BUILD),vs)
 				endif
 
 				ifeq ($(PROC),x86)			
-					PATH := $(CFG_PATHROOT)/VC/bin;$(CFG_PATHROOT)/Common7/IDE;$(CFG_PATHROOT)/VC/redist/x86/Microsoft.VC80.CRT;$(PATH)
+					PATH := $(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE:$(CFG_PATHROOT)/VC/redist/x86/Microsoft.VC80.CRT:$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
@@ -446,7 +450,7 @@ ifeq ($(BUILD),vs)
 					else
 						MSCROSS := x86_
 					endif
-					PATH := $(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC);$(CFG_PATHROOT)/Common7/IDE;$(PATH)
+					PATH := $(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC):$(CFG_PATHROOT)/Common7/IDE:$(PATH)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
@@ -1011,7 +1015,7 @@ ifeq ($(PLATFORM),windows)
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-		PATH := $(CFG_MSPSDK)/bin;$(PATH)
+		PATH := $(CFG_MSPSDK)/bin:$(PATH)
 		CFG_SIGNROOT := $(CFG_MSPSDK)
 		CFG_CODESIGN := signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
@@ -1024,14 +1028,8 @@ ifeq ($(PLATFORM),windows)
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
 			endif
 		endif
-		ifeq ($(BUILD),vs)
-			CFG_RC := $(CFG_MSPSDK)/Bin/rc /nologo
-		else
-			CFG_RC := rc /nologo
-		endif
-	else
-		CFG_RC := rc /nologo
 	endif
+	CFG_RC := rc /nologo
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
 	ifneq ($(strip $(EXISTS_DXSDK)),)
