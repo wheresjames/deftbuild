@@ -144,10 +144,11 @@ endif
 
 ifeq ($(BUILD),vs)
 .PHONE cfg_set_path:
-	$(shell set PATH=$(PATH))
+	export PATH="$(PATH)"
+	$(shell set PATH="$(PATH)")
 else
 .PHONE cfg_set_path:
-	$(shell export PATH=$(PATH))
+	export PATH="$(PATH)"
 endif
 
 ifdef PRJ_NAME
@@ -245,7 +246,7 @@ endif
 ifeq ($(BUILD),vs)
 	EXISTS_MSTOOLS := $(wildcard $(CFG_LIBROOT)/mstools)
 	ifneq ($(strip $(EXISTS_MSTOOLS)),)
-		PATH := $(CFG_LIBROOT)/mstools/bin:$(CFG_LIBROOT)/mstools:$(PATH)
+		PATH := $(PATH):$(CFG_LIBROOT)/mstools/bin:$(CFG_LIBROOT)/mstools
 	endif
 endif
 
@@ -421,7 +422,7 @@ ifeq ($(BUILD),vs)
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
 
 			ifneq ($(findstring msvs6,$(VSVER)),)
-				PATH := $(CFG_PATHROOT)/VC98/Bin:$(CFG_PATHROOT)/COMMON/IDE/IDE98:$(PATH)
+				PATH := $(PATH):$(CFG_PATHROOT)/VC98/Bin:$(CFG_PATHROOT)/COMMON/IDE/IDE98
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
 				#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
@@ -433,7 +434,7 @@ ifeq ($(BUILD),vs)
 				endif
 
 				ifeq ($(PROC),x86)			
-					PATH := $(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE:$(CFG_PATHROOT)/VC/redist/x86/Microsoft.VC80.CRT:$(PATH)
+					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
@@ -450,7 +451,7 @@ ifeq ($(BUILD),vs)
 					else
 						MSCROSS := x86_
 					endif
-					PATH := $(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC):$(CFG_PATHROOT)/Common7/IDE:$(PATH)
+					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC):$(CFG_PATHROOT)/Common7/IDE
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
@@ -1015,7 +1016,7 @@ ifeq ($(PLATFORM),windows)
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 	ifneq ($(strip $(EXISTS_MSPSDK)),)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-		PATH := $(CFG_MSPSDK)/bin:$(PATH)
+		PATH := $(PATH):$(CFG_MSPSDK)/bin
 		CFG_SIGNROOT := $(CFG_MSPSDK)/bin
 		CFG_CODESIGN := signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
@@ -1046,7 +1047,7 @@ ifeq ($(PLATFORM),windows)
 		EXISTS_MSSIGN := $(wildcard $(CFG_LIBROOT)/mssign)
 		ifneq ($(strip $(EXISTS_MSSIGN)),)
 			CFG_SIGNROOT := $(CFG_LIBROOT)/mssign
-			PATH := $(CFG_SIGNROOT):$(PATH)
+			PATH := $(PATH):$(CFG_SIGNROOT)
 			CFG_CODESIGN := $(CFG_SIGNROOT)/codesign.bat
 		endif
 	endif
