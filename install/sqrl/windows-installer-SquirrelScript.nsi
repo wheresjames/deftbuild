@@ -74,7 +74,13 @@ Section "${APPNAME} (required)"
   SetOverwrite on
   File "${OUTROOT}\_sqmod\sqmod_cell${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
+!if "${PROC}" != "x64"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
+!else
+!if "${BUILD}" != "vs"
+  File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
+!endif
+!endif
   File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"

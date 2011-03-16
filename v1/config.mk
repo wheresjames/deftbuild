@@ -1020,7 +1020,7 @@ ifeq ($(PLATFORM),windows)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
 		PATH := $(PATH):$(CFG_MSPSDK)/bin
 		CFG_SIGNROOT := $(CFG_MSPSDK)/bin
-		CFG_CODESIGN := $(CFG_SIGNROOT)/signtool
+		CFG_CODESIGN := signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
@@ -1050,7 +1050,7 @@ ifeq ($(PLATFORM),windows)
 		ifneq ($(strip $(EXISTS_MSSIGN)),)
 			CFG_SIGNROOT := $(CFG_LIBROOT)/mssign
 			PATH := $(PATH):$(CFG_SIGNROOT)
-			CFG_CODESIGN := $(CFG_SIGNROOT)/codesign.bat
+			CFG_CODESIGN := codesign.bat
 		endif
 	endif
 	
