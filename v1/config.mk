@@ -450,11 +450,10 @@ ifeq ($(BUILD),vs)
 						MSPROC := $(PROC)
 					endif
 					ifneq ($(findstring x64,$(BLD)),)
-						MSCROSS :=
+						PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/$(MSPROC):$(CFG_PATHROOT)/Common7/IDE
 					else
-						MSCROSS := x86_
+						PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/x86_$(MSPROC):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
 					endif
-					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/$(MSCROSS)$(MSPROC):$(CFG_PATHROOT)/Common7/IDE
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 					ifneq ($(findstring msvs,$(VSVER)),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
