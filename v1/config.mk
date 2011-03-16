@@ -144,6 +144,7 @@ endif
 
 ifeq ($(BUILD),vs)
 .PHONE cfg_set_path:
+	@echo +++++++++++++++++++++++ $(PATH)
 	export PATH="$(PATH)"
 	$(shell set PATH="$(PATH)")
 else
@@ -1018,7 +1019,7 @@ ifeq ($(PLATFORM),windows)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
 		PATH := $(PATH):$(CFG_MSPSDK)/bin
 		CFG_SIGNROOT := $(CFG_MSPSDK)/bin
-		CFG_CODESIGN := signtool
+		CFG_CODESIGN := $(CFG_SIGNROOT)/signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
