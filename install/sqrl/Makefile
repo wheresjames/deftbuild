@@ -6,6 +6,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := installers
+PRJ_DESC := Squirrel Installer
 PRJ_DEPS := SqPlus
 PRJ_LIBROOT := ../../v1
 
@@ -56,7 +57,7 @@ ifneq ($(BUILD),)
 endif
 
 # Build list of tarets
-NSIS_SCRIPTS := $(wildcard *.nsi)
+NSIS_SCRIPTS := windows-installer-$(SQENGINE).nsi
 NSIS_INSTALLERS := $(foreach f,$(NSIS_SCRIPTS),$(CFG_OUTROOT)/Install$(subst .nsi,,$(f))$(CFG_DPOSTFIX)_$(CFG_FVER)_$(PROC).exe)
 NSIS_DEL_INSTALLERS := $(foreach f,$(NSIS_INSTALLERS),$(shell $(CFG_DEL) $(f)))
 
@@ -65,7 +66,7 @@ include $(PRJ_LIBROOT)/sign.mk
 ifneq ($(GO_SIGN_ENABLED),)
 $(CFG_OUTROOT)/Install%$(CFG_DPOSTFIX)_$(CFG_FVER)_$(PROC).exe : %.nsi
 	"$(NSIS_PATH)" /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $<
-	$(call GO_SIGN_EXE,$@,Duos Installer)
+	$(call GO_SIGN_EXE,$@,$(PRJ_DESC))
 	$(call GO_SIGN_VERIFY,$@)
 else
 $(CFG_OUTROOT)/Install%$(CFG_DPOSTFIX)_$(CFG_FVER)_$(PROC).exe : %.nsi
