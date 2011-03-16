@@ -982,6 +982,7 @@ else
 	CFG_DT := $(CFG_TOOLPREFIX)dlltool
 	CFG_DP := $(CFG_TOOLPREFIX)makedepend
 	CFG_AS := $(CFG_TOOLPREFIX)as
+	CFG_RC := $(CFG_TOOLPREFIX)windres
 	
 	CFG_ASM := yasm
 
@@ -1003,12 +1004,17 @@ endif
 ifeq ($(PLATFORM),windows)
 
 	CFG_OBJ_EXT  := obj
-	CFG_RES_EXT  := res
 	CFG_DEP_EXT  := d
 	CFG_LIB_PRE	 :=
 	CFG_LIB_POST := .lib
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
+	
+	ifeq($(BUILD),vs)
+		CFG_RES_EXT  := res
+	else
+		CFG_RES_EXT  := $(CFG_OBJ_EXT)
+	endif
 	
 	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501 _WIN32_WINNT=0x0501
 	#PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
@@ -1031,8 +1037,8 @@ ifeq ($(PLATFORM),windows)
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
 			endif
 		endif
+		CFG_RC := rc
 	endif
-	CFG_RC := rc
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
 	ifneq ($(strip $(EXISTS_DXSDK)),)
