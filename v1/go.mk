@@ -20,7 +20,7 @@ ifndef BLD_FILE_EXE
 endif
 
 # Windows Version Resource
-ifneq ($(FVER),)
+ifneq ($(CFG_VER),)
 ifeq ($(PLATFORM),windows)
 ifeq ($(PRJ_NORC),)
 ifneq ($(strip $(foreach t,dll exe,$(findstring $(t),$(PRJ_TYPE)))),)
@@ -29,10 +29,10 @@ ifeq ($(PRJ_WVER_NAME),)
 	PRJ_WVER_NAME := $(PRJ_NAME)
 endif
 ifeq ($(PRJ_WVER_FVER),)
-	PRJ_WVER_FVER := $(subst .,\$(CFG_COMMA) ,$(FVER))
+	PRJ_WVER_FVER := $(subst .,\$(CFG_COMMA) ,$(CFG_VER))
 endif
 ifeq ($(PRJ_WVER_PVER),)
-	PRJ_WVER_PVER := $(subst .,\$(CFG_COMMA) ,$(FVER))
+	PRJ_WVER_PVER := $(subst .,\$(CFG_COMMA) ,$(CFG_VER))
 endif
 ifeq ($(PRJ_WVER_FNAME),)
 	PRJ_WVER_FNAME := $(BLD_FILE_EXE)

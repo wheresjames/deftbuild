@@ -144,7 +144,6 @@ endif
 
 ifeq ($(BUILD),vs)
 .PHONE cfg_set_path:
-	@echo +++++++++++++++++++++++ $(PATH)
 	export PATH="$(PATH)"
 	$(shell set PATH="$(PATH)")
 else
@@ -1031,7 +1030,7 @@ ifeq ($(PLATFORM),windows)
 			endif
 		endif
 	endif
-	CFG_RC := rc /nologo
+	CFG_RC := rc
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
 	ifneq ($(strip $(EXISTS_DXSDK)),)
