@@ -209,9 +209,9 @@ GO_DELSIGN := $(CFG_DEL) $(GO_SIGN)
 ifneq ($(strip $(EXISTS_MSPSDK)),)
 do_sign: $(BLD_PATH_EXE)
 	[ "Success" == "$(findstring Success,$(shell $(CFG_CODESIGN) sign /f $(CFG_ROOT)/$(PRJ_SIGN).pfx /p $(PVKPASS) /t $(CFG_SIGN_TIMESTAMP) /d "$(PRJ_DESC)" /du "$(PRJ_URL)" $(BLD_PATH_EXE)))" ]
-	- @echo $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE));
+	- @echo $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE))
 $(GO_SIGN): do_sign
-	- $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE) > $(GO_SIGN));
+	- $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE) > $(GO_SIGN))
 else
 $(GO_SIGN): $(BLD_PATH_EXE)
 	- $(CFG_CODESIGN) $(BLD_PATH_EXE) $(PRJ_NAME) $(CFG_ROOT)/$(PRJ_URL) $(PRJ_SIGN) $(CFG_SIGNROOT)
