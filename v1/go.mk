@@ -203,15 +203,16 @@ ifdef PRJ_SIGN
 ifdef PVKPASS
 ifdef CFG_CODESIGN
 GO_SIGN_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
-GO_SIGN := $(GO_SIGN_OUT)/sign.log.txt
+GO_SIGN_TRACK := $(GO_SIGN_OUT)/sign.result
+GO_SIGN := $(GO_SIGN_TRACK).Success
 GO_FINAL := $(GO_SIGN)
 GO_DELSIGN := $(CFG_DEL) $(GO_SIGN)
 ifneq ($(strip $(EXISTS_MSPSDK)),)
-do_sign: $(BLD_PATH_EXE)
+#.PHONY : do_sign
+#do_sign: $(BLD_PATH_EXE)
+$(GO_SIGN): $(BLD_PATH_EXE)
 	[ "Success" == "$(findstring Success,$(shell $(CFG_CODESIGN) sign /f $(CFG_ROOT)/$(PRJ_SIGN).pfx /p $(PVKPASS) /t $(CFG_SIGN_TIMESTAMP) /d "$(PRJ_DESC)" /du "$(PRJ_URL)" $(BLD_PATH_EXE)))" ]
-	- @echo $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE))
-$(GO_SIGN): do_sign
-	- $(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE) > $(GO_SIGN))
+	- @echo Signing $(BLD_PATH_EXE) > $(GO_SIGN_TRACK).$(findstring Success,$(shell $(CFG_CODESIGN) verify /pa $(BLD_PATH_EXE)))
 else
 $(GO_SIGN): $(BLD_PATH_EXE)
 	- $(CFG_CODESIGN) $(BLD_PATH_EXE) $(PRJ_NAME) $(CFG_ROOT)/$(PRJ_URL) $(PRJ_SIGN) $(CFG_SIGNROOT)
@@ -224,6 +225,7 @@ ifeq ($(GO_FINAL),)
 GO_FINAL := $(BLD_PATH_EXE)
 endif
 
+.PHONY : all rebuild setup clean
 all: cfg_init $(BLD_ALL) $(GO_FINAL)
 rebuild: cfg_init $(BLD_REBUILD) $(GO_FINAL)
 setup: cfg_init $(BLD_SETUP)

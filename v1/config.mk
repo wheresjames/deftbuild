@@ -142,26 +142,29 @@ else
 	CFG_IDX=3
 endif
 
+.SILENT: cfg_set_path
+.PHONY: cfg_set_path
 ifeq ($(BUILD),vs)
-.PHONE cfg_set_path:
+cfg_set_path:
 	export PATH="$(PATH)"
 	$(shell set PATH="$(PATH)")
 else
-.PHONE cfg_set_path:
+cfg_set_path:
 	export PATH="$(PATH)"
 endif
 
+.PHONY: cfg_init
 ifdef PRJ_NAME
 ifdef PRJ_DESC
 
-.PHONY cfg_init: cfg_set_path
+cfg_init: cfg_set_path
 	- @echo .=======================================================
 	- @echo .= $(PRJ_NAME) - $(PRJ_DESC)
 	- @echo .=======================================================
 	
 else
 
-.PHONY cfg_init: cfg_set_path
+cfg_init: cfg_set_path
 	- @echo .=======================================================
 	- @echo .= $(PRJ_NAME)
 	- @echo .=======================================================
@@ -169,7 +172,7 @@ else
 endif
 else
 
-.PHONY cfg_init: cfg_set_path
+cfg_init: cfg_set_path
 	- @echo .=======================================================
 	- @echo .= PRJ_NAME NOT SPECIFIED
 	- @echo .=======================================================
