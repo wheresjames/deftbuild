@@ -6,6 +6,11 @@
 #      there are just too many bugs and limitations.
 #	   You will need to use cygwin on Windows.
 
+# delete / new already defined in nafxcwd.lib;libcmtd.lib
+# http://support.microsoft.com/kb/148652
+
+
+
 CFG_COMMA:=,
 CFG_SPACE:=
 CFG_SPACE+=
@@ -418,6 +423,14 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 	
+	ifneq ($(VERBOSELIB),)
+		CFG_LEXTRA := $(CFG_LEXTRA) /verbose:lib
+	endif
+
+	ifneq ($(PRJ_ILIB),)
+		CFG_LEXTRA := $(CFG_LEXTRA) $(foreach f,$(PRJ_ILIB),/NOD:$(f))
+	endif
+
 	ifneq ($(VSVER),)
 
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
