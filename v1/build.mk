@@ -193,57 +193,61 @@ ifeq ($(BUILD),vs)
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
+# vs-rc
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_RC) $(BLD_INCS) /fo $@ $<
 
+#rc
 else
 
+# vs-c
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_DEFS) $(BLD_INCS) $(BLD_MSFLAGS) "$<" $(CFG_CC_OUT)"$@"
 
 endif
 
+# vs
+else
+
+ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
+
+# gcc-rc
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(CFG_RC) $(BLD_INCS) -o $@ -i $<
+
+#rc
 else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
-ifeq ($(PLATFORM),windows)
-
+# gcc-asm
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(BLD_ASM) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
-# - $(CFG_DEL) $@
-#yasm -f win32 -a x86 -DPREFIX $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-	
-else
-
-$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(BLD_ASM) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-
-# - $(CFG_DEL) $@
-#yasm -f elf32 -a x86 $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@	
-	
-endif
-
-# +++ WTF ??? Why doesn't this work ??? $(LOC_ASM_$(LOC_TAG)) is ALWAYS EMPTY!!!
-#	$(LOC_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-
+#asm
 else
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
 
+#gcc-as
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
+#as
 else
+
 
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(BLD_COMPILER_$(LOC_TAG)) $(CFG_CFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
-endif
 
 endif
 
 endif
 
+endif
+
+endif
+
+#unsupported
 endif
 

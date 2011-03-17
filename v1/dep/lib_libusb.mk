@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := usb
 PRJ_DEPS := libusb
 PRJ_TYPE := lib
-PRJ_INCS := libusb
+PRJ_INCS := libusb libusb/libusb
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
@@ -30,6 +30,12 @@ export LOC_TAG := def
 LOC_CXX_def := c
 LOC_SRC_def := $(CFG_LIBROOT)/libusb/libusb
 LOC_EXC_def :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := os
+LOC_CXX_os := c
+LOC_SRC_os := $(CFG_LIBROOT)/libusb/libusb/os
+LOC_LST_os := linux_usbfs
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

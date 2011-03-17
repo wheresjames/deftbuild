@@ -1010,7 +1010,7 @@ ifeq ($(PLATFORM),windows)
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
 	
-	ifeq($(BUILD),vs)
+	ifeq ($(BUILD),vs)
 		CFG_RES_EXT  := res
 	else
 		CFG_RES_EXT  := $(CFG_OBJ_EXT)
