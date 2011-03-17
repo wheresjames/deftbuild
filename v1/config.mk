@@ -408,6 +408,16 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
+	ifeq ($(PROC),x86)
+		CFG_LEXTRA := /MACHINE:x86 $(CFG_LEXTRA)
+	else
+		ifeq ($(PROC),x64)
+			CFG_LEXTRA := /MACHINE:x64 $(CFG_LEXTRA)
+		else
+			CFG_LEXTRA := /MACHINE:$(PROC) $(CFG_LEXTRA)
+		endif
+	endif
+	
 	ifneq ($(VSVER),)
 
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
@@ -436,7 +446,7 @@ ifeq ($(BUILD),vs)
 					PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc 
 				endif
 
-				ifeq ($(PROC),x86)			
+				ifeq ($(PROC),x86)
 					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
 					ifneq ($(findstring msvs,$(VSVER)),)
