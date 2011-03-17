@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := guilib
-PRJ_DEPS := GuiLib
+PRJ_DEPS := guilib
 PRJ_TYPE := lib
 PRJ_INCS := guilib
 PRJ_LIBS := 
