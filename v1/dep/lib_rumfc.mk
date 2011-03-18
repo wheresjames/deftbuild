@@ -8,7 +8,7 @@ PRJ_NAME := rumfc
 PRJ_DEPS := rulib rumfc
 PRJ_TYPE := lib
 PRJ_INCS := rumfc rulib/inc SqPlus/include SqPlus/sqplus opencv/include
-PRJ_DEFS := ENABLE_SOCKETS ENABLE_SQUIRREL ENABLE_OPENCV
+PRJ_DEFS := ENABLE_SQUIRREL ENABLE_OPENCV
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
