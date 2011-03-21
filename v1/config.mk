@@ -1032,6 +1032,7 @@ ifeq ($(PLATFORM),windows)
 	CFG_LIB_POST := .lib
 	CFG_EXE_POST := .exe
 	CFG_DLL_POST := .dll
+	CFG_IDL_EXT  := idl.log.txt
 	
 	ifeq ($(BUILD),vs)
 		CFG_RES_EXT  := res
@@ -1053,14 +1054,18 @@ ifeq ($(PLATFORM),windows)
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
+			CFG_MIDL_FLAGS := /win32
 		else
 			ifeq ($(PROC),ia64)			
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
+				CFG_MIDL_FLAGS := /win64 /ia64
 			else
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
+				CFG_MIDL_FLAGS := /win64 /amd64
 			endif
 		endif
 		CFG_RC := rc
+		CFG_MIDL := midl /nologo
 	endif
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
@@ -1140,6 +1145,15 @@ endif
 
 ifdef PRJ_SUBROOT
 	CFG_OUTROOT := $(CFG_OUTROOT)/$(PRJ_SUBROOT)
+endif
+
+ifneq ($(CFG_MIDL),)
+	ifdef PRJ_OBJROOT
+		CFG_PATH_IDL := $(CFG_OUTROOT)/$(PRJ_OBJROOT)/$(PRJ_NAME)		
+	else
+		CFG_PATH_IDL := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)		
+	endif
+	PRJ_SYSI := $(PRJ_SYSI) $(CFG_PATH_IDL)
 endif
 
 CFG_INCS := $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
