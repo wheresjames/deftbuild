@@ -31,7 +31,8 @@
 #	define _WIN32_WINNT 0x0501
 #endif
 
-#define restrict __restrict__
+//#define restrict __restrict__
+#define restrict
 #define ASMALIGN(ZEROBITS) ".align 1 << " #ZEROBITS "\n\t"
 
 // attribute_align_arg
