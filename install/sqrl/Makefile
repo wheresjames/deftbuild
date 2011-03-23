@@ -15,6 +15,11 @@ PRJ_LIBROOT := ../../v1
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(CFG_NSIS),)
+UNSUPPORTED := NSIS is not installed
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifneq ($(PLATFORM),windows)
 UNSUPPORTED := PLATFORM=$(PLATFORM) not supported
 include $(PRJ_LIBROOT)/unsupported.mk
@@ -28,14 +33,10 @@ else
 #-------------------------------------------------------------------
 # Build
 #-------------------------------------------------------------------
-ifeq ($(BUILD),vs)
-	NSIS_PATH := "$(CFG_LIBROOT)/nsis/makensis.exe"
-	ifeq ($(SQENGINE),)
+ifeq ($(SQENGINE),)
+	ifeq ($(BUILD),vs)
 		SQENGINE := SquirrelScript
-	endif
-else
-	NSIS_PATH := wine "$(CFG_LIBROOT)/nsis/makensis.exe"
-	ifeq ($(SQENGINE),)
+	else
 		SQENGINE := WinglibScriptEngine
 	endif
 endif
@@ -65,12 +66,12 @@ NSIS_DEL_INSTALLERS := $(foreach f,$(NSIS_INSTALLERS),$(shell $(CFG_DEL) $(f)))
 include $(PRJ_LIBROOT)/sign.mk
 ifneq ($(GO_SIGN_ENABLED),)
 $(CFG_OUTROOT)/Install%$(CFG_DPOSTFIX)_$(CFG_FVER)_$(PROC).exe : %.nsi
-	"$(NSIS_PATH)" /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $<
+	$(CFG_NSIS) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $<
 	$(call GO_SIGN_EXE,$@,$(PRJ_DESC))
 	$(call GO_SIGN_VERIFY,$@)
 else
 $(CFG_OUTROOT)/Install%$(CFG_DPOSTFIX)_$(CFG_FVER)_$(PROC).exe : %.nsi
-	$(NSIS_PATH) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $<
+	$(CFG_NSIS) /DOUTROOT="$(CFG_OUTROOT)" /DPOSTFIX="$(CFG_DPOSTFIX)" /DLIBROOT="$(CFG_LIBROOT)" $(NSIS_VER_STR) $(NSIS_PROC_STR) $(NSIS_BUILD_STR) $<
 endif
 
 .PHONY : all
@@ -78,4 +79,4 @@ all : $(NSIS_INSTALLERS)
 
 endif
 endif
-
+endif

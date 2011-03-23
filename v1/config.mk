@@ -514,6 +514,7 @@ ifeq ($(BUILD),vs)
 		CFG_DEL			:= rm
 		CFG_MD 			:= mkdir -p
 		CFG_CPY			:= cp
+		CFG_CD 			:= cd
 		CFG_SAR			:= sed -i
 #		CFG_MD 			:= $(PRJ_LIBROOT)/make_directory.bat
 		# +++ As to the line above, I have no clue why, but *sometimes*
@@ -540,6 +541,7 @@ ifeq ($(BUILD),vs)
 		CFG_DEL			:= rm -f
 		CFG_CMDSHELL	:= wine
 		CFG_CPY			:= cp
+		CFG_CD 			:= cd
 		CFG_SAR			:= sed -i
 		CFG_PP := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996
 		CFG_CC := wine "$(CFG_TOOLPREFIX)cl" /nologo /wd4996 /Tc
@@ -1013,6 +1015,7 @@ else
 	CFG_RM := rm -rf
 	CFG_DEL:= rm -f
 	CFG_CPY:= cp
+	CFG_CD := cd
 	CFG_SAR:= sed -i
 
 	CFG_CC_OUT := -o $(nullstring)
@@ -1050,7 +1053,6 @@ ifeq ($(PLATFORM),windows)
 		CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
 		PATH := $(PATH):$(CFG_MSPSDK)/bin
 		CFG_SIGNROOT := $(CFG_MSPSDK)/bin
-		CFG_CODESIGN := signtool
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
 		ifeq ($(PROC),x86)			
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
@@ -1064,8 +1066,9 @@ ifeq ($(PLATFORM),windows)
 				CFG_MIDL_FLAGS := /win64 /amd64
 			endif
 		endif
-		CFG_RC := rc
-		CFG_MIDL := midl /nologo
+		CFG_RC := rc.exe
+		CFG_MIDL := midl.exe /nologo
+		CFG_CODESIGN := signtool.exe
 	endif
 
 	EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
@@ -1088,6 +1091,24 @@ ifeq ($(PLATFORM),windows)
 		endif
 	endif
 	
+	EXISTS_MSCAB := $(wildcard $(CFG_LIBROOT)/mscab)
+	ifneq ($(strip $(EXISTS_MSCAB)),)
+		CFG_MSCABROOT := $(CFG_LIBROOT)/mscab
+		PATH := $(PATH):$(CFG_MSCABROOT)
+		CFG_MSCAB := cabarc.exe
+	endif
+	
+	EXISTS_NSIS := $(wildcard $(CFG_LIBROOT)/nsis)
+	ifneq ($(strip $(EXISTS_MSCAB)),)
+		CFG_NSISROOT := $(CFG_LIBROOT)/nsis
+		PATH := $(PATH):$(CFG_NSISROOT)
+		ifeq ($(BUILD),vs)
+			CFG_NSIS := makensis.exe
+		else
+			CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+		endif
+	endif
+
 else
 
 	CFG_OBJ_EXT := o
