@@ -79,6 +79,7 @@ Section "${APPVNAME} (required)"
   SetOverwrite on
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
+  File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
   File "${LIBROOT}\winglib\etc\scripts\reg_winglib.nut"
   File "${LIBROOT}\winglib\etc\scripts\unreg_winglib.nut"
   

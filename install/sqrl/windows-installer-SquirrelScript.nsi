@@ -66,6 +66,7 @@ Section "${APPNAME} (required)"
   SetOverwrite on
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
+  File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR\modules
