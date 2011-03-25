@@ -18,10 +18,14 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(PLATFORM),windows)
-UNSUPPORTED := PLATFORM=$(PLATFORM) is not supported
+ifneq ($(PLATFORM),windows)
+UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid, ffmpeg can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
 else
+
+ifeq ($(BUILD),vs)
+	PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
+endif
 
 #-------------------------------------------------------------------
 # File locations
@@ -35,7 +39,11 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := os
 LOC_CXX_os := c
 LOC_SRC_os := $(CFG_LIBROOT)/libusb/libusb/os
-LOC_LST_os := linux_usbfs
+ifeq ($(PLATFORM),windows)
+	LOC_LST_os := windows_usb threads_windows
+else
+	LOC_LST_os := linux_usbfs
+endif
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
@@ -44,4 +52,3 @@ include $(PRJ_LIBROOT)/build.mk
 include $(PRJ_LIBROOT)/go.mk
 
 endif
-
