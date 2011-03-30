@@ -40,7 +40,7 @@ export LOC_TAG := os
 LOC_CXX_os := c
 LOC_SRC_os := $(CFG_LIBROOT)/libusb/libusb/os
 ifeq ($(PLATFORM),windows)
-	LOC_LST_os := windows_usb threads_windows
+	LOC_LST_os := poll_windows windows_usb threads_windows
 else
 	LOC_LST_os := linux_usbfs
 endif
