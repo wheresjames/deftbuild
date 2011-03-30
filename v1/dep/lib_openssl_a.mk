@@ -21,10 +21,11 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ASM OPENSSL_NO_ERR OPENSSL_SYS_WINDOWS
-endif
-ifeq ($(BUILD),vs)
-	PRJ_DEFS := $(PRJ_DEFS) ssize_t=long
+	# OPENSSL_SYS_WINDOWS
+	PRJ_DEFS := $(PRJ_DEFS) OPENSSL_NO_ERR 
+	ifeq ($(BUILD),vs)
+		PRJ_DEFS := $(PRJ_DEFS) ssize_t=long
+	endif
 endif
 
 #-------------------------------------------------------------------

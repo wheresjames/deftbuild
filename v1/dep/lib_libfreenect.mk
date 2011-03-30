@@ -19,11 +19,12 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
-	PRJ_INCS := $(PRJ_INCS) libusb-win32/libusb
 	ifeq ($(BUILD),vs)
-		PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
+		PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99 libusb-win32/msvc
 		PRJ_DEFS := ssize_t=unsigned
 	endif
+	PRJ_INCS := $(PRJ_INCS) libusb-win32/libusb
+	PRJ_LIBS := $(PRJ_LIBS) usb-win32
 else
 	PRJ_INCS := $(PRJ_INCS) libusb libusb/libusb
 	PRJ_LIBS := $(PRJ_LIBS) usb
@@ -34,7 +35,7 @@ endif
 #-------------------------------------------------------------------
 export LOC_TAG := def
 LOC_CXX_def := c
-LOC_BLD_def := cpp
+#LOC_BLD_def := cpp
 LOC_SRC_def := $(CFG_LIBROOT)/libfreenect/src
 include $(PRJ_LIBROOT)/build.mk
 

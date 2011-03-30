@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := usb-win32
 PRJ_DEPS := libusb-win32
 PRJ_TYPE := lib
-PRJ_INCS := libusb-win32/libusb libusb-win32/msvc
+PRJ_INCS := libusb-win32/libusb
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
@@ -23,7 +23,12 @@ UNSUPPORTED := PLATFORM=$(PLATFORM) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-PRJ_INCS := $(PRJ_INCS) libusb-win32/libusb libusb-win32/msvc
+ifeq ($(BUILD),vs)
+	PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99 libusb-win32/msvc
+	PRJ_DEFS := ssize_t=unsigned
+else
+	PRJ_INCS := $(PRJ_INCS) libusb-win32
+endif
 
 #-------------------------------------------------------------------
 # File locations
