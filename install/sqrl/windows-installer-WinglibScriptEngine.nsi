@@ -236,6 +236,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   
   Delete $INSTDIR\sqrl.exe  
+  Delete $INSTDIR\sqrl-cgi.exe  
   Delete $INSTDIR\License.txt  
   Delete $INSTDIR\reg_winglib.nut
   Delete $INSTDIR\unreg_winglib.nut

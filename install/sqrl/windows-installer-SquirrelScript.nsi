@@ -134,6 +134,7 @@ Section "Uninstall"
   Delete $INSTDIR\uninstall.exe
   
   Delete $INSTDIR\sqrl.exe  
+  Delete $INSTDIR\sqrl-cgi.exe  
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
