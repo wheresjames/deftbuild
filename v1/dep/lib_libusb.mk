@@ -18,8 +18,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(PLATFORM),windows)
-UNSUPPORTED := PLATFORM=$(PLATFORM) is invalid, ffmpeg can only be built with 'gcc'
+ifeq ($(BUILD),vs)
+UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
