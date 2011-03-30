@@ -1099,7 +1099,7 @@ ifeq ($(PLATFORM),windows)
 	endif
 	
 	EXISTS_NSIS := $(wildcard $(CFG_LIBROOT)/nsis)
-	ifneq ($(strip $(EXISTS_MSCAB)),)
+	ifneq ($(strip $(EXISTS_NSIS)),)
 		CFG_NSISROOT := $(CFG_LIBROOT)/nsis
 		PATH := $(PATH):$(CFG_NSISROOT)
 		ifeq ($(BUILD),vs)
