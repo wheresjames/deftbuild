@@ -80,6 +80,7 @@ Section "${APPVNAME} (required)"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
   File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
+  File "${OUTROOT}\wlink${POSTFIX}.exe"
   File "${LIBROOT}\winglib\etc\scripts\reg_winglib.nut"
   File "${LIBROOT}\winglib\etc\scripts\unreg_winglib.nut"
   
@@ -97,7 +98,7 @@ Section "${APPVNAME} (required)"
   WriteUninstaller "uninstall.exe"
   
   ; Associate extension
-  ExecWait '"$INSTDIR\sqrl.exe" "$INSTDIR\reg_winglib.nut"'
+  ExecWait '"$INSTDIR\sqrl${POSTFIX}.exe" "$INSTDIR\reg_winglib.nut"'
   
 SectionEnd
 
@@ -215,8 +216,16 @@ Section "Example Scripts"
   
 SectionEnd
 
-;--------------------------------
+; Optional section (can be disabled by the user)
+Section "WetCoin.com Integration"
 
+  ; Start service
+  ExecWait '"$INSTDIR\wlink.exe" -install -start'
+  
+SectionEnd
+
+
+;--------------------------------
 ; Uninstaller
 
 Section "Uninstall"
@@ -228,6 +237,9 @@ Section "Uninstall"
   ; Unassociate extension
   ExecWait '"$INSTDIR\sqrl.exe" "$INSTDIR\unreg_winglib.nut"'
 
+  ; Stop wlink service
+  ExecWait '"$INSTDIR\wlink.exe" -stop -uninstall'
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPKEY}"
   DeleteRegKey HKLM "SOFTWARE\${APPKEY}"
@@ -237,6 +249,7 @@ Section "Uninstall"
   
   Delete $INSTDIR\sqrl.exe  
   Delete $INSTDIR\sqrl-cgi.exe  
+  Delete $INSTDIR\wlink.exe  
   Delete $INSTDIR\License.txt  
   Delete $INSTDIR\reg_winglib.nut
   Delete $INSTDIR\unreg_winglib.nut

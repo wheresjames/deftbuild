@@ -86,7 +86,7 @@ export LOC_TAG := libavdevice
 LOC_CXX_libavdevice := c
 LOC_SRC_libavdevice := $(CFG_LIBROOT)/ffmpeg/libavdevice
 LOC_EXC_libavdevice := alsa-audio-common alsa-audio-dec alsa-audio-enc bktr \
-					   jack_audio libdc1394
+					   jack_audio libdc1394 fbdev sndio_dec sndio_common sndio_enc
 ifeq ($(PLATFORM),windows)					   
 	LOC_EXC_libavdevice := $(LOC_EXC_libavdevice) dv1394 oss_audio v4l v4l2 x11grab
 	ifeq ($(PROC),arm)
@@ -124,7 +124,9 @@ LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  \
 					  aacpsdata dct32 dxva2_mpeg2 \
 					  \
-					  dct-test fft-test motion-test
+					  dct-test fft-test motion-test \
+					  \
+					  crystalhd
 
 ifeq ($(PROC),arm)
 	ifeq ($(PLATFORM),windows)
