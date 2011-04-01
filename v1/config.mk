@@ -955,7 +955,7 @@ else
 
 	endif
 
-	ifeq ($(LIBLINK),shared)
+	ifneq ($(LIBLINK),static)
 		CFG_LFLAGS := $(CFG_LFLAGS)
 		ifndef PRJ_NPIC
 			CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC
