@@ -571,7 +571,11 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
+	ifneq ($(findstring x64,$(BLD)),)
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x64-local-shared
+	else
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
+	endif
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
 	ifdef PRJ_SQEX
