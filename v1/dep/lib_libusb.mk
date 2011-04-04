@@ -18,13 +18,14 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(BUILD),vs)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
-include $(PRJ_LIBROOT)/unsupported.mk
-else
+#ifeq ($(BUILD),vs)
+#UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
+#include $(PRJ_LIBROOT)/unsupported.mk
+#else
 
 ifeq ($(BUILD),vs)
 	PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
+	PRJ_DEFS := $(PRJ_DEFS) ssize_t=unsigned
 endif
 
 #-------------------------------------------------------------------
@@ -51,4 +52,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-endif
+#endif

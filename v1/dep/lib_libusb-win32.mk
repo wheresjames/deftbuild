@@ -25,7 +25,7 @@ else
 
 ifeq ($(BUILD),vs)
 	PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99 libusb-win32/msvc
-	PRJ_DEFS := ssize_t=unsigned
+	PRJ_DEFS := $(PRJ_DEFS) ssize_t=unsigned
 else
 	PRJ_INCS := $(PRJ_INCS) libusb-win32
 endif
