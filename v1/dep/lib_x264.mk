@@ -60,9 +60,9 @@ ifeq ($(PLATFORM),windows)
 	endif
 else
 	ifeq ($(PROC),x64)
-		LOC_ASM_common_asm := yasm -f elf64 -fPIC -DPIC -DBIT_DEPTH=8 -DARCH_X86_64 
+		LOC_ASM_common_asm := yasm -f elf64 -DPIC -DBIT_DEPTH=8 -DARCH_X86_64 
 	else
-		LOC_ASM_common_asm := yasm -f elf32 -a x86 -fPIC -DPIC -DBIT_DEPTH=8 -DARCH_X86
+		LOC_ASM_common_asm := yasm -f elf32 -a x86 -DPIC -DBIT_DEPTH=8 -DARCH_X86
 	endif
 endif
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
