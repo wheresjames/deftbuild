@@ -24,6 +24,7 @@ include $(PRJ_LIBROOT)/config.mk
 #-------------------------------------------------------------------
 export LOC_TAG := def
 LOC_SRC_def := $(CFG_LIBROOT)/cryptopp
+LOC_EXC_def := cryptest datatest dlltest fipstest regtest test
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

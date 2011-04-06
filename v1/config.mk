@@ -9,8 +9,6 @@
 # delete / new already defined in nafxcwd.lib;libcmtd.lib
 # http://support.microsoft.com/kb/148652
 
-
-
 CFG_COMMA:=,
 CFG_SPACE:=
 CFG_SPACE+=
@@ -61,6 +59,20 @@ ifneq ($(findstring posix,$(BLD)),)
 	XBLD := 1
 endif
 
+ifeq ($(findstring msvs,$(TGT)),)
+	NOMFC := 1
+else
+	ifneq ($(findstring nomfc,$(TGT)),)
+		NOMFC := 1
+	else
+		ifeq ($(findstring mfc,$(TGT)),)
+			ifeq ($(findstring mfc,$(PRJ_FWRK)),)
+				NOMFC := 1
+			endif
+		endif
+	endif
+endif
+
 ifneq ($(findstring vs,$(TGT)),)
 	BUILD := vs
 	TOOLS := local
@@ -91,6 +103,10 @@ ifneq ($(findstring static,$(TGT)),)
 endif
 ifneq ($(findstring shared,$(TGT)),)
 	LIBLINK := shared
+endif
+
+ifneq ($(findstring unicode,$(TGT)),)
+	UNICODE := 1
 endif
 
 ifneq ($(findstring cygwin,$(BLD)),)
@@ -384,32 +400,76 @@ ifeq ($(BUILD),vs)
 
 	ifdef DBG
 		ifeq ($(LIBLINK),static)
-			CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
-		else
 			ifeq ($(PRJ_TYPE),dll)
-				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MDd /Z7 $(CFG_CEXTRA)
+				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
 			else
-				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MDd /Z7 $(CFG_CEXTRA)
+				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
 			endif
-		endif
-		ifeq ($(LIBLINK),static)
 			CFG_LEXTRA	 := /DEBUG
 		else
-			CFG_LEXTRA	 := /DEBUG /NODEFAULTLIB:libcmtd
+#			CFG_LEXTRA	 := /DEBUG /NODEFAULTLIB:libcmtd
+			CFG_LEXTRA	 := /DEBUG
 		endif
 		CFG_DPOSTFIX := _d
 		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
+			CFG_STDLIBS	 := ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 		endif
+
+		# MFC Stuff
+		ifeq ($(NOMFC),)
+			CFG_MFCV := 42
+			ifneq ($(findstring msvs8,$(TGT)),)
+				CFG_MFCV := 80
+			endif
+			ifneq ($(findstring msvs9,$(TGT)),)
+				CFG_MFCV := 90
+			endif
+			ifneq ($(findstring msvs10,$(TGT)),)
+				CFG_MFCV := 100
+			endif
+			CFG_CEXTRA := /D_AFX_NOFORCE_LIBS $(CFG_CEXTRA)
+			ifeq ($(LIBLINK),static)
+				ifeq ($(UNICODE),)
+					ifdef DBG
+						CFG_STDLIBS := nafxcwd.lib libcmtd.lib $(CFG_STDLIBS)
+					else
+						CFG_STDLIBS := nafxcw.lib libcmt.lib $(CFG_STDLIBS)
+					endif
+				else
+					ifdef DBG
+						CFG_STDLIBS := unafxcwd.lib libcmtd.lib $(CFG_STDLIBS)
+					else
+						CFG_STDLIBS := unafxcw.lib libcmt.lib $(CFG_STDLIBS)
+					endif
+				endif
+			else
+				ifeq ($(UNICODE),)
+					ifdef DBG
+						CFG_STDLIBS := mfc$(CFG_MFCV)d.lib mfcs$(CFG_MFCV)d.lib msvcrtd.lib $(CFG_STDLIBS)
+					else
+						CFG_STDLIBS := mfc$(CFG_MFCV).lib mfcs$(CFG_MFCV).lib msvcrt.lib $(CFG_STDLIBS)
+					endif
+				else
+					ifdef DBG
+						CFG_STDLIBS := mfc$(CFG_MFCV)ud.lib mfcs$(CFG_MFCV)ud.lib msvcrtd.lib $(CFG_STDLIBS)
+					else
+						CFG_STDLIBS := mfc$(CFG_MFCV)u.lib mfcs$(CFG_MFCV)u.lib msvcrt.lib $(CFG_STDLIBS)
+					endif
+				endif
+			endif
+		endif
+		
 	else
 		ifeq ($(LIBLINK),static)
-			CFG_CEXTRA	 := /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
-		else
-			CFG_CEXTRA	 := /MD /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
+			ifeq ($(PRJ_TYPE),dll)
+				CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
+			else
+				CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
+			endif
 		endif
 		CFG_LEXTRA	 :=
 		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib Oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib Advapi32.lib vfw32.lib
+			CFG_STDLIBS	 := ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 		endif
 	endif
 
@@ -436,36 +496,36 @@ ifeq ($(BUILD),vs)
 		EXISTS_VSROOT := $(wildcard $(CFG_LIBROOT)/$(VSVER))
 		ifneq ($(strip $(EXISTS_VSROOT)),)
 
-#			ifneq ($(CYGBLD),)
-				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
-				CFG_PATHROOT := $(CFG_VSROOT)
-#				CFG_PATHROOT := $(abspath $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-#				CFG_PATHROOT := $(CFG_CUR_ROOT)/$(CFG_VSROOT)
-#			else
-#				CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
-#				CFG_PATHROOT := $(CFG_VSROOT)
-#			endif
-			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include $(CFG_VSROOT)/VC/atlmfc/include
+			CFG_VSROOT := $(CFG_LIBROOT)/$(VSVER)
+			CFG_PATHROOT := $(CFG_VSROOT)
+			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include
+			ifeq ($(NOMFC),)
+				PRJ_SYSI := $(PRJ_SYSI) $(CFG_VSROOT)/VC/atlmfc/include
+			endif
 
 			ifneq ($(findstring msvs6,$(VSVER)),)
 				PATH := $(PATH):$(CFG_PATHROOT)/VC98/Bin:$(CFG_PATHROOT)/COMMON/IDE/IDE98
-				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
-				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib $(CFG_VSROOT)/VC98/MFC/Lib
-				#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC98/Bin/
+				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC98/Include
+				ifeq ($(NOMFC),)
+					PRJ_SYSI := $(PRJ_SYSI) $(CFG_VSROOT)/VC98/ATL/Include $(CFG_VSROOT)/VC98/MFC/Include
+				endif
+				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC98/Lib
+				ifeq ($(NOMFC),)
+					PRJ_LIBP := $(CFG_VSROOT)/VC98/MFC/Lib
+				endif
 			else
 
 				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include 
-				ifneq ($(findstring msvs,$(VSVER)),)
+				ifeq ($(NOMFC),)
 					PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc 
 				endif
 
 				ifeq ($(PROC),x86)
 					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
-					ifneq ($(findstring msvs,$(VSVER)),)
+					ifeq ($(NOMFC),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
 					endif
-					#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/
 				else
 					ifeq ($(PROC),x64)
 						MSPROC := amd64
@@ -478,25 +538,11 @@ ifeq ($(BUILD),vs)
 						PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/x86_$(MSPROC):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
 					endif
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
-					ifneq ($(findstring msvs,$(VSVER)),)
+					ifeq ($(NOMFC),)
 						PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib/$(MSPROC)
 					endif
-					#CFG_TOOLPREFIX := $(CFG_VSROOT)/VC/bin/$(MSCROSS)$(MSPROC)/
 				endif
 			endif
-
-#			ifneq ($(CYGBLD),)
-				CFG_TOOLPREFIX :=
-#			else
-				# +++ Not sure of the exact pattern here, but VS 8-10 will crash
-				#     having something to do with the combination of forward or 
-				#     backslashes in the command line invocation, and the use of 
-				#     forward or backslashes in #include statements
-#				ifeq ($(findstring win_fwd_slashes,$(PRJ_HACK)),)
-#					CFG_TOOLPREFIX := $(subst /,\,$(CFG_TOOLPREFIX))
-#				endif
-#			endif
-			
 		endif
 	endif
 

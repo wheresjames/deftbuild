@@ -11,7 +11,6 @@ PRJ_INCS := live555/liveMedia/include live555/groupsock/include \
 			live555/UsageEnvironment/include live555/BasicUsageEnvironment/include 
 PRJ_DEFS := SOCKLEN_T=socklen_t
 PRJ_LIBS := 
-PRJ_HACK := win_fwd_slashes
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

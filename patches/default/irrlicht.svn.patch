@@ -1,25 +1,93 @@
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp
---- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp	2011-02-04 10:06:25.000000000 -0500
-+++ irrlicht/source/Irrlicht/CIrrDeviceConsole.cpp	2011-02-03 10:41:13.000000000 -0500
-@@ -75,6 +75,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(con
- 	WindowsSTDOut = GetStdHandle(STD_OUTPUT_HANDLE);
- 	PCOORD Dimensions = 0;
+diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
+--- ../dnl3/irrlicht/include/IrrCompileConfig.h	2011-04-06 12:24:38.078125000 -0400
++++ irrlicht/include/IrrCompileConfig.h	2011-04-06 12:22:47.093750000 -0400
+@@ -5,6 +5,12 @@
+ #ifndef __IRR_COMPILE_CONFIG_H_INCLUDED__
+ #define __IRR_COMPILE_CONFIG_H_INCLUDED__
  
-+#if _WIN32_WINNT > 0x0501	
- 	if (CreationParams.Fullscreen)
- 	{
- 		if (SetConsoleDisplayMode(WindowsSTDOut, CONSOLE_FULLSCREEN_MODE, Dimensions))
-@@ -84,6 +85,7 @@ CIrrDeviceConsole::CIrrDeviceConsole(con
- 		}
- 	}
- 	else
++// For issues such as
++// irrlicht_d.lib(CIrrDeviceConsole.obj) : 
++//	error LNK2005: "void __cdecl operator delete(void *,int,char const *,int)" (??3@YAXPAXHPBDH@Z) 
++//	 already defined in nafxcwd.lib(afxmem.obj)
++#define _IRR_NO_MEMORY_LEAK_DETECTION
++
+ //! Irrlicht SDK Version
+ #define IRRLICHT_VERSION_MAJOR 1
+ #define IRRLICHT_VERSION_MINOR 7
+@@ -130,7 +136,7 @@ define out. */
+ //! Define _IRR_COMPILE_WITH_SOFTWARE_ to compile the Irrlicht engine with software driver
+ /** If you do not need the software driver, or want to use Burning's Video instead,
+ comment this define out */
+-#define _IRR_COMPILE_WITH_SOFTWARE_
++//#define _IRR_COMPILE_WITH_SOFTWARE_
+ 
+ //! Define _IRR_COMPILE_WITH_BURNINGSVIDEO_ to compile the Irrlicht engine with Burning's video driver
+ /** If you do not need this software driver, you can comment this define out. */
+@@ -176,7 +182,7 @@ the engine will no longer read .jpeg ima
+ //! Define _IRR_USE_NON_SYSTEM_JPEG_LIB_ to let irrlicht use the jpeglib which comes with irrlicht.
+ /** If this is commented out, Irrlicht will try to compile using the jpeg lib installed in the system.
+ 	This is only used when _IRR_COMPILE_WITH_LIBJPEG_ is defined. */
+-#define _IRR_USE_NON_SYSTEM_JPEG_LIB_
++//#define _IRR_USE_NON_SYSTEM_JPEG_LIB_
+ 
+ 
+ //! Define _IRR_COMPILE_WITH_LIBPNG_ to enable compiling the engine using libpng.
+@@ -187,7 +193,7 @@ the engine will no longer read .png imag
+ //! Define _IRR_USE_NON_SYSTEM_LIBPNG_ to let irrlicht use the libpng which comes with irrlicht.
+ /** If this is commented out, Irrlicht will try to compile using the libpng installed in the system.
+ 	This is only used when _IRR_COMPILE_WITH_LIBPNG_ is defined. */
+-#define _IRR_USE_NON_SYSTEM_LIB_PNG_
++//#define _IRR_USE_NON_SYSTEM_LIB_PNG_
+ 
+ 
+ //! Define _IRR_D3D_NO_SHADER_DEBUGGING to disable shader debugging in D3D9
+@@ -348,7 +354,7 @@ ones. */
+ /** If this is commented out, Irrlicht will try to compile using the zlib
+ installed on the system. This is only used when _IRR_COMPILE_WITH_ZLIB_ is
+ defined. */
+-#define _IRR_USE_NON_SYSTEM_ZLIB_
++#undef _IRR_USE_NON_SYSTEM_ZLIB_
+ //! Define _IRR_COMPILE_WITH_ZIP_ENCRYPTION_ if you want to read AES-encrypted ZIP archives
+ #define _IRR_COMPILE_WITH_ZIP_ENCRYPTION_
+ //! Define _IRR_COMPILE_WITH_BZIP2_ if you want to support bzip2 compressed zip archives
+@@ -360,7 +366,7 @@ library. */
+ /** If this is commented out, Irrlicht will try to compile using the bzlib
+ installed on the system. This is only used when _IRR_COMPILE_WITH_BZLIB_ is
+ defined. */
+-#define _IRR_USE_NON_SYSTEM_BZLIB_
++#undef _IRR_USE_NON_SYSTEM_BZLIB_
+ //! Define _IRR_COMPILE_WITH_LZMA_ if you want to use LZMA compressed zip files.
+ /** LZMA is a very efficient compression code, known from 7zip. Irrlicht
+ currently only supports zip archives, though. */
+diff -rupwN -x .svn ../dnl3/irrlicht/include/irrAllocator.h irrlicht/include/irrAllocator.h
+--- ../dnl3/irrlicht/include/irrAllocator.h	2011-04-06 12:24:38.328125000 -0400
++++ irrlicht/include/irrAllocator.h	2011-04-06 12:05:21.156250000 -0400
+@@ -10,6 +10,10 @@
+ // necessary for older compilers
+ #include <memory.h>
+ 
++#ifdef _IRR_NO_MEMORY_LEAK_DETECTION
++#	undef new
 +#endif
++
+ namespace irr
+ {
+ namespace core
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2011-04-06 12:24:28.578125000 -0400
++++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-04-08 10:12:24.000000000 -0400
+@@ -162,7 +162,7 @@ IImage* CImageLoaderPng::loadImage(io::I
+ 	if (BitDepth < 8)
  	{
- 		COORD ConsoleSize;
- 		ConsoleSize.X = CreationParams.WindowSize.Width;
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
---- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-02-04 10:06:25.000000000 -0500
-+++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-02-04 09:47:55.000000000 -0500
+ 		if (ColorType==PNG_COLOR_TYPE_GRAY || ColorType==PNG_COLOR_TYPE_GRAY_ALPHA)
+-			png_set_gray_1_2_4_to_8(png_ptr);
++			png_set_expand_gray_1_2_4_to_8(png_ptr);
+ 		else
+ 			png_set_packing(png_ptr);
+ 	}
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
+--- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-04-06 12:24:29.359375000 -0400
++++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-03-21 18:27:56.812500000 -0400
 @@ -16,7 +16,7 @@
  #if !defined(_IRR_XBOX_PLATFORM_)
  	#include <windows.h>
@@ -29,21 +97,15 @@ diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrr
  #endif
  
  namespace irr
-diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2011-02-04 10:06:25.000000000 -0500
-+++ irrlicht/source/Irrlicht/Irrlicht.cpp	2011-02-03 17:54:02.000000000 -0500
-@@ -125,7 +125,7 @@ namespace video
- 
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2011-04-06 12:24:30.125000000 -0400
++++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-04-08 10:12:24.000000000 -0400
+@@ -126,7 +126,7 @@ namespace video
  } // end namespace irr
  
--
-+/*
- #if defined(_IRR_WINDOWS_API_)
+ 
+-#if defined(_IRR_WINDOWS_API_)
++#if defined(_IRR_WINDOWS_API_) && !defined( _IRR_STATIC_LIB_ )
  
  BOOL APIENTRY DllMain( HANDLE hModule,
-@@ -150,4 +150,5 @@ BOOL APIENTRY DllMain( HANDLE hModule,
- }
- 
- #endif // defined(_IRR_WINDOWS_)
-+*/
- 
+                        DWORD  ul_reason_for_call,

@@ -10,6 +10,7 @@ PRJ_TYPE := lib
 PRJ_INCS := guilib
 PRJ_LIBS := 
 PRJ_DEFS := _GUILIB_NOLIB _GUILIB_STATIC_
+PRJ_FWRK := mfc
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

@@ -10,7 +10,6 @@ PRJ_TYPE := lib
 PRJ_INCS := curl/include curl/include/curl openssl/include
 PRJ_LIBS := 
 PRJ_DEFS := USE_OPENSSL USE_SSLEAY
-PRJ_HACK := win_fwd_slashes
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep

@@ -11,6 +11,7 @@ PRJ_INCS := rulib/inc SqPlus/include
 PRJ_LIBS := rulib cximage jpeg png zlib
 PRJ_DEFS := ENABLE_SOCKETS
 PRJ_OSLB := winmm.lib vfw32.lib
+PRJ_FWRK := mfc
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
