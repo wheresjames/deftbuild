@@ -159,9 +159,9 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -fPIC -DPIC -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86 -fPIC -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
 	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
