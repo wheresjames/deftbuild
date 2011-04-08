@@ -1,0 +1,155 @@
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/libusb//config.h libusb/config.h
+--- ../dnl3/libusb//config.h	1969-12-31 19:00:00.000000000 -0500
++++ libusb/config.h	2011-03-30 08:20:35.000000000 -0400
+@@ -0,0 +1,6 @@
++
++#if defined( WIN32 ) || defined( WIN64 )
++#	include "config-windows.h"
++#else
++#	include "config-posix.h"
++#endif
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/libusb//config-posix.h libusb/config-posix.h
+--- ../dnl3/libusb//config-posix.h	1969-12-31 19:00:00.000000000 -0500
++++ libusb/config-posix.h	2011-03-28 13:17:54.000000000 -0400
+@@ -0,0 +1,105 @@
++/* config.h.  Generated from config.h.in by configure.  */
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Default visibility */
++#define DEFAULT_VISIBILITY __attribute__((visibility("default")))
++
++/* Debug message logging */
++#define ENABLE_DEBUG_LOGGING 1
++
++/* Message logging */
++#define ENABLE_LOGGING 1
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#define HAVE_INTTYPES_H 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#define HAVE_STDINT_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if the system has the type `struct timespec'. */
++#define HAVE_STRUCT_TIMESPEC 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++#define HAVE_SYS_TIME_H 1
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#define LT_OBJDIR ".libs/"
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++/* #undef NO_MINUS_C_MINUS_O */
++
++/* Darwin backend */
++/* #undef OS_DARWIN */
++
++/* Linux backend */
++#define OS_LINUX /**/
++
++/* Windows backend */
++/* #undef OS_WINDOWS */
++
++/* Name of package */
++#define PACKAGE "libusb"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT "libusb-devel@lists.sourceforge.net"
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "libusb"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "libusb 1.0.8"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "libusb"
++
++/* Define to the home page for this package. */
++#define PACKAGE_URL "http://www.libusb.org/"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "1.0.8"
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Use Posix Threads */
++#define THREADS_POSIX /**/
++
++/* timerfd headers available */
++#define USBI_TIMERFD_AVAILABLE /**/
++
++/* Version number of package */
++#define VERSION "1.0.8"
++
++/* Use GNU extensions */
++#define _GNU_SOURCE /**/
++
++/* Define to `__inline__' or `__inline' if that's what the C compiler
++   calls it, or to nothing if 'inline' is not supported under any name.  */
++#ifndef __cplusplus
++/* #undef inline */
++#endif
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/libusb//config-windows.h libusb/config-windows.h
+--- ../dnl3/libusb//config-windows.h	1969-12-31 19:00:00.000000000 -0500
++++ libusb/config-windows.h	2011-03-30 07:30:31.000000000 -0400
+@@ -0,0 +1,17 @@
++/* Default visibility */
++#define DEFAULT_VISIBILITY /**/
++
++/* Debug message logging (forced) */
++//#define ENABLE_DEBUG_LOGGING 1
++
++/* Debug message logging (toggable) */
++#define INCLUDE_DEBUG_LOGGING 1
++
++/* Message logging */
++#define ENABLE_LOGGING 1
++
++/* Windows backend */
++#define OS_WINDOWS /**/
++
++/* type of second poll() argument */
++#define POLL_NFDS_TYPE unsigned int
+Binary files ../dnl3/libusb//.git/index and libusb/.git/index differ
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/libusb//.git/logs/HEAD libusb/.git/logs/HEAD
+--- ../dnl3/libusb//.git/logs/HEAD	2011-03-30 08:35:16.000000000 -0400
++++ libusb/.git/logs/HEAD	2011-03-30 08:22:03.000000000 -0400
+@@ -1 +1 @@
+-0000000000000000000000000000000000000000 295c9d12e25bc2dbdd8b42bd67a1f7120f0631a1 ru <ru@wheresjames.com> 1301488516 -0400	clone: from git://git.libusb.org/libusb.git
++0000000000000000000000000000000000000000 295c9d12e25bc2dbdd8b42bd67a1f7120f0631a1 ru <ru@wheresjames.com> 1301487723 -0400	clone: from git://git.libusb.org/libusb.git
+diff -rupwbBEN --strip-trailing-cr -x .svn ../dnl3/libusb//.git/logs/refs/heads/master libusb/.git/logs/refs/heads/master
+--- ../dnl3/libusb//.git/logs/refs/heads/master	2011-03-30 08:35:16.000000000 -0400
++++ libusb/.git/logs/refs/heads/master	2011-03-30 08:22:03.000000000 -0400
+@@ -1 +1 @@
+-0000000000000000000000000000000000000000 295c9d12e25bc2dbdd8b42bd67a1f7120f0631a1 ru <ru@wheresjames.com> 1301488516 -0400	clone: from git://git.libusb.org/libusb.git
++0000000000000000000000000000000000000000 295c9d12e25bc2dbdd8b42bd67a1f7120f0631a1 ru <ru@wheresjames.com> 1301487723 -0400	clone: from git://git.libusb.org/libusb.git
+Binary files ../dnl3/libusb//.git/objects/pack/pack-b7acc652c8cf44c16721d9e2a4c796c2123ede6c.idx and libusb/.git/objects/pack/pack-b7acc652c8cf44c16721d9e2a4c796c2123ede6c.idx differ
+Binary files ../dnl3/libusb//.git/objects/pack/pack-b7acc652c8cf44c16721d9e2a4c796c2123ede6c.pack and libusb/.git/objects/pack/pack-b7acc652c8cf44c16721d9e2a4c796c2123ede6c.pack differ
