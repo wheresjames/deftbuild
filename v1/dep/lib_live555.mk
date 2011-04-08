@@ -20,10 +20,6 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(BUILD),vs)
-	PRJ_DEFS := $(PRJ_DEFS) socklen_t=int
-endif
-
 ifeq ($(PLATFORM),windows)
 	ifeq ($(PROC),arm)
 		PRJ_DEFS := $(PRJ_DEFS) LOCALE_NOT_USED

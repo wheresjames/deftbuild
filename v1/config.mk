@@ -1090,6 +1090,12 @@ endif
 
 ifeq ($(PLATFORM),windows)
 
+	WINVER := 0x0502
+
+	PRJ_DEFS := $(PRJ_DEFS) WINVER=$(WINVER) _WIN32_WINNT=$(WINVER)
+	PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
+	# PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
+		
 	CFG_OBJ_EXT  := obj
 	CFG_DEP_EXT  := d
 	CFG_LIB_PRE	 :=
@@ -1104,11 +1110,6 @@ ifeq ($(PLATFORM),windows)
 		CFG_RES_EXT  := $(CFG_OBJ_EXT)
 	endif
 	
-	WINVER := 0x0501
-	PRJ_DEFS := $(PRJ_DEFS) WINVER=$(WINVER) _WIN32_WINNT=$(WINVER)
-	# PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
-	# PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
-		
 	CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
 		
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
