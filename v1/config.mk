@@ -547,9 +547,9 @@ ifeq ($(BUILD),vs)
 	endif
 
 	ifeq ($(OS),win64)
-		PRJ_DEFS := $(PRJ_DEFS) WIN64
+		PRJ_DEFS := $(PRJ_DEFS) WIN64 _WIN64
 	else
-		PRJ_DEFS := $(PRJ_DEFS) WIN32
+		PRJ_DEFS := $(PRJ_DEFS) WIN32 _WIN32
 	endif
 	
 	ifeq ($(XBLD),)
@@ -1104,8 +1104,10 @@ ifeq ($(PLATFORM),windows)
 		CFG_RES_EXT  := $(CFG_OBJ_EXT)
 	endif
 	
-	PRJ_DEFS := $(PRJ_DEFS) WINVER=0x0501 _WIN32_WINNT=0x0501
-	#PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
+	WINVER := 0x0501
+	PRJ_DEFS := $(PRJ_DEFS) WINVER=$(WINVER) _WIN32_WINNT=$(WINVER)
+	# PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
+	# PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
 		
 	CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
 		

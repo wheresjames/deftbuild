@@ -4,8 +4,8 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := wpub
-PRJ_DEPS := wpub
+PRJ_NAME := Vp
+PRJ_DEPS := Vp
 PRJ_TYPE := exe
 PRJ_INCS := rulib/inc SqPlus/include
 PRJ_LIBS := rulib cximage jpeg png zlib
@@ -33,17 +33,17 @@ CFG_LFLAGS := $(CFG_LFLAGS) /SUBSYSTEM:WINDOWS
 #-------------------------------------------------------------------
 
 export LOC_TAG := def
-LOC_SRC_def := $(CFG_LIBROOT)/wpub
+LOC_SRC_def := $(CFG_LIBROOT)/Vp
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := opc
-LOC_SRC_opc := $(CFG_LIBROOT)/wpub/opc
+LOC_SRC_opc := $(CFG_LIBROOT)/Vp/opc
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := rc
 LOC_CXX_rc := rc
 LOC_BLD_rc := rc
-LOC_SRC_rc := $(CFG_LIBROOT)/wpub
+LOC_SRC_rc := $(CFG_LIBROOT)/Vp
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
