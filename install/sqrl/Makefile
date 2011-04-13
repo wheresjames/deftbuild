@@ -10,6 +10,13 @@ PRJ_DESC := Squirrel Installer
 PRJ_DEPS := SqPlus
 PRJ_LIBROOT := ../../v1
 
+# Signing info
+#PRJ_COMPANY :=
+#PRJ_URL :=
+#PRJ_EMAIL :=
+#PRJ_COPYRIGHT :=
+#PRJ_SIGN :=
+
 #-------------------------------------------------------------------
 # Configure
 #-------------------------------------------------------------------
