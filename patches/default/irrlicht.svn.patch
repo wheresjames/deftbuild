@@ -1,6 +1,6 @@
 diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include/IrrCompileConfig.h
---- ../dnl3/irrlicht/include/IrrCompileConfig.h	2011-04-06 12:24:38.078125000 -0400
-+++ irrlicht/include/IrrCompileConfig.h	2011-04-06 12:22:47.093750000 -0400
+--- ../dnl3/irrlicht/include/IrrCompileConfig.h	2011-04-29 15:48:02.484375000 -0400
++++ irrlicht/include/IrrCompileConfig.h	2011-04-14 09:42:02.890625000 -0400
 @@ -5,6 +5,12 @@
  #ifndef __IRR_COMPILE_CONFIG_H_INCLUDED__
  #define __IRR_COMPILE_CONFIG_H_INCLUDED__
@@ -14,6 +14,15 @@ diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include
  //! Irrlicht SDK Version
  #define IRRLICHT_VERSION_MAJOR 1
  #define IRRLICHT_VERSION_MINOR 7
+@@ -42,7 +48,7 @@
+ //#define _IRR_COMPILE_WITH_SDL_DEVICE_
+ 
+ //! Comment this line to compile without the fallback console device.
+-#define _IRR_COMPILE_WITH_CONSOLE_DEVICE_
++// #define _IRR_COMPILE_WITH_CONSOLE_DEVICE_
+ 
+ //! WIN32 for Windows32
+ //! WIN64 for Windows64
 @@ -130,7 +136,7 @@ define out. */
  //! Define _IRR_COMPILE_WITH_SOFTWARE_ to compile the Irrlicht engine with software driver
  /** If you do not need the software driver, or want to use Burning's Video instead,
@@ -60,7 +69,7 @@ diff -rupwN -x .svn ../dnl3/irrlicht/include/IrrCompileConfig.h irrlicht/include
  /** LZMA is a very efficient compression code, known from 7zip. Irrlicht
  currently only supports zip archives, though. */
 diff -rupwN -x .svn ../dnl3/irrlicht/include/irrAllocator.h irrlicht/include/irrAllocator.h
---- ../dnl3/irrlicht/include/irrAllocator.h	2011-04-06 12:24:38.328125000 -0400
+--- ../dnl3/irrlicht/include/irrAllocator.h	2011-04-29 15:48:03.015625000 -0400
 +++ irrlicht/include/irrAllocator.h	2011-04-06 12:05:21.156250000 -0400
 @@ -10,6 +10,10 @@
  // necessary for older compilers
@@ -74,7 +83,7 @@ diff -rupwN -x .svn ../dnl3/irrlicht/include/irrAllocator.h irrlicht/include/irr
  {
  namespace core
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlicht/source/Irrlicht/CImageLoaderPNG.cpp
---- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2011-04-06 12:24:28.578125000 -0400
+--- ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2011-04-29 15:47:44.562500000 -0400
 +++ irrlicht/source/Irrlicht/CImageLoaderPNG.cpp	2010-04-08 10:12:24.000000000 -0400
 @@ -162,7 +162,7 @@ IImage* CImageLoaderPng::loadImage(io::I
  	if (BitDepth < 8)
@@ -86,7 +95,7 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CImageLoaderPNG.cpp irrlich
  			png_set_packing(png_ptr);
  	}
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/source/Irrlicht/CIrrDeviceWin32.h
---- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-04-06 12:24:29.359375000 -0400
+--- ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-04-29 15:47:45.281250000 -0400
 +++ irrlicht/source/Irrlicht/CIrrDeviceWin32.h	2011-03-21 18:27:56.812500000 -0400
 @@ -16,7 +16,7 @@
  #if !defined(_IRR_XBOX_PLATFORM_)
@@ -97,8 +106,38 @@ diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/CIrrDeviceWin32.h irrlicht/
  #endif
  
  namespace irr
+diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/COpenGLDriver.cpp irrlicht/source/Irrlicht/COpenGLDriver.cpp
+--- ../dnl3/irrlicht/source/Irrlicht/COpenGLDriver.cpp	2011-04-29 15:47:46.703125000 -0400
++++ irrlicht/source/Irrlicht/COpenGLDriver.cpp	2011-04-29 15:37:10.500000000 -0400
+@@ -1275,7 +1275,7 @@ void COpenGLDriver::runOcclusionQuery(sc
+ #else
+ 				0,
+ #endif
+-				reinterpret_cast<GLuint>(OcclusionQueries[index].ID));
++				reinterpret_cast<long GLuint>(OcclusionQueries[index].ID));
+ 		CNullDriver::runOcclusionQuery(node,visible);
+ 		if (OcclusionQueries[index].ID)
+ 			extGlEndQuery(
+@@ -1302,7 +1302,7 @@ void COpenGLDriver::updateOcclusionQuery
+ 			return;
+ 		GLint available = block?GL_TRUE:GL_FALSE;
+ 		if (!block)
+-			extGlGetQueryObjectiv(reinterpret_cast<GLuint>(OcclusionQueries[index].ID),
++			extGlGetQueryObjectiv(reinterpret_cast<long GLuint>(OcclusionQueries[index].ID),
+ #ifdef GL_ARB_occlusion_query
+ 						GL_QUERY_RESULT_AVAILABLE_ARB,
+ #elif defined(GL_NV_occlusion_query)
+@@ -1314,7 +1314,7 @@ void COpenGLDriver::updateOcclusionQuery
+ 		testGLError();
+ 		if (available==GL_TRUE)
+ 		{
+-			extGlGetQueryObjectiv(reinterpret_cast<GLuint>(OcclusionQueries[index].ID),
++			extGlGetQueryObjectiv(reinterpret_cast<long GLuint>(OcclusionQueries[index].ID),
+ #ifdef GL_ARB_occlusion_query
+ 						GL_QUERY_RESULT_ARB,
+ #elif defined(GL_NV_occlusion_query)
 diff -rupwN -x .svn ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp irrlicht/source/Irrlicht/Irrlicht.cpp
---- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2011-04-06 12:24:30.125000000 -0400
+--- ../dnl3/irrlicht/source/Irrlicht/Irrlicht.cpp	2011-04-29 15:47:45.921875000 -0400
 +++ irrlicht/source/Irrlicht/Irrlicht.cpp	2010-04-08 10:12:24.000000000 -0400
 @@ -126,7 +126,7 @@ namespace video
  } // end namespace irr

@@ -10,7 +10,10 @@ PRJ_TYPE := lib
 PRJ_INCS := opencv/include/opencv opencv/src/cv \
 			opencv/3rdparty/include zlib
 PRJ_LIBS := 
-
+ifneq ($(USE_HIGHGUI),)
+	PRJ_DEFS := $(PRJ_DEFS) USE_HIGHGUI
+endif
+	
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
 
@@ -41,6 +44,12 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := cvaux
 LOC_SRC_cvaux := $(CFG_LIBROOT)/opencv/src/cvaux
 include $(PRJ_LIBROOT)/build.mk
+
+ifneq ($(USE_HIGHGUI),)
+	export LOC_TAG := highgui
+	LOC_SRC_highgui := $(CFG_LIBROOT)/opencv/src/highgui
+	include $(PRJ_LIBROOT)/build.mk
+endif
 
 #-------------------------------------------------------------------
 # Execute the build
