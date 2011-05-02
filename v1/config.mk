@@ -398,6 +398,10 @@ ifeq ($(BUILD),vs)
 		CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld.exe"
 	endif
 
+	ifeq ($(CFG_STDLIBS),)
+		CFG_STDLIBS	:= ws2_32.lib ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
+	endif
+	
 	ifdef DBG
 		ifeq ($(LIBLINK),static)
 			ifeq ($(PRJ_TYPE),dll)
@@ -411,9 +415,6 @@ ifeq ($(BUILD),vs)
 			CFG_LEXTRA	 := /DEBUG
 		endif
 		CFG_DPOSTFIX := _d
-		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
-		endif
 
 		# MFC Stuff
 		ifeq ($(NOMFC),)
@@ -468,9 +469,6 @@ ifeq ($(BUILD),vs)
 			endif
 		endif
 		CFG_LEXTRA	 :=
-		ifeq ($(CFG_STDLIBS),)
-			CFG_STDLIBS	 := ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
-		endif
 	endif
 
 	ifeq ($(PROC),x86)
@@ -893,7 +891,8 @@ else
 			CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/bin/arm-wince-mingw32ce-
 			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/arm-wince-mingw32ce/
 
-			CFG_STDLIB := -lole32 -laygshell -lwinsock -lws2
+			# -lwinsock
+			CFG_STDLIB := -lole32 -laygshell -lws2
 			CFG_LFLAGS := $(CFG_LEXTRA)
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 								-c -MMD -D_WIN32_WCE=0x0400 -DOEX_ARM -D__int64="long long" \
@@ -937,7 +936,7 @@ else
 			# CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
 			# --whole-archive -rdynamic
 
-			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lvfw32
+			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32
 			CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 								-c -MMD -Wall -fno-strict-aliasing \
@@ -966,7 +965,7 @@ else
 			endif
 
 			# -fstack-check
-			CFG_STDLIB := -lole32 -lgdi32 -lwsock32 -lws2_32 -lavicap32 -lmsvfw32
+			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lavicap32 -lmsvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols -fno-leading-underscore -static-libgcc -static-libstdc++
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 								-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
