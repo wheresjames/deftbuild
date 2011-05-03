@@ -110,10 +110,10 @@ LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
 LOC_EXC_libavcodec := vaapi vaapi_h264 vaapi_mpeg2 vaapi_mpeg4 vaapi_vc1 \
 					  \
-					  libamr libdiracdec libdiracenc \
+					  libamr libcelt_dec libdiracdec libdiracenc \
 					  libfaac libfaad libgsm libmp3lame libopenjpeg libschroedinger \
 					  libschroedingerdec libschroedingerenc libspeexdec libtheoraenc \
-					  libvorbis libvpxdec libvpxenc libxavs libxvidff libxvid_rc \
+					  libvo-aacenc libvorbis libvpxdec libvpxenc libxavs libxvidff libxvid_rc \
 					  \
 					  beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
 					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
