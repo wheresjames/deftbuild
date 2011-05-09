@@ -60,7 +60,7 @@
 #define ARCH_SPARC 0
 #define ARCH_SPARC64 0
 #define ARCH_TOMI 0
-#define ARCH_X86 1
+#define ARCH_X86 0
 #define HAVE_ALTIVEC 0
 #define HAVE_AMD3DNOW 1
 #define HAVE_AMD3DNOWEXT 1
@@ -203,7 +203,7 @@
 #define CONFIG_DOC 0
 #define CONFIG_DWT 1
 #define CONFIG_DXVA2 0
-#define CONFIG_FASTDIV 1
+#define CONFIG_FASTDIV 0
 #define CONFIG_FFMPEG 1
 #define CONFIG_FFPLAY 0
 #define CONFIG_FFPROBE 1

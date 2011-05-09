@@ -1,0 +1,54 @@
+diff --git a/include/libfreenect.h b/include/libfreenect.h
+old mode 100644
+new mode 100755
+index b13fa26..4cc6d0e
+--- a/include/libfreenect.h
++++ b/include/libfreenect.h
+@@ -129,7 +129,7 @@ typedef struct _freenect_device freenect_device; /**< Holds device information.
+   /* frees Windows users of the burden of specifying the path to <libusb-1.0/libusb.h> */
+   typedef void freenect_usb_context;
+ #else
+-  #include <libusb-1.0/libusb.h>
++  #include <libusb.h>
+   typedef libusb_context freenect_usb_context; /**< Holds libusb-1.0 specific information */
+ #endif
+ //
+diff --git a/src/usb_libusb10.c b/src/usb_libusb10.c
+old mode 100644
+new mode 100755
+index 3d5c010..473099f
+--- a/src/usb_libusb10.c
++++ b/src/usb_libusb10.c
+@@ -28,7 +28,7 @@
+ #include <stdbool.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <libusb-1.0/libusb.h>
++#include <libusb.h>
+ #include "freenect_internal.h"
+ 
+ int fnusb_num_devices(fnusb_ctx *ctx)
+@@ -209,7 +209,7 @@ int fnusb_close_subdevices(freenect_device *dev)
+ 	return 0;
+ }
+ 
+-static void iso_callback(struct libusb_transfer *xfer)
++static void LIBUSB_CALL iso_callback(struct libusb_transfer *xfer)
+ {
+ 	int i;
+ 	fnusb_isoc_stream *strm = (fnusb_isoc_stream*)xfer->user_data;
+diff --git a/src/usb_libusb10.h b/src/usb_libusb10.h
+old mode 100644
+new mode 100755
+index 7cb9c9f..8b7d5d8
+--- a/src/usb_libusb10.h
++++ b/src/usb_libusb10.h
+@@ -27,7 +27,7 @@
+ #ifndef USB_LIBUSB10
+ #define USB_LIBUSB10
+ 
+-#include <libusb-1.0/libusb.h>
++#include <libusb.h>
+ 
+ #if defined(__APPLE__)
+ /*
