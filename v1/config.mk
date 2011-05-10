@@ -1,5 +1,5 @@
 
-#SHELL=/bin/sh
+#SHELL=/bin/bash
 #SHELL=CMD.EXE
 
 # iii. I'm permanently giving up on the Windows command line,
@@ -57,6 +57,10 @@ endif
 
 ifneq ($(findstring posix,$(BLD)),)
 	XBLD := 1
+endif
+
+ifneq ($(findstring windows,$(BLD)),)
+	WBLD := 1
 endif
 
 ifeq ($(findstring msvs,$(TGT)),)
@@ -389,7 +393,7 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 	#PATH := $(CFG_LOCAL_BUILD_TYPE):$(PATH)
-	
+
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
 	ifdef PRJ_SQEX
@@ -401,7 +405,7 @@ ifeq ($(BUILD),vs)
 	ifeq ($(CFG_STDLIBS),)
 		CFG_STDLIBS	:= ws2_32.lib ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 	endif
-	
+
 	ifdef DBG
 		ifeq ($(LIBLINK),static)
 			ifeq ($(PRJ_TYPE),dll)
@@ -459,7 +463,7 @@ ifeq ($(BUILD),vs)
 				endif
 			endif
 		endif
-		
+
 	else
 		ifeq ($(LIBLINK),static)
 			ifeq ($(PRJ_TYPE),dll)
@@ -468,7 +472,7 @@ ifeq ($(BUILD),vs)
 				CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
 			endif
 		endif
-		CFG_LEXTRA	 :=
+		CFG_LEXTRA :=
 	endif
 
 	ifeq ($(PROC),x86)
@@ -480,7 +484,7 @@ ifeq ($(BUILD),vs)
 			CFG_LEXTRA := /MACHINE:$(PROC) $(CFG_LEXTRA)
 		endif
 	endif
-	
+
 	ifneq ($(VERBOSELIB),)
 		CFG_LEXTRA := $(CFG_LEXTRA) /verbose:lib
 	endif
@@ -544,14 +548,8 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
-	ifeq ($(OS),win64)
-		PRJ_DEFS := $(PRJ_DEFS) WIN64 _WIN64
-	else
-		PRJ_DEFS := $(PRJ_DEFS) WIN32 _WIN32
-	endif
-	
 	ifeq ($(XBLD),)
-	
+
 		CFG_DP 			:= makedepend
 		CFG_RM 			:= rmdir /s /q
 #		CFG_DEL			:= del /f /q
@@ -566,7 +564,7 @@ ifeq ($(BUILD),vs)
 		#     Windows.  Moving it to a batch file seems to fix the problem.
 		#     BTW, it's *not* the embedded relative ellipsis, I suspected
 		#     that too.
-		
+
 		ifneq ($(CFG_TOOLPREFIX),)
 			CFG_PP := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996
 			CFG_CC := "$(CFG_TOOLPREFIX)cl.exe" /nologo /wd4996 /Tc
@@ -578,7 +576,7 @@ ifeq ($(BUILD),vs)
 			CFG_LD := "link.exe" /nologo
 			CFG_AR := "lib.exe" /nologo
 		endif
-		
+
 	else
 		CFG_MD 			:= mkdir -p
 		CFG_RM 			:= rm -rf
@@ -615,11 +613,20 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	ifneq ($(findstring x64,$(BLD)),)
-		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x64-local-shared
+	ifneq ($(WBLD),)
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win64-x64-mingw64-static
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win32-x86-mingw32-static
+		endif
 	else
-		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x64-local-shared
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
+		endif
 	endif
+		
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
 	ifdef PRJ_SQEX
@@ -713,8 +720,8 @@ else
 			CFG_LFLAGS := $(CFG_LEXTRA)
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT \
-									    -DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX \
-									    -DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
+										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX \
+										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 			
@@ -1092,9 +1099,15 @@ ifeq ($(PLATFORM),windows)
 	WINVER := 0x0502
 
 	PRJ_DEFS := $(PRJ_DEFS) WINVER=$(WINVER) _WIN32_WINNT=$(WINVER)
-	PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
+	# PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
 	# PRJ_DEFS := $(PRJ_DEFS) NTDDI_VERSION=NTDDI_WINXP
 		
+	ifeq ($(OS),win64)
+		PRJ_DEFS := $(PRJ_DEFS) WIN64 _WIN64
+	else
+		PRJ_DEFS := $(PRJ_DEFS) WIN32 _WIN32
+	endif
+	
 	CFG_OBJ_EXT  := obj
 	CFG_DEP_EXT  := d
 	CFG_LIB_PRE	 :=
@@ -1109,6 +1122,19 @@ ifeq ($(PLATFORM),windows)
 		CFG_RES_EXT  := $(CFG_OBJ_EXT)
 	endif
 	
+else
+
+	CFG_OBJ_EXT := o
+	CFG_DEP_EXT := d
+	CFG_LIB_PRE	 := lib
+	CFG_LIB_POST := .a
+	CFG_DLL_PRE	 := lib
+	CFG_DLL_POST := .so
+
+endif
+	
+ifeq ($(BUILD),vs)
+
 	CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
 		
 	EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
@@ -1172,15 +1198,6 @@ ifeq ($(PLATFORM),windows)
 		endif
 	endif
 
-else
-
-	CFG_OBJ_EXT := o
-	CFG_DEP_EXT := d
-	CFG_LIB_PRE	 := lib
-	CFG_LIB_POST := .a
-	CFG_DLL_PRE	 := lib
-	CFG_DLL_POST := .so
-	
 endif
 
 ifdef PRJ_DEFS

@@ -94,12 +94,22 @@ BLD_PATH_LNK_$(LOC_TAG) := /usr/bin
 ifneq ($(LOC_LST_$(LOC_TAG)),)
 	BLD_SOURCES_$(LOC_TAG) 	:= $(foreach file,$(LOC_LST_$(LOC_TAG)),$(BLD_PATH_SRC_$(LOC_TAG))/$(file).$(LOC_CXX_$(LOC_TAG)))
 else
-	BLD_SOURCES_$(LOC_TAG) 	:= $(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/*.$(LOC_CXX_$(LOC_TAG)))
+	ifneq ($(LOC_WLS_$(LOC_TAG)),)
+		BLD_SOURCES_$(LOC_TAG) 	:= $(foreach wc,$(LOC_WLS_$(LOC_TAG)),$(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/$(wc)*.$(LOC_CXX_$(LOC_TAG))))
+	else
+		BLD_SOURCES_$(LOC_TAG) 	:= $(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/*.$(LOC_CXX_$(LOC_TAG)))
+	endif
 endif
 
 ifneq ($(LOC_EXC_$(LOC_TAG)),)
 	BLD_EXCLUDE_$(LOC_TAG) 	:= $(foreach file,$(LOC_EXC_$(LOC_TAG)),$(BLD_PATH_SRC_$(LOC_TAG))/$(file).$(LOC_CXX_$(LOC_TAG)))
 	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_EXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
+endif
+
+ifneq ($(LOC_WEX_$(LOC_TAG)),)
+	BLD_WEXCLUDE_$(LOC_TAG)	:= $(foreach wc,$(LOC_WEX_$(LOC_TAG)),$(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/$(wc)*.$(LOC_CXX_$(LOC_TAG))))
+	#BLD_WEXCLUDE_$(LOC_TAG)	:= $(foreach file,$(LOC_EXC_$(LOC_TAG)),$(BLD_PATH_SRC_$(LOC_TAG))/$(file).$(LOC_CXX_$(LOC_TAG)))
+	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_WEXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
 endif
 
 BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
@@ -171,8 +181,8 @@ BLD_CLEAN 	:= $(BLD_CLEAN) clean_$(LOC_TAG)
 # Build
 #-------------------------------------------------------------------
 
-$(print BLD_OBJECTS_$(LOC_TAG) )
-$(print $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) )
+# $(print BLD_OBJECTS_$(LOC_TAG) )
+# $(print $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) )
 
 ifeq ($(BUILD),vs)
 

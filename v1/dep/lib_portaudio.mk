@@ -46,6 +46,10 @@ export LOC_TAG := win
 LOC_CXX_win := c
 LOC_SRC_win := $(CFG_LIBROOT)/portaudio/src/os/win
 LOC_EXC_win := pa_win_wdmks_utils
+ifneq ($(BUILD),vs)
+	LOC_EXC_win := $(LOC_EXC_win) pa_x86_plain_converters
+endif
+
 include $(PRJ_LIBROOT)/build.mk
 
 # export LOC_TAG := asio

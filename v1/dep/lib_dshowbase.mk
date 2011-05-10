@@ -18,8 +18,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(PLATFORM),windows)
-UNSUPPORTED := PLATFORM=$(PLATFORM) is not supported
+ifneq ($(BUILD),vs)
+UNSUPPORTED := BUILD=$(BUILD) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

@@ -21,6 +21,7 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifeq ($(PLATFORM),windows)
+	PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)
 	ifeq ($(PROC),arm)
 		PRJ_DEFS := $(PRJ_DEFS) LOCALE_NOT_USED
 	endif
