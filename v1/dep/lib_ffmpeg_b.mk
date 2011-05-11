@@ -57,10 +57,12 @@ endif
 # File locations
 #-------------------------------------------------------------------
 
+# *_a.lib, *_b.lib crap is because of windows command line limit
+
 export LOC_TAG := libavcodec
 LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_WLS_libavcodec := g h i j k l m n o p q r s t u v w x y z
+LOC_WLS_libavcodec := 0 1 2 3 4 5 6 7 8 9 a b c d e f
 LOC_WEX_libavcodec := vaa lib
 LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
 					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
@@ -73,25 +75,7 @@ LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template
 					  \
 					  dct-test fft-test motion-test \
 					  \
-					  crystalhd \
-					  \
-					  mpegvideo_enc
-
-# mpegvideo_enc crashing mingw on windows
-
-ifeq ($(PROC),arm)
-	ifeq ($(PLATFORM),windows)
-#		LOC_EXC_libavcodec := $(LOC_EXC_libavcodec)
-#							  4xm apedec asv1 cljr dct-test dv faandct \
-#							  faanidct ffv1 huffyuv imgconvert
-	endif
-#	dnxhdenc dsputil gif sp5xdec
-endif
-ifeq ($(PLATFORM),windows)
-	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) pthread
-else
-	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) w32thread
-endif
+					  crystalhd
 
 include $(PRJ_LIBROOT)/build.mk
 

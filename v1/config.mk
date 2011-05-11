@@ -1031,6 +1031,9 @@ else
 
 	ifeq ($(PRJ_TYPE),dll)
 		CFG_LFLAGS := $(CFG_LFLAGS) -shared
+		ifeq ($(PLATFORM),windows)
+			CFG_LFLAGS := $(CFG_LFLAGS) -Wl,-enable-auto-import
+		endif
 	else
 		ifeq ($(LIBLINK),static)
 			CFG_LFLAGS := $(CFG_LFLAGS) -static -static-libgcc
