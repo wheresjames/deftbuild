@@ -27,6 +27,11 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifeq ($(PLATFORM),windows)
+
+	ifneq ($(BUILD),vs)
+		PRJ_DEFS := $(PRJ_DEFS) __GNUWIN32__
+	endif
+
 	PRJ_DEFS := $(PRJ_DEFS) _IRR_STATIC_LIB_ _IRR_MULTI_ZLIB_
 else
 	PRJ_DEFS := $(PRJ_DEFS) _IRR_USE_LINUX_DEVICE_ 
