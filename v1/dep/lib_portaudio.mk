@@ -19,7 +19,15 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+# -masm=intel -fasm-blocks -use-msasm -use-asm
+
 ifeq ($(PLATFORM),windows)
+	ifneq ($(BUILD),vs)
+		ifeq ($(PROC),x86)
+			# CFG_CFLAGS := $(CFG_CFLAGS) -masm=intel
+		endif
+	endif
+
 	PRJ_DEFS := $(PRJ_DEFS) PA_NO_ASIO PA_NO_WASAPI
 	PRJ_INCS := $(PRJ_INCS) portaudio/src/os/win
 ifneq ($(BUILD),vs)
