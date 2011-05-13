@@ -1125,6 +1125,24 @@ ifeq ($(PLATFORM),windows)
 		CFG_RES_EXT  := $(CFG_OBJ_EXT)
 	endif
 	
+	EXISTS_NSIS := $(wildcard $(CFG_LIBROOT)/nsis)
+	ifneq ($(strip $(EXISTS_NSIS)),)
+		CFG_NSISROOT := $(CFG_LIBROOT)/nsis
+		PATH := $(PATH):$(CFG_NSISROOT)
+		ifeq ($(BUILD),vs)
+			CFG_NSIS := makensis.exe
+		else
+			CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+		endif
+	endif
+
+	EXISTS_MSCAB := $(wildcard $(CFG_LIBROOT)/mscab)
+	ifneq ($(strip $(EXISTS_MSCAB)),)
+		CFG_MSCABROOT := $(CFG_LIBROOT)/mscab
+		PATH := $(PATH):$(CFG_MSCABROOT)
+		CFG_MSCAB := cabarc.exe
+	endif
+	
 else
 
 	CFG_OBJ_EXT := o
@@ -1183,24 +1201,6 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 	
-	EXISTS_MSCAB := $(wildcard $(CFG_LIBROOT)/mscab)
-	ifneq ($(strip $(EXISTS_MSCAB)),)
-		CFG_MSCABROOT := $(CFG_LIBROOT)/mscab
-		PATH := $(PATH):$(CFG_MSCABROOT)
-		CFG_MSCAB := cabarc.exe
-	endif
-	
-	EXISTS_NSIS := $(wildcard $(CFG_LIBROOT)/nsis)
-	ifneq ($(strip $(EXISTS_NSIS)),)
-		CFG_NSISROOT := $(CFG_LIBROOT)/nsis
-		PATH := $(PATH):$(CFG_NSISROOT)
-		ifeq ($(BUILD),vs)
-			CFG_NSIS := makensis.exe
-		else
-			CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
-		endif
-	endif
-
 endif
 
 ifdef PRJ_DEFS
