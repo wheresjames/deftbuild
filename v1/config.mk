@@ -548,6 +548,11 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 
+	#user override?
+	ifdef PRE
+		CFG_TOOLPREFIX = $(strip $(PRE))
+	endif
+
 	ifeq ($(XBLD),)
 
 		CFG_DP 			:= makedepend
@@ -1036,10 +1041,15 @@ else
 		endif
 	else
 		ifeq ($(LIBLINK),static)
-			CFG_LFLAGS := $(CFG_LFLAGS) -static -static-libgcc
+			CFG_LFLAGS := $(CFG_LFLAGS) -static
+		else
+			CFG_LFLAGS := $(CFG_LFLAGS) -shared
 		endif
 	endif
 
+	ifeq ($(LIBLINK),static)
+		CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
+	endif
 
 	# you can't use dlopen() [-ldl] with static linking!
 	# http://www.qnx.com/developers/docs/6.3.2/neutrino/lib_ref/d/dlopen.html
@@ -1061,6 +1071,14 @@ else
 #		endif
 #	endif
 
+	#user override?
+	ifdef PRE
+		CFG_TOOLPREFIX := $(strip $(PRE))
+	endif
+	ifdef SYS
+		CFG_SYSROOT := $(strip $(SYS))
+	endif
+	
 	ifneq ($(CFG_SYSROOT),)
 		CFG_SYSROOT_OPTIONS := --sysroot=$(CFG_SYSROOT)
 	endif
@@ -1132,7 +1150,11 @@ ifeq ($(PLATFORM),windows)
 		ifeq ($(BUILD),vs)
 			CFG_NSIS := makensis.exe
 		else
-			CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+			ifneq ($(WBLD),)
+				CFG_NSIS := makensis.exe
+			else
+				CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+			endif
 		endif
 	endif
 
