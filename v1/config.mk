@@ -943,11 +943,6 @@ else
 			OS := win32
 			PLATFORM := windows
 
-			# Cross compile for windows
-			CFG_TOOLPREFIX := i586-mingw32msvc-
-			# CFG_TOOLPREFIX := ~/mingw32/bin/i586-pc-mingw32-
-			# --whole-archive -rdynamic
-
 			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32
 			CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
@@ -962,18 +957,33 @@ else
 			OS := win64
 			PLATFORM := windows
 			
-			EXISTS_MINGW64 := $(wildcard $(CFG_LIBROOT)/mingw64)
-			ifneq ($(strip $(EXISTS_MINGW64)),)
-			
-				CFG_TOOLPREFIX := $(CFG_LIBROOT)/mingw64/bin/x86_64-w64-mingw32-
-				CFG_SYSROOT := $(CFG_LIBROOT)/mingww64/x86_64-w64-mingw32
-				
-			else
+			EXISTS_MINGWROOT := $(wildcard $(CFG_LIBROOT)/mingw64-win)
+			ifneq ($(strip $(EXISTS_MINGWROOT)),)
 
-				# Cross compile for windows
-				CFG_TOOLPREFIX := amd64-mingw32msvc-
-				# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
+				CFG_TOOLPREFIX :=
+				# _MACHINE:x64 SYB_LP64 _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+				PRJ_DEFS := $(PRJ_DEFS) _AMD64_ __x86_64
+				CFG_MINGWROOT := $(CFG_LIBROOT)/mingw64-win
+#				CFG_PATHROOT := $(CFG_VSROOT)
+				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_MINGWROOT)/mingw/include
+				PATH := $(PATH):$(CFG_MINGWROOT)/mingw/bin
+
+			else
 			
+				EXISTS_MINGW64 := $(wildcard $(CFG_LIBROOT)/mingw64)
+				ifneq ($(strip $(EXISTS_MINGW64)),)
+				
+					CFG_TOOLPREFIX := $(CFG_LIBROOT)/mingw64/bin/x86_64-w64-mingw32-
+					CFG_SYSROOT := $(CFG_LIBROOT)/mingww64/x86_64-w64-mingw32
+					
+				else
+
+					# Cross compile for windows
+					CFG_TOOLPREFIX := amd64-mingw32msvc-
+					# CFG_TOOLPREFIX := ~/mingw64/bin/amd64-mingw32msvc
+				
+				endif
+				
 			endif
 
 			# -fstack-check
