@@ -172,6 +172,7 @@ Section "Example Scripts"
   SetOutPath $INSTDIR\scripts
   
   SetOverwrite on
+  File "${LIBROOT}\winglib\etc\scripts\auto_logout.nut"
   File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
@@ -199,6 +200,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_portaudio_fftw.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_quickfix.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_registry.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_reboot.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_rtspstream.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_serial_port.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sntp_client.nut"
