@@ -1,0 +1,117 @@
+diff -rupwN ../dnl3/live555/BasicUsageEnvironment/BasicHashTable.cpp live555/BasicUsageEnvironment/BasicHashTable.cpp
+--- ../dnl3/live555/BasicUsageEnvironment/BasicHashTable.cpp	2011-03-14 19:40:37.000000000 -0400
++++ live555/BasicUsageEnvironment/BasicHashTable.cpp	2011-05-25 13:25:15.812500000 -0400
+@@ -263,7 +263,7 @@ unsigned BasicHashTable::hashIndexFromKe
+     }
+     result &= fMask;
+   } else if (fKeyType == ONE_WORD_HASH_KEYS) {
+-    result = randomIndex((unsigned long)key);
++    result = randomIndex((unsigned long)(unsigned long long)key);
+   } else {
+     unsigned* k = (unsigned*)key;
+     unsigned long sum = 0;
+diff -rupwN ../dnl3/live555/BasicUsageEnvironment/BasicTaskScheduler0.cpp live555/BasicUsageEnvironment/BasicTaskScheduler0.cpp
+--- ../dnl3/live555/BasicUsageEnvironment/BasicTaskScheduler0.cpp	2011-03-14 19:40:37.000000000 -0400
++++ live555/BasicUsageEnvironment/BasicTaskScheduler0.cpp	2011-05-25 13:26:28.250000000 -0400
+@@ -68,7 +68,7 @@ TaskToken BasicTaskScheduler0::scheduleD
+ }
+ 
+ void BasicTaskScheduler0::unscheduleDelayedTask(TaskToken& prevTask) {
+-  DelayQueueEntry* alarmHandler = fDelayQueue.removeEntry((long)prevTask);
++  DelayQueueEntry* alarmHandler = fDelayQueue.removeEntry((long)(long long)prevTask);
+   prevTask = NULL;
+   delete alarmHandler;
+ }
+diff -rupwN ../dnl3/live555/UsageEnvironment/include/UsageEnvironment_version.hh live555/UsageEnvironment/include/UsageEnvironment_version.hh
+--- ../dnl3/live555/UsageEnvironment/include/UsageEnvironment_version.hh	2011-03-14 19:40:37.000000000 -0400
++++ live555/UsageEnvironment/include/UsageEnvironment_version.hh	2011-03-04 17:33:01.000000000 -0500
+@@ -4,7 +4,7 @@
+ #ifndef _USAGEENVIRONMENT_VERSION_HH
+ #define _USAGEENVIRONMENT_VERSION_HH
+ 
+-#define USAGEENVIRONMENT_LIBRARY_VERSION_STRING	"2011.03.14"
+-#define USAGEENVIRONMENT_LIBRARY_VERSION_INT		1300060800
++#define USAGEENVIRONMENT_LIBRARY_VERSION_STRING	"2011.03.05"
++#define USAGEENVIRONMENT_LIBRARY_VERSION_INT		1299283200
+ 
+ #endif
+diff -rupwN ../dnl3/live555/groupsock/Groupsock.cpp live555/groupsock/Groupsock.cpp
+--- ../dnl3/live555/groupsock/Groupsock.cpp	2011-03-14 19:40:37.000000000 -0400
++++ live555/groupsock/Groupsock.cpp	2011-05-25 13:27:34.625000000 -0400
+@@ -399,7 +399,7 @@ int Groupsock::outputToAllMembersExcept(
+ 	= (TunnelEncapsulationTrailer*)&data[size];
+       TunnelEncapsulationTrailer* trailer;
+ 
+-      Boolean misaligned = ((unsigned long)trailerInPacket & 3) != 0;
++      Boolean misaligned = ((unsigned long)(unsigned long long)trailerInPacket & 3) != 0;
+       unsigned trailerOffset;
+       u_int8_t tunnelCmd;
+       if (isSSM()) {
+diff -rupwN ../dnl3/live555/liveMedia/MP3StreamState.cpp live555/liveMedia/MP3StreamState.cpp
+--- ../dnl3/live555/liveMedia/MP3StreamState.cpp	2011-03-14 19:40:37.000000000 -0400
++++ live555/liveMedia/MP3StreamState.cpp	2011-05-25 13:14:09.437500000 -0400
+@@ -35,7 +35,7 @@ MP3StreamState::~MP3StreamState() {
+   // Close our open file or socket:
+   if (fFid != NULL && fFid != stdin) {
+     if (fFidIsReallyASocket) {
+-      long fid_long = (long)fFid;
++      long long fid_long = (long long)fFid;
+       closeSocket((int)fid_long);
+     } else {
+       fclose(fFid);
+@@ -191,7 +191,7 @@ void MP3StreamState::writeGetCmd(char co
+   char const* const getCmdFmt = "GET %s HTTP/1.1\r\nHost: %s:%d\r\n\r\n";
+ 
+   if (fFidIsReallyASocket) {
+-    long fid_long = (long)fFid;
++    long long fid_long = (long long)fFid;
+     int sock = (int)fid_long;
+     char writeBuf[100];
+ #if defined(IRIX) || defined(ALPHA) || defined(_QNX4) || defined(IMN_PIM) || defined(CRIS)
+@@ -390,7 +390,7 @@ unsigned MP3StreamState::readFromStream(
+ 					unsigned numChars) {
+   // Hack for doing socket I/O instead of file I/O (e.g., on Windows)
+   if (fFidIsReallyASocket) {
+-    long fid_long = (long)fFid;
++    long long fid_long = (long long)fFid;
+     int sock = (int)fid_long;
+     unsigned totBytesRead = 0;
+     do {
+@@ -152,16 +152,16 @@ void MPEG2TransportFileServerMediaSubses
+ }
+ 
+ void MPEG2TransportFileServerMediaSubsession
+-::seekStream(unsigned clientSessionId, void* streamToken, double seekNPT, double streamDuration) {
++::seekStream(unsigned clientSessionId, void* streamToken, double seekNPT, double seekDuration) {
+   if (fIndexFile != NULL) { // we support 'trick play'
+     ClientTrickPlayState* client = lookupClient(clientSessionId);
+     if (client != NULL) {
+-      client->updateStateFromNPT(seekNPT, streamDuration);
++      client->updateStateFromNPT(seekNPT);
+     }
+   }
+ 
+   // Call the original, default version of this routine:
+-  OnDemandServerMediaSubsession::seekStream(clientSessionId, streamToken, seekNPT, streamDuration);
++  OnDemandServerMediaSubsession::seekStream(clientSessionId, streamToken, seekNPT, seekDuration);
+ }
+ 
+ void MPEG2TransportFileServerMediaSubsession
+diff -rupwN ../dnl3/live555/liveMedia/RTCP.cpp live555/liveMedia/RTCP.cpp
+--- ../dnl3/live555/liveMedia/RTCP.cpp	2011-03-14 19:40:37.000000000 -0400
++++ live555/liveMedia/RTCP.cpp	2011-05-25 13:18:38.343750000 -0400
+@@ -83,12 +83,12 @@ void RTCPMemberDatabase::reapOldMembers(
+       = HashTable::Iterator::create(*fTable);
+     unsigned long timeCount;
+     char const* key;
+-    while ((timeCount = (unsigned long)(iter->next(key))) != 0) {
++    while ((timeCount = (unsigned long)(unsigned long long)(iter->next(key))) != 0) {
+ #ifdef DEBUG
+       fprintf(stderr, "reap: checking SSRC 0x%lx: %ld (threshold %d)\n", (unsigned long)key, timeCount, threshold);
+ #endif
+       if (timeCount < (unsigned long)threshold) { // this SSRC is old
+-        unsigned long ssrc = (unsigned long)key;
++        unsigned long ssrc = (unsigned long)(unsigned long long)key;
+         oldSSRC = (unsigned)ssrc;
+         foundOldMember = True;
+       }

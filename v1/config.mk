@@ -113,6 +113,12 @@ ifneq ($(findstring unicode,$(TGT)),)
 	UNICODE := 1
 endif
 
+ifneq ($(findstring android,$(TGT)),)
+	PROC := arm
+	TOOLS := android
+endif
+
+
 ifneq ($(findstring cygwin,$(BLD)),)
 	CYGBLD := 1
 else
@@ -359,6 +365,36 @@ ifneq ($(CXX_LIBP_$(PROC)),)
 	PRJ_LIBP := $(PRJ_LIBP) $(subst :, ,$(subst ;, ,$(subst  ,:,$(CXX_LIBP_$(PROC)))))
 endif
 
+ifneq ($(WBLD),)
+	ifneq ($(findstring msvs,$(BLD)),)
+		BLDVSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10,$(findstring $(t),$(BLD))))
+	endif		
+	ifneq ($(findstring vsexp,$(BLD)),)
+		BLDVSVER := $(strip $(foreach t,vsexp8 vsexp9 vsexp10,$(findstring $(t),$(BLD))))
+	endif
+
+	ifneq ($(BLDVSVER),)
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(BLDVSVER)-win64-x64-local-static
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(BLDVSVER)-win32-x86-local-static
+		endif
+	else
+		ifneq ($(findstring x64,$(BLD)),)
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win64-x64-mingw64-static
+		else
+			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win32-x86-mingw32-static
+		endif
+	endif
+	#PATH := $(CFG_LOCAL_BUILD_TYPE):$(PATH)
+else
+	ifneq ($(findstring x64,$(BLD)),)
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x64-local-shared
+	else
+		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
+	endif
+endif
+
 ifeq ($(BUILD),vs)
 
 	#CFG_CUR_ROOT := $(shell cd)
@@ -378,21 +414,6 @@ ifeq ($(BUILD),vs)
 		endif
 	endif
 	PLATFORM := windows
-
-	ifneq ($(VSVER),)
-		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(VSVER)-win64-x64-local-static
-		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(VSVER)-win32-x86-local-static
-		endif
-	else
-		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-vs-win64-x64-local-static
-		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-vs-win32-x86-local-static
-		endif
-	endif
-	#PATH := $(CFG_LOCAL_BUILD_TYPE):$(PATH)
 
 	CFG_LOCAL_TOOL_JOIN  	:= "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
 
@@ -618,20 +639,6 @@ else
 	# --with-sysroot
 	# --with-headers
 
-	ifneq ($(WBLD),)
-		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win64-x64-mingw64-static
-		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-gcc-win32-x86-mingw32-static
-		endif
-	else
-		ifneq ($(findstring x64,$(BLD)),)
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x64-local-shared
-		else
-			CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/posix-gcc-linux-x86-local-shared
-		endif
-	endif
-		
 	CFG_LOCAL_TOOL_JOIN  	:= $(CFG_LOCAL_BUILD_TYPE)/join
 
 	ifdef PRJ_SQEX
@@ -691,27 +698,56 @@ else
 
 			OS := android
 			PLATFORM := posix
+			PRJ_DEFS := $(PRJ_DEFS) __ANDROID__
+			
+			EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-win)
+			ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
-			# ./download-toolchain-sources.sh --release=atc --package --verbose
-			# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
+				PRJ_DEFS := $(PRJ_DEFS)
+				CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
+				PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
+				CFG_TOOLPREFIX := arm-eabi-
+				#CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
+				PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/platforms/android-9/arch-arm/usr/include
 
-			# Google Android
-			CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
-			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm
+			else
 
-			CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm/usr/lib
+				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-win)
+				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
+
+					PRJ_DEFS := $(PRJ_DEFS)
+					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
+					PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.2.1/bin:$(PATH)
+					CFG_TOOLPREFIX := arm-eabi-
+					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/include
+					
+					CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+
+				else
+					# ./download-toolchain-sources.sh --release=atc --package --verbose
+					# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
+
+					# Google Android
+					CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
+					CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm
+					CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm/usr/lib
+
+				endif
+				
+			endif
+
 			CFG_LFLAGS := $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \ 
-										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NODIRENT \
-									    -DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX \
-									    -DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
+										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
+										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX -DOEX_NOTLS \
+										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
 			ifeq ($(LIBLINK),static)
 				CFG_NODL := 1
 			endif
-
+			
 		endif
 		ifeq ($(CFG_TOOLS),crystax)
 
@@ -957,24 +993,23 @@ else
 			OS := win64
 			PLATFORM := windows
 			
-			EXISTS_MINGWROOT := $(wildcard $(CFG_LIBROOT)/mingw64-win)
-			ifneq ($(strip $(EXISTS_MINGWROOT)),)
+			EXISTS_MINGW64 := $(wildcard $(CFG_LIBROOT)/mingw64-win)
+			ifneq ($(strip $(EXISTS_MINGW64)),)
 
-				CFG_TOOLPREFIX :=
 				# _MACHINE:x64 SYB_LP64 _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
-				PRJ_DEFS := $(PRJ_DEFS) _AMD64_ __x86_64
-				CFG_MINGWROOT := $(CFG_LIBROOT)/mingw64-win
-#				CFG_PATHROOT := $(CFG_VSROOT)
-				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_MINGWROOT)/mingw/include
-				PATH := $(PATH):$(CFG_MINGWROOT)/mingw/bin
+				PRJ_DEFS := $(PRJ_DEFS) _AMD64_ __x86_64 __LP64__
+				CFG_MINGW64 := $(CFG_LIBROOT)/mingw64-win
+				PATH := $(CFG_MINGW64)/bin:$(PATH)
+				CFG_TOOLPREFIX := x86_64-w64-mingw32-
 
 			else
 			
 				EXISTS_MINGW64 := $(wildcard $(CFG_LIBROOT)/mingw64)
 				ifneq ($(strip $(EXISTS_MINGW64)),)
 				
-					CFG_TOOLPREFIX := $(CFG_LIBROOT)/mingw64/bin/x86_64-w64-mingw32-
-					CFG_SYSROOT := $(CFG_LIBROOT)/mingww64/x86_64-w64-mingw32
+					CFG_MINGW64 := $(CFG_LIBROOT)/mingw64
+					CFG_SYSROOT := $(CFG_MINGW64)/x86_64-w64-mingw32
+					CFG_TOOLPREFIX := $(CFG_MINGW64)/bin/x86_64-w64-mingw32-
 					
 				else
 
@@ -986,10 +1021,10 @@ else
 				
 			endif
 
-			# -fstack-check
+			# -fstack-check -m64
 			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lavicap32 -lmsvfw32
 			CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols -fno-leading-underscore -static-libgcc -static-libstdc++
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 \
 								-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 								-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD

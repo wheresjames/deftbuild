@@ -27,6 +27,10 @@ ifeq ($(PLATFORM),windows)
 	endif
 endif
 
+ifeq ($(OS),android)
+	PRJ_DEFS := $(PRJ_DEFS) NULL=0
+endif
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------

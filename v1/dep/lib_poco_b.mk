@@ -11,7 +11,8 @@ PRJ_INCS := poco/Foundation/include poco/Net/include zlib \
 			openssl/include poco/NetSSL_OpenSSL/include poco/Crypto/include \
 			poco/WebWidgets/include poco/Util/include poco/XML/include poco/Zip/include
 PRJ_LIBS := 
-PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC PCRE_STATIC OPENSSL_NO_ENGINE OPENSSL_NOWINSOCK2
+PRJ_DEFS := HAVE_MEMMOVE POCO_NO_AUTOMATIC_LIBS XML_STATIC POCO_STATIC \
+			PCRE_STATIC OPENSSL_NO_ENGINE OPENSSL_NOWINSOCK2
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -20,6 +21,11 @@ PRJ_OBJROOT := _0_dep
 # Configure build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
+
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
 
 ifeq ($(PLATFORM),windows)
 
@@ -31,6 +37,12 @@ ifeq ($(PLATFORM),windows)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mingw/inc $(PRJ_INCS)
 		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
 	endif
+endif
+
+ifeq ($(OS),android)
+	PRJ_DEFS := $(PRJ_DEFS) POCO_OS_FAMILY_UNIX POCO_NO_FPENVIRONMENT \
+							POCO_NO_NAMEDEVENTS POCO_NO_RWLOCKS \
+							POCO_NO_SHAREDMEMORY
 endif
 
 #-------------------------------------------------------------------
@@ -75,5 +87,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
-
+endif

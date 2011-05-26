@@ -7,12 +7,15 @@ default_target: all
 PRJ_NAME := irrlicht-es
 PRJ_DEPS := irrlicht-es
 PRJ_TYPE := lib
-PRJ_INCS := irrlicht-es/source/Irrlicht/zlib
+PRJ_INCS := irrlicht-es/include jpeg png tiff zlib bzip2
 PRJ_LIBS := 
 PRJ_DEFS := GL_APIENTRY= glTexEnvi=glTexEnvx \
 		    EGL_RENDERABLE_TYPE=0x3040 EGL_OPENGL_ES_BIT=0x0001 EGL_CLIENT_APIS=0x308D \
 			NO_IRR_USE_NON_SYSTEM_JPEG_LIB_  NO_IRR_USE_NON_SYSTEM_LIB_PNG_ \
-			NO_IRR_USE_NON_SYSTEM_ZLIB_ NO_IRR_USE_NON_SYSTEM_BZLIB_
+			NO_IRR_USE_NON_SYSTEM_ZLIB_ NO_IRR_USE_NON_SYSTEM_BZLIB_ \
+			NO_IRR_COMPILE_WITH_SDL_DEVICE_ NO_IRR_COMPILE_WITH_CONSOLE_DEVICE_ \
+			NO_IRR_COMPILE_WITH_DIRECT3D_8_ NO_IRR_COMPILE_WITH_DIRECT3D_9_ \
+			NO_IRR_COMPILE_WITH_OPENGL_ NO_IRR_COMPILE_WITH_X11_
 			
 
 PRJ_LIBROOT := ..
@@ -23,8 +26,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(PROC),arm)
-UNSUPPORTED := PROC=$(PROC) not supported
+ifneq ($(OS),wince)
+UNSUPPORTED := OS=$(OS) not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

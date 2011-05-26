@@ -22,6 +22,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifeq ($(PLATFORM),windows)
 
 	ifneq ($(UNICODE),)
@@ -32,6 +37,12 @@ ifeq ($(PLATFORM),windows)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mingw/inc $(PRJ_INCS)
 		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
 	endif
+endif
+
+ifeq ($(OS),android)
+	PRJ_DEFS := $(PRJ_DEFS) POCO_OS_FAMILY_UNIX POCO_NO_FPENVIRONMENT \
+							POCO_NO_NAMEDEVENTS POCO_NO_RWLOCKS \
+							POCO_NO_SHAREDMEMORY
 endif
 
 #-------------------------------------------------------------------
@@ -78,5 +89,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
-
+endif

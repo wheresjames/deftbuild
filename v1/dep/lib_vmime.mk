@@ -25,6 +25,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifeq ($(PLATFORM),windows)
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vmime/inc/windows \
 				$(CFG_LIB2BLD)/dep/etc/gnutls/inc/windows \
@@ -139,4 +144,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
+endif

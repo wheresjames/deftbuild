@@ -19,6 +19,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 # -masm=intel -fasm-blocks -use-msasm -use-asm
 
 ifeq ($(PLATFORM),windows)
@@ -113,4 +118,4 @@ endif
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
+endif

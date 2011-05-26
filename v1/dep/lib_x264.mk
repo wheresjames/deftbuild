@@ -19,6 +19,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifneq ($(BUILD),gcc)
 UNSUPPORTED := BUILD=$(BUILD) is invalid, x264 can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
@@ -88,3 +93,4 @@ include $(PRJ_LIBROOT)/go.mk
 
 endif
 
+endif

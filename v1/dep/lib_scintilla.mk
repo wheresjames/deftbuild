@@ -19,6 +19,11 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PROC),arm)
+UNSUPPORTED := PROC=$(PROC) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
@@ -41,4 +46,4 @@ endif
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
+endif

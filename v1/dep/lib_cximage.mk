@@ -19,6 +19,10 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifeq ($(PLATFORM)$(PROC)$(BUILD),windowsx64vs)
+	PRJ_DEFS := $(PRJ_DEFS) _tfopen=fopen WIN32
+endif
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
