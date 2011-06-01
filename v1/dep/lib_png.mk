@@ -25,6 +25,7 @@ export LOC_TAG := def
 LOC_CXX_def := c
 LOC_INC_def := $(CFG_LIBROOT)/png
 LOC_SRC_def := $(CFG_LIBROOT)/png
+LOC_EXC_def := example
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
