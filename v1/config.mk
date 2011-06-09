@@ -725,14 +725,23 @@ else
 				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-win)
 				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
+					TOOLS := crystax
 					PRJ_DEFS := $(PRJ_DEFS)
 					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
 					PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.2.1/bin:$(PATH)
 					CFG_TOOLPREFIX := arm-eabi-
 					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/include
 					
-					CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+					# CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+					CFG_STDLIB := -nostdlib -lc -lgcc -lc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
 
+					#CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+					#CFG_AFLAGS := cq
+					
+					#ifeq ($(LIBLINK),static)
+					#	CFG_NODL := 1
+					#endif
+					
 				else
 					# ./download-toolchain-sources.sh --release=atc --package --verbose
 					# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
@@ -750,7 +759,7 @@ else
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
 										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX -DOEX_NOTLS \
-										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
+										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS  -DOEX_NOEPOLL
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
@@ -1103,7 +1112,7 @@ else
 	endif
 
 	ifeq ($(LIBLINK),static)
-		CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
+		# CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
 	endif
 
 	# you can't use dlopen() [-ldl] with static linking!
