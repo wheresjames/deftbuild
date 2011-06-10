@@ -339,7 +339,7 @@ ifdef SQMOD_STATIC
 endif
 
 ifndef PRJ_OPTS
-	PRJ_OPTS := -O3
+	PRJ_OPTS := -O2
 endif
 
 CFG_CEXTRA := $(CFG_CEXTRA) $(PRJ_CFLAGS)
