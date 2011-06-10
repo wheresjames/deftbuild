@@ -1087,6 +1087,10 @@ else
 			CFG_AFLAGS := cq
 			CFG_ASFLAGS := -f elf32 -a x86
 			
+			ifeq ($(PROC),x64)
+				CFG_CFLAGS := $(CFG_CFLAGS) -m64
+			endif
+			
 		endif
 
 	endif
