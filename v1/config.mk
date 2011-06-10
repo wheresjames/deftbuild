@@ -1060,8 +1060,7 @@ else
 
 			CFG_STDLIB :=
 			CFG_LFLAGS := $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) 
-								-c -MMD -Wall -fno-strict-aliasing -DOEX_NOSTRUCTINIT
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing -DOEX_NOSTRUCTINIT
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
@@ -1085,12 +1084,14 @@ else
 #			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
-			CFG_ASFLAGS := -f elf32 -a x86
-			
+
 			ifeq ($(PROC),x64)
 				CFG_CFLAGS := $(CFG_CFLAGS) -m64
+				CFG_ASFLAGS := -f elf64
+			else
+				CFG_ASFLAGS := -f elf32 -a x86
 			endif
-			
+
 		endif
 
 	endif
@@ -1098,7 +1099,7 @@ else
 	ifneq ($(LIBLINK),static)
 		CFG_LFLAGS := $(CFG_LFLAGS)
 		ifeq ($(PRJ_NPIC),)
-			CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC
+#			CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC
 		endif
 	endif
 
