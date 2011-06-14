@@ -172,6 +172,6 @@ Function .onInit
     MessageBox MB_YESNOCANCEL|MB_ICONQUESTION  "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" IDNO done IDYES uninst
       Abort
 uninst:
-    ExecWait $R0
+    ExecWait '$R0 _?=$INSTDIR'
 done: 
 FunctionEnd
