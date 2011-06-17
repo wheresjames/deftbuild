@@ -100,15 +100,27 @@ Following directory structure is assumed
 
 	deftbuild 3 checkout 3d,scripting
 
+# Typical Dependencies
+#./deftbuild.sh 3 res - poco,mingw64,libssh2,libevent,libusb,openssl,nsis,curl,bzip2,zlib
+#./deftbuild.sh 3 res - CxImage,jpeg,png,tiff,j2k,gdchart
+#./deftbuild.sh 3 res - ffmpeg,x264,live555
+#./deftbuild.sh 3 res - SqPlus,swig,v8,v8-juice
+#./deftbuild.sh 3 res - ftgl,irrlicht,bullet,freetype2
+#./deftbuild.sh 3 res - libfreenect,portaudio,opencv,fftw,cell,haru,sqlite,tinyxml,mysql
+
+
 //------------------------------------------------------------------
 // dependencies
 //------------------------------------------------------------------
 
+// Building
+	sudo apt-get screen gcc g++ git-core
+
+// OpenGL / X11
+	sudo apt-get install mesa-common-dev xorg-dev xlibmesa-glu-dev xlibmesa-gl-dev
+
 // CURL	
-	sudo apt-get install libldap-dev libidn11-dev libssl-dev 
+	sudo apt-get install libldap-dev 
 	
 // ALSA
 	sudo apt-get install libasound2-dev
-	
-	
-
