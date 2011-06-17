@@ -733,8 +733,10 @@ else
 					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/include
 					
 					# CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
-					CFG_STDLIB := -nostdlib -lc -lgcc -static-libstdc++
-					CFG_STDLIB := $(CFG_STDLIB) -nostdlib -lc -lc -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+					# CFG_STDLIB := -fno-exceptions -static-libgcc -static-libstdc++
+					CFG_CFLAGS := $(CFG_CFLAGS) -fno-exceptions
+					CFG_STDLIB := -nostdlib -lc -lgcc -lstdc++ -lc
+					CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
 					# CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
 
 					#CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
@@ -757,6 +759,7 @@ else
 				
 			endif
 
+			# --disable-libunwind-exceptions
 			CFG_LFLAGS := $(CFG_LEXTRA)
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
