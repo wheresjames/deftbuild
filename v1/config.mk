@@ -1080,7 +1080,8 @@ else
 			CFG_STDLIB := -lrt -pthread
 			CFG_LFLAGS := $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
 #			CFG_LFLAGS := $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall
+#			-fno-strict-aliasing
 #			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
