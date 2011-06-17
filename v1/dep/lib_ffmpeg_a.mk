@@ -60,8 +60,10 @@ endif
 ifneq ($(PROC),arm)
 
 	ASMOPTS := $(ASMOPTS) -DHAVE_SSE
-	ifneq ($(PROC),x64)
-		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+	ifneq ($(PLATFORM),windows)
+		ifneq ($(PROC),x64)
+			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+		endif
 	endif
 
 	export LOC_TAG := libavcodecx86_asm
