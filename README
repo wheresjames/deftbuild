@@ -114,7 +114,7 @@ Following directory structure is assumed
 //------------------------------------------------------------------
 
 // Building
-	sudo apt-get screen gcc g++ git-core
+	sudo apt-get screen gcc g++ git-core wine
 
 // OpenGL / X11
 	sudo apt-get install mesa-common-dev xorg-dev xlibmesa-glu-dev xlibmesa-gl-dev
