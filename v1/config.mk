@@ -1099,7 +1099,7 @@ else
 				ifeq ($(LIBLINK),static)
 					CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
 				else
-					CFG_LFLAGS := $(CFG_LFLAGS) -shared-libgcc -shared-libstdc++
+					CFG_LFLAGS := $(CFG_LFLAGS) -shared-libgcc
 				endif
 #			endif
 
