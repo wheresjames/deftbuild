@@ -88,7 +88,7 @@ ifneq ($(PROC),arm)
 	LOC_SRC_libavcodecx86 := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
 	LOC_EXC_libavcodecx86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
 				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
-				   			 mpegvideo_mmx_template h264_qpel_mmx h264dsp_mmx
+				   			 mpegvideo_mmx_template h264_qpel_mmx
 	ifeq ($(PROC),x64)
 		LOC_WEX_libavcodecx86 := $(LOC_WEX_libavcodecx86) *mmx*
 	endif
