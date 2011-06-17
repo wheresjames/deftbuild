@@ -339,7 +339,7 @@ ifdef SQMOD_STATIC
 endif
 
 ifndef PRJ_OPTS
-	PRJ_OPTS := -O2
+	PRJ_OPTS := -O3
 endif
 
 CFG_CEXTRA := $(CFG_CEXTRA) $(PRJ_CFLAGS)
@@ -1091,6 +1091,16 @@ else
 			else
 				CFG_ASFLAGS := -f elf32 -a x86
 			endif
+			
+#			ifeq ($(PRJ_TYPE),dll)
+#				CFG_LFLAGS := $(CFG_LFLAGS)
+#			else
+				ifeq ($(LIBLINK),static)
+					CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
+				else
+					CFG_LFLAGS := $(CFG_LFLAGS) -shared-libgcc -shared-libstdc++
+				endif
+#			endif
 
 		endif
 
