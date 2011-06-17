@@ -85,8 +85,10 @@ ifeq ($(PLATFORM),windows)
 else
 	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) w32thread
 endif
-ifeq ($(PROC),x64)
-	LOC_EXC_libavcodecx86 := $(LOC_EXC_libavcodecx86) *mmx*
+ifneq ($(PLATFORM),windows)
+	ifeq ($(PROC),x64)
+		LOC_EXC_libavcodecx86 := $(LOC_EXC_libavcodecx86) *mmx*
+	endif
 endif
 
 include $(PRJ_LIBROOT)/build.mk
