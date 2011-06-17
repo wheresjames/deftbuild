@@ -1123,8 +1123,8 @@ else
 			CFG_LFLAGS := $(CFG_LFLAGS) -static
 			CFG_CFLAGS := $(CFG_CFLAGS) -static
 		else
-			CFG_LFLAGS := $(CFG_LFLAGS) -shared
-			CFG_CFLAGS := $(CFG_CFLAGS) -shared
+			# CFG_LFLAGS := $(CFG_LFLAGS) -shared
+			# CFG_CFLAGS := $(CFG_CFLAGS) -shared
 		endif
 	endif
 
