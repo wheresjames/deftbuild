@@ -78,9 +78,6 @@ ifneq ($(PROC),arm)
 		endif
 	endif
 	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
-#	LOC_EXC_libavcodecx86_asm := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
-#								 dsputil_mmx_qns_template dsputil_mmx_rnd_template h264dsp_mmx \
-#								 mpegvideo_mmx_template
 	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := libavcodecx86
