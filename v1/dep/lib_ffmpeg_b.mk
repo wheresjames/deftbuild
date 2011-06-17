@@ -64,6 +64,9 @@ LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
 LOC_WLS_libavcodec := 0 1 2 3 4 5 6 7 8 9 a b c d e f
 LOC_WEX_libavcodec := vaa lib
+ifeq ($(PROC),x64)
+	LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*
+endif
 LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
 					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
 					  \

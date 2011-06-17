@@ -59,7 +59,10 @@ endif
 
 ifneq ($(PROC),arm)
 
-	ASMOPTS := -DHAVE_MMX2 -DHAVE_SSE
+	ASMOPTS := $(ASMOPTS) -DHAVE_SSE
+	ifneq ($(PROC),x64)
+		ASMOPTS := -DHAVE_MMX2 
+	endif
 
 	export LOC_TAG := libavcodecx86_asm
 	LOC_CXX_libavcodecx86_asm := asm
@@ -86,6 +89,9 @@ ifneq ($(PROC),arm)
 	LOC_EXC_libavcodecx86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
 				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
 				   			 mpegvideo_mmx_template h264_qpel_mmx h264dsp_mmx
+	ifeq ($(PROC),x64)
+		LOC_WEX_libavcodecx86 := $(LOC_WEX_libavcodecx86) *mmx*
+	endif
 	include $(PRJ_LIBROOT)/build.mk
 
 endif
