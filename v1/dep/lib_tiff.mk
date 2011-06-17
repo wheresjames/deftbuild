@@ -19,7 +19,7 @@ PRJ_OBJROOT := _0_dep
 include $(PRJ_LIBROOT)/config.mk
 
 ifneq ($(PLATFORM),windows)
-	ifeq($(PROC),x64)
+	ifeq ($(PROC),x64)
 		PRJ_DEFS := __int64=long
 	endif
 endif
