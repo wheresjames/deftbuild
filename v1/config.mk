@@ -733,7 +733,9 @@ else
 					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/include
 					
 					# CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
-					CFG_STDLIB := -nostdlib -lc -lgcc -lc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+					CFG_STDLIB := -nostdlib -lc -lgcc -static-libstdc++
+					CFG_STDLIB := $(CFG_STDLIB) -nostdlib -lc -lc -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+					# CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
 
 					#CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 					#CFG_AFLAGS := cq
