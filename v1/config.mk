@@ -1078,10 +1078,8 @@ else
 			# --whole-archive
 			
 			CFG_STDLIB := -lrt -pthread
-			CFG_LFLAGS := $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
 #			CFG_LFLAGS := $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall
-#			-fno-strict-aliasing
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing
 #			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
@@ -1093,14 +1091,15 @@ else
 				CFG_ASFLAGS := -f elf32 -a x86
 			endif
 			
-#			ifeq ($(PRJ_TYPE),dll)
-#				CFG_LFLAGS := $(CFG_LFLAGS)
-#			else
-				ifeq ($(LIBLINK),static)
-					CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
-				else
-					CFG_LFLAGS := $(CFG_LFLAGS) -shared-libgcc
-				endif
+			ifeq ($(PRJ_TYPE),dll)
+				CFG_LFLAGS := $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
+			endif
+
+			ifeq ($(LIBLINK),static)
+				CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
+			else
+				CFG_LFLAGS := $(CFG_LFLAGS) -shared-libgcc
+			endif
 #			endif
 
 		endif
