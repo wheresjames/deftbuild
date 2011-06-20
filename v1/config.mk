@@ -731,21 +731,20 @@ else
 					PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.2.1/bin:$(PATH)
 					CFG_TOOLPREFIX := arm-eabi-
 					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/include
-					
-					# CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
+
 					# CFG_STDLIB := -fno-exceptions -static-libgcc -static-libstdc++
-					CFG_CFLAGS := $(CFG_CFLAGS) -fno-exceptions
+					# CFG_CFLAGS := $(CFG_CFLAGS) -fno-exceptions
 					CFG_STDLIB := -nostdlib -lc -lgcc -lstdc++ -lc
 					CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDNDK)/build/platforms/android-5/arch-arm/usr/lib
 					# CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
 
 					#CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 					#CFG_AFLAGS := cq
-					
+
 					#ifeq ($(LIBLINK),static)
 					#	CFG_NODL := 1
 					#endif
-					
+
 				else
 					# ./download-toolchain-sources.sh --release=atc --package --verbose
 					# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
@@ -765,13 +764,14 @@ else
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
 										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX -DOEX_NOTLS \
 										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS  -DOEX_NOEPOLL
+#										-DOEX_NOEXCEPTIONS
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
 			ifeq ($(LIBLINK),static)
 				CFG_NODL := 1
 			endif
-			
+
 		endif
 		ifeq ($(CFG_TOOLS),crystax)
 
@@ -789,7 +789,7 @@ else
 										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
-			
+
 			ifeq ($(LIBLINK),static)
 				CFG_NODL := 1
 			endif
