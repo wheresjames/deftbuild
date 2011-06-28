@@ -204,6 +204,21 @@ ifeq ($(GO_FINAL),)
 GO_FINAL := $(BLD_PATH_EXE)
 endif
 
+ifneq ($(findstring $(PRJ_NAME),$(PLATRUN)),)
+#ifneq ($(findstring $(OS),$(PRJ_PLAT)),)
+ifeq ($(OS),android)
+ifeq ($(PLATRUN_0),)
+	PLATRUN_0 := /data/tmp
+endif
+.PHONY : android
+android: $(GO_FINAL)
+	adb push $(BLD_PATH_EXE) $(PLATRUN_0)/$(PRJ_NAME)
+	adb shell chmod 0755 $(PLATRUN_0)/$(PRJ_NAME)
+GO_FINAL := android
+endif
+#endif
+endif
+
 .PHONY : all rebuild setup clean
 all: cfg_init $(BLD_ALL) $(GO_FINAL)
 rebuild: cfg_init $(BLD_REBUILD) $(GO_FINAL)
