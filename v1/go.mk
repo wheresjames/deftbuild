@@ -212,8 +212,8 @@ ifeq ($(PLATRUN_0),)
 endif
 .PHONY : android
 android: $(GO_FINAL)
-	adb push $(BLD_PATH_EXE) $(PLATRUN_0)/$(PRJ_NAME)
-	adb shell chmod 0755 $(PLATRUN_0)/$(PRJ_NAME)
+	adb push $(BLD_PATH_EXE) $(PLATRUN_0)/$(BLD_FILE_EXE)
+	adb shell chmod 0755 $(PLATRUN_0)/$(BLD_FILE_EXE)
 GO_FINAL := android
 endif
 #endif

@@ -714,93 +714,88 @@ else
 			PLATFORM := posix
 			PRJ_DEFS := $(PRJ_DEFS) ANDROID __ANDROID__
 
-			EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-win)
-			ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
+			ifneq ($(WBLD),)
 
-				PRJ_DEFS := $(PRJ_DEFS)
-				CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
-				PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
-				CFG_TOOLPREFIX := arm-eabi-
-				CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
-				# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
-
-				PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/include
-				CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/lib
-
-				ifeq ($(PRJ_TYPE),exe)
-					CFG_STDLIB := $(CFG_STDLIB) -Wl,--entry=main
-					ifeq ($(LIBLINK),static)
-						CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/lib/crtbegin_static.o
-					else
-						CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/lib/crtbegin_dynamic.o
-						CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath-link=$(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/lib
-						CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath=/system/lib
-					endif				
-				endif
-				
-				ifeq ($(LIBLINK),static)
-					CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lstdc++ -lc
-				else
-					CFG_STDLIB := $(CFG_STDLIB) -lc
-				endif				
-				
-				CFG_STDLIB := $(CFG_STDLIB) $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr/lib/crtend_android.o
-
-				# CFG_NODL := 1
-			else
-
-				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-win)
+				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-win)
 				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
-					TOOLS := crystax
+					TOOLS := google
 					PRJ_DEFS := $(PRJ_DEFS)
-					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
-					PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.4.0/bin:$(PATH)
+					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
+					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
 					CFG_TOOLPREFIX := arm-eabi-
-					PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDNDK)/build/platforms/android-8/arch-arm/usr/include
+					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr
 
-					# -msoft-float -mcpu=xscale -mtune=xscale -march=armv5te -mthumb -fomit-frame-pointer 
-					# -finline-limit=64 -fexceptions -frtti
-					# CFG_STDLIB := -fno-exceptions -static-libgcc -static-libstdc++
-					# CFG_CFLAGS := $(CFG_CFLAGS) -fno-exceptions
-					# -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__ -DANDROID 
-#					CFG_STDLIB := -nostdlib -lgcc -lstdc++ -lc -fPIC
-					CFG_LFLAGS := $(CFG_LFLAGS) -nostdlib
-					CFG_STDLIB := -lgcc -lc -lstdc++ -lgcc -lc -static-libgcc -static-libstdc++ 
-					CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDNDK)/build/platforms/android-8/arch-arm/usr/lib
-					
-					ifeq ($(PRJ_TYPE),exe)
-						CFG_STDLIB := $(CFG_STDLIB) -Wl,--entry=main
-					endif
-
-					#CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
-					#CFG_AFLAGS := cq
-
-					#ifeq ($(LIBLINK),static)
-					#	CFG_NODL := 1
-					#endif
-
+					# CFG_NODL := 1
 				else
-					# ./download-toolchain-sources.sh --release=atc --package --verbose
-					# ./rebuild-all-prebuilt.sh --verbose --package --toolchain-src-pkg=/tmp/android-ndk-toolchain-atc.tar.bz2
 
-					# Google Android
-					CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/prebuilt/linux-x86/arm-eabi-4.4.0/bin/arm-eabi-
-					CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm
-					CFG_STDLIB := -nostdlib -lgcc -lc -lgcc -lstdc++ -L$(CFG_TOOLROOT)/$(CFG_TOOLS)/android-ndk/build/platforms/android-8/arch-arm/usr/lib
+					EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-win)
+					ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
+
+						TOOLS := crystax
+						PRJ_DEFS := $(PRJ_DEFS)
+						CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
+						PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.4.0/bin:$(PATH)
+						CFG_TOOLPREFIX := arm-eabi-
+						CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr
+
+						# -msoft-float -mcpu=xscale -mtune=xscale -march=armv5te -mthumb -fomit-frame-pointer 
+						# -finline-limit=64 -fexceptions -frtti
+						# CFG_STDLIB := -fno-exceptions -static-libgcc -static-libstdc++
+						# CFG_CFLAGS := $(CFG_CFLAGS) -fno-exceptions
+						# -D__ARM_ARCH_5__ -D__ARM_ARCH_5T__ -D__ARM_ARCH_5E__ -D__ARM_ARCH_5TE__ -DANDROID 
+
+					endif
+				
+				endif
+			else
+				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-linux)
+				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
+
+					TOOLS := google
+					PRJ_DEFS := $(PRJ_DEFS)
+					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-linux
+					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/linux-x86/bin:$(PATH)
+					CFG_TOOLPREFIX := arm-eabi-
+					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr
 
 				endif
-				
 			endif
+
+			PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDROOT)/include
+			CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDROOT)/lib
+			CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
+
+			ifeq ($(PRJ_TYPE),exe)
+				CFG_STDLIB := $(CFG_STDLIB) -Wl,--entry=main
+				ifeq ($(LIBLINK),static)
+					CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDROOT)/lib/crtbegin_static.o
+				else
+					CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDROOT)/lib/crtbegin_dynamic.o
+					CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath-link=$(CFG_ANDROIDROOT)/lib
+					CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath=/system/lib
+				endif				
+			endif
+			
+			ifeq ($(LIBLINK),static)
+				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lstdc++ -lc
+			else
+				CFG_STDLIB := $(CFG_STDLIB) -lc
+			endif				
+			
+			CFG_STDLIB := $(CFG_STDLIB) $(CFG_ANDROIDROOT)/lib/crtend_android.o
 
 			# --disable-libunwind-exceptions -mthumb
 			# -Wno-psabi +++ What's the correct way to get rid of va_list warning?
 			CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_LEXTRA)
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -fno-rtti -fno-exceptions -fno-short-enums -Wno-psabi \
+										-msoft-float -march=armv5te -mthumb-interwork -mthumb \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
 										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX -DOEX_NOTLS \
 										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS  -DOEX_NOEPOLL \
-										-DOEX_NOEXCEPTIONS -DOEX_NOWCSTO
+										-DOEX_NOEXCEPTIONS -DOEX_NOWCSTO -DOEX_NOWCHAR
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 
