@@ -764,7 +764,10 @@ else
 				endif
 			endif
 
-			PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDROOT)/include
+			PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDROOT)/include \
+									$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/stlport \
+									$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/include \
+									$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/include
 			CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDROOT)/lib
 			CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
 
@@ -787,15 +790,16 @@ else
 			
 			CFG_STDLIB := $(CFG_STDLIB) $(CFG_ANDROIDROOT)/lib/crtend_android.o
 
-			# --disable-libunwind-exceptions -mthumb
+			# --disable-libunwind-exceptions -mthumb -fno-exceptions
 			# -Wno-psabi +++ What's the correct way to get rid of va_list warning?
 			CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_LEXTRA)
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -fno-rtti -fno-exceptions -fno-short-enums -Wno-psabi \
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -fno-rtti -fno-short-enums -Wno-psabi \
 										-msoft-float -march=armv5te -mthumb-interwork -mthumb \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
 										-DOEX_NODL -DOEX_NOEXECINFO -DOEX_NOPTHREADCANCEL -DOEX_NOMSGBOX -DOEX_NOTLS \
 										-DOEX_NOWCSTO -DOEX_NOSETTIME -DOEX_NOTIMEGM -DOEX_NOTHREADTIMEOUTS  -DOEX_NOEPOLL \
-										-DOEX_NOEXCEPTIONS -DOEX_NOWCSTO -DOEX_NOWCHAR -DOEX_CRASHDUMPSTDOUT
+										-DOEX_NOWCSTO -DOEX_NOWCHAR -DOEX_CRASHDUMPSTDOUT
+#										-DOEX_NOEXCEPTIONS
 			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 			CFG_AFLAGS := cq
 

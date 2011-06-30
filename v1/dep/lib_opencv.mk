@@ -38,12 +38,16 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := cv
 LOC_SRC_cv := $(CFG_LIBROOT)/opencv/src/cv
-LOC_EXC_cv := 
+ifeq ($(OS),android)
+	LOC_EXC_cv := cvkdtree
+endif
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := cvaux
-LOC_SRC_cvaux := $(CFG_LIBROOT)/opencv/src/cvaux
-include $(PRJ_LIBROOT)/build.mk
+ifneq ($(OS),android)
+	export LOC_TAG := cvaux
+	LOC_SRC_cvaux := $(CFG_LIBROOT)/opencv/src/cvaux
+	include $(PRJ_LIBROOT)/build.mk
+endif
 
 ifneq ($(USE_HIGHGUI),)
 	export LOC_TAG := highgui
