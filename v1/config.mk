@@ -722,9 +722,15 @@ else
 					TOOLS := google
 					PRJ_DEFS := $(PRJ_DEFS)
 					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
-					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
-					CFG_TOOLPREFIX := arm-eabi-
+
+					# PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
+					# CFG_TOOLPREFIX := arm-eabi-
 					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
+
+					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows/bin:$(PATH)
+					CFG_TOOLPREFIX := arm-linux-androideabi-
+					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows
+					
 					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/android-8/arch-arm/usr
 
 					# CFG_NODL := 1
@@ -780,15 +786,14 @@ else
 					CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath-link=$(CFG_ANDROIDROOT)/lib
 					CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath=/system/lib
 				endif				
+				CFG_STDLIB := $(CFG_STDLIB) $(CFG_ANDROIDROOT)/lib/crtend_android.o
 			endif
 			
 			ifeq ($(LIBLINK),static)
-				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lstdc++ -lc
+				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lstdc++ -lsupc++ -lc
 			else
 				CFG_STDLIB := $(CFG_STDLIB) -lc
 			endif				
-			
-			CFG_STDLIB := $(CFG_STDLIB) $(CFG_ANDROIDROOT)/lib/crtend_android.o
 
 			# --disable-libunwind-exceptions -mthumb -fno-exceptions
 			# -Wno-psabi +++ What's the correct way to get rid of va_list warning?

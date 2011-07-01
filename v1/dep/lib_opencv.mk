@@ -46,6 +46,7 @@ include $(PRJ_LIBROOT)/build.mk
 ifneq ($(OS),android)
 	export LOC_TAG := cvaux
 	LOC_SRC_cvaux := $(CFG_LIBROOT)/opencv/src/cvaux
+	LOC_EXC_cvaux := cvba
 	include $(PRJ_LIBROOT)/build.mk
 endif
 
