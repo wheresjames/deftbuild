@@ -711,6 +711,7 @@ else
 			# http://honeypod.blogspot.com/2007/12/dynamically-linked-hello-world-for.html
 
 			OS := android
+			APILEVEL = android-9
 			PLATFORM := posix
 			PRJ_DEFS := $(PRJ_DEFS) ANDROID __ANDROID__
 
@@ -719,7 +720,6 @@ else
 				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-win)
 				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
-					OS := android-9
 					TOOLS := google
 					PRJ_DEFS := $(PRJ_DEFS)
 					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
@@ -732,7 +732,7 @@ else
 					CFG_TOOLPREFIX := arm-linux-androideabi-
 					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows
 					
-					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(OS)/arch-arm/usr
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
 
 					# CFG_NODL := 1
 				else
@@ -740,13 +740,12 @@ else
 					EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-win)
 					ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
-						OS := android-9
 						TOOLS := crystax
 						PRJ_DEFS := $(PRJ_DEFS)
 						CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
 						PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.4.0/bin:$(PATH)
 						CFG_TOOLPREFIX := arm-eabi-
-						CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(OS)/arch-arm/usr
+						CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
 
 						# -msoft-float -mcpu=xscale -mtune=xscale -march=armv5te -mthumb -fomit-frame-pointer 
 						# -finline-limit=64 -fexceptions -frtti
@@ -761,34 +760,37 @@ else
 				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-ndk-linux)
 				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
 
-					OS := android-9
 					TOOLS := google
 					PRJ_DEFS := $(PRJ_DEFS)
 					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-linux
-					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/linux-x86/bin:$(PATH)
-					CFG_TOOLPREFIX := arm-eabi-
-					# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
-					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(OS)/arch-arm/usr
+
+#					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/linux-x86/bin:$(PATH)
+#					CFG_TOOLPREFIX := arm-eabi-
+
+					CFG_ANDROIDTOOLS := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86
+					PATH := $(CFG_ANDROIDTOOLS)/bin:$(PATH)
+					CFG_TOOLPREFIX := arm-linux-androideabi-
+
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
 
 				endif
 			endif
 
 #			$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/stlport \
 #			$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/libs/armeabi/libstlport_static.a
-
 #			$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a
 
 			PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDROOT)/include
 			CFG_CPFLAGS := $(CFG_CPFLAGS) -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/include \
 										  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/include
+									  
 			CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDROOT)/lib
 			CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
 
 			ifeq ($(PRJ_TYPE),exe)
 				# CFG_STDLIB := $(CFG_STDLIB) -Wl,--entry=main
 				ifeq ($(LIBLINK),static)
-					CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDROOT)/lib/crtbegin_static.o 
-												# $(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a
+					CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDROOT)/lib/crtbegin_static.o
 				else
 					CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_ANDROIDROOT)/lib/crtbegin_dynamic.o
 					CFG_STDLIB := $(CFG_STDLIB) -Wl,-rpath-link=$(CFG_ANDROIDROOT)/lib
@@ -798,7 +800,9 @@ else
 			endif
 			
 			ifeq ($(LIBLINK),static)
-				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm 
+				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm \
+											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
+											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
 			else
 				CFG_STDLIB := $(CFG_STDLIB) -lc
 			endif				
