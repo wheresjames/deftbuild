@@ -23,6 +23,13 @@ ifeq ($(PROC),arm)
 	PRJ_DEFS := $(PRJ_DEFS) SQLITE_DISABLE_LFS
 endif
 
+# +++ Because of bugs in the android NDK, how anoying...
+# sqlite/sqlite3.c:58805: internal compiler error: Segmentation fault
+ifeq ($(OS),android)
+UNSUPPORTED := OS=$(OS) is not supported
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
@@ -36,4 +43,4 @@ include $(PRJ_LIBROOT)/build.mk
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
 
-
+endif

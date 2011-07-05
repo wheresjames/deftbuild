@@ -438,16 +438,15 @@ ifeq ($(BUILD),vs)
 	endif
 
 	ifdef DBG
+		CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
 		ifeq ($(LIBLINK),static)
 			ifeq ($(PRJ_TYPE),dll)
-				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
-			else
-				CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
+				CFG_CEXTRA	 := /D_USRDLL /D_WINDLL $(CFG_CEXTRA)
 			endif
 			CFG_LEXTRA	 := /DEBUG
 		else
-#			CFG_LEXTRA	 := /DEBUG /NODEFAULTLIB:libcmtd
-			CFG_LEXTRA	 := /DEBUG
+			CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
+			CFG_LEXTRA	:= /DEBUG
 		endif
 		CFG_DPOSTFIX := _d
 
