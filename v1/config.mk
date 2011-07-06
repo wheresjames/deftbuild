@@ -807,7 +807,7 @@ else
 											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
 											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
 			else
-				CFG_STDLIB := $(CFG_STDLIB) -lc
+				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm
 			endif				
 
 			# --disable-libunwind-exceptions -mthumb -fno-exceptions
