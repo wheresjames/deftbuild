@@ -445,7 +445,9 @@ ifeq ($(BUILD),vs)
 			endif
 			CFG_LEXTRA	 := /DEBUG
 		else
-			CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
+			ifeq ($(PRJ_TYPE),dll)
+				CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
+			endif
 			CFG_LEXTRA	:= /DEBUG
 		endif
 		CFG_DPOSTFIX := _d
@@ -496,13 +498,15 @@ ifeq ($(BUILD),vs)
 
 	else
 		ifeq ($(LIBLINK),static)
+			CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
 			ifeq ($(PRJ_TYPE),dll)
-				CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
-			else
-				CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
+				CFG_CEXTRA	 := /D_USRDLL /D_WINDLL $(CFG_CEXTRA)
+			endif
+		else
+			ifeq ($(PRJ_TYPE),dll)
+				CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
 			endif
 		endif
-		CFG_LEXTRA :=
 	endif
 
 	ifeq ($(PROC),x86)
