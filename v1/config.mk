@@ -737,6 +737,7 @@ else
 					
 					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
 
+					CFG_CPFLAGS := $(CFG_CPFLAGS) -fno-rtti 
 					# CFG_NODL := 1
 				else
 
@@ -746,8 +747,13 @@ else
 						TOOLS := crystax
 						PRJ_DEFS := $(PRJ_DEFS)
 						CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-win
-						PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.4.0/bin:$(PATH)
-						CFG_TOOLPREFIX := arm-eabi-
+						
+						#PATH := $(CFG_ANDROIDNDK)/build/prebuilt/windows/arm-eabi-4.4.0/bin:$(PATH)
+						#CFG_TOOLPREFIX := arm-eabi-
+						
+						PATH := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows/bin:$(PATH)
+						CFG_TOOLPREFIX := arm-linux-androideabi-
+						
 						CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
 
 						# -msoft-float -mcpu=xscale -mtune=xscale -march=armv5te -mthumb -fomit-frame-pointer 
@@ -779,13 +785,19 @@ else
 				endif
 			endif
 
-#			$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/stlport \
-#			$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/libs/armeabi/libstlport_static.a
-#			$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a
-
 			PRJ_SYSI := $(PRJ_SYSI) $(CFG_ANDROIDROOT)/include
-			CFG_CPFLAGS := $(CFG_CPFLAGS) -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/include \
-										  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/include
+
+#			wchar_static
+#			CFG_CPFLAGS := $(CFG_CPFLAGS) -I$(CFG_ANDROIDROOT)/include \
+#										  -I$(CFG_ANDROIDNDK)/sources/wchar-support/include \
+#										  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/stlport \
+#										  $(CFG_ANDROIDNDK)/sources/cxx-stl/stlport/libs/armeabi/libstlport_static.a \
+#										  $(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a
+
+			CFG_CPFLAGS := $(CFG_CPFLAGS) -I$(CFG_ANDROIDROOT)/include \
+										  -I$(CFG_ANDROIDNDK)/sources/wchar-support/include \
+										  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/include \
+										  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/include \
 									  
 			CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDROOT)/lib
 			CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
@@ -807,13 +819,14 @@ else
 											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
 											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
 			else
-				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm
+				CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm \
+											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
+											$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
 			endif				
 
 			# --disable-libunwind-exceptions -mthumb -fno-exceptions
 			# -Wno-psabi +++ What's the correct way to get rid of va_list warning?
 			CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_LEXTRA)
-			CFG_CPFLAGS := $(CFG_CPFLAGS) -fno-rtti 
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -fno-short-enums -Wno-psabi \
 										-msoft-float -march=armv5te -mthumb-interwork -mthumb \
 										-c -MMD -DOEX_ARM -DOEX_LOWRAM -DOEX_NOSHM -DOEX_PACKBROKEN -DOEX_NOPACK -DOEX_NODIRENT \
