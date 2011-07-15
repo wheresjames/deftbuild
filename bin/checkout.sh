@@ -52,6 +52,17 @@ if [ "${REPO}" == "git" ]; then
 
 fi
 
+# hg
+if [ "${REPO}" == "git" ]; then	
+
+	hg clone "${LINK}" "${PROJ}"
+	if [ "${REVN}" != "-" ]; then
+		cd "${PROJ}"
+		hg checkout "${REVN}"
+	fi
+
+fi
+
 # targz
 if [ "${REPO}" == "targz" ]; then	
 

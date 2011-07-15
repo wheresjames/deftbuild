@@ -1,3 +1,4 @@
+
 #ifneq ($(VSVER),)
 #	UTOOLS := $(VSVER)
 #else
@@ -37,12 +38,14 @@ ifdef PRJ_SUBROOT
 	CFG_OUTROOT := $(CFG_OUTROOT)/$(PRJ_SUBROOT)
 endif
 
+ifdef PRJ_OBJROOT
+	CFG_OBJROOT := $(CFG_OUTROOT)/$(PRJ_OBJROOT)/$(PRJ_NAME)
+else
+	CFG_OBJROOT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
+endif
+
 ifneq ($(CFG_MIDL),)
-	ifdef PRJ_OBJROOT
-		CFG_PATH_IDL := $(CFG_OUTROOT)/$(PRJ_OBJROOT)/$(PRJ_NAME)		
-	else
-		CFG_PATH_IDL := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)		
-	endif
+	CFG_PATH_IDL := $(CFG_OBJROOT)
 	PRJ_SYSI := $(PRJ_SYSI) $(CFG_PATH_IDL)
 endif
 

@@ -34,6 +34,14 @@ if [ "${REPO}" == "git" ]; then
 
 fi
 
+# hg
+if [ "${REPO}" == "hg" ]; then	
+
+	cd ${LIBPATH}
+	hg pull
+
+fi
+
 # targz
 if [ "${REPO}" == "targz" ]; then	
 

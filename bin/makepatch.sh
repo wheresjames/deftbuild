@@ -94,6 +94,26 @@ if [ "${REPO}" == "git" ]; then
 
 fi
 
+# hg
+if [ "${REPO}" == "hg" ]; then	
+
+	# ensure download directory
+	if [ ! -d ${DIR_DNL} ]; then
+		mkdir -p ${DIR_DNL}
+	fi
+	
+	hg clone "${LINK}" "${DIR_DNL}/${PROJ}"
+	if [ "${REVN}" != "-" ]; then
+		cd "${DIR_DNL}/${PROJ}"
+		hg checkout "${REVN}"
+	fi
+
+	cd ${DIR_LIB}
+	diff -rupwbBEN --strip-trailing-cr -x ".svn" "${DNLREL}/" "${PROJ}" > "${PATCH}"
+	rm -Rf "${DIR_DNL}/${PROJ}/"							
+
+fi
+
 # targz
 if [ "${REPO}" == "targz" ]; then	
 

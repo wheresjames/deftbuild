@@ -36,6 +36,14 @@ if [ "${REPO}" == "git" ]; then
 
 fi
 
+# hg
+if [ "${REPO}" == "hg" ]; then	
+
+	cd ${LIBPATH}
+	hg import "${PATCH}"
+
+fi
+
 # targz
 if [ "${REPO}" == "targz" ]; then	
 

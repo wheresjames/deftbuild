@@ -54,7 +54,8 @@ ifeq ($(PRJ_TYPE),dll)
 else
 	PRJ_WVER_FTYPE := 0x1L
 endif
-CFG_VER_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
+
+CFG_VER_OUT := $(CFG_OBJROOT)
 CFG_VER_FSRC := $(PRJ_LIBROOT)/win.vinf.rc
 CFG_VER_FDST := $(CFG_VER_OUT)/ver.rc
 .PRECIOUS: $(CFG_VER_FDST)
@@ -110,7 +111,7 @@ ifeq ($(BUILD),vs)
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_WINX), $(lib))
 	GO_LIBS := $(GO_LIBS) $(CFG_STDLIBS)
 	GO_LIBS := $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), $(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
-	
+
 	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_WLBP),/LIBPATH:$(lib))
 	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),/LIBPATH:$(lib))
 	GO_LIBPATHS := $(GO_LIBPATHS) /LIBPATH:$(CFG_BINROOT)
@@ -118,7 +119,7 @@ ifeq ($(BUILD),vs)
 		GO_LIBPATHS := $(GO_LIBPATHS) /LIBPATH:$(CFG_OUTROOT)
 	endif
 	GO_EXPORTS 	:= $(foreach exp,$(PRJ_EXPORTS), $(CFG_FLAG_EXPORT)$(exp))
-	
+
 else
 
 	GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_LIBS), -l$(lib)$(CFG_DPOSTFIX))
@@ -129,14 +130,14 @@ else
 	else
 		GO_LIBS	:= $(GO_LIBS) $(foreach lib,$(PRJ_POSL), -l$(lib))
 	endif
-	
+
 	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_PLBP),-L$(lib))
 	GO_LIBPATHS	:= $(GO_LIBPATHS) $(foreach lib,$(PRJ_LIBP),-L$(lib))
 	GO_LIBPATHS := $(GO_LIBPATHS) -L$(CFG_BINROOT)
 	ifneq ($(CFG_BINROOT),$(CFG_OUTROOT))
 		GO_LIBPATHS := $(GO_LIBPATHS) -L$(CFG_OUTROOT)
 	endif
-	
+
 endif
 
 ifeq ($(PRJ_TYPE),lib)
