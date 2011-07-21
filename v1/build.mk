@@ -24,12 +24,16 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),)
 	LOC_BLD_$(LOC_TAG) := $(LOC_CXX_$(LOC_TAG))
 endif
 
-BLD_EXT_$(LOC_TAG) := $(CFG_OBJ_EXT)
-ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
-	BLD_EXT_$(LOC_TAG) := $(CFG_RES_EXT)
-endif
-ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
-	BLD_EXT_$(LOC_TAG) := $(CFG_IDL_EXT)
+ifneq ($(LOC_EXT_$(LOC_TAG)),)
+	BLD_EXT_$(LOC_TAG) := $(LOC_EXT_$(LOC_TAG))
+else
+	BLD_EXT_$(LOC_TAG) := $(CFG_OBJ_EXT)
+	ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
+		BLD_EXT_$(LOC_TAG) := $(CFG_RES_EXT)
+	endif
+	ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
+		BLD_EXT_$(LOC_TAG) := $(CFG_IDL_EXT)
+	endif
 endif
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
@@ -78,12 +82,7 @@ ifeq ($(LOC_SRC_$(LOC_TAG)),)
 endif
 endif
 
-ifdef PRJ_OBJROOT
-BLD_PATH_BIN_$(LOC_TAG) := $(CFG_OUTROOT)/$(PRJ_OBJROOT)/$(PRJ_NAME)/$(LOC_TAG)
-else
-BLD_PATH_BIN_$(LOC_TAG) := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)/$(LOC_TAG)
-endif
-
+BLD_PATH_BIN_$(LOC_TAG) := $(CFG_OBJROOT)/$(LOC_TAG)
 BLD_PATH_OBJ_$(LOC_TAG) := $(BLD_PATH_BIN_$(LOC_TAG))
 BLD_PATH_INS_$(LOC_TAG) := /usr/share/$(PRJ_NAME)
 BLD_PATH_LNK_$(LOC_TAG) := /usr/bin
@@ -112,7 +111,12 @@ ifneq ($(LOC_WEX_$(LOC_TAG)),)
 	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_WEXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
 endif
 
-BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
+ifneq ($(LOC_PKG_$(LOC_TAG)),)
+	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/$(LOC_PKG_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
+else
+	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
+endif
+
 BLD_INCS			    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 ifneq ($(PRJ_SYSI),)
 	ifeq ($(BUILD),vs)
@@ -229,6 +233,7 @@ $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC
 # c++
 endif
 	
+# rc
 endif
 
 # vs-idl
@@ -273,14 +278,32 @@ $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC
 #c
 else
 
+# java
+ifeq ($(LOC_BLD_$(LOC_TAG)),java)
+
+BLD_JAVAROOT_TOTAL := $(BLD_JAVAROOT_TOTAL) $(CFG_CUR_ROOT)/$(BLD_PATH_OBJ_$(LOC_TAG))
+BLD_REMOVE_HACK := $(BLD_REMOVE_HACK) $(LOC_PKG_$(LOC_TAG))
+
+# java
+$(BLD_PATH_OBJ_$(LOC_TAG))/$(LOC_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(CFG_JAVAC) "$<" -d $(foreach d,$(BLD_REMOVE_HACK),$(subst /$(d)/$*.$(CFG_JAV_EXT),,$@)) -classpath $(CFG_JDK_CLASSPATH)
+
+else
+
 #gcc-c++
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
 
+#java
 endif
 
+#c
 endif
 
+#as
+endif
+
+#asm
 endif
 
 endif

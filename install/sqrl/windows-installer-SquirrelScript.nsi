@@ -176,6 +176,17 @@ Function .onInit
 uninst:
     ExecWait '$R0 _?=$INSTDIR /S'
 done: 
+
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${FILENAME}" "UninstallString"
+  StrCmp $R0 "" done_old
+    MessageBox MB_YESNOCANCEL|MB_ICONQUESTION \
+			   "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" \
+			   /SD IDYES IDNO done_old IDYES uninst_old
+      Abort
+uninst_old:
+    ExecWait '$R0 _?=$INSTDIR /S'
+done_old: 
+
 FunctionEnd
 
 

@@ -4,19 +4,29 @@ ifndef ABORT_UNSUPPORTED
 # Create file name
 ifndef BLD_FILE_EXE
 	ifdef PRJ_FILE_EXE		 
+		BLD_FILE := $(PRJ_FILE_EXE)
 		BLD_FILE_EXE := $(PRJ_FILE_EXE)
 	else
 		ifeq ($(PRJ_TYPE),lib)
-			BLD_FILE_EXE := $(CFG_LIB_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)$(CFG_LIB_POST)
+			BLD_FILE := $(CFG_LIB_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)
+			BLD_FILE_EXE := $(BLD_FILE)$(CFG_LIB_POST)
 		else
 			ifeq ($(PRJ_TYPE),dll)
-				BLD_FILE_EXE := $(CFG_DLL_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)$(CFG_DLL_POST)
+				BLD_FILE := $(CFG_DLL_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)
+				BLD_FILE_EXE := $(BLD_FILE)$(CFG_DLL_POST)
 			else
-				BLD_FILE_EXE := $(CFG_EXE_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)$(CFG_EXE_POST)
+				ifeq ($(PRJ_TYPE),apk)
+					BLD_FILE := $(CFG_DEX_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)
+					BLD_FILE_EXE := $(BLD_FILE).$(CFG_APK_POST)
+				else
+					BLD_FILE := $(CFG_EXE_PRE)$(PRJ_NAME)$(CFG_DPOSTFIX)
+					BLD_FILE_EXE := $(BLD_FILE)$(CFG_EXE_POST)
+				endif
 			endif
 		endif
 	endif
-	BLD_PATH_EXE := $(CFG_OUTROOT)/$(BLD_FILE_EXE)	
+	BLD_PATH_FILE := $(CFG_OUTROOT)/$(BLD_FILE)
+	BLD_PATH_EXE := $(CFG_OUTROOT)/$(BLD_FILE_EXE)
 endif
 
 # Windows Version Resource
@@ -141,6 +151,7 @@ else
 endif
 
 ifeq ($(PRJ_TYPE),lib)
+
 ifeq ($(BUILD),vs)	  
 $(BLD_PATH_EXE): $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_TOTAL) $(BLD_DEPENDS_TOTAL)
 	- $(CFG_DEL) $(subst \,/,$@)
@@ -150,7 +161,10 @@ $(BLD_PATH_EXE): $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_TOTAL)
 	- $(CFG_DEL) $@
 	$(CFG_AR) $(CFG_AFLAGS) $(CFG_AR_OUT)$@ $(BLD_OBJECTS_TOTAL) $(GO_ADDF)
 endif
+
+# lib
 else
+
 ifeq ($(PRJ_TYPE),dll)
 
 GO_DEPENDS 	:= $(GO_DEPENDS) $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
@@ -173,6 +187,26 @@ $(BLD_PATH_EXE): $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS)
 endif
 endif
 
+# dll
+else
+
+ifeq ($(PRJ_TYPE),apk)
+
+GO_DEPENDS 	:= $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
+
+# Build resource zip file
+$(BLD_PATH_FILE).$(CFG_ZIP_POST): $(CFG_RES_OBJ) $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)
+	$(CFG_ANDROID_AAPT) package -f -M $(CFG_CUR_ROOT)/$(PRJ_MANIFEST) -F $(CFG_CUR_ROOT)/$@ -I $(CFG_CUR_ROOT)/$(CFG_ANDROID_JAR) -S $(CFG_CUR_ROOT)/$(PRJ_RESOURCE)
+
+# Build .dex file
+$(BLD_PATH_FILE).$(CFG_DEX_POST): $(BLD_PATH_FILE).$(CFG_ZIP_POST)
+	$(CFG_ANDROID_DX) --output=$(CFG_CUR_ROOT)/$@ $(BLD_JAVAROOT_TOTAL)
+
+# Build .apk file
+$(BLD_PATH_FILE).$(CFG_APK_POST): $(BLD_PATH_FILE).$(CFG_DEX_POST)
+	$(CFG_ANDROID_APKBUILDER) $(CFG_CUR_ROOT)/$@ -u -z $(CFG_CUR_ROOT)/$(BLD_PATH_FILE).$(CFG_ZIP_POST) -f $(CFG_CUR_ROOT)/$(BLD_PATH_FILE).$(CFG_DEX_POST)
+
+# apk
 else
 
 GO_DEPENDS 	:= $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
@@ -195,8 +229,13 @@ $(BLD_PATH_EXE): $(CFG_RES_OBJ) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS)
 	
 endif	
 
+# apk
 endif
 
+# dll
+endif
+
+# lib
 endif
 
 include $(PRJ_LIBROOT)/sign.mk

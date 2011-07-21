@@ -119,8 +119,10 @@ endif
 # What are we building on?
 ifneq ($(WBLD),)
 	include $(CFG_PATH_CONFIG)/windows-build.mk
+	include $(CFG_PATH_CONFIG)/tools-win.mk
 else
 	include $(CFG_PATH_CONFIG)/linux-build.mk
+	include $(CFG_PATH_CONFIG)/tools-linux.mk
 endif
 
 # Which compiler is building the target?

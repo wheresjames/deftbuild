@@ -250,31 +250,6 @@ ifeq ($(PRJ_TYPE),dll)
 	CFG_LFLAGS := $(CFG_LFLAGS) /DLL
 endif
 
-CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
-	
-EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
-ifneq ($(strip $(EXISTS_MSPSDK)),)
-	CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-	PATH := $(PATH):$(CFG_MSPSDK)/bin
-	CFG_SIGNROOT := $(CFG_MSPSDK)/bin
-	PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
-	ifeq ($(PROC),x86)			
-		PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
-		CFG_MIDL_FLAGS := /win32
-	else
-		ifeq ($(PROC),ia64)			
-			PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
-			CFG_MIDL_FLAGS := /win64 /ia64
-		else
-			PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
-			CFG_MIDL_FLAGS := /win64 /amd64
-		endif
-	endif
-	CFG_RC := rc.exe
-	CFG_MIDL := midl.exe /nologo
-	CFG_CODESIGN := signtool.exe
-endif
-
 EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
 ifneq ($(strip $(EXISTS_DXSDK)),)
 	CFG_DXSDK := $(CFG_LIBROOT)/msdxsdk

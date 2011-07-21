@@ -77,7 +77,6 @@ ifeq ($(CFG_PROC),arm)
 		# http://honeypod.blogspot.com/2007/12/dynamically-linked-hello-world-for.html
 
 		OS := android
-		APILEVEL = android-9
 		PLATFORM := posix
 		PRJ_DEFS := $(PRJ_DEFS) ANDROID __ANDROID__
 
@@ -98,7 +97,7 @@ ifeq ($(CFG_PROC),arm)
 				CFG_TOOLPREFIX := arm-linux-androideabi-
 				# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows
 				
-				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
+				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
 
 				CFG_CPFLAGS := $(CFG_CPFLAGS) -fno-rtti 
 				# CFG_NODL := 1
@@ -117,8 +116,8 @@ ifeq ($(CFG_PROC),arm)
 					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows/bin:$(PATH)
 					CFG_TOOLPREFIX := arm-linux-androideabi-
 					
-					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
-
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
+					
 					# -msoft-float -mcpu=xscale -mtune=xscale -march=armv5te -mthumb -fomit-frame-pointer 
 					# -finline-limit=64 -fexceptions -frtti
 					# CFG_STDLIB := -fno-exceptions -static-libgcc -static-libstdc++
@@ -143,7 +142,7 @@ ifeq ($(CFG_PROC),arm)
 				PATH := $(CFG_ANDROIDTOOLS)/bin:$(PATH)
 				CFG_TOOLPREFIX := arm-linux-androideabi-
 
-				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(APILEVEL)/arch-arm/usr
+				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
 
 			endif
 		endif
@@ -626,7 +625,5 @@ CFG_SAR:= sed -i
 
 CFG_CC_OUT := -o $(nullstring)
 CFG_LD_OUT := -o $(nullstring)
-
-CFG_CUR_ROOT := $(shell pwd)
 
 CFG_CC_INC := -I

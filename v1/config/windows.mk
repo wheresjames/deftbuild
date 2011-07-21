@@ -13,11 +13,15 @@ endif
 
 CFG_OBJ_EXT  := obj
 CFG_DEP_EXT  := d
+CFG_JAV_EXT  := class
 CFG_LIB_PRE	 :=
 CFG_LIB_POST := .lib
 CFG_EXE_POST := .exe
 CFG_DLL_POST := .dll
 CFG_IDL_EXT  := idl.log.txt
+CFG_ZIP_POST := zip
+CFG_DEX_POST := dex
+CFG_APK_POST := apk
 
 ifeq ($(BUILD),vs)
 	CFG_RES_EXT  := res

@@ -1,3 +1,10 @@
+
+ifneq ($(CYGBLD),)
+	CFG_CUR_ROOT := $(subst \,/,$(shell cmd /c cd))
+else
+	CFG_CUR_ROOT := $(shell pwd)
+endif
+
 CFG_NAME := $(PRJ_NAME)
 ifndef PRJ_DESC
 	CFG_DESC := $(PRJ_NAME)
