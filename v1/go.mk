@@ -30,83 +30,10 @@ ifndef BLD_FILE_EXE
 endif
 
 # Windows Version Resource
-ifneq ($(CFG_VER),)
-ifeq ($(PLATFORM),windows)
-ifeq ($(PRJ_NORC),)
-ifneq ($(strip $(foreach t,dll exe,$(findstring $(t),$(PRJ_TYPE)))),)
-
-ifeq ($(PRJ_WVER_NAME),)
-	PRJ_WVER_NAME := $(PRJ_NAME)
-endif
-ifeq ($(PRJ_WVER_FVER),)
-	PRJ_WVER_FVER := $(subst .,\$(CFG_COMMA) ,$(CFG_VER))
-endif
-ifeq ($(PRJ_WVER_PVER),)
-	PRJ_WVER_PVER := $(subst .,\$(CFG_COMMA) ,$(CFG_VER))
-endif
-ifeq ($(PRJ_WVER_FNAME),)
-	PRJ_WVER_FNAME := $(BLD_FILE_EXE)
-endif
-ifeq ($(PRJ_WVER_DESC),)
-	PRJ_WVER_DESC := $(PRJ_DESC)
-endif
-ifeq ($(PRJ_WVER_COMPANY),)
-	PRJ_WVER_COMPANY := $(PRJ_COMPANY)
-endif
-ifeq ($(PRJ_WVER_COPYRIGHT),)
-	PRJ_WVER_COPYRIGHT := $(PRJ_COPYRIGHT)
-endif
-ifeq ($(PRJ_WVER_COMMENTS),)
-	PRJ_WVER_COMMENTS := $(PRJ_URL)
-endif
-ifeq ($(PRJ_TYPE),dll)
-	PRJ_WVER_FTYPE := 0x2L
-else
-	PRJ_WVER_FTYPE := 0x1L
-endif
-
-CFG_VER_OUT := $(CFG_OBJROOT)
-CFG_VER_FSRC := $(PRJ_LIBROOT)/win.vinf.rc
-CFG_VER_FDST := $(CFG_VER_OUT)/ver.rc
-.PRECIOUS: $(CFG_VER_FDST)
-$(CFG_VER_FDST): $(CFG_VER_FSRC)
-	$(shell $(CFG_CPY) "$(CFG_VER_FSRC)" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@NAME/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_NAME))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@FVER/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FVER))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@PVER/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_PVER))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@FTYPE/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FTYPE))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@FNAME/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_FNAME))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@DESC/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_DESC))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@COMPANY/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COMPANY))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@COPYRIGHT/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COPYRIGHT))/g" "$(CFG_VER_FDST)")
-	$(shell $(CFG_SAR) "s/@COMMENTS/$(call CFG_FWD_ESCAPE,$(PRJ_WVER_COMMENTS))/g" "$(CFG_VER_FDST)")
-
-$(CFG_VER_OUT)/_rc/%.res: $(CFG_VER_OUT)/%.rc
-#GO_DEPENDS 	:= $(GO_DEPENDS) $(CFG_VER_FDST)
-export LOC_TAG := _rc
-LOC_CXX__rc := rc
-LOC_BLD__rc := rc
-LOC_SRC__rc := $(CFG_VER_OUT)
-LOC_LST__rc := ver
-include $(PRJ_LIBROOT)/build.mk
-
-endif
-endif
-endif
-endif
+include $(PRJ_LIBROOT)/go/ver.mk
 
 # Squirrel build
-ifdef PRJ_SQRL
-	ifeq ($(PRJ_SQRL),service)
-		export LOC_TAG := sqs
-		LOC_SRC_sqs := $(CFG_LIBROOT)/winglib/tools/sqservice
-		include $(PRJ_LIBROOT)/build.mk	
-	else
-		export LOC_TAG := sq
-		LOC_SRC_sq := $(CFG_LIBROOT)/winglib/tools/sqembed
-		include $(PRJ_LIBROOT)/build.mk	
-	endif
-endif
+include $(PRJ_LIBROOT)/go/sqrl.mk
 
 ifdef PRJ_EXSY
 	GO_ADD := $(GO_ADD) -Wl,--exclude-symbols$(foreach s,$(PRJ_EXSY),,$(s))
@@ -190,25 +117,6 @@ endif
 # dll
 else
 
-ifeq ($(PRJ_TYPE),apk)
-
-GO_DEPENDS 	:= $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
-
-# Build resource zip file
-$(BLD_PATH_FILE).$(CFG_ZIP_POST): $(CFG_RES_OBJ) $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS) $(BLD_DEPENDS_TOTAL)
-	$(CFG_ANDROID_AAPT) package -f -M $(CFG_CUR_ROOT)/$(PRJ_MANIFEST) -F $(CFG_CUR_ROOT)/$@ -I $(CFG_CUR_ROOT)/$(CFG_ANDROID_JAR) -S $(CFG_CUR_ROOT)/$(PRJ_RESOURCE)
-
-# Build .dex file
-$(BLD_PATH_FILE).$(CFG_DEX_POST): $(BLD_PATH_FILE).$(CFG_ZIP_POST)
-	$(CFG_ANDROID_DX) --output=$(CFG_CUR_ROOT)/$@ $(BLD_JAVAROOT_TOTAL)
-
-# Build .apk file
-$(BLD_PATH_FILE).$(CFG_APK_POST): $(BLD_PATH_FILE).$(CFG_DEX_POST)
-	$(CFG_ANDROID_APKBUILDER) $(CFG_CUR_ROOT)/$@ -u -z $(CFG_CUR_ROOT)/$(BLD_PATH_FILE).$(CFG_ZIP_POST) -f $(CFG_CUR_ROOT)/$(BLD_PATH_FILE).$(CFG_DEX_POST)
-
-# apk
-else
-
 GO_DEPENDS 	:= $(foreach lib,$(PRJ_LIBS),$(CFG_BINROOT)/$(CFG_LIB_PRE)$(lib)$(CFG_DPOSTFIX)$(CFG_LIB_POST))
 
 #$(GO_DEPENDS):
@@ -229,20 +137,24 @@ $(BLD_PATH_EXE): $(CFG_RES_OBJ) $(BLD_OBJECTS_TOTAL) $(GO_DEPENDS)
 	
 endif	
 
-# apk
-endif
-
 # dll
 endif
 
 # lib
 endif
 
-include $(PRJ_LIBROOT)/sign.mk
-
-ifeq ($(GO_FINAL),)
+# dependency chain
 GO_FINAL := $(BLD_PATH_EXE)
-endif
+
+#packaging
+include $(PRJ_LIBROOT)/go/pkg.mk
+
+# signing
+include $(PRJ_LIBROOT)/go/sign.mk
+
+#ifeq ($(GO_FINAL),)
+#GO_FINAL := $(BLD_PATH_EXE)
+#endif
 
 ifneq ($(findstring $(PRJ_NAME),$(PLATRUN)),)
 #ifneq ($(findstring $(OS),$(PRJ_PLAT)),)
@@ -250,10 +162,15 @@ ifeq ($(OS),android)
 ifeq ($(PLATRUN_0),)
 	PLATRUN_0 := /data/tmp
 endif
+ifneq ($(PRJ_PACK),apk)
 .PHONY : android
 android: $(GO_FINAL)
 	adb push $(BLD_PATH_EXE) $(PLATRUN_0)/$(BLD_FILE_EXE)
 	adb shell chmod 0755 $(PLATRUN_0)/$(BLD_FILE_EXE)
+else
+android: $(GO_FINAL)
+	adb uninstall
+endif
 GO_FINAL := android
 endif
 #endif

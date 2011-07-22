@@ -111,8 +111,9 @@ ifneq ($(LOC_WEX_$(LOC_TAG)),)
 	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_WEXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
 endif
 
-ifneq ($(LOC_PKG_$(LOC_TAG)),)
-	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/$(LOC_PKG_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
+ifeq ($(LOC_BLD_$(LOC_TAG)),java)
+	BLD_PKG_$(LOC_TAG) = $(subst .,/,$(PRJ_PKG_NAME))
+	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/$(BLD_PKG_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
 else
 	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
 endif
@@ -131,6 +132,12 @@ ifdef CFG_RES_OUT
 	BLD_INCS			:= $(CFG_CC_INC)$(CFG_RES_OUT) $(BLD_INCS)
 endif
 
+ifeq ($(LOC_BLD_$(LOC_TAG)),java)
+#BLD_ROOTS_$(LOC_TAG)	:= $(foreach f,$(BLD_OBJECTS_$(LOC_TAG)),$(subst $(LOC_BLD_$(LOC_TAG)),,$(f)))
+#BLD_DEPENDS_$(LOC_TAG)	:= $(foreach f,$(BLD_ROOTS_$(LOC_TAG)),$(f)._i.c $(f)_p.c $(f).tbl $(f).h)
+#BLD_DEPENDS_TOTAL		:= $(BLD_DEPENDS_$(LOC_TAG))
+BLD_DEPENDS_TOTAL 		:= $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
+else
 ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 #BLD_ROOTS_$(LOC_TAG)	:= $(foreach f,$(BLD_OBJECTS_$(LOC_TAG)),$(subst $(LOC_BLD_$(LOC_TAG)),,$(f)))
 #BLD_DEPENDS_$(LOC_TAG)	:= $(foreach f,$(BLD_ROOTS_$(LOC_TAG)),$(f)._i.c $(f)_p.c $(f).tbl $(f).h)
@@ -138,6 +145,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 BLD_DEPENDS_TOTAL 		:= $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
 else
 BLD_OBJECTS_TOTAL 		:= $(BLD_OBJECTS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
+endif
 endif
 #BLD_DEPENDS_$(LOC_TAG) := $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(CFG_DEP_EXT)) )
 #BLD_DEPENDS_INCS		:= -I$(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), -I$(CFG_LIBROOT)/$(inc))
@@ -282,10 +290,10 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),java)
 
 BLD_JAVAROOT_TOTAL := $(BLD_JAVAROOT_TOTAL) $(CFG_CUR_ROOT)/$(BLD_PATH_OBJ_$(LOC_TAG))
-BLD_REMOVE_HACK := $(BLD_REMOVE_HACK) $(LOC_PKG_$(LOC_TAG))
+BLD_REMOVE_HACK := $(BLD_REMOVE_HACK) $(BLD_PKG_$(LOC_TAG))
 
 # java
-$(BLD_PATH_OBJ_$(LOC_TAG))/$(LOC_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+$(BLD_PATH_OBJ_$(LOC_TAG))/$(BLD_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_JAVAC) "$<" -d $(foreach d,$(BLD_REMOVE_HACK),$(subst /$(d)/$*.$(CFG_JAV_EXT),,$@)) -classpath $(CFG_JDK_CLASSPATH)
 
 else
