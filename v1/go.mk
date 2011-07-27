@@ -156,20 +156,24 @@ include $(PRJ_LIBROOT)/go/sign.mk
 #GO_FINAL := $(BLD_PATH_EXE)
 #endif
 
-ifneq ($(findstring $(PRJ_NAME),$(PLATRUN)),)
+ifeq ($(PRJ_NAME),$(PLATRUN))
+#ifneq ($(findstring $(PRJ_NAME),$(PLATRUN)),)
 #ifneq ($(findstring $(OS),$(PRJ_PLAT)),)
 ifeq ($(OS),android)
 ifeq ($(PLATRUN_0),)
 	PLATRUN_0 := /data/tmp
 endif
-ifneq ($(PRJ_PACK),apk)
 .PHONY : android
+ifneq ($(PRJ_PACK),apk)
 android: $(GO_FINAL)
 	adb push $(BLD_PATH_EXE) $(PLATRUN_0)/$(BLD_FILE_EXE)
 	adb shell chmod 0755 $(PLATRUN_0)/$(BLD_FILE_EXE)
+	1 # Stopping the build here
 else
 android: $(GO_FINAL)
-	adb uninstall
+	adb uninstall $(PRJ_PKG_NAME)
+	adb install $(GO_PKG_FILE)
+	1 # Stopping the build here
 endif
 GO_FINAL := android
 endif

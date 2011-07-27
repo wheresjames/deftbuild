@@ -4,7 +4,7 @@ ifeq ($(PRJ_PACK),apk)
 
 BLD_PACKAGE := $(CFG_OUTROOT)/$(PRJ_NAME)
 BLD_PACKAGE_LIBS := $(CFG_OBJROOT)/_pkg
-BLD_PACKAGE_OBJP := $(BLD_PACKAGE_LIBS)/bin/lib
+BLD_PACKAGE_OBJP := $(BLD_PACKAGE_LIBS)/lib/armeabi
 BLD_PACKAGE_SRC := $(GO_FINAL)
 BLD_PACKAGE_DST := $(BLD_PACKAGE_OBJP)/$(BLD_FILE_EXE)
 
@@ -32,6 +32,7 @@ $(BLD_PACKAGE).$(CFG_APK_POST): $(BLD_PACKAGE).$(CFG_DEX_POST)
 # zipalign -v 4 bin/unsigned.apk bin/signed.apk
 
 # new dependency
+GO_PKG_FILE := $(BLD_PACKAGE).$(CFG_APK_POST)
 GO_FINAL := $(BLD_PACKAGE).$(CFG_APK_POST)
 	
 # PRJ_PACK = apk
