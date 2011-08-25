@@ -24,6 +24,7 @@ Name "${APPNAME}"
 
 ; The default installation director
 !if "${PROC}" == "x64"
+	SetRegView 64
 	InstallDir "$PROGRAMFILES64\Squirrel Script Engine ${PROC}"
 !else
 	InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
@@ -174,7 +175,7 @@ Function .onInit
 			   /SD IDYES IDNO done IDYES uninst
       Abort
 uninst:
-    ExecWait '$R0 _?=$INSTDIR /S'
+    ExecWait '$R0 /S _?=$INSTDIR'
 done: 
 
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${FILENAME}" "UninstallString"
@@ -184,7 +185,7 @@ done:
 			   /SD IDYES IDNO done_old IDYES uninst_old
       Abort
 uninst_old:
-    ExecWait '$R0 _?=$INSTDIR /S'
+    ExecWait '$R0 /S _?=$INSTDIR'
 done_old: 
 
 FunctionEnd

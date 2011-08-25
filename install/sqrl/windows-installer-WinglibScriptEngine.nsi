@@ -27,6 +27,7 @@ Name "${APPVNAME}"
 
 ; The default installation director
 !if "${PROC}" == "x64"
+	SetRegView 64
 	InstallDir "$PROGRAMFILES64\${APPNAME}"
 !else
 	InstallDir "$PROGRAMFILES\${APPNAME}"
@@ -71,7 +72,7 @@ Section "${APPVNAME} (required)"
 !if "${PROC}" == "x64"
 	SetRegView 64
 !endif
-  
+
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
@@ -305,7 +306,7 @@ Function .onInit
 			   /SD IDYES IDNO done IDYES uninst
       Abort
 uninst:
-    ExecWait '$R0 _?=$INSTDIR /S'
+    ExecWait '$R0 /S _?=$INSTDIR'
 done: 
 FunctionEnd
 
