@@ -27,7 +27,6 @@ Name "${APPVNAME}"
 
 ; The default installation director
 !if "${PROC}" == "x64"
-	SetRegView 64
 	InstallDir "$PROGRAMFILES64\${APPNAME}"
 !else
 	InstallDir "$PROGRAMFILES\${APPNAME}"

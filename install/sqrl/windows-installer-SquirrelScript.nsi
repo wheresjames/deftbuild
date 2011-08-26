@@ -24,7 +24,6 @@ Name "${APPNAME}"
 
 ; The default installation director
 !if "${PROC}" == "x64"
-	SetRegView 64
 	InstallDir "$PROGRAMFILES64\Squirrel Script Engine ${PROC}"
 !else
 	InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
