@@ -135,8 +135,8 @@ ifeq ($(CFG_PROC),arm)
 				PRJ_DEFS := $(PRJ_DEFS)
 				CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-linux
 
-#					PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/linux-x86/bin:$(PATH)
-#					CFG_TOOLPREFIX := arm-eabi-
+#				PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/linux-x86/bin:$(PATH)
+#				CFG_TOOLPREFIX := arm-eabi-
 
 				CFG_ANDROIDTOOLS := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86
 				PATH := $(CFG_ANDROIDTOOLS)/bin:$(PATH)
@@ -144,6 +144,22 @@ ifeq ($(CFG_PROC),arm)
 
 				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
 
+			else
+				
+				EXISTS_ANDROIDNDK := $(wildcard $(CFG_LIBROOT)/android-crystax-linux)
+				ifneq ($(strip $(EXISTS_ANDROIDNDK)),)
+
+					TOOLS := crystax
+					PRJ_DEFS := $(PRJ_DEFS)
+					CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-crystax-linux
+					
+					CFG_ANDROIDTOOLS := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86
+					PATH := $(CFG_ANDROIDTOOLS)/bin:$(PATH)
+					CFG_TOOLPREFIX := arm-linux-androideabi-
+					
+					CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
+
+				endif
 			endif
 		endif
 

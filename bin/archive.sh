@@ -10,5 +10,5 @@ echo " *** Archiving ${PROJ}"
 
 tar -hc ${PROJ} | bzip2 > "${ARCHPATH}/${PROJ}.tar.bz2"
 
-zip -q -r "${ARCHPATH}/${PROJ}.zip" ${PROJ}
+#zip -q -r "${ARCHPATH}/${PROJ}.zip" ${PROJ}
 
