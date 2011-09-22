@@ -6,9 +6,11 @@ ifneq ($(strip $(EXISTS_JDK)),)
 	PATH := $(CFG_JDKROOT)/bin:$(PATH)
 	CFG_JAVAC := javac -target 1.5
 	CFG_JARSIGNER := jarsigner
+	CFG_JARSIGNING := 1
 else
 	CFG_JAVAC := javac -target 1.5
 	CFG_JARSIGNER := jarsigner
+	CFG_JARSIGNING := 1
 endif
 
 CFG_ANDROID_APILEVEL := android-9

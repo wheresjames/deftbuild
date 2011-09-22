@@ -1,8 +1,15 @@
 
+ifdef CFG_JARSIGNING
+	GO_SIGN_EXISTS := 1
+endif
+ifdef CFG_CODESIGNING
+	GO_SIGN_EXISTS := 1
+endif
+
 # Code signing
 ifdef PRJ_SIGN
 ifdef PVKPASS
-ifdef CFG_CODESIGNING
+ifdef GO_SIGN_ENABLED
 
 GO_SIGN_ENABLED := 1
 GO_SIGN_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
