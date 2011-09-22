@@ -12,7 +12,7 @@ ifeq ($(PRJ_PACK),apk)
 
 # Self signed help ;)
 # openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ss.pem -out ss.pem
-# openssl openssl pkcs12 -export -out ss.pfx -in ss.pem -name “ss”
+# openssl pkcs12 -export -out ss.pfx -in ss.pem -name “ss”
 # openssl pkcs12 -in ss.pfx -out ss.pem
 # openssl pkcs12 -export -in ss.pem -out ss.ks -name "ss"
 GO_SIGN_FILE := $(CFG_CUR_ROOT)/$(GO_FINAL)
