@@ -9,7 +9,7 @@ endif
 # Code signing
 ifdef PRJ_SIGN
 ifdef PVKPASS
-ifdef GO_SIGN_ENABLED
+ifdef GO_SIGN_EXISTS
 
 GO_SIGN_ENABLED := 1
 GO_SIGN_OUT := $(CFG_OUTROOT)/_0_obj/$(PRJ_NAME)
