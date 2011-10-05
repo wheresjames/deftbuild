@@ -28,6 +28,11 @@ UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
+ifeq ($(LIBLINK),static)
+	PRJ_DEFS := $(PRJ_DEFS) DISABLE_IMPORTGL
+endif
+
+
 PRJ_DEFS := $(PRJ_DEFS) _IRR_USE_LINUX_DEVICE_ 
 
 #-------------------------------------------------------------------

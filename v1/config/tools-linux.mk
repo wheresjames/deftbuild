@@ -4,11 +4,11 @@ ifneq ($(strip $(EXISTS_JDK)),)
 	PRJ_DEFS := $(PRJ_DEFS)
 	CFG_JDKROOT := $(CFG_LIBROOT)/jdk-linux
 	PATH := $(CFG_JDKROOT)/bin:$(PATH)
-	CFG_JAVAC := javac -target 1.5
+	CFG_JAVAC := javac -target 1.6
 	CFG_JARSIGNER := jarsigner
 	CFG_JARSIGNING := 1
 else
-	CFG_JAVAC := javac -target 1.5
+	CFG_JAVAC := javac -target 1.6
 	CFG_JARSIGNER := jarsigner
 	CFG_JARSIGNING := 1
 endif
