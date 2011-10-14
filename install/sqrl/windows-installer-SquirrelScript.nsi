@@ -102,6 +102,7 @@ Section "${APPNAME} (required)"
 !ifdef DVER
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "DisplayVersion" "${DVER}"
 !endif
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "InstallLocation" '$INSTDIR'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoRepair" 1
@@ -112,8 +113,8 @@ SectionEnd
 ; Optional section (can be disabled by the user)
 Section "Start Menu Shortcuts"
 
-  CreateDirectory "$SMPROGRAMS\${APPNAME}"
-  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+;  CreateDirectory "$SMPROGRAMS\${APPNAME}"
+;  CreateShortCut "$SMPROGRAMS\${APPNAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
   
 SectionEnd
 
@@ -168,23 +169,25 @@ Function .onInit
 	SetRegView 64
 !endif
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "UninstallString"
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "InstallLocation"
   StrCmp $R0 "" done
     MessageBox MB_YESNOCANCEL|MB_ICONQUESTION \
 			   "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" \
 			   /SD IDYES IDNO done IDYES uninst
       Abort
 uninst:
-    ExecWait '$R0 /S _?=$INSTDIR'
+    ExecWait '$R0 /S _?=$R1'
 done: 
 
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${FILENAME}" "UninstallString"
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${FILENAME}" "InstallLocation"
   StrCmp $R0 "" done_old
     MessageBox MB_YESNOCANCEL|MB_ICONQUESTION \
 			   "A previous version of ${APPNAME} was found.$\n$\nIt is recommended that you uninstall it first.$\n$\nDo you want to do that now?" \
 			   /SD IDYES IDNO done_old IDYES uninst_old
       Abort
 uninst_old:
-    ExecWait '$R0 /S _?=$INSTDIR'
+    ExecWait '$R0 /S _?=$R1'
 done_old: 
 
 FunctionEnd
