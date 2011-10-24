@@ -6,14 +6,16 @@
 #
 # $1 = idx			- value postfixed to output directories
 #
-# $2 = Command      - show, checkout, update, archive, diff,
-#                     makepatch, applypatch, build
+# $2 = Command      - show, checkout, update, archive, restore,
+#                     diff, makepatch, applypatch, build
 #
-# $3 = Group list   - Project group
+# $3 = Group list   - Comma separated group list
 #
-# $4 = Project list -
+# $4 = Project list - Comma separated project list
 #
 # $5 = Tag			- Unique tag for archives, diffs, or patches
+#
+# $6 = *            - [restore] - URL Source prefix (http://example.com/)
 #
 #-------------------------------------------------------------------
 

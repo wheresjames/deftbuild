@@ -53,7 +53,7 @@ if [ "${REPO}" == "git" ]; then
 fi
 
 # hg
-if [ "${REPO}" == "git" ]; then	
+if [ "${REPO}" == "hg" ]; then	
 
 	hg clone "${LINK}" "${PROJ}"
 	if [ "${REVN}" != "-" ]; then
