@@ -63,7 +63,7 @@ export LOC_TAG := libavcodec
 LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
 LOC_WLS_libavcodec := 0 1 2 3 4 5 6 7 8 9 a b c d e f
-LOC_WEX_libavcodec := vaa lib
+LOC_WEX_libavcodec := vaa lib *_template
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
 		LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*

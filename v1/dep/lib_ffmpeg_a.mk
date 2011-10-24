@@ -130,7 +130,8 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := libavformat
 LOC_CXX_libavformat := c
 LOC_SRC_libavformat := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_EXC_libavformat := avisynth libnut librtmp rtpdec_theora
+LOC_EXC_libavformat := avisynth rtpdec_theora
+LOC_WEX_libavformat := lib
 #LOC_EXC_libavformat := avisynth libnut matroskadec mov
 #ifeq ($(PROC),arm)
 #	LOC_EXC_libavformat := $(LOC_EXC_libavformat) ipmovie mpegts sierravmd
@@ -155,8 +156,8 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := libswscale
 LOC_CXX_libswscale := c
 LOC_SRC_libswscale := $(CFG_LIBROOT)/ffmpeg/libswscale
-LOC_EXC_libswscale := rgb2rgb_template swscale_template \
-					  swscale-example colorspace-test
+#LOC_EXC_libswscale := swscale-example colorspace-test
+LOC_WEX_libswscale := *_template *-example *-test
 include $(PRJ_LIBROOT)/build.mk
 					  				  
 
@@ -165,7 +166,8 @@ ifneq ($(PROC),arm)
 	export LOC_TAG := libswscalex86
 	LOC_CXX_libswscalex86 := c
 	LOC_SRC_libswscalex86 := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
-	LOC_EXC_libswscalex86 := yuv2rgb_template
+#	LOC_EXC_libswscalex86 := yuv2rgb_template
+	LOC_WEX_libswscalex86 := *_template
 	include $(PRJ_LIBROOT)/build.mk
 	
 	export LOC_TAG := libavutil_x86
