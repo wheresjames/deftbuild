@@ -59,7 +59,10 @@ endif
 
 ifneq ($(PROC),arm)
 
-	ASMOPTS := $(ASMOPTS) -DHAVE_SSE
+# HAVE_AVX = Intel Sandy Bridge vector extension ???
+
+	ASMOPTS := $(ASMOPTS) -I$(CFG_LIBROOT)/ffmpeg/libavutil/x86	
+	ASMOPTS := $(ASMOPTS) -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW -DHAVE_SSSE -DHAVE_SSSE3
 	ifeq ($(PLATFORM),windows)
 		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
 	else
@@ -93,11 +96,11 @@ ifneq ($(PROC),arm)
 	LOC_EXC_libavcodecx86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
 				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
 				   			 mpegvideo_mmx_template h264_qpel_mmx
-	ifneq ($(PLATFORM),windows)
-		ifeq ($(PROC),x64)
-			LOC_WEX_libavcodecx86 := $(LOC_WEX_libavcodecx86) *mmx*
-		endif
-	endif
+#	ifneq ($(PLATFORM),windows)
+#		ifeq ($(PROC),x64)
+			# LOC_WEX_libavcodecx86 := $(LOC_WEX_libavcodecx86) *mmx*
+#		endif
+#	endif
 	include $(PRJ_LIBROOT)/build.mk
 
 endif
@@ -175,6 +178,26 @@ ifneq ($(PROC),arm)
 	LOC_SRC_libavutil_x86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
 	LOC_EXC_libavutil_x86 := 
 	include $(PRJ_LIBROOT)/build.mk
+	
+	export LOC_TAG := libswscalex86_asm
+	LOC_CXX_libswscalex86_asm := asm
+	LOC_BLD_libswscalex86_asm := asm
+	ifeq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_ASM_libswscalex86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_libswscalex86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	else
+		ifeq ($(PROC),x64)
+			LOC_ASM_libswscalex86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_libswscalex86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	endif
+	LOC_SRC_libswscalex86_asm := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
+	include $(PRJ_LIBROOT)/build.mk
+
 
 endif
 

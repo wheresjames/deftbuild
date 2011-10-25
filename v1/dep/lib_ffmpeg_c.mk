@@ -67,7 +67,7 @@ ifneq ($(PLATFORM),windows)
 		LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*
 	endif
 endif
-LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
+LOC_EXC_libavcodec := beosthread imgconvert_template motion_est_template gsmdec_template \
 					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
 					  \
 					  dxva2 dxva2_h264 dxva2_vc1 \
@@ -80,11 +80,11 @@ LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template
 					  \
 					  crystalhd
 
-ifeq ($(PLATFORM),windows)
-	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) pthread
-else
-	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) w32thread
-endif
+#ifeq ($(PLATFORM),windows)
+#	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) pthread
+#else
+#	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) w32thread
+#endif
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
 		LOC_EXC_libavcodecx86 := $(LOC_EXC_libavcodecx86) *mmx*
