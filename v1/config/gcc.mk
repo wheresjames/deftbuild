@@ -492,11 +492,11 @@ else
 			
 		endif
 
-		# -fstack-check -m64
+		# -fstack-check -m64 -fpermissive
 		CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lavicap32 -lmsvfw32
 		CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols -fno-leading-underscore -static-libgcc -static-libstdc++
 		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 \
-							-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore -fpermissive \
+							-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 							-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
 		CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 		CFG_AFLAGS := cq

@@ -5,28 +5,38 @@
 ; The name of the installer and output file
 
 !ifdef DVER
-	!define APPNAME "Squirrel Script Engine ${PROC} ${DVER}"
+	!define APPNAME "Squirrel Script Engine ${PROC} ${DVER} ${BUILD}"
 !else
-	!define APPNAME "Squirrel Script Engine ${PROC}"
+	!define APPNAME "Squirrel Script Engine ${PROC} ${BUILD}"
 !endif
 
 !define FILENAME "SquirrelScript"
 
-!define KEYNAME "${FILENAME}_${PROC}"
+!define KEYNAME "${FILENAME}_${PROC}_${BUILD}"
+!define GCCKEYNAME "${FILENAME}_${PROC}_gcc"
 
 Name "${APPNAME}"
 
 !ifdef FVER
-	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${FVER}_${PROC}.exe"
+!define FULL_FILENAME "Install${FILENAME}${POSTFIX}_${FVER}_${PROC}_${BUILD}.exe"
+!define FULL_GCC_FILENAME "Install${FILENAME}${POSTFIX}_${FVER}_${PROC}_gcc.exe"
 !else
-	OutFile "${OUTROOT}\Install${FILENAME}${POSTFIX}_${PROC}.exe"
+!define FULL_FILENAME "Install${FILENAME}${POSTFIX}_${PROC}_${BUILD}.exe"
+!define FULL_GCC_FILENAME "Install${FILENAME}${POSTFIX}_${PROC}_gcc.exe"
 !endif
+OutFile "${OUTROOT}\${FULL_FILENAME}"
+
+!if "${PROC}" == "x64"
+!if "${BUILD}" == "vs"
+!define FULL_GCC_PATH "..\windows-gcc-win64-x64-mingw64-static\${FULL_GCC_FILENAME}"
+!endif
+!endif  
 
 ; The default installation director
 !if "${PROC}" == "x64"
-	InstallDir "$PROGRAMFILES64\Squirrel Script Engine ${PROC}"
+	InstallDir "$PROGRAMFILES64\Squirrel Script Engine ${PROC} ${BUILD}"
 !else
-	InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC}"
+	InstallDir "$PROGRAMFILES\Squirrel Script Engine ${PROC} ${BUILD}"
 !endif
 
 ; Registry key to check for directory (so if you install again, it will 
@@ -67,6 +77,13 @@ Section "${APPNAME} (required)"
   File "License.txt"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
   File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
+
+  ; Hack - install GCC version
+!if "${PROC}" == "x64"
+!if "${BUILD}" == "vs"
+		File "${OUTROOT}\${FULL_GCC_PATH}"
+!endif		
+!endif  
   
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR\modules
@@ -108,6 +125,13 @@ Section "${APPNAME} (required)"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}" "NoRepair" 1
   WriteUninstaller "uninstall.exe"
   
+  ; Hack - install GCC version
+!if "${PROC}" == "x64"
+!if "${BUILD}" == "vs"
+  ExecWait '"$INSTDIR\${FULL_GCC_FILENAME}" /S'
+!endif
+!endif  
+  
 SectionEnd
 
 ; Optional section (can be disabled by the user)
@@ -127,12 +151,25 @@ Section "Uninstall"
 	SetRegView 64
 !endif
 
+!if "${PROC}" == "x64"
+!if "${BUILD}" == "vs"
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GCCKEYNAME}" "UninstallString"
+  ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GCCKEYNAME}" "InstallLocation"
+  StrCmp $R0 "" gcc_done
+    ExecWait '$R0 /S _?=$R1'
+	Delete "$R1\uninstall.exe"
+	RMDir "$R1"
+gcc_done: 
+!endif
+!endif
+
   ; Remove registry keys
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${KEYNAME}"
   DeleteRegKey HKLM "Software\${KEYNAME}"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\uninstall.exe
+  Delete $INSTDIR\License.txt
   
   Delete $INSTDIR\sqrl.exe  
   Delete $INSTDIR\sqrl-cgi.exe  
@@ -151,6 +188,12 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
 
+!if "${PROC}" == "x64"
+!if "${BUILD}" == "vs"
+  Delete "$INSTDIR\${FULL_GCC_FILENAME}"
+!endif		
+!endif  
+  
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\${APPNAME}\*.*"
 
