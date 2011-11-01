@@ -176,7 +176,7 @@ ifneq ($(PROC),arm)
 	export LOC_TAG := libavutil_x86
 	LOC_CXX_libavutil_x86 := c
 	LOC_SRC_libavutil_x86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
-	LOC_EXC_libavutil_x86 := 
+	LOC_EXC_libavutil_x86 := yuv2rgb_mmx
 	include $(PRJ_LIBROOT)/build.mk
 	
 	export LOC_TAG := libswscalex86_asm

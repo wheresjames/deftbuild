@@ -450,13 +450,25 @@ else
 		OS := win32
 		PLATFORM := windows
 
-		CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32
-		CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
-		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
-							-c -MMD -Wall -fno-strict-aliasing \
-							-DOEX_NODSHOW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
-		CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
-		CFG_AFLAGS := cq
+		EXISTS_MINGW32 := $(wildcard $(CFG_LIBROOT)/mingw32-win)
+		ifneq ($(strip $(EXISTS_MINGW32)),)
+			CFG_MINGW32 := $(CFG_LIBROOT)/mingw32-win
+			PATH := $(CFG_MINGW32)/bin:$(PATH)
+		else
+			EXISTS_MINGW32 := $(wildcard $(CFG_LIBROOT)/mingw32)
+			ifneq ($(strip $(EXISTS_MINGW32)),)
+				CFG_MINGW32 := $(CFG_LIBROOT)/mingw32
+				PATH := $(CFG_MINGW32)/bin:$(PATH)
+			endif
+		endif
+
+			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32
+			CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
+			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
+								-c -MMD -Wall -fno-strict-aliasing \
+								-DOEX_NODSHOW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
+			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+			CFG_AFLAGS := cq
 
 	endif
 	ifeq ($(CFG_TOOLS),mingw64)
