@@ -172,7 +172,7 @@ ifneq ($(PROC),arm)
 #	LOC_EXC_libswscalex86 := yuv2rgb_template
 	LOC_WEX_libswscalex86 := *_template
 	ifeq ($(PROC),x64)
-		LOC_EXC_libavutil_x86 := yuv2rgb_mmx
+		LOC_EXC_libswscalex86 := yuv2rgb_mmx
 	endif
 	include $(PRJ_LIBROOT)/build.mk
 	
