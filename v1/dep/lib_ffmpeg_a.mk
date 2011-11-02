@@ -171,8 +171,10 @@ ifneq ($(PROC),arm)
 	LOC_SRC_libswscalex86 := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
 #	LOC_EXC_libswscalex86 := yuv2rgb_template
 	LOC_WEX_libswscalex86 := *_template
-	ifeq ($(PROC),x64)
-		LOC_EXC_libswscalex86 := yuv2rgb_mmx
+	ifeq ($(PLATFORM),posix)
+		ifeq ($(PROC),x64)
+			LOC_EXC_libswscalex86 := yuv2rgb_mmx
+		endif
 	endif
 	include $(PRJ_LIBROOT)/build.mk
 	
