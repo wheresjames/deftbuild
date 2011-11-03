@@ -10,6 +10,17 @@ ifneq ($(strip $(EXISTS_YASM)),)
 	CFG_YASM := yasm
 endif
 
+#ifneq ($(findstring Qt,$(PRJ_FWRK)),)
+EXISTS_QT := $(wildcard $(CFG_LIBROOT)/qt-win)
+ifneq ($(strip $(EXISTS_QT)),)
+	CFG_QTROOT := $(CFG_LIBROOT)/qt-win
+	PRJ_LIBP := $(CFG_QTROOT)/lib $(PRJ_LIBP)
+	PRJ_INCS := qt-win/include $(PRJ_INCS)
+	PATH := $(CFG_QTROOT)/bin:$(PATH)
+	CFG_QTMOC := moc
+endif
+#endif
+
 EXISTS_JDK := $(wildcard $(CFG_LIBROOT)/jdk-win)
 ifneq ($(strip $(EXISTS_JDK)),)
 	PRJ_DEFS := $(PRJ_DEFS)
@@ -21,7 +32,7 @@ ifneq ($(strip $(EXISTS_JDK)),)
 
 	# -classpath
 	# CFG_JDK_CLASSPATH := 
-	
+
 endif
 
 CFG_ANDROID_APILEVEL := android-9

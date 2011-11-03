@@ -13,7 +13,11 @@ ifneq ($(PRJ_DEFS),)
 endif
 
 ifeq ($(LOC_CXX_$(LOC_TAG)),)
-	LOC_CXX_$(LOC_TAG) := cpp
+	ifeq ($(LOC_BLD_$(LOC_TAG)),moc)
+		LOC_CXX_$(LOC_TAG) := h
+	else
+		LOC_CXX_$(LOC_TAG) := cpp
+	endif
 endif
 
 ifeq ($(LOC_H_$(LOC_TAG)),)
@@ -222,7 +226,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_RC) $(BLD_INCS) /fo $@ $<
 
-# rc
+# vs-rc
 else
 
 # vs-c++
@@ -232,16 +236,33 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),cpp)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tp "$<" $(CFG_CC_OUT)"$@"
 
+# vs-c++
+else
+
+# moc vs-c++
+ifeq ($(LOC_BLD_$(LOC_TAG)),moc)
+
+.PRECIOUS: $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
+$(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(CFG_QTMOC) "$<" -o "$@"
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tp "$<" $(CFG_CC_OUT)"$@"
+
+# moc vs-c++
 else
 
 # vs-c
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CCFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tc "$<" $(CFG_CC_OUT)"$@"
 
-# c++
+# moc vs-c++
+endif
+
+# vs-c++
 endif
 	
-# rc
+# vs-rc
 endif
 
 # vs-idl
