@@ -1,4 +1,12 @@
 
+ifneq ($(findstring Qt,$(PRJ_FWRK)),)
+	CFG_QTROOT := /usr/share/qt4
+	PRJ_LIBP := $(CFG_QTROOT)/lib $(PRJ_LIBP)
+	PRJ_SYSI := /usr/include/qt4 $(PRJ_SYSI)
+	PATH := $(CFG_QTROOT)/bin:$(PATH)
+	CFG_QTMOC := moc
+endif
+
 EXISTS_JDK := $(wildcard $(CFG_LIBROOT)/jdk-linux)
 ifneq ($(strip $(EXISTS_JDK)),)
 	PRJ_DEFS := $(PRJ_DEFS)

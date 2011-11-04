@@ -20,8 +20,10 @@ include $(PRJ_LIBROOT)/config.mk
 
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
-		PRJ_DEFS := __int64=long
-	endif
+        PRJ_DEFS := __int64=long
+    else
+        PRJ_DEFS := __int64=long
+    endif
 endif
 
 

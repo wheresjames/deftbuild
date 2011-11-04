@@ -317,11 +317,29 @@ BLD_REMOVE_HACK := $(BLD_REMOVE_HACK) $(BLD_PKG_$(LOC_TAG))
 $(BLD_PATH_OBJ_$(LOC_TAG))/$(BLD_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_JAVAC) "$<" -d $(foreach d,$(BLD_REMOVE_HACK),$(subst /$(d)/$*.$(CFG_JAV_EXT),,$@)) -classpath $(CFG_JDK_CLASSPATH)
 
+# java
+else
+
+# moc
+ifeq ($(LOC_BLD_$(LOC_TAG)),moc)
+
+.PRECIOUS: $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(CFG_QTMOC) "$<" -o "$@"
+
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+
+# moc
 else
 
 #gcc-c++
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+
+#moc
+endif
 
 #java
 endif
