@@ -1,9 +1,15 @@
 
 ifneq ($(findstring Qt,$(PRJ_FWRK)),)
+
 	CFG_QTROOT := /usr/share/qt4
-	PRJ_LIBP := $(CFG_QTROOT)/lib $(PRJ_LIBP)
-	PRJ_SYSI := /usr/include/qt4 $(PRJ_SYSI)
 	PATH := $(CFG_QTROOT)/bin:$(PATH)
+	ifneq ($(findstring windows,$(TGT)),)
+		PRJ_LIBP := $(CFG_LIBROOT)/qt-mingw32/lib $(PRJ_LIBP)
+		PRJ_SYSI := $(CFG_LIBROOT)/qt-mingw32/include $(PRJ_SYSI)
+	else
+		PRJ_LIBP := $(CFG_QTROOT)/lib $(PRJ_LIBP)
+		PRJ_SYSI := /usr/include/qt4 $(PRJ_SYSI)
+	endif
 	CFG_QTMOC := moc
 endif
 
