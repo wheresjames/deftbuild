@@ -11,9 +11,9 @@ PRJ_INCS := opencv/include/opencv opencv/src/cv \
 			opencv/3rdparty/include zlib
 PRJ_LIBS := 
 ifneq ($(USE_HIGHGUI),)
-	PRJ_DEFS := $(PRJ_DEFS) USE_HIGHGUI
+	PRJ_DEFS := $(PRJ_DEFS) USE_HIGHGUI HAVE_JPEG=1 HAVE_ZLIB=1 HAVE_PNG=1
 endif
-	
+
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
 
