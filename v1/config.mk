@@ -95,6 +95,10 @@ ifdef PRJ_SQRL
 	include $(CFG_PATH_CONFIG)/sqrl.mk
 endif
 
+ifdef PRJ_QTWK
+	include $(CFG_PATH_CONFIG)/qtwk.mk
+endif
+
 # +++ ???
 CFG_CEXTRA := $(CFG_CEXTRA) $(PRJ_CFLAGS)
 

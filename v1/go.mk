@@ -35,6 +35,9 @@ include $(PRJ_LIBROOT)/go/ver.mk
 # Squirrel build
 include $(PRJ_LIBROOT)/go/sqrl.mk
 
+# Qt WebKit project
+include $(PRJ_LIBROOT)/go/qtwk.mk
+
 ifdef PRJ_EXSY
 	GO_ADD := $(GO_ADD) -Wl,--exclude-symbols$(foreach s,$(PRJ_EXSY),,$(s))
 endif
