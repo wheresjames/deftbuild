@@ -13,7 +13,9 @@ endif
 
 ifneq ($(findstring gui,$(PRJ_GUIT)),)
 	ifeq ($(BUILD),vs)
-		CFG_LFLAGS := $(CFG_LFLAGS) /SUBSYSTEM:WINDOWS
+		PRJ_DEFS := $(PRJ_DEFS) OEX_GUI
+		PRJ_OSLB := $(PRJ_OSLB) qtmain
+		CFG_LFLAGS := $(CFG_LFLAGS) /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
 	else
 		CFG_LFLAGS := $(CFG_LFLAGS) -mwindows
 	endif
