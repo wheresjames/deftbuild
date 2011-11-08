@@ -11,6 +11,14 @@ else
 	PRJ_DEFS := $(PRJ_DEFS) WIN32 _WIN32
 endif
 
+ifneq ($(findstring gui,$(PRJ_GUIT)),)
+	ifeq ($(BUILD),vs)
+		CFG_LFLAGS := $(CFG_LFLAGS) /SUBSYSTEM:WINDOWS
+	else
+		CFG_LFLAGS := $(CFG_LFLAGS) -mwindows
+	endif
+endif
+
 CFG_OBJ_EXT  := obj
 CFG_DEP_EXT  := d
 CFG_JAV_EXT  := class

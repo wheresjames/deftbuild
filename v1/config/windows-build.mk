@@ -1,5 +1,7 @@
+	323121 fsfdsfa
 
 ifneq ($(VSVER),)
+	
 	ifneq ($(findstring x64,$(BLD)),)
 		CFG_LOCAL_BUILD_TYPE 	:= $(CFG_OUT)/windows-$(VSVER)-win64-x64-local-static
 	else
