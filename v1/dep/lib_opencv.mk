@@ -7,8 +7,9 @@ default_target: all
 PRJ_NAME := opencv
 PRJ_DEPS := opencv
 PRJ_TYPE := lib
-PRJ_INCS := opencv/include/opencv opencv/src/cv \
-			opencv/3rdparty/include zlib
+PRJ_INCS := jpeg png tiff/libtiff zlib \
+			opencv/include/opencv opencv/src/cv \
+			opencv/3rdparty/include
 PRJ_LIBS := 
 ifneq ($(USE_HIGHGUI),)
 	PRJ_INCS := $(PRJ_INCS) jpeg png
