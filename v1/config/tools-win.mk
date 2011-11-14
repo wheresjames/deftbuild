@@ -1,15 +1,4 @@
 
-EXISTS_YASM := $(wildcard $(CFG_LIBROOT)/yasm-win)
-ifneq ($(strip $(EXISTS_YASM)),)
-	ifeq ($(PROC),x64)
-		CFG_YASMROOT := $(CFG_LIBROOT)/yasm-win/x64
-	else
-		CFG_YASMROOT := $(CFG_LIBROOT)/yasm-win/x86
-	endif
-	PATH := $(CFG_YASMROOT):$(PATH)
-	CFG_YASM := yasm
-endif
-
 ifneq ($(findstring Qt,$(PRJ_FWRK)),)
 	EXISTS_QT := $(wildcard $(CFG_LIBROOT)/qt-win)
 	ifneq ($(strip $(EXISTS_QT)),)
