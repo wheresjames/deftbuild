@@ -41,7 +41,7 @@ endif
 
 EXISTS_YASM := $(wildcard $(CFG_LIBROOT)/yasm-win)
 ifneq ($(strip $(EXISTS_YASM)),)
-	ifeq ($(PROC),x64)
+	ifneq ($(findstring x64,$(BLD)),)
 		CFG_YASMROOT := $(CFG_LIBROOT)/yasm-win/x64
 	else
 		CFG_YASMROOT := $(CFG_LIBROOT)/yasm-win/x86
