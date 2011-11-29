@@ -72,11 +72,11 @@ else
 endif
 ifeq ($(PROC),x64)
 	LOC_EXC_common_asm := dct-32 pixel-32
+#ifdef NOVPPERM
+	LOC_EXC_common_asm := $(LOC_EXC_common_asm) dct-a mc-a2
+#endif
 else
 	LOC_EXC_common_asm := dct-64 pixel-64
-endif
-ifdef NOVPPERM
-	LOC_EXC_common_asm := $(LOC_EXC_common_asm) dct-a mc-a2
 endif
 LOC_EXC_common_asm := $(LOC_EXC_common_asm) sad16-a
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
