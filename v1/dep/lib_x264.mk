@@ -75,9 +75,9 @@ ifeq ($(PROC),x64)
 else
 	LOC_EXC_common_asm := dct-64 pixel-64
 endif
-#ifdef NOVPPERM
+ifdef NOVPPERM
 	LOC_EXC_common_asm := $(LOC_EXC_common_asm) dct-a mc-a2
-#endif
+endif
 LOC_EXC_common_asm := $(LOC_EXC_common_asm) sad16-a
 LOC_SRC_common_asm := $(CFG_LIBROOT)/x264/common/x86
 include $(PRJ_LIBROOT)/build.mk
