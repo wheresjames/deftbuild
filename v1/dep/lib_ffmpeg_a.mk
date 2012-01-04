@@ -62,7 +62,8 @@ ifneq ($(PROC),arm)
 # HAVE_AVX = Intel Sandy Bridge vector extension ???
 
 	ASMOPTS := $(ASMOPTS) -I$(CFG_LIBROOT)/ffmpeg/libavutil/x86	
-	ASMOPTS := $(ASMOPTS) -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW -DHAVE_SSSE -DHAVE_SSSE3
+	ASMOPTS := $(ASMOPTS) -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW \
+						  -DHAVE_SSSE -DHAVE_SSSE3 -DHAVE_AVX
 	ifeq ($(PLATFORM),windows)
 		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
 	else
