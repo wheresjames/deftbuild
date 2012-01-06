@@ -40,18 +40,30 @@ ifeq ($(CFG_STDLIBS),)
 	CFG_STDLIBS	:= ws2_32.lib ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 endif
 
+# Debug info options
+ifneq ($(DBGINFO),)
+	CFG_DBGINFO := $(DBGINFO)
+endif
+
 ifdef DBG
-	CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd /Z7 $(CFG_CEXTRA)
+
+	ifeq ($(CFG_DBGINFO),)
+		# /Z7
+		CFG_DBGINFO := /Zi
+	endif
+
+	# /Zp16 
+	CFG_CEXTRA	 := /DDEBUG /D_DEBUG /D_MT /MTd $(CFG_DBGINFO) $(CFG_CEXTRA)
 	ifeq ($(LIBLINK),static)
 		ifeq ($(PRJ_TYPE),dll)
 			CFG_CEXTRA	 := /D_USRDLL /D_WINDLL $(CFG_CEXTRA)
 		endif
-		CFG_LEXTRA	 := /DEBUG
+		CFG_LEXTRA	 := /DEBUG $(CFG_LEXTRA)
 	else
 		ifeq ($(PRJ_TYPE),dll)
 			CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
 		endif
-		CFG_LEXTRA	:= /DEBUG
+		CFG_LEXTRA	:= /DEBUG $(CFG_LEXTRA)
 	endif
 	CFG_DPOSTFIX := _d
 
@@ -101,7 +113,8 @@ ifdef DBG
 
 else
 	ifeq ($(LIBLINK),static)
-		CFG_CEXTRA	 := /D_MT /MT /O2 /Zp16 /DNDEBUG=1 $(CFG_CEXTRA)
+		# /Zp16 
+		CFG_CEXTRA	 := /D_MT /MT /O2 /DNDEBUG=1 $(CFG_DBGINFO) $(CFG_CEXTRA)
 		ifeq ($(PRJ_TYPE),dll)
 			CFG_CEXTRA	 := /D_USRDLL /D_WINDLL $(CFG_CEXTRA)
 		endif

@@ -174,7 +174,8 @@ ifeq ($(BUILD),vs)
 
 $(BLD_PATH_OBJ_$(LOC_TAG)):
 	$(shell $(CFG_MD) "$(subst /,\,$@)")
-	
+	$(shell $(CFG_MD) "$(subst /,\,$(CFG_PDBDIR))")
+
 clean_$(LOC_TAG):
 	- $(CFG_RM) "$(subst /,\,$(BLD_PATH_OBJ_$(LOC_TAG)))"
 	
@@ -182,7 +183,7 @@ else
 
 $(BLD_PATH_OBJ_$(LOC_TAG)):
 	$(CFG_MD) $@
-	
+
 clean_$(LOC_TAG):
 	- $(CFG_RM) $(BLD_PATH_OBJ_$(LOC_TAG))
 
