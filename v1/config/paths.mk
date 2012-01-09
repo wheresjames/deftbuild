@@ -60,8 +60,13 @@ CFG_INCS := $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 #	CFG_TOOL_JOIN  := $(CFG_OUTROOT)/$(CFG_EXE_PRE)join$(CFG_DPOSTFIX)$(CFG_EXE_POST)
 #endif
 
+# http://www.codeproject.com/KB/debug/mapfile.aspx
 ifeq ($(BUILD),vs)
-	CFG_PDBDIR := $(CFG_OUTROOT)/_0_pdb
-	CFG_CFLAGS := $(CFG_CFLAGS) /Fd"$(CFG_PDBDIR)/$(PRJ_NAME).pdb"
-	CFG_LFLAGS := $(CFG_LFLAGS) /Fd"$(CFG_PDBDIR)/$(PRJ_NAME).pdb"
+	ifneq ($(CFG_DBGINFO),)
+		CFG_DBGDIR := $(CFG_OUTROOT)/_0_dbg
+		CFG_CFLAGS := $(CFG_CFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb"
+		CFG_LFLAGS := $(CFG_LFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb" \
+									/MAP:$(CFG_DBGDIR)/$(PRJ_NAME).map \
+									/MAPINFO:LINES /MAPINFO:EXPORTS
+	endif
 endif
