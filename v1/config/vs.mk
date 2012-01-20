@@ -58,12 +58,10 @@ ifdef DBG
 		ifeq ($(PRJ_TYPE),dll)
 			CFG_CEXTRA	 := /D_USRDLL /D_WINDLL $(CFG_CEXTRA)
 		endif
-		CFG_LEXTRA	 := /DEBUG $(CFG_LEXTRA)
 	else
 		ifeq ($(PRJ_TYPE),dll)
 			CFG_CEXTRA 	:= /D_USRDLL /D_WINDLL /D_AFXDLL $(CFG_CEXTRA)
 		endif
-		CFG_LEXTRA	:= /DEBUG $(CFG_LEXTRA)
 	endif
 	CFG_DPOSTFIX := _d
 
@@ -263,6 +261,11 @@ ifeq ($(PRJ_TYPE),dll)
 	CFG_LFLAGS := $(CFG_LFLAGS) /DLL
 endif
 
+ifneq ($(CFG_DBGINFO),)
+	CFG_CFLAGS := $(CFG_CFLAGS)
+	CFG_LFLAGS := $(CFG_LFLAGS) /DEBUG
+endif
+
 EXISTS_DXSDK := $(wildcard $(CFG_LIBROOT)/msdxsdk)
 ifneq ($(strip $(EXISTS_DXSDK)),)
 	CFG_DXSDK := $(CFG_LIBROOT)/msdxsdk
@@ -287,3 +290,4 @@ EXISTS_MSTOOLS := $(wildcard $(CFG_LIBROOT)/mstools)
 ifneq ($(strip $(EXISTS_MSTOOLS)),)
 	PATH := $(PATH):$(CFG_LIBROOT)/mstools/bin:$(CFG_LIBROOT)/mstools
 endif
+
