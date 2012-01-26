@@ -72,34 +72,34 @@ ifneq ($(PROC),arm)
 		endif
 	endif
 
-	export LOC_TAG := libavcodecx86_asm
-	LOC_CXX_libavcodecx86_asm := asm
-	LOC_BLD_libavcodecx86_asm := asm
+	export LOC_TAG := av86_asm
+	LOC_CXX_av86_asm := asm
+	LOC_BLD_av86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_libavcodecx86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libavcodecx86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
-	LOC_SRC_libavcodecx86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
+	LOC_SRC_av86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
 	include $(PRJ_LIBROOT)/build.mk
 
-	export LOC_TAG := libavcodecx86
-	LOC_CXX_libavcodecx86 := c
-	LOC_SRC_libavcodecx86 := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
-	LOC_EXC_libavcodecx86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
-				   			 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
-				   			 mpegvideo_mmx_template h264_qpel_mmx
+	export LOC_TAG := av86
+	LOC_CXX_av86 := c
+	LOC_SRC_av86 := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
+	LOC_EXC_av86 := dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
+				   	 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
+				   	 mpegvideo_mmx_template h264_qpel_mmx
 #	ifneq ($(PLATFORM),windows)
 #		ifeq ($(PROC),x64)
-			# LOC_WEX_libavcodecx86 := $(LOC_WEX_libavcodecx86) *mmx*
+			# LOC_WEX_av86 := $(LOC_WEX_av86) *mmx*
 #		endif
 #	endif
 	include $(PRJ_LIBROOT)/build.mk
@@ -115,7 +115,7 @@ ifeq ($(PROC),arm)
 	LOC_EXC_arm := dsputil_iwmmxt_rnd_template \
 				   dsputil_iwmmxt mpegvideo_iwmmxt
 	include $(PRJ_LIBROOT)/build.mk
-	
+
 #	export LOC_TAG := arm_asm
 #	LOC_CXX_arm_asm := S
 #	LOC_BLD_arm_asm := c
@@ -125,84 +125,83 @@ ifeq ($(PROC),arm)
 	
 endif
 
-export LOC_TAG := libavutil
-LOC_CXX_libavutil := c
-LOC_SRC_libavutil := $(CFG_LIBROOT)/ffmpeg/libavutil
-LOC_EXC_libavutil := integer softfloat
+export LOC_TAG := avu
+LOC_CXX_avu := c
+LOC_SRC_avu := $(CFG_LIBROOT)/ffmpeg/libavutil
+LOC_EXC_avu := integer softfloat
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := libavformat
-LOC_CXX_libavformat := c
-LOC_SRC_libavformat := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_EXC_libavformat := avisynth rtpdec_theora
-LOC_WEX_libavformat := lib
-#LOC_EXC_libavformat := avisynth libnut matroskadec mov
+export LOC_TAG := avf
+LOC_CXX_avf := c
+LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
+LOC_EXC_avf := avisynth rtpdec_theora
+LOC_WEX_avf := lib
+#LOC_EXC_avf := avisynth libnut matroskadec mov
 #ifeq ($(PROC),arm)
-#	LOC_EXC_libavformat := $(LOC_EXC_libavformat) ipmovie mpegts sierravmd
+#	LOC_EXC_avf := $(LOC_EXC_avf) ipmovie mpegts sierravmd
 #endif
 include $(PRJ_LIBROOT)/build.mk
 
-#export LOC_TAG := libavdevice
-#LOC_CXX_libavdevice := c
-#LOC_SRC_libavdevice := $(CFG_LIBROOT)/ffmpeg/libavdevice
-#LOC_EXC_libavdevice := alsa-audio-common alsa-audio-dec alsa-audio-enc bktr \
+#export LOC_TAG := avd
+#LOC_CXX_avd := c
+#LOC_SRC_avd := $(CFG_LIBROOT)/ffmpeg/libavdevice
+#LOC_EXC_avd := alsa-audio-common alsa-audio-dec alsa-audio-enc bktr \
 #					   jack_audio libdc1394 fbdev sndio_dec sndio_common sndio_enc
 #ifeq ($(PLATFORM),windows)					   
-#	LOC_EXC_libavdevice := $(LOC_EXC_libavdevice) dv1394 oss_audio v4l v4l2 x11grab
+#	LOC_EXC_avd := $(LOC_EXC_libavdevice) dv1394 oss_audio v4l v4l2 x11grab
 #	ifeq ($(PROC),arm)
-#		LOC_EXC_libavdevice := $(LOC_EXC_libavdevice) vfwcap
+#		LOC_EXC_avd := $(LOC_EXC_avd) vfwcap
 #	endif
 #else
-#LOC_EXC_libavdevice := $(LOC_EXC_libavdevice) vfwcap					   
+#LOC_EXC_avd := $(LOC_EXC_avd) vfwcap
 #endif
 #include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := libswscale
-LOC_CXX_libswscale := c
-LOC_SRC_libswscale := $(CFG_LIBROOT)/ffmpeg/libswscale
-#LOC_EXC_libswscale := swscale-example colorspace-test
-LOC_WEX_libswscale := *_template *-example *-test
+export LOC_TAG := sws
+LOC_CXX_sws := c
+LOC_SRC_sws := $(CFG_LIBROOT)/ffmpeg/libswscale
+#LOC_EXC_sws := swscale-example colorspace-test
+LOC_WEX_sws := *_template *-example *-test
 include $(PRJ_LIBROOT)/build.mk
-					  				  
+
 
 ifneq ($(PROC),arm)
 
-	export LOC_TAG := libswscalex86
-	LOC_CXX_libswscalex86 := c
-	LOC_SRC_libswscalex86 := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
-#	LOC_EXC_libswscalex86 := yuv2rgb_template
-	LOC_WEX_libswscalex86 := *_template
+	export LOC_TAG := sws86
+	LOC_CXX_sws86 := c
+	LOC_SRC_sws86 := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
+#	LOC_EXC_sws86 := yuv2rgb_template
+	LOC_WEX_sws86 := *_template
 	ifeq ($(PLATFORM),posix)
 		ifeq ($(PROC),x64)
-			LOC_EXC_libswscalex86 := yuv2rgb_mmx
+			LOC_EXC_sws86 := yuv2rgb_mmx
 		endif
 	endif
 	include $(PRJ_LIBROOT)/build.mk
-	
-	export LOC_TAG := libavutil_x86
-	LOC_CXX_libavutil_x86 := c
-	LOC_SRC_libavutil_x86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+
+	export LOC_TAG := avu86
+	LOC_CXX_avu86 := c
+	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
 	include $(PRJ_LIBROOT)/build.mk
-	
-	export LOC_TAG := libswscalex86_asm
-	LOC_CXX_libswscalex86_asm := asm
-	LOC_BLD_libswscalex86_asm := asm
+
+	export LOC_TAG := sws86_asm
+	LOC_CXX_sws86_asm := asm
+	LOC_BLD_sws86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_libswscalex86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libswscalex86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_libswscalex86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
 		else
-			LOC_ASM_libswscalex86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
-	LOC_SRC_libswscalex86_asm := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
+	LOC_SRC_sws86_asm := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
 	include $(PRJ_LIBROOT)/build.mk
-
 
 endif
 
