@@ -47,7 +47,7 @@ else
 	endif
 endif
 
-CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer
+CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=gnu99
 
 ifdef DBG
 	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1

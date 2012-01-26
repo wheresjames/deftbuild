@@ -26,6 +26,8 @@ include $(PRJ_LIBROOT)/config.mk
 ifeq ($(BUILD),vs)
 	PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
 	PRJ_DEFS := $(PRJ_DEFS) ssize_t=unsigned
+else
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=gnu99
 endif
 
 #-------------------------------------------------------------------

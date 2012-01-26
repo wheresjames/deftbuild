@@ -11,7 +11,8 @@ PRJ_INCS := zlib ffmpeg zoneminder
 PRJ_LIBS := zoneminder \
 			ffmpeg_a ffmpeg_b ffmpeg_c x264 \
 			ffmpeg_a ffmpeg_b ffmpeg_c x264 \
-			ffmpeg_a ffmpeg_b ffmpeg_c x264 \
+			openssl_a openssl_b \
+			openssl_a openssl_b \
 			jpeg zlib 
 PRJ_DEFS := __STDC_CONSTANT_MACROS
 

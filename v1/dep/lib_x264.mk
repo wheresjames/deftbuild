@@ -71,9 +71,9 @@ else
 	endif
 endif
 ifeq ($(PROC),x64)
-	LOC_EXC_common_asm := dct-32 pixel-32
+	LOC_EXC_common_asm := dct-32 pixel-32 trellis-32
 else
-	LOC_EXC_common_asm := dct-64 pixel-64
+	LOC_EXC_common_asm := dct-64 pixel-64 trellis-64
 endif
 ifdef NOVPPERM
 	LOC_EXC_common_asm := $(LOC_EXC_common_asm) dct-a mc-a2 pixel-a quant-a
