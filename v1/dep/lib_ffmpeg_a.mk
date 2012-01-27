@@ -4,10 +4,10 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := ffmpeg_a
+PRJ_NAME := ffa
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
-PRJ_INCS := ffmpeg x264
+PRJ_INCS := ffmpeg openssl/include x264
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 

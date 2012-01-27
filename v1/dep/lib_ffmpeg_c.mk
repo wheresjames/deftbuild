@@ -4,7 +4,7 @@ default_target: all
 #-------------------------------------------------------------------
 # Project
 #-------------------------------------------------------------------
-PRJ_NAME := ffmpeg_c
+PRJ_NAME := ffc
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
 PRJ_INCS := ffmpeg x264
