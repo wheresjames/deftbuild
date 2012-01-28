@@ -206,7 +206,7 @@ ifeq ($(XBLD),)
 	CFG_DP 			:= makedepend
 	CFG_RM 			:= rmdir /s /q
 #		CFG_DEL			:= del /f /q
-	CFG_DEL			:= rm
+	CFG_DEL			:= rm -f
 	CFG_MD 			:= mkdir -p
 	CFG_CPY			:= cp
 	CFG_CD 			:= cd
