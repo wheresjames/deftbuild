@@ -59,6 +59,23 @@ UninstPage uninstConfirm
 UninstPage instfiles
 
 ;--------------------------------
+; http://nsis.sourceforge.net/Check_if_a_file_exists_at_compile_time
+!macro !defineifexist _VAR_NAME _FILE_NAME
+	!tempfile _TEMPFILE
+	!ifdef NSIS_WIN32_MAKENSIS
+		; Windows - cmd.exe
+		!system 'if exist "${_FILE_NAME}" echo !define ${_VAR_NAME} > "${_TEMPFILE}"'
+	!else
+		; Posix - sh
+		!system 'if [ -e "${_FILE_NAME}" ]; then echo "!define ${_VAR_NAME}" > "${_TEMPFILE}"; fi'
+	!endif
+	!include '${_TEMPFILE}'
+	!delfile '${_TEMPFILE}'
+	!undef _TEMPFILE
+!macroend
+!define !defineifexist "!insertmacro !defineifexist"
+
+;--------------------------------
 ; The stuff to install
 
 Section "${APPNAME} (required)"
@@ -78,11 +95,14 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\sqrl${POSTFIX}.exe"
   File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
 
-  ; Hack - install GCC version
+  ; Hack - install GCC version if needed and it exists
 !if "${PROC}" == "x64"
 !if "${BUILD}" == "vs"
-		File "${OUTROOT}\${FULL_GCC_PATH}"
-!endif		
+${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
+!ifdef GCC_BUILD_EXISTS
+	File "${OUTROOT}\${FULL_GCC_PATH}"
+!endif
+!endif
 !endif  
   
   ; Set output path to the installation directory.
