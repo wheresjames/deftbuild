@@ -184,10 +184,10 @@ endif
 endif
 
 .PHONY : all rebuild setup clean
-all: cfg_init $(BLD_ALL) $(GO_FINAL)
-rebuild: cfg_init $(BLD_REBUILD) $(GO_FINAL)
-setup: cfg_init $(BLD_SETUP)
-clean: cfg_init $(BLD_CLEAN)
+all: $(BLD_ALL) $(GO_FINAL)
+rebuild: $(BLD_REBUILD) $(GO_FINAL)
+setup: $(BLD_SETUP)
+clean: $(BLD_CLEAN)
 
 endif
 

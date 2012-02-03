@@ -50,6 +50,8 @@ include $(PRJ_LIBROOT)/unsupported.mk
 PLATFORM := none
 else
 
+NO_UNSUPPORTED_BARS := 1
+
 # Example
 # make TGT=x86-windows-vs
 # make TGT=x86-windows-msvs10
