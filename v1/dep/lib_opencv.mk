@@ -13,7 +13,7 @@ PRJ_INCS := jpeg png tiff/libtiff zlib \
 PRJ_LIBS := 
 ifneq ($(USE_HIGHGUI),)
 	PRJ_INCS := $(PRJ_INCS) jpeg png
-	PRJ_DEFS := $(PRJ_DEFS) USE_HIGHGUI HAVE_JPEG=1 HAVE_ZLIB=1 HAVE_PNG=1 HAVE_VFW=1 \
+	PRJ_DEFS := $(PRJ_DEFS) USE_HIGHGUI HAVE_JPEG=1 HAVE_ZLIB=1 HAVE_PNG=1 \
 				png_set_gray_1_2_4_to_8=png_set_expand_gray_1_2_4_to_8
 endif
 
@@ -60,10 +60,17 @@ ifneq ($(USE_HIGHGUI),)
 	LOC_EXC_highgui := gstappsink image
 	LOC_WEX_highgui := cvcap *carbon* *gtk*
 	include $(PRJ_LIBROOT)/build.mk
-	
+
 	export LOC_TAG := highgui_cap
 	LOC_SRC_highgui_cap := $(CFG_LIBROOT)/opencv/src/highgui
-	LOC_LST_highgui_cap := cvcap cvcap_vfw
+	LOC_LST_highgui_cap := cvcap cvcap_images 
+
+	ifeq ($(PLATFORM),windows)
+		LOC_LST_highgui_cap := $(LOC_LST_highgui_cap) cvcap_w32 cvcap_vfw 
+	else
+		LOC_LST_highgui_cap := $(LOC_LST_highgui_cap) cvcap_v4l
+	endif
+
 	include $(PRJ_LIBROOT)/build.mk
 
 endif
