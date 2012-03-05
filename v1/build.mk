@@ -48,20 +48,26 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 	endif
 endif
 
-# Using full paths helps IDE editors to locate the file when there's an error ;)
+# +++ Using full paths helps IDE editors to locate the file when there's an error,
+#     but unfortunately causes dependency issues in cygwin
 ifneq ($(LOC_SRC_$(LOC_TAG)),)
-#ifeq ($(CYGBLD),)
-#BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
-#else
-BLD_PATH_SRC_$(LOC_TAG) := $(LOC_SRC_$(LOC_TAG))
-#endif
-ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
-	ifeq ($(BUILD),vs)
-		BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))"
-	else
-		BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+	#ifeq ($(CYGBLD),)
+	#BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+	#else
+	BLD_PATH_SRC_$(LOC_TAG) := $(LOC_SRC_$(LOC_TAG))
+	#endif
+
+	ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
+		ifeq ($(BUILD),vs)
+			BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))"
+		else
+			ifeq ($(CYGBLD),)
+				BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+			else
+				BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(LOC_SRC_$(LOC_TAG))
+			endif
+		endif
 	endif
-endif
 else
 	ifeq ($(CYGBLD),)
 		BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
