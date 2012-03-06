@@ -58,6 +58,12 @@ LOC_CXX_cmn_gen := c
 LOC_SRC_cmn_gen := $(CFG_LIBROOT)/vpx/vp8/common/generic
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := vpxs_gen
+LOC_CXX_vpxs_gen := c
+# LOC_INC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/include/generic
+LOC_SRC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/generic
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := enc
 LOC_EXC_enc := mr_dissim ssim
 LOC_CXX_enc := c
@@ -69,12 +75,16 @@ LOC_CXX_enc_gen := c
 LOC_SRC_enc_gen := $(CFG_LIBROOT)/vpx/vp8/encoder/generic
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := vpxs_gen
-LOC_CXX_vpxs_gen := c
-# LOC_INC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/include/generic
-LOC_SRC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/generic
+export LOC_TAG := dec
+LOC_EXC_dec := error_concealment
+LOC_CXX_dec := c
+LOC_SRC_dec := $(CFG_LIBROOT)/vpx/vp8/decoder
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := dec_gen
+LOC_CXX_dec_gen := c
+LOC_SRC_dec_gen := $(CFG_LIBROOT)/vpx/vp8/decoder/generic
+include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
 
@@ -128,6 +138,35 @@ ifneq ($(PROC),arm)
 	LOC_SRC_enc_x86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
 	include $(PRJ_LIBROOT)/build.mk
 
+	export LOC_TAG := dec_asm
+	LOC_CXX_dec_asm := asm
+	LOC_BLD_dec_asm := asm
+	ifeq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_ASM_dec_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_dec_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	else
+		ifeq ($(PROC),x64)
+			LOC_ASM_dec_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_dec_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	endif
+	LOC_EXC_dec_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
+	ifneq ($(PROC),x64)
+		LOC_EXC_dec_asm := $(LOC_EXC_enc_asm) ssim_opt
+	endif
+	LOC_SRC_dec_asm := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := dec_x86
+	LOC_CXX_dec_x86 := c
+	LOC_EXC_dec_x86 := x86_csystemdependent
+	LOC_SRC_dec_x86 := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
+	include $(PRJ_LIBROOT)/build.mk
+	
 endif
 
 #-------------------------------------------------------------------

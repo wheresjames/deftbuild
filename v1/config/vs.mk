@@ -261,7 +261,8 @@ ifeq ($(PRJ_TYPE),dll)
 	CFG_LFLAGS := $(CFG_LFLAGS) /DLL
 endif
 
-ifneq ($(CFG_DBGINFO),)
+#ifneq ($(CFG_DBGINFO),)
+ifdef DBG
 	CFG_CFLAGS := $(CFG_CFLAGS)
 	CFG_LFLAGS := $(CFG_LFLAGS) /DEBUG
 endif
