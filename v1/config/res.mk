@@ -15,14 +15,14 @@ $(CFG_RES_MAK):
 	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQEX)" -i:"$(PRJ_CIIX)"
 
 .PRECIOUS: $(CFG_RES_MAK)
-include $(CFG_RES_MAK)
+-include $(CFG_RES_MAK)
 CFG_RES_OBJ := $(CFG_RES_OBJ) $(subst .cpp,.$(CFG_OBJ_EXT),$(RES_CPP))
 
 .PRECIOUS: $(CFG_RES_DEP)
 $(CFG_RES_DEP): $(CFG_RES_MAK) $(RES_CPP)
 	$(CFG_TOOL_RESCMP) -d:"$(CFG_RES_INP)" -o:"$(CFG_RES_OUT)" -c:"$(PRJ_SQEX)" -i:"$(PRJ_CIIX)"
 
-include $(CFG_RES_DEP)
+-include $(CFG_RES_DEP)
 
 ifneq ($(BUILD),vs)
 include $(wildcard $(CFG_RES_OUT)/*.$(CFG_DEP_EXT))
