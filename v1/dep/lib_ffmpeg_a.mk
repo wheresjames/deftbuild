@@ -62,13 +62,15 @@ ifneq ($(PROC),arm)
 # HAVE_AVX = Intel Sandy Bridge vector extension ???
 
 	ASMOPTS := $(ASMOPTS) -I$(CFG_LIBROOT)/ffmpeg/libavutil/x86	
-	ASMOPTS := $(ASMOPTS) -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW \
-						  -DHAVE_SSSE -DHAVE_SSSE3 -DHAVE_AVX
+	ASMOPTS := $(ASMOPTS) -DHAVE_MMX=1 -DHAVE_AVX=1 -DHAVE_AMD3DNOW=1 \
+						  -DHAVE_SSE=1 -DHAVE_SSSE=1 -DHAVE_SSSE3=1
 	ifeq ($(PLATFORM),windows)
-		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=1
 	else
 		ifneq ($(PROC),x64)
-			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=1
+		else
+			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=0
 		endif
 	endif
 
@@ -88,12 +90,6 @@ ifneq ($(PROC),arm)
 			LOC_ASM_av86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
 	endif
-	LOC_EXC_av86_asm := ac3dsp dct32_sse deinterlace dsputilenc_yasm dsputil_yasm dwt_yasm \
-						fft_mmx fmtconvert diracdsp_yasm h264_chromamc h264_deblock_10bit \
-						h264_deblock h264_idct_10bit h264_idct h264_intrapred_10bit \
-						h264_intrapred h264_qpel_10bit h264_qpel h264_weight_10bit \
-						h264_weight imdct36_sse h264_chromamc_10bit proresdsp pngdsp \
-						rv40dsp	rv34dsp v210 vc1dsp_yasm vp3dsp vp56dsp vp8dsp sbrdsp
 	LOC_SRC_av86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
 	include $(PRJ_LIBROOT)/build.mk
 
@@ -197,19 +193,16 @@ ifneq ($(PROC),arm)
 	LOC_BLD_sws86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_sws86_asm := yasm -f win64 -DARCH_X86_64=0 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f win64 -DARCH_X86_64=1 $(ASMOPTS)
 		else
-			LOC_ASM_sws86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86=0 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_sws86_asm := yasm -f elf64 -DPIC -DARCH_X86_64=0 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf64 -DPIC -DARCH_X86_64=1 $(ASMOPTS)
 		else
-			LOC_ASM_sws86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=0 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
-	endif
-	ifneq ($(PROC),x64)
-		LOC_EXC_sws86_asm := input output
 	endif
 	LOC_SRC_sws86_asm := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
 	include $(PRJ_LIBROOT)/build.mk
