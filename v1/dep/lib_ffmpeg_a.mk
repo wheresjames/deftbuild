@@ -29,33 +29,19 @@ UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-ifeq ($(PLATFORM),windows)
-	ifeq ($(BUILD),vs)
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)
-	else 
-		ifeq ($(PROC),arm)
-			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/arm $(PRJ_INCS) zlib
-		else
-			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
-		endif
-	endif
-else
-	ifeq ($(PROC),arm)
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix/arm $(PRJ_INCS) zlib
-	else
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix $(PRJ_INCS) zlib
-	endif
-endif
-
-CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=gnu99
-
-ifdef DBG
-	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
-endif
+include lib_ffmpeg.i
 
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+
+export LOC_TAG := avf
+LOC_CXX_avf := c
+LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
+LOC_WLS_avf := 0 1 2 3 4 5 6 7 8 9 a b c d e f
+LOC_EXC_avf := avisynth bluray rtpdec_theora
+LOC_WEX_avf := lib
+include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
 
@@ -131,17 +117,6 @@ export LOC_TAG := avu
 LOC_CXX_avu := c
 LOC_SRC_avu := $(CFG_LIBROOT)/ffmpeg/libavutil
 LOC_EXC_avu := integer softfloat
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := avf
-LOC_CXX_avf := c
-LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_EXC_avf := avisynth bluray rtpdec_theora
-LOC_WEX_avf := lib
-#LOC_EXC_avf := avisynth libnut matroskadec mov
-#ifeq ($(PROC),arm)
-#	LOC_EXC_avf := $(LOC_EXC_avf) ipmovie mpegts sierravmd
-#endif
 include $(PRJ_LIBROOT)/build.mk
 
 #export LOC_TAG := avd
