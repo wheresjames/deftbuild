@@ -59,7 +59,7 @@ ifneq ($(LOC_SRC_$(LOC_TAG)),)
 
 	ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
 		ifeq ($(BUILD),vs)
-			BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))"
+			BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(LOC_SRC_$(LOC_TAG))"
 		else
 			ifeq ($(CYGBLD),)
 				BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
