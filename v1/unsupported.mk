@@ -21,7 +21,7 @@ $(info .======================================================= )
 endif
 
 # On stderr as well
-$(warning .= $(PRJ_NAME) : $(UNSUPPORTED) )
+# $(warning .= $(PRJ_NAME) : $(UNSUPPORTED) )
 
 unsupported:
 	exit 0
