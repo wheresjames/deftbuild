@@ -70,4 +70,3 @@ include $(PRJ_LIBROOT)/go.mk
 endif
 
 endif
-
