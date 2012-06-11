@@ -108,16 +108,18 @@ Following directory structure is assumed
 #./deftbuild.sh 3 res - ftgl,irrlicht,bullet,freetype2
 #./deftbuild.sh 3 res - libfreenect,portaudio,opencv,fftw,cell,haru,sqlite,tinyxml,mysql
 
+//------------------------------------------------------------------
+// Linux dependencies
+//------------------------------------------------------------------
 
-//------------------------------------------------------------------
-// dependencies
-//------------------------------------------------------------------
+// Tools
+	sudo apt-get screen git-core wine
 
 // Building
-	sudo apt-get screen gcc g++ git-core wine
+	sudo apt-get build-essential gcc gcc-multilib yasmy
 
 // OpenGL / X11
-	sudo apt-get install mesa-common-dev xorg-dev xlibmesa-glu-dev xlibmesa-gl-dev
+	sudo apt-get install mesa-common-dev xorg-dev xlibmesa-glu-dev ( x11proto-gl-dev | xlibmesa-gl-dev )
 
 // CURL	
 	sudo apt-get install libldap-dev 

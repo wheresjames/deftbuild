@@ -35,6 +35,12 @@ ifeq ($(PLATFORM),windows)
 
 	PRJ_DEFS := $(PRJ_DEFS) _IRR_STATIC_LIB_ _IRR_MULTI_ZLIB_
 else
+	ifeq ($(PROC),x64)
+		PRJ_DEFS := $(PRJ_DEFS) _IRR_GETPROCADDRESS_WORKAROUND_
+#		PRJ_DEFS := $(PRJ_DEFS) glXGetProcAddress=wglGetProcAddress
+#		PRJ_DEFS := $(PRJ_DEFS) GLX_GLXEXT_LEGACY glXGetProcAddressARB=wglGetProcAddress
+#		PRJ_DEFS := $(PRJ_DEFS) GLX_GLXEXT_LEGACY glXGetProcAddress=glXGetProcAddressARB
+	endif
 	PRJ_DEFS := $(PRJ_DEFS) _IRR_USE_LINUX_DEVICE_ 
 endif
 
