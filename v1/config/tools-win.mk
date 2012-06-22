@@ -20,7 +20,7 @@ ifneq ($(strip $(EXISTS_JDK)),)
 	CFG_JARSIGNING := 1
 
 	# -classpath
-	# CFG_JDK_CLASSPATH := 
+	# CFG_JDK_CLASSPATH :=
 
 endif
 
@@ -37,22 +37,22 @@ ifneq ($(strip $(EXISTS_ANDROIDSDK)),)
 endif
 
 CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
-	
+
 EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 ifneq ($(strip $(EXISTS_MSPSDK)),)
 	CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-	PATH := $(PATH):$(CFG_MSPSDK)/bin
-	CFG_SIGNROOT := $(CFG_MSPSDK)/bin
+	PATH := $(PATH):$(CFG_MSPSDK)/Bin
+	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin
 	CFG_CODESIGN := signtool.exe
 	CFG_CODESIGNING := 1
-	
+
 	ifeq ($(BUILD),vs)
 		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
-		ifeq ($(PROC),x86)			
+		ifeq ($(PROC),x86)
 			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
 			CFG_MIDL_FLAGS := /win32
 		else
-			ifeq ($(PROC),ia64)			
+			ifeq ($(PROC),ia64)
 				PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
 				CFG_MIDL_FLAGS := /win64 /ia64
 			else
@@ -60,7 +60,13 @@ ifneq ($(strip $(EXISTS_MSPSDK)),)
 				CFG_MIDL_FLAGS := /win64 /amd64
 			endif
 		endif
-		CFG_RC := rc.exe
-		CFG_MIDL := midl.exe /nologo
+		ifeq ($(XBLD),)
+			CFG_RC := "rc"
+			CFG_MIDL := "Midl" /nologo
+		else
+			CFG_RC := wine "rc"
+			CFG_MIDL := wine "Midl" /nologo
+		endif
+
 	endif
 endif

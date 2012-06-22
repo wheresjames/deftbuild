@@ -49,7 +49,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 endif
 
 # +++ Using full paths helps IDE editors to locate the file when there's an error,
-#     but unfortunately causes dependency issues in cygwin
+#     but unfortunately causes dependency issues in cygwin and msvc on wine
 ifneq ($(LOC_SRC_$(LOC_TAG)),)
 	#ifeq ($(CYGBLD),)
 	#BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
@@ -61,19 +61,19 @@ ifneq ($(LOC_SRC_$(LOC_TAG)),)
 		ifeq ($(BUILD),vs)
 			BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(LOC_SRC_$(LOC_TAG))"
 		else
-			ifeq ($(CYGBLD),)
-				BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
-			else
+			#ifeq ($(CYGBLD),)
+			#	BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
+			#else
 				BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(LOC_SRC_$(LOC_TAG))
-			endif
+			#endif
 		endif
 	endif
 else
-	ifeq ($(CYGBLD),)
-		BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
-	else
+	#ifeq ($(CYGBLD),)
+	#	BLD_PATH_SRC_$(LOC_TAG) := $(CFG_CUR_ROOT)
+	#else
 		BLD_PATH_SRC_$(LOC_TAG) := .
-	endif
+	#endif
 endif
 
 ifneq ($(LOC_INC_$(LOC_TAG)),)
@@ -177,6 +177,12 @@ rebuild_$(LOC_TAG): clean_$(LOC_TAG) all_$(LOC_TAG)
 setup_$(LOC_TAG): $(BLD_PATH_OBJ_$(LOC_TAG))
 
 ifeq ($(BUILD),vs)
+ifeq ($(XBLD),)
+BLD_USE_BS := 1
+endif
+endif
+
+ifneq ($(BLD_USE_BS),)
 
 $(BLD_PATH_OBJ_$(LOC_TAG)):
 	$(shell $(CFG_MD) "$(subst /,\,$@)")
@@ -189,6 +195,11 @@ else
 
 $(BLD_PATH_OBJ_$(LOC_TAG)):
 	$(CFG_MD) $@
+
+ifneq ($(CFG_DBGDIR),)
+$(CFG_DBGDIR):
+	- $(CFG_MD) $(CFG_DBGDIR)
+endif
 
 clean_$(LOC_TAG):
 	- $(CFG_RM) $(BLD_PATH_OBJ_$(LOC_TAG))
@@ -222,6 +233,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 #	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(BLD_INCS) $(BLD_OBJECTS_$(LOC_TAG))
 #$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	echo $(PATH)
 	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(CFG_DEFS) /out $(CFG_PATH_IDL) $(BLD_INCS) /o $@ $<
 
 # vs-idl
