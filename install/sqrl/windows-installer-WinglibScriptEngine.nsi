@@ -140,6 +140,7 @@ Section "Squirrel Modules"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_quickfix${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_rtmpd${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ssh2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_usb${POSTFIX}.dll"
@@ -203,6 +204,8 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_quickfix.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_registry.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_reboot.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_rtmpd_server.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_rtmpd_session.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_rtspstream.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_serial_port.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_sntp_client.nut"
@@ -219,12 +222,14 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\test_threads_2.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_tinyxml.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_usb.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_videostream.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_videostream.thread.nut"
   File "${LIBROOT}\winglib\etc\scripts\z_primes.nut"
   
 SectionEnd
 
 ; Optional section (can be disabled by the user)
-Section "WetCoin.com Integration"
+Section /o "WetCoin.com Integration"
 
   ; Start service
   ExecWait '"$INSTDIR\wlink.exe" -install -start'

@@ -14,10 +14,14 @@ echo " *** Checkout ${PROJ} : ${REPO} : ${REVN}"
 # Subversion
 if [ "${REPO}" == "svn" ]; then	
 
+	if [ "${FOPTS}" == "anon" ]; then
+		SVN_LOGIN="--username anonymous --password \"\""
+	fi
+
 	if [ "${REVN}" != "-" ]; then
-		svn ${SVN_OPTIONS} co -q -r ${REVN} "${LINK}" "${LIBPATH}"
+		svn ${SVN_OPTIONS} co ${SVN_LOGIN} -q -r ${REVN} "${LINK}" "${LIBPATH}"
 	else
-		svn ${SVN_OPTIONS} co -q "${LINK}" "${LIBPATH}"
+		svn ${SVN_OPTIONS} co ${SVN_LOGIN} -q "${LINK}" "${LIBPATH}"
 	fi
 
 fi

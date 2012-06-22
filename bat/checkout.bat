@@ -48,7 +48,11 @@ REM ----------------------------------------------------------------
 IF %%b==svn (
 cd !LPATH!
 IF %%c==- (
+IF %%e==anon (
+svn co -q --username anonymous --password "" "%%d" %%a
+) ELSE (
 svn co -q "%%d" %%a
+)
 ) ELSE (
 svn co -q -r %%c "%%d" %%a
 )

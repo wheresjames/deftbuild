@@ -192,6 +192,8 @@ do
 				STR=${STR#* }
 				LINK=${STR%% *}
 				STR=${STR#* }
+				FOPTS=${STR%% *}
+				STR=${STR#* }
 		
 				if [ -n "${FVERS}" ]; then	
 					REVN=${FVERS}			
@@ -211,7 +213,7 @@ do
 					
 					# Show affected projects
 					if [ ${CMD} == "show" ]; then
-						echo ${PROJ} : ${REPO} : ${REVN} : ${LINK}
+						echo ${PROJ} : ${REPO} : ${REVN} : ${LINK} : ${OPTS}
 					fi
 
 					# build

@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := vnc
 PRJ_DEPS := vnc
 PRJ_TYPE := lib
-PRJ_INCS := vnc jpeg png zlib openssl/include
+PRJ_INCS := vnc jpeg png zlib openssl/include vnc/common
 PRJ_LIBS :=
 PRJ_DEFS := LIBVNCSERVER_HAVE_LIBZ=1 LIBVNCSERVER_WITH_WEBSOCKETS=1 \
 			LIBVNCSERVER_HAVE_LIBJPEG=1 LIBVNCSERVER_HAVE_LIBPNG=1
@@ -42,6 +42,11 @@ endif
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+export LOC_TAG := common
+LOC_CXX_common := c
+LOC_SRC_common := $(CFG_LIBROOT)/vnc/common
+LOC_EXC_common := 
+
 export LOC_TAG := def
 LOC_CXX_def := c
 #LOC_BLD_def := cpp
