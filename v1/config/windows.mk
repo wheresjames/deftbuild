@@ -60,7 +60,11 @@ ifneq ($(strip $(EXISTS_NSIS)),)
 		ifneq ($(WBLD),)
 			CFG_NSIS := makensis.exe
 		else
-			CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+			ifneq ($(XBLD),)
+				CFG_NSIS := wine "$(CFG_NSISROOT)/makensis.exe"
+			else
+				CFG_NSIS := makensis.exe
+			endif
 		endif
 	endif
 endif

@@ -9,6 +9,7 @@ PRJ_DEPS := tinyxml
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS := 
+PRJ_DEFS := TIXML_USE_STL
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
