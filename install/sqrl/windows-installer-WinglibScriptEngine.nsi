@@ -280,6 +280,7 @@ Section "Uninstall"
   Delete $INSTDIR\modules\sqmod_openssl.dll
   Delete $INSTDIR\modules\sqmod_poco.dll
   Delete $INSTDIR\modules\sqmod_portaudio.dll
+  Delete $INSTDIR\modules\sqmod_rtmpd.dll
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
   Delete $INSTDIR\modules\sqmod_usb.dll

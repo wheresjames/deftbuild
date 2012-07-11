@@ -128,6 +128,7 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
   File "${OUTROOT}\_sqmod\sqmod_openssl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
+  File "${OUTROOT}\_sqmod\sqmod_rtmpd${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ssh2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_tinyxml${POSTFIX}.dll"
   
@@ -205,6 +206,7 @@ gcc_done:
   Delete $INSTDIR\modules\sqmod_openssl.dll
   Delete $INSTDIR\modules\sqmod_poco.dll
   Delete $INSTDIR\modules\sqmod_portaudio.dll
+  Delete $INSTDIR\modules\sqmod_rtmpd.dll
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
 
