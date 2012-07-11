@@ -31,6 +31,7 @@ endif
 export LOC_TAG := def
 LOC_CXX_def := c
 LOC_SRC_def := $(CFG_LIBROOT)/rtmpd/librtmp
+LOC_EXC_def := 
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
