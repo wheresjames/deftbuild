@@ -110,6 +110,7 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
   
   ; Put file there
   SetOverwrite on
+  File "${OUTROOT}\_sqmod\sqmod_asio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_cell${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
 !if "${PROC}" != "x64"
@@ -194,6 +195,7 @@ gcc_done:
   
   Delete $INSTDIR\sqrl.exe  
   Delete $INSTDIR\sqrl-cgi.exe  
+  Delete $INSTDIR\modules\sqmod_asio.dll
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll

@@ -125,6 +125,7 @@ Section "Squirrel Modules"
   
   ; Put file there
   SetOverwrite on
+  File "${OUTROOT}\_sqmod\sqmod_asio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_cell${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
@@ -177,6 +178,7 @@ Section "Example Scripts"
   File "${LIBROOT}\winglib\etc\scripts\auto_logout.nut"
   File "${LIBROOT}\winglib\etc\scripts\irr_bouncing_ball.nut"
   ;File "${LIBROOT}\winglib\etc\scripts\irr_editor.nut"
+  File "${LIBROOT}\winglib\etc\scripts\test_asio.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_capture.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_cell.nut"
   File "${LIBROOT}\winglib\etc\scripts\test_curl.nut"
@@ -266,6 +268,7 @@ Section "Uninstall"
   Delete $INSTDIR\reg_winglib.nut
   Delete $INSTDIR\unreg_winglib.nut
   
+  Delete $INSTDIR\modules\sqmod_asio.dll
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
   Delete $INSTDIR\modules\sqmod_ffmpeg.dll
