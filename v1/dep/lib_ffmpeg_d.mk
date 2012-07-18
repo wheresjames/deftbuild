@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := ffd
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
-PRJ_INCS := ffmpeg x264 vpx
+PRJ_INCS := ffmpeg x264 vpx rtmpd
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 
@@ -76,6 +76,13 @@ export LOC_TAG := libavcodec_lib
 LOC_CXX_libavcodec_lib := c
 LOC_SRC_libavcodec_lib := $(CFG_LIBROOT)/ffmpeg/libavcodec
 LOC_LST_libavcodec_lib := libx264 libvpxenc libvpxdec
+include $(PRJ_LIBROOT)/build.mk
+
+# 3rd party libs
+export LOC_TAG := libavformat_lib
+LOC_CXX_libavformat_lib := c
+LOC_SRC_libavformat_lib := $(CFG_LIBROOT)/ffmpeg/libavformat
+LOC_LST_libavformat_lib := librtmp
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

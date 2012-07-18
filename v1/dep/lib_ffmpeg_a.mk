@@ -113,12 +113,6 @@ ifeq ($(PROC),arm)
 	
 endif
 
-export LOC_TAG := avu
-LOC_CXX_avu := c
-LOC_SRC_avu := $(CFG_LIBROOT)/ffmpeg/libavutil
-LOC_EXC_avu := integer softfloat
-include $(PRJ_LIBROOT)/build.mk
-
 #export LOC_TAG := avd
 #LOC_CXX_avd := c
 #LOC_SRC_avd := $(CFG_LIBROOT)/ffmpeg/libavdevice
@@ -181,6 +175,54 @@ ifneq ($(PROC),arm)
 		endif
 	endif
 	LOC_SRC_sws86_asm := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+endif
+
+export LOC_TAG := avu
+LOC_CXX_avu := c
+LOC_SRC_avu := $(CFG_LIBROOT)/ffmpeg/libavutil
+LOC_EXC_avu := integer softfloat
+include $(PRJ_LIBROOT)/build.mk
+
+ifneq ($(PROC),arm)
+
+	export LOC_TAG := avu86
+	LOC_CXX_avu86 := c
+	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+	LOC_WEX_avu86 := *_template
+	ifneq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_WEX_avu86 := $(LOC_WEX_avu86) *mmx*
+		endif
+	endif
+	ifneq ($(PROC),x64)
+		LOC_EXC_avu86 := w64xmmtest
+	endif
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := avu86
+	LOC_CXX_avu86 := c
+	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := avu86_asm
+	LOC_CXX_avu86_asm := asm
+	LOC_BLD_avu86_asm := asm
+	ifeq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_ASM_avu86_asm := yasm -f win64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+		else
+			LOC_ASM_avu86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
+		endif
+	else
+		ifeq ($(PROC),x64)
+			LOC_ASM_avu86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+		else
+			LOC_ASM_avu86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
+		endif
+	endif
+	LOC_SRC_avu86_asm := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
 	include $(PRJ_LIBROOT)/build.mk
 
 endif

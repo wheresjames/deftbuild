@@ -59,15 +59,15 @@ LOC_CXX_common_asm := asm
 LOC_BLD_common_asm := asm
 ifeq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
-		LOC_ASM_common_asm := yasm -f win64 -DBIT_DEPTH=8 -DARCH_X86_64 -DWIN32 -DWIN64
+		LOC_ASM_common_asm := yasm -f win64 -DBIT_DEPTH=8 -DARCH_X86=1 -DARCH_X86_64=1 -DWIN32 -DWIN64 -DHIGH_BIT_DEPTH=0
 	else
-		LOC_ASM_common_asm := yasm -f win32 -a x86 -DPREFIX -DBIT_DEPTH=8 -DARCH_X86 -DWIN32
+		LOC_ASM_common_asm := yasm -f win32 -a x86 -DPREFIX -DBIT_DEPTH=8 -DARCH_X86=0 -DARCH_X86_64=0 -DWIN32 -DHIGH_BIT_DEPTH=0
 	endif
 else
 	ifeq ($(PROC),x64)
-		LOC_ASM_common_asm := yasm -f elf64 -DPIC -DBIT_DEPTH=8 -DARCH_X86_64 
+		LOC_ASM_common_asm := yasm -f elf64 -DPIC -DBIT_DEPTH=8 -DARCH_X86=1 -DARCH_X86_64=1 -DHIGH_BIT_DEPTH=0
 	else
-		LOC_ASM_common_asm := yasm -f elf32 -a x86 -DPIC -DBIT_DEPTH=8 -DARCH_X86
+		LOC_ASM_common_asm := yasm -f elf32 -a x86 -DPIC -DBIT_DEPTH=8 -DARCH_X86=0 -DARCH_X86_64=0 -DHIGH_BIT_DEPTH=0
 	endif
 endif
 ifeq ($(PROC),x64)
