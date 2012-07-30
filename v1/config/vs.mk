@@ -48,8 +48,8 @@ endif
 ifdef DBG
 
 	ifeq ($(CFG_DBGINFO),)
-		# /Z7
-		CFG_DBGINFO := /Zi
+		# /Z7 /Zi
+		CFG_DBGINFO := /Z7
 	endif
 
 	# /Zp16 
