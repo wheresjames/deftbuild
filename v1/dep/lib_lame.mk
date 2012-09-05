@@ -9,7 +9,7 @@ PRJ_DEPS := lame
 PRJ_TYPE := lib
 PRJ_INCS := lame/include
 PRJ_LIBS := 
-PRJ_DEFS := 
+PRJ_DEFS := HAVE_CONFIG_H=1
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -28,6 +28,10 @@ ifneq ($(BUILD),gcc)
 UNSUPPORTED := BUILD=$(BUILD) is invalid, can only be built with 'gcc'
 include $(PRJ_LIBROOT)/unsupported.mk
 else
+
+ifeq ($(PLATFORM),windows)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/lame/inc/windows $(PRJ_INCS)
+endif
 
 CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
 ifdef DBG
