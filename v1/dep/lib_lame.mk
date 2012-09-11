@@ -24,10 +24,10 @@ UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, can only be built with 'gcc'
-include $(PRJ_LIBROOT)/unsupported.mk
-else
+#ifneq ($(BUILD),gcc)
+#UNSUPPORTED := BUILD=$(BUILD) is invalid, can only be built with 'gcc'
+#include $(PRJ_LIBROOT)/unsupported.mk
+#else
 
 ifeq ($(PLATFORM),windows)
 	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/lame/inc/windows $(PRJ_INCS)
@@ -55,4 +55,4 @@ include $(PRJ_LIBROOT)/go.mk
 
 endif
 
-endif
+#endif
