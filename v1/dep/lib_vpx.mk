@@ -96,7 +96,7 @@ ifneq ($(PROC),arm)
 # HAVE_AVX = Intel Sandy Bridge vector extension ???
 
 	ifeq ($(PLATFORM),windows)
-		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+		ASMOPTS := $(ASMOPTS) -DHAVE_MMX -DHAVE_MMX2 
 		ifeq ($(BUILD),vs)
 			ASMOPTS := $(ASMOPTS) -I$(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/vs
 		else 
@@ -104,7 +104,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifneq ($(PROC),x64)
-			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2 
+			ASMOPTS := $(ASMOPTS) -DHAVE_MMX -DHAVE_MMX2 
 		endif
 		ASMOPTS := $(ASMOPTS) -I$(CFG_LIB2BLD)/dep/etc/vpx/inc/posix
 	endif
@@ -130,10 +130,10 @@ ifneq ($(PROC),arm)
 			LOC_ASM_enc_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
-	LOC_EXC_enc_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
-	ifneq ($(PROC),x64)
-		LOC_EXC_enc_asm := $(LOC_EXC_enc_asm) ssim_opt
-	endif
+#	LOC_EXC_enc_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
+#	ifneq ($(PROC),x64)
+#		LOC_EXC_enc_asm := $(LOC_EXC_enc_asm) ssim_opt
+#	endif
 	LOC_SRC_enc_asm := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
 	include $(PRJ_LIBROOT)/build.mk
 
@@ -159,10 +159,10 @@ ifneq ($(PROC),arm)
 			LOC_ASM_dec_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
 		endif
 	endif
-	LOC_EXC_dec_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
-	ifneq ($(PROC),x64)
-		LOC_EXC_dec_asm := $(LOC_EXC_enc_asm) ssim_opt
-	endif
+#	LOC_EXC_dec_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
+#	ifneq ($(PROC),x64)
+#		LOC_EXC_dec_asm := $(LOC_EXC_dec_asm) ssim_opt
+#	endif
 	LOC_SRC_dec_asm := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
 	include $(PRJ_LIBROOT)/build.mk
 
@@ -171,7 +171,35 @@ ifneq ($(PROC),arm)
 	LOC_EXC_dec_x86 := x86_csystemdependent
 	LOC_SRC_dec_x86 := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
 	include $(PRJ_LIBROOT)/build.mk
-	
+
+	export LOC_TAG := cmn_asm
+	LOC_CXX_cmn_asm := asm
+	LOC_BLD_cmn_asm := asm
+	ifeq ($(PLATFORM),windows)
+		ifeq ($(PROC),x64)
+			LOC_ASM_cmn_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_cmn_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	else
+		ifeq ($(PROC),x64)
+			LOC_ASM_cmn_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
+		else
+			LOC_ASM_cmn_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
+		endif
+	endif
+#	LOC_EXC_cmn_asm := 
+#	ifneq ($(PROC),x64)
+#		LOC_EXC_cmn_asm := $(LOC_EXC_cmn_asm)
+#	endif
+	LOC_SRC_cmn_asm := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := cmn_x86
+	LOC_CXX_cmn_x86 := c
+	LOC_SRC_cmn_x86 := $(CFG_LIBROOT)/vpx/vp8/common/x86
+	include $(PRJ_LIBROOT)/build.mk
+
 endif
 
 #-------------------------------------------------------------------

@@ -75,7 +75,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := libavcodec_lib
 LOC_CXX_libavcodec_lib := c
 LOC_SRC_libavcodec_lib := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_LST_libavcodec_lib := libx264 libvpxenc libvpxdec libmp3lame
+LOC_LST_libavcodec_lib := libx264 libmp3lame
 include $(PRJ_LIBROOT)/build.mk
 
 # 3rd party libs

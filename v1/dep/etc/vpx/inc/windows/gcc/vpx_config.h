@@ -3,8 +3,8 @@
 
 #if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
 #	define INT_BIT 64
-#define HAVE_MMX 0
-#define HAVE_MMX2 0
+#define HAVE_MMX 1
+#define HAVE_MMX2 1
 #else
 #	define INT_BIT 32
 #define HAVE_MMX 1
@@ -12,9 +12,11 @@
 #endif
 
 #if ( INT_BIT == 32 )
+#	define ARCH_X86 1
 #	define ARCH_X86_32 1
 #	define ARCH_X86_64 0
 #else
+#	define ARCH_X86 0
 #	define ARCH_X86_32 0
 #	define ARCH_X86_64 1
 #endif

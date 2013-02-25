@@ -4,8 +4,8 @@
 
 #if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
 #	define INT_BIT 64
-#define HAVE_MMX 0
-#define HAVE_MMX2 0
+#define HAVE_MMX 1
+#define HAVE_MMX2 1
 #else
 #	define INT_BIT 32
 #define HAVE_MMX 1
@@ -80,8 +80,6 @@
 #define HAVE_AVX 1
 #define HAVE_IWMMXT 0
 #define HAVE_MMI 0
-#define HAVE_MMX 1
-#define HAVE_MMX2 1
 #define HAVE_NEON 0
 #define HAVE_PPC4XX 0
 #define HAVE_SSE 1
@@ -303,7 +301,7 @@
 #define CONFIG_LIBVO_AACENC 0
 #define CONFIG_LIBVO_AMRWBENC 0
 #define CONFIG_LIBVORBIS 0
-#define CONFIG_LIBVPX 1
+#define CONFIG_LIBVPX 0
 #define CONFIG_LIBX264 1
 #define CONFIG_LIBXAVS 0
 #define CONFIG_LIBXVID 0
@@ -719,7 +717,7 @@
 #define CONFIG_LIBSTAGEFRIGHT_H264_DECODER 0
 #define CONFIG_LIBUTVIDEO_DECODER 0
 #define CONFIG_LIBVORBIS_DECODER 0
-#define CONFIG_LIBVPX_DECODER 1
+#define CONFIG_LIBVPX_DECODER 0
 #define CONFIG_BINTEXT_DECODER 1
 #define CONFIG_XBIN_DECODER 1
 #define CONFIG_IDF_DECODER 1
@@ -1036,7 +1034,7 @@
 #define CONFIG_LIBVO_AACENC_ENCODER 0
 #define CONFIG_LIBVO_AMRWBENC_ENCODER 0
 #define CONFIG_LIBVORBIS_ENCODER 0
-#define CONFIG_LIBVPX_ENCODER 1
+#define CONFIG_LIBVPX_ENCODER 0
 #define CONFIG_LIBX264_ENCODER 1
 #define CONFIG_LIBX264RGB_ENCODER 1
 #define CONFIG_LIBXAVS_ENCODER 0
