@@ -124,7 +124,7 @@ else
 endif
 
 ifeq ($(PROC),x86)
-	CFG_LEXTRA := /MACHINE:x86 $(CFG_LEXTRA)
+	CFG_LEXTRA := /MACHINE:x86 /LARGEADDRESSAWARE $(CFG_LEXTRA)
 else
 	ifeq ($(PROC),x64)
 		CFG_LEXTRA := /MACHINE:x64 $(CFG_LEXTRA)
@@ -167,7 +167,7 @@ ifneq ($(VSVER),)
 
 			PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/include 
 			ifeq ($(NOMFC),)
-				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc 
+				PRJ_SYSI := $(PRJ_SYSI)	$(CFG_VSROOT)/VC/atlmfc
 			endif
 
 			ifeq ($(PROC),x86)

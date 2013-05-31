@@ -11,8 +11,7 @@ PRJ_INCS := openssl/include lua/src tinyxml \
 			crtmp/sources/common/include crtmp/sources/thelib/include
 PRJ_LIBS := 
 PRJ_DEFS := NET_SELECT HAS_LUA LITTLE_ENDIAN_BYTE_ALIGNED \
-			HAS_PROTOCOL_TS
-
+			HAS_PROTOCOL_TS HAS_PROTOCOL_RTMP
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
 
