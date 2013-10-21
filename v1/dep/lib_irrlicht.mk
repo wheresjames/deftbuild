@@ -27,6 +27,10 @@ UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
+ifneq ($(UNICODE),)
+	PRJ_DEFS := $(PRJ_DEFS) _IRR_WCHAR_FILESYSTEM
+endif
+
 ifeq ($(PLATFORM),windows)
 
 	ifneq ($(BUILD),vs)

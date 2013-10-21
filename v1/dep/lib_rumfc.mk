@@ -29,6 +29,11 @@ UNSUPPORTED := BUILD=$(BUILD) is invalid, rumfc can only be built with Visual St
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
+ifneq ($(UNICODE),)
+UNSUPPORTED := UNICODE=$(UNICODE) is invalid
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
@@ -53,6 +58,8 @@ include $(PRJ_LIBROOT)/build.mk
 # Execute the build
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/go.mk
+
+endif
 
 endif
 

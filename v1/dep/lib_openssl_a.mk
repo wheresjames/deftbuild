@@ -32,12 +32,6 @@ endif
 # File locations
 #-------------------------------------------------------------------
 
-export LOC_TAG := ssl
-LOC_CXX_ssl := c
-LOC_SRC_ssl := $(CFG_LIBROOT)/openssl/ssl
-LOC_EXC_ssl := ssl_task ssltest
-include $(PRJ_LIBROOT)/build.mk
-
 export LOC_TAG := crypto
 LOC_CXX_crypto := c
 LOC_SRC_crypto := $(CFG_LIBROOT)/openssl/crypto
