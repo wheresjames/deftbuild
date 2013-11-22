@@ -23,6 +23,11 @@ else
 	CFG_LOCAL_TOOL_RESCMP 	:= $(CFG_LOCAL_BUILD_TYPE)/resbld
 endif
 
+ifndef PRJ_NOC0X
+#	CFG_CEXTRA := -std=c++0x
+#	CFG_CEXTRA := -std=gnu++0x
+endif
+
 ifdef DBG
 	CFG_CEXTRA	 := -g -DDEBUG -D_DEBUG $(CFG_CEXTRA)
 	CFG_LEXTRA	 := -g
