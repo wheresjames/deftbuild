@@ -30,6 +30,12 @@ UNSUPPORTED := TOOLS=$(TOOLS) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
+ifeq ($(PLATFORM),posix)
+	ifeq ($(PROC),x64)
+#		PRJ_DEFS := $(PRJ_DEFS) ptrdiff_t=long difference_type=long
+	endif
+endif
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------

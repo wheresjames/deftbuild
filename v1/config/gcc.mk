@@ -554,7 +554,7 @@ else
 		CFG_AFLAGS := cq
 
 		ifeq ($(PROC),x64)
-			CFG_CFLAGS := $(CFG_CFLAGS) -m64
+			CFG_CFLAGS := $(CFG_CFLAGS) -m64 -fpermissive -Wno-narrowing
 			CFG_ASFLAGS := -f elf64
 		else
 			CFG_ASFLAGS := -f elf32 -a x86

@@ -40,7 +40,14 @@ else
 				HAVE_FCNTL_O_NONBLOCK HAVE_SYS_IOCTL_H HAVE_UNISTD_H HAVE_NETDB_H \
 				HAVE_STDLIB_H HAVE_SYS_UN_H HAVE_SYS_SOCKET_H HAVE_NETINET_IN_H \
 				SIZEOF_SHORT=2 SIZEOF_INT=4
+
+	ifeq ($(PROC),x64)
+		PRJ_DEFS := $(PRJ_DEFS) SIZEOF_SIZE_T=8 CURL_MASK_SSIZE_T=8
+	else
+		PRJ_DEFS := $(PRJ_DEFS) SIZEOF_SIZE_T=4 CURL_MASK_SSIZE_T=4
+	endif
 endif
+
 
 #-------------------------------------------------------------------
 # File locations
