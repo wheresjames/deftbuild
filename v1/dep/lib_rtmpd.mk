@@ -9,6 +9,7 @@ PRJ_DEPS := rtmpd
 PRJ_TYPE := lib
 PRJ_INCS := openssl/include zlib
 PRJ_LIBS := 
+PRJ_DEFS := CRYPTO=OPENSSL
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
