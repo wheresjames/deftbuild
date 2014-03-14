@@ -11,7 +11,11 @@
 #define SIZEOF_INT 4
 
 /* The number of bytes in a long.  */
-#define SIZEOF_LONG 4
+#if defined(_WIN64)
+#	define SIZEOF_LONG 8
+#else
+#	define SIZEOF_LONG 4
+#endif
 
 /* The number of bytes in a long double.  */
 #define SIZEOF_LONG_DOUBLE 12
@@ -23,7 +27,11 @@
 #define SIZEOF_UNSIGNED_INT 4
 
 /* The number of bytes in a unsigned long.  */
-#define SIZEOF_UNSIGNED_LONG 4
+#if defined(_WIN64)
+#	define SIZEOF_UNSIGNED_LONG 8
+#else
+#	define SIZEOF_UNSIGNED_LONG 4
+#endif
 
 /* The number of bytes in a unsigned short.  */
 #define SIZEOF_UNSIGNED_SHORT 2

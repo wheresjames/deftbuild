@@ -23,6 +23,11 @@ else
 	CFG_LOCAL_TOOL_RESCMP 	:= $(CFG_LOCAL_BUILD_TYPE)/resbld
 endif
 
+ifndef PRJ_NOC0X
+#	CFG_CEXTRA := -std=c++0x
+#	CFG_CEXTRA := -std=gnu++0x
+endif
+
 ifdef DBG
 	CFG_CEXTRA	 := -g -DDEBUG -D_DEBUG $(CFG_CEXTRA)
 	CFG_LEXTRA	 := -g
@@ -552,7 +557,7 @@ else
 		CFG_AFLAGS := cq
 
 		ifeq ($(PROC),x64)
-			CFG_CFLAGS := $(CFG_CFLAGS) -m64
+			CFG_CFLAGS := $(CFG_CFLAGS) -m64 -fpermissive -Wno-narrowing
 			CFG_ASFLAGS := -f elf64
 		else
 			CFG_ASFLAGS := -f elf32 -a x86
