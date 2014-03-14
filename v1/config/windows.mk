@@ -1,5 +1,9 @@
 
-WINVER := 0x0502
+ifneq ($(strip $(findstring 10,$(VSVER))),)
+	WINVER := 0x0600
+else
+	WINVER := 0x0502
+endif
 
 PRJ_DEFS := $(PRJ_DEFS) WINVER=$(WINVER) _WIN32_WINNT=$(WINVER)
 # PRJ_DEFS := $(PRJ_DEFS) _WINNT=$(WINVER) WINNT=$(WINVER)

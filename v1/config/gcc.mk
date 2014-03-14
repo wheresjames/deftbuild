@@ -88,13 +88,15 @@ ifeq ($(CFG_PROC),arm)
 				TOOLS := google
 				PRJ_DEFS := $(PRJ_DEFS)
 				CFG_ANDROIDNDK := $(CFG_LIBROOT)/android-ndk-win
+				CFG_ANDROID_ZIPALIGN := zipalign -f 4
 
 				# PATH := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows/bin:$(PATH)
 				# CFG_TOOLPREFIX := arm-eabi-
 				# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-eabi-4.4.0/prebuilt/windows
 
-				PATH := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows/bin:$(PATH)
+				PATH := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/windows-x86_64/bin:$(PATH)
 				CFG_TOOLPREFIX := arm-linux-androideabi-
+				# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.8/prebuilt/windows-x86_64
 				# CFG_SYSROOT := $(CFG_ANDROIDNDK)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/windows
 				
 				CFG_ANDROIDROOT := $(CFG_ANDROIDNDK)/platforms/$(CFG_ANDROID_APILEVEL)/arch-arm/usr
@@ -174,11 +176,11 @@ ifeq ($(CFG_PROC),arm)
 
 		CFG_CPFLAGS := $(CFG_CPFLAGS) -I$(CFG_ANDROIDROOT)/include \
 									  -I$(CFG_ANDROIDNDK)/sources/wchar-support/include \
-									  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/include \
-									  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/include \
+									  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/include \
+									  -I$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi/include \
 								  
 		CFG_STDLIB := $(CFG_STDLIB) -L$(CFG_ANDROIDROOT)/lib
-		CFG_LFLAGS := $(CFG_LFLAGS) -Wl -nostdlib -dynamic-linker=/system/bin/linker
+		CFG_LFLAGS := $(CFG_LFLAGS) -nostdlib -dynamic-linker=/system/bin/linker
 
 		ifeq ($(PRJ_TYPE),exe)
 			# CFG_STDLIB := $(CFG_STDLIB) -Wl,--entry=main
@@ -194,12 +196,13 @@ ifeq ($(CFG_PROC),arm)
 		
 		ifeq ($(LIBLINK),static)
 			CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm \
-										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
-										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
+										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi/libstdc++.a \
+										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/libstdc++.a
 		else
-			CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lsupc++ -lstdc++ -lc -lm \
-										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libstdc++.a \
-										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libstdc++.a
+			CFG_STDLIB := $(CFG_STDLIB) -lc -lgcc -lstdc++ -lc -lm \
+			
+#										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi/libstdc++.a \
+#										$(CFG_ANDROIDNDK)/sources/cxx-stl/gnu-libstdc++/4.8/libs/armeabi-v7a/libstdc++.a
 		endif				
 
 		# --disable-libunwind-exceptions -mthumb -fno-exceptions

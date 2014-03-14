@@ -27,7 +27,7 @@ else
 	CFG_JARSIGNING := 1
 endif
 
-CFG_ANDROID_APILEVEL := android-9
+CFG_ANDROID_APILEVEL := android-19
 EXISTS_ANDROIDSDK := $(wildcard $(CFG_LIBROOT)/android-sdk-linux)
 ifneq ($(strip $(EXISTS_ANDROIDSDK)),)
 	CFG_ANDROIDSDK := $(CFG_LIBROOT)/android-sdk-linux

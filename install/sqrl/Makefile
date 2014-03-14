@@ -22,6 +22,11 @@ PRJ_LIBROOT := ../../v1
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
+ifneq ($(NOSQINSTALL),)
+UNSUPPORTED := SQ Engine Installer disabled (NOSQINSTALL)
+include $(PRJ_LIBROOT)/unsupported.mk
+else
+
 ifeq ($(CFG_NSIS),)
 UNSUPPORTED := NSIS is not installed
 include $(PRJ_LIBROOT)/unsupported.mk
@@ -84,6 +89,7 @@ endif
 .PHONY : all
 all : $(NSIS_INSTALLERS)
 
+endif
 endif
 endif
 endif

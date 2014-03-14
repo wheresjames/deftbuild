@@ -67,6 +67,6 @@ ifeq ($(BUILD),vs)
 		CFG_CFLAGS := $(CFG_CFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb"
 		CFG_LFLAGS := $(CFG_LFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb" \
 									/MAP:$(CFG_DBGDIR)/$(PRJ_NAME).map \
-									/MAPINFO:LINES /MAPINFO:EXPORTS
+									/MAPINFO:EXPORTS
 	endif
 endif

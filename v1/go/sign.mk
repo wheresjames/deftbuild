@@ -23,12 +23,15 @@ ifeq ($(PRJ_PACK),apk)
 # openssl pkcs12 -in ss.pfx -out ss.pem
 # openssl pkcs12 -export -in ss.pem -out ss.ks -name "ss"
 GO_SIGN_FILE := $(CFG_CUR_ROOT)/$(GO_FINAL)
+GO_SIGN_ALIGNED_FILE := $(GO_FINAL)
+GO_SIGN_UNALIGNED_FILE := $(GO_FINAL).unaligned.apk
 GO_SIGN := $(GO_SIGN_TRACK)-verified
 GO_DELSIGN := $(CFG_DEL) $(GO_SIGN)
 $(GO_SIGN): $(GO_FINAL)
 	$(CFG_JARSIGNER) -storetype pkcs12 -keypass $(PVKPASS) -storepass $(PVKPASS) -keystore $(CFG_ROOT)/$(PRJ_SIGN).ks $(GO_SIGN_FILE) $(PRJ_SIGNALIAS)
 	$(CFG_JARSIGNER) -verify $(GO_SIGN_FILE) > $(GO_SIGN_TRACK)-$(findstring verified,`$(CFG_JARSIGNER) -verify $(GO_SIGN_FILE)`)
-
+	mv -f $(GO_SIGN_ALIGNED_FILE) $(GO_SIGN_UNALIGNED_FILE)
+	$(CFG_ANDROID_ZIPALIGN) $(GO_SIGN_UNALIGNED_FILE) $(GO_SIGN_ALIGNED_FILE) 
 else
 
 GO_SIGN_FILE := $(GO_FINAL)
