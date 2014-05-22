@@ -15,7 +15,8 @@ ifneq ($(strip $(EXISTS_JDK)),)
 	PRJ_DEFS := $(PRJ_DEFS)
 	CFG_JDKROOT := $(CFG_LIBROOT)/jdk-win
 	PATH := $(CFG_JDKROOT)/bin:$(PATH)
-	CFG_JAVAC := javac -target 1.5
+	CFG_JAVA := java
+	CFG_JAVAC := javac -target 1.7
 	CFG_JARSIGNER := jarsigner
 	CFG_JARSIGNING := 1
 
@@ -24,16 +25,17 @@ ifneq ($(strip $(EXISTS_JDK)),)
 
 endif
 
-CFG_ANDROID_APILEVEL := android-9
+CFG_ANDROID_APILEVEL := android-19
 EXISTS_ANDROIDSDK := $(wildcard $(CFG_LIBROOT)/android-sdk-win)
 ifneq ($(strip $(EXISTS_ANDROIDSDK)),)
 	CFG_ANDROIDSDK := $(CFG_LIBROOT)/android-sdk-win
-	PATH := $(CFG_ANDROIDSDK)/platform-tools:$(CFG_ANDROIDSDK)/tools:$(PATH)
+	PATH := $(CFG_ANDROIDSDK)/platform-tools:$(CFG_ANDROIDSDK)/build-tools/19.0.2:$(CFG_ANDROIDSDK)/tools:$(PATH)
 	CFG_ANDROID_AAPT := aapt
 	CFG_ANDROID_DX := dx.bat --dex
-	CFG_ANDROID_APKBUILDER := apkbuilder.bat
 	CFG_ANDROID_JAR := $(CFG_ANDROIDSDK)/platforms/$(CFG_ANDROID_APILEVEL)/android.jar
+	CFG_SDKLIB_JAR := $(CFG_ANDROIDSDK)/tools/lib/sdklib.jar
 	CFG_JDK_CLASSPATH := $(CFG_ANDROID_JAR)
+	CFG_ANDROID_APKBUILDER := $(CFG_JAVA) -classpath $(CFG_SDKLIB_JAR) com.android.sdklib.build.ApkBuilderMain 
 endif
 
 CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
