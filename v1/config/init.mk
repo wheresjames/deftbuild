@@ -18,18 +18,13 @@ else
 	CFG_LNAME := $(PRJ_LNAME)
 endif
 
-ifneq ($(VER),)
-	CFG_VER := $(VER)
-	ifndef FVER
-		FVER := $(VER)
-	endif
-else
-	ifneq ($(PRJ_VERSION),)
-		CFG_VER := $(PRJ_VERSION)
-		ifndef PRJ_FVERSION
-			PRJ_FVERSION := $(PRJ_VERSION)
-		endif
-	endif
+ifeq ($(VER),)
+	VER := $(shell date +'%y.%m.%d.%H%M')
+endif
+
+CFG_VER := $(VER)
+ifeq ($(FVER),)
+	FVER := $(VER)
 endif
 
 ifneq ($(FVER),)

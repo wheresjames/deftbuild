@@ -24,8 +24,9 @@ else
 endif
 
 ifndef PRJ_NOC0X
-#	CFG_CEXTRA := -std=c++0x
-#	CFG_CEXTRA := -std=gnu++0x
+#	CFG_CEXTRA := $(CFG_CEXTRA) -fpermissive
+#	CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x
+#	CFG_CEXTRA := $(CFG_CEXTRA) -std=gnu++0x
 endif
 
 ifdef DBG

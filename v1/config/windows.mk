@@ -15,6 +15,14 @@ else
 	PRJ_DEFS := $(PRJ_DEFS) WIN32 _WIN32
 endif
 
+ifneq ($(findstring windows,$(PRJ_GUIT)),)
+	ifeq ($(BUILD),vs)
+		CFG_LFLAGS := $(CFG_LFLAGS) /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+	else
+		CFG_LFLAGS := $(CFG_LFLAGS) -mwindows
+	endif
+endif
+
 ifneq ($(findstring gui,$(PRJ_GUIT)),)
 	ifeq ($(BUILD),vs)
 		PRJ_DEFS := $(PRJ_DEFS) OEX_GUI

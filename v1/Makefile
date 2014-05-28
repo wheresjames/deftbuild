@@ -13,8 +13,12 @@ ifndef NOINSTALL
 	endif
 endif
 
+ifeq ($(VER),)
+	VER := $(shell date +'%y.%m.%d.%H%M')
+endif
+
 .PHONY all: $(BUILDDIRS)
 
 .PHONY $(BUILDDIRS) :
-	$(MAKE) -C $@ $(BUILDTYPE)
+	$(MAKE) -C $@ VER=$(VER) $(BUILDTYPE)
 
