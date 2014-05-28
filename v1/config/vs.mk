@@ -37,7 +37,7 @@ else
 endif
 
 ifeq ($(CFG_STDLIBS),)
-	CFG_STDLIBS	:= ws2_32.lib ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
+	CFG_STDLIBS	:= ws2_32.lib iphlpapi.lib ole32.lib oleaut32.lib user32.lib gdi32.lib comdlg32.lib comctl32.lib rpcrt4.lib shell32.lib advapi32.lib vfw32.lib
 endif
 
 # Debug info options

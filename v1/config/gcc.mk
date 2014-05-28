@@ -470,7 +470,7 @@ else
 			endif
 		endif
 
-			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32
+			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32 -liphlpapi
 			CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
 			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
 								-c -MMD -Wall -fno-strict-aliasing \
@@ -513,7 +513,7 @@ else
 		endif
 
 		# -fstack-check -m64 -fpermissive
-		CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lavicap32 -lmsvfw32
+		CFG_STDLIB := -lole32 -lgdi32 -liphlpapi -lws2_32 -lavicap32 -lmsvfw32
 		CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols -fno-leading-underscore -static-libgcc -static-libstdc++
 		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 \
 							-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \

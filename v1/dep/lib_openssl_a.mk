@@ -10,7 +10,7 @@ PRJ_TYPE := lib
 PRJ_INCS := openssl openssl/include openssl/crypto \
 			openssl/crypto/asn1 openssl/crypto/evp
 PRJ_LIBS := 
-PRJ_DEFS := NO_WINDOWS_BRAINDEATH I386_ONLY OPENSSL_NO_ASM
+PRJ_DEFS := NO_WINDOWS_BRAINDEATH I386_ONLY OPENSSL_NO_ASM 
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
