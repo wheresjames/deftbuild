@@ -65,13 +65,13 @@ ifneq ($(PROC),arm)
 	LOC_BLD_av86_asm := asm
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
-			LOC_ASM_av86_asm := yasm -f win64 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f win64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_av86_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_av86_asm := yasm -f elf64 -DPIC -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_av86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
@@ -169,7 +169,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_sws86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_sws86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
@@ -217,7 +217,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_avu86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_avu86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_avu86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif

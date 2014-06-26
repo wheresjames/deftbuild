@@ -552,7 +552,7 @@ else
 		
 		CFG_STDLIB := -lrt -pthread
 #			CFG_LFLAGS := $(CFG_LEXTRA)
-		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing
+		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -c -MMD -Wall -fno-strict-aliasing -Wno-unused-local-typedefs
 #			CFG_CFLAGS := $(CFG_CEXTRA) -c -MMD -Wall
 		CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
 		CFG_AFLAGS := cq
@@ -580,9 +580,12 @@ else
 endif
 
 ifneq ($(LIBLINK),static)
-	CFG_LFLAGS := $(CFG_LFLAGS)
+	CFG_LFLAGS := $(CFG_LFLAGS) -fPIC -Wl,-Bsymbolic
 	ifeq ($(PRJ_NPIC),)
-		CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC
+		#  -fkeep-inline-functions
+		CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC -fvisibility=hidden
+		# CFG_CFLAGS := $(CFG_CFLAGS) -mcmodel=large
+		# CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-protector -fno-PIE
 	endif
 endif
 
