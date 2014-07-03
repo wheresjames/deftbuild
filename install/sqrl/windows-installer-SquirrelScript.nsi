@@ -26,10 +26,8 @@ Name "${APPNAME}"
 !endif
 OutFile "${OUTROOT}\${FULL_FILENAME}"
 
-!if "${PROC}" == "x64"
-!if "${BUILD}" == "vs"
+!if "${PROC}-${BUILD}" == "x64-vs"
 !define FULL_GCC_PATH "..\windows-gcc-win64-x64-mingw64-static\${FULL_GCC_FILENAME}"
-!endif
 !endif  
 
 ; The default installation director
@@ -96,12 +94,10 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
 
   ; Hack - install GCC version if needed and it exists
-!if "${PROC}" == "x64"
-!if "${BUILD}" == "vs"
+!if "${PROC}-${BUILD}" == "x64-vs"
 ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
 !ifdef GCC_BUILD_EXISTS
 	File "${OUTROOT}\${FULL_GCC_PATH}"
-!endif
 !endif
 !endif  
   
@@ -148,10 +144,8 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
   WriteUninstaller "uninstall.exe"
   
   ; Hack - install GCC version
-!if "${PROC}" == "x64"
-!if "${BUILD}" == "vs"
+!if "${PROC}-${BUILD}" == "x64-vs"
   ExecWait '"$INSTDIR\${FULL_GCC_FILENAME}" /S'
-!endif
 !endif  
   
 SectionEnd
@@ -194,7 +188,9 @@ gcc_done:
   Delete $INSTDIR\License.txt
   
   Delete $INSTDIR\sqrl.exe  
+  Delete $INSTDIR\sqrl.exe.debug.log  
   Delete $INSTDIR\sqrl-cgi.exe  
+  Delete $INSTDIR\sqrl-cgi.exe.debug.log  
   Delete $INSTDIR\modules\sqmod_asio.dll
   Delete $INSTDIR\modules\sqmod_cell.dll
   Delete $INSTDIR\modules\sqmod_curl.dll
@@ -212,10 +208,8 @@ gcc_done:
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
 
-!if "${PROC}" == "x64"
-!if "${BUILD}" == "vs"
+!if "${PROC}-${BUILD}" == "x64-vs"
   Delete "$INSTDIR\${FULL_GCC_FILENAME}"
-!endif		
 !endif  
   
   ; Remove shortcuts, if any
