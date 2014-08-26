@@ -152,7 +152,7 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 #BLD_ROOTS_$(LOC_TAG)	:= $(foreach f,$(BLD_OBJECTS_$(LOC_TAG)),$(subst $(LOC_BLD_$(LOC_TAG)),,$(f)))
 #BLD_DEPENDS_$(LOC_TAG)	:= $(foreach f,$(BLD_ROOTS_$(LOC_TAG)),$(f)._i.c $(f)_p.c $(f).tbl $(f).h)
 #BLD_DEPENDS_TOTAL		:= $(BLD_DEPENDS_$(LOC_TAG))
-BLD_DEPENDS_TOTAL 		:= $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
+#BLD_DEPENDS_TOTAL 		:= $(BLD_DEPENDS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
 else
 BLD_OBJECTS_TOTAL 		:= $(BLD_OBJECTS_TOTAL) $(BLD_OBJECTS_$(LOC_TAG))
 endif
@@ -232,9 +232,15 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 #$(BLD_DEPENDS_$(LOC_TAG)) :
 #	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(BLD_INCS) $(BLD_OBJECTS_$(LOC_TAG))
 #$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(CFG_DEFS) /out $(CFG_PATH_IDL) $(BLD_INCS) /o $@ $<
+#$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+$(CFG_PATH_IDL)/%.tlb : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	echo $@ $<
+	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(CFG_DEFS) /out $(CFG_PATH_IDL) $(BLD_INCS) /o $@.log $<
+# $(BLD_PATH_SRC_$(LOC_TAG)) $(BLD_OBJECTS_$(LOC_TAG))
+BLD_TLB_DEPS := $(BLD_TLB_DEPS) $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(CFG_PATH_IDL)/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.tlb) )
 
+$(info $(BLD_TLB_DEPS))
+	
 # vs-idl
 else
 
@@ -251,7 +257,7 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),cpp)
 
 # vs-c++
-$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG)) $(BLD_TLB_DEPS)
 	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tp "$<" $(CFG_CC_OUT)"$@"
 
 # vs-c++
