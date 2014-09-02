@@ -247,7 +247,7 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 # vs-rc
-$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG)) $(BLD_TLB_DEPS)
 	$(CFG_RC) $(BLD_INCS) /fo $@ $<
 
 # vs-rc
