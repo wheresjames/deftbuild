@@ -18,10 +18,10 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(BUILD),vs)
-UNSUPPORTED := BUILD=$(BUILD) is invalid
-include $(PRJ_LIBROOT)/unsupported.mk
-else
+#ifneq ($(BUILD),vs)
+#UNSUPPORTED := BUILD=$(BUILD) is invalid
+#include $(PRJ_LIBROOT)/unsupported.mk
+#else
 
 ifneq ($(UNICODE),)
 UNSUPPORTED := UNICODE=$(UNICODE) is invalid
@@ -43,5 +43,5 @@ include $(PRJ_LIBROOT)/go.mk
 
 endif
 
-endif
+#endif
 
