@@ -2,14 +2,27 @@
 
 ifndef ABORT_UNSUPPORTED
 
+SWT := -
+ifeq ($(BUILD),vs)
+	ifneq ($(LOC_BLD_$(LOC_TAG)),asm)
+		SWT := /
+		SWT_$(LOC_TAG) := /
+	endif
+endif
+
 ifneq ($(PRJ_DEFS),)
-	ifeq ($(BUILD),vs)
-		CFG_ADD_DEFS := $(foreach def,$(PRJ_DEFS),/D$(def) )
+	# ifeq ($(BUILD),vs)
+		# CFG_ADD_DEFS := $(foreach def,$(PRJ_DEFS),/D$(def) )
+	# else
+		# CFG_ADD_DEFS := $(foreach def,$(PRJ_DEFS),-D$(def) )
+	# endif	
+	CFG_ADD_DEFS := $(foreach def,$(PRJ_DEFS),$(SWT)D$(def) )
+	ifneq ($(LOC_BLD_$(LOC_TAG)),asm)
+		BLD_DEFS_$(LOC_TAG) := $(CFG_ADD_DEFS)
 	else
-		CFG_ADD_DEFS := $(foreach def,$(PRJ_DEFS),-D$(def) )
-	endif	
-	CFG_DEFS := $(CFG_DEFS) $(CFG_ADD_DEFS)
-	PRJ_DEFS :=
+		BLD_DEFS_$(LOC_TAG) := $(CFG_ADD_DEFS)
+	endif
+#	PRJ_DEFS :=
 endif
 
 ifeq ($(LOC_CXX_$(LOC_TAG)),)
@@ -42,9 +55,9 @@ endif
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 	ifeq ($(LOC_ASM_$(LOC_TAG)),)
-		BLD_ASM := $(CFG_ASM)
+		BLD_ASM_$(LOC_TAG) := $(CFG_ASM)
 	else
-		BLD_ASM := $(LOC_ASM_$(LOC_TAG))
+		BLD_ASM_$(LOC_TAG) := $(LOC_ASM_$(LOC_TAG))
 	endif
 endif
 
@@ -59,7 +72,7 @@ ifneq ($(LOC_SRC_$(LOC_TAG)),)
 
 	ifneq ($(LOC_SRC_$(LOC_TAG)),$(LOC_INC_$(LOC_TAG)))
 		ifeq ($(BUILD),vs)
-			BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)"$(LOC_SRC_$(LOC_TAG))"
+			BLD_PATH_INC_$(LOC_TAG) := $(SWT)I"$(LOC_SRC_$(LOC_TAG))"
 		else
 			#ifeq ($(CYGBLD),)
 			#	BLD_PATH_INC_$(LOC_TAG) := $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_SRC_$(LOC_TAG))
@@ -78,14 +91,14 @@ endif
 
 ifneq ($(LOC_INC_$(LOC_TAG)),)
 	ifeq ($(BUILD),vs)
-		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)"$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))"
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(SWT)I"$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))"
 	else
 		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)/$(LOC_INC_$(LOC_TAG))
 	endif
 else
 ifeq ($(LOC_SRC_$(LOC_TAG)),)
 	ifeq ($(BUILD),vs)
-		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)"$(CFG_CUR_ROOT)"
+		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(SWT)I"$(CFG_CUR_ROOT)"
 	else
 		BLD_PATH_INC_$(LOC_TAG) := $(BLD_PATH_INC_$(LOC_TAG)) $(CFG_CC_INC)$(CFG_CUR_ROOT)
 	endif
@@ -128,19 +141,35 @@ else
 	BLD_OBJECTS_$(LOC_TAG) 	:= $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(BLD_PATH_OBJ_$(LOC_TAG))/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.$(BLD_EXT_$(LOC_TAG))) )
 endif
 
-BLD_INCS := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
+BLD_INCS :=
+ifeq ($(BUILD),vs)
+	BLD_INCS 				:= $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(SWT)I"$(CFG_LIBROOT)/$(inc)")
+else
+	BLD_INCS 				:= $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
+endif
+
+
+ifneq ($(LOC_EXI_$(LOC_TAG)),)
+	ifeq ($(BUILD),vs)
+		BLD_INCS 			:= $(BLD_INCS) $(foreach inc,$(LOC_EXI_$(LOC_TAG)), $(SWT)I"$(inc)")
+	else
+		BLD_INCS 			:= $(BLD_INCS) $(foreach inc,$(LOC_EXI_$(LOC_TAG)), $(CFG_CC_INC)$(inc))
+	endif
+endif
+
 ifneq ($(PRJ_SYSI),)
 	ifeq ($(BUILD),vs)
-		BLD_INCS		    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)"$(CFG_LIBROOT)/$(inc)")
-		BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)"$(inc)")
+		BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(SWT)I"$(inc)")
 	else
-		BLD_INCS		    := $(BLD_PATH_INC_$(LOC_TAG)) $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 		BLD_INCS			:= $(BLD_INCS) $(foreach inc,$(PRJ_SYSI), $(CFG_CC_INC)$(inc))
 	endif
 endif
+
 ifdef CFG_RES_OUT
 	BLD_INCS			:= $(CFG_CC_INC)$(CFG_RES_OUT) $(BLD_INCS)
 endif
+
+LOC_BLD_INCS_$(LOC_TAG) := $(BLD_INCS)
 
 ifeq ($(LOC_BLD_$(LOC_TAG)),java)
 #BLD_ROOTS_$(LOC_TAG)	:= $(foreach f,$(BLD_OBJECTS_$(LOC_TAG)),$(subst $(LOC_BLD_$(LOC_TAG)),,$(f)))
@@ -233,9 +262,11 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),idl)
 #	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(BLD_INCS) $(BLD_OBJECTS_$(LOC_TAG))
 #$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 #$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_IDL_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+
+$(CFG_PATH_IDL)/%.tlb : LOC_TAG := $(LOC_TAG)
 $(CFG_PATH_IDL)/%.tlb : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	echo $@ $<
-	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(CFG_DEFS) /out $(CFG_PATH_IDL) $(BLD_INCS) /o $@.log $<
+	$(CFG_MIDL) $(CFG_MIDL_FLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) /out $(CFG_PATH_IDL) $(LOC_BLD_INCS_$(LOC_TAG)) /o $@.log $<
 # $(BLD_PATH_SRC_$(LOC_TAG)) $(BLD_OBJECTS_$(LOC_TAG))
 BLD_TLB_DEPS := $(BLD_TLB_DEPS) $(subst $(BLD_PATH_SRC_$(LOC_TAG))/,$(CFG_PATH_IDL)/, $(BLD_SOURCES_$(LOC_TAG):.$(LOC_CXX_$(LOC_TAG))=.tlb) )
 
@@ -247,8 +278,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 # vs-rc
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG)) $(BLD_TLB_DEPS)
-	$(CFG_RC) $(BLD_INCS) /fo $@ $<
+	$(CFG_RC) $(LOC_BLD_INCS_$(LOC_TAG)) /fo $@ $<
 
 # vs-rc
 else
@@ -257,8 +289,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),cpp)
 
 # vs-c++
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG)) $(BLD_TLB_DEPS)
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tp "$<" $(CFG_CC_OUT)"$@"
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(LOC_BLD_INCS_$(LOC_TAG)) /Tp "$<" $(CFG_CC_OUT)"$@"
 
 # vs-c++
 else
@@ -270,16 +303,31 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),moc)
 $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_QTMOC) "$<" -o "$@"
 
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tp "$<" $(CFG_CC_OUT)"$@"
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(LOC_BLD_INCS_$(LOC_TAG)) /Tp "$<" $(CFG_CC_OUT)"$@"
 
 # moc vs-c++
 else
 
-# vs-c
-$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CCFLAGS) $(CFG_DEFS) $(BLD_INCS) /Tc "$<" $(CFG_CC_OUT)"$@"
+ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
+# vs-asm
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(BLD_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(BLD_DEFS_$(LOC_TAG)) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< -o$@
+
+# vs-asm
+else
+
+# vs-c
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CCFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(LOC_BLD_INCS_$(LOC_TAG)) /Tc "$<" $(CFG_CC_OUT)"$@"
+
+# vs-asm
+endif
+	
 # moc vs-c++
 endif
 
@@ -298,8 +346,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),rc)
 
 # gcc-rc
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_RES_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_RC) $(BLD_INCS) -o $@ -i $<
+	$(CFG_RC) $(LOC_BLD_INCS_$(LOC_TAG)) -o $@ -i $<
 
 #rc
 else
@@ -307,8 +356,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),asm)
 
 # gcc-asm
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(BLD_ASM) $(CFG_ASMFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(BLD_ASM_$(LOC_TAG)) $(CFG_ASMFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< $(CFG_CC_OUT)$@
 
 #asm
 else
@@ -316,8 +366,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),as)
 
 #gcc-as
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(CFG_AS) $(CFG_ASFLAGS) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< $(CFG_CC_OUT)$@
 
 #as
 else
@@ -325,8 +376,9 @@ else
 ifeq ($(LOC_BLD_$(LOC_TAG)),c)
 
 #gcc-c
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_CC) $(CFG_CFLAGS) $(CFG_CCFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(CFG_CC) $(CFG_CFLAGS) $(CFG_CCFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< $(CFG_CC_OUT)$@
 
 #c
 else
@@ -342,10 +394,12 @@ BLD_REMOVE_HACK := $(BLD_REMOVE_HACK) $(BLD_PKG_$(LOC_TAG))
 # $(BLD_PATH_SRC_$(LOC_TAG))
 
 # R.Java
+$(BLD_PATH_OBJ_$(LOC_TAG))/R.Java : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/R.Java :
 	$(CFG_ANDROID_AAPT) package -f -m -J $(BLD_PATH_OBJ_$(LOC_TAG)) -M $(CFG_CUR_ROOT)/$(PRJ_MANIFEST) -I $(CFG_CUR_ROOT)/$(CFG_ANDROID_JAR) -S $(CFG_CUR_ROOT)/$(PRJ_RESOURCE)
 
 # java
+$(BLD_PATH_OBJ_$(LOC_TAG))/$(BLD_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/$(BLD_PKG_$(LOC_TAG))/%.$(CFG_JAV_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG)) $(BLD_PATH_OBJ_$(LOC_TAG))/R.Java
 	$(CFG_JAVAC) "$<" -d $(foreach d,$(BLD_REMOVE_HACK),$(subst /$(d)/$*.$(CFG_JAV_EXT),,$@)) -classpath $(CFG_JDK_CLASSPATH) -sourcepath $(BLD_PATH_OBJ_$(LOC_TAG))
 
@@ -360,15 +414,17 @@ ifeq ($(LOC_BLD_$(LOC_TAG)),moc)
 $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
 	$(CFG_QTMOC) "$<" -o "$@"
 
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_OBJ_$(LOC_TAG))/moc_%.cpp
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< $(CFG_CC_OUT)$@
 
 # moc
 else
 
 #gcc-c++
+$(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : LOC_TAG := $(LOC_TAG)
 $(BLD_PATH_OBJ_$(LOC_TAG))/%.$(CFG_OBJ_EXT) : $(BLD_PATH_SRC_$(LOC_TAG))/%.$(LOC_CXX_$(LOC_TAG))
-	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(PRJ_EXTC) $(BLD_INCS) $< $(CFG_CC_OUT)$@
+	$(CFG_PP) $(CFG_CFLAGS) $(CFG_CPFLAGS) $(CFG_DEFS) $(BLD_DEFS_$(LOC_TAG)) $(PRJ_EXTC) $(LOC_BLD_INCS_$(LOC_TAG)) $< $(CFG_CC_OUT)$@
 
 #moc
 endif

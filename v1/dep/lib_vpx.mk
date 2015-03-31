@@ -7,9 +7,9 @@ default_target: all
 PRJ_NAME := vpx
 PRJ_DEPS := vpx
 PRJ_TYPE := lib
-PRJ_INCS := vpx vpx/vpx_scale/include/generic
-PRJ_LIBS := 
+PRJ_INCS := vpx
 PRJ_DEFS := 
+PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
 PRJ_OBJROOT := _0_dep
@@ -19,20 +19,26 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, vpx can only be built with 'gcc'
+ifeq ($(PLATFORM)-$(BUILD),windows-gcc)
+UNSUPPORTED := BUILD=$(BUILD) is invalid, webrtc can only be built on windows with Visual Studio
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-ifeq ($(PLATFORM),windows)
-	ifeq ($(BUILD),vs)
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/vs $(PRJ_INCS)
-	else 
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/gcc $(PRJ_INCS)
-	endif
-else
-	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/posix $(PRJ_INCS) zlib
-endif
+# PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/nullconfig $(PRJ_INCS)
+# PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/srtp/inc/$(PLATFORM)/$(PROC) $(PRJ_INCS)
+
+# ifeq ($(PLATFORM),windows)
+	# ifeq ($(BUILD),vs)
+		# PRJ_DEFS := WEBRTC_WIN COMPILER_MSVC
+	# else
+		# PRJ_DEFS := WEBRTC_WIN AI_ADDRCONFIG=0
+		CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x
+		CFG_CEXTRA := $(CFG_CEXTRA) -std=gnu++0x
+		# CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
+	# endif
+# else
+	# PRJ_DEFS := 
+# endif
 
 #-------------------------------------------------------------------
 # File locations
@@ -48,159 +54,144 @@ LOC_CXX_vpx_mem := c
 LOC_SRC_vpx_mem := $(CFG_LIBROOT)/vpx/vpx_mem
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := vpx_scale
+LOC_CXX_vpx_scale := c
+LOC_SRC_vpx_scale := $(CFG_LIBROOT)/vpx/vpx_scale
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vpx_scale_gen
+LOC_CXX_vpx_scale_gen := c
+LOC_SRC_vpx_scale_gen := $(CFG_LIBROOT)/vpx/vpx_scale/generic
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := vp8
 LOC_CXX_vp8 := c
 LOC_SRC_vp8 := $(CFG_LIBROOT)/vpx/vp8
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := cmn
-LOC_CXX_cmn := c
-LOC_SRC_cmn := $(CFG_LIBROOT)/vpx/vp8/common
+export LOC_TAG := vp8com
+LOC_CXX_vp8com := c
+LOC_SRC_vp8com := $(CFG_LIBROOT)/vpx/vp8/common
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := cmn_gen
-LOC_CXX_cmn_gen := c
-LOC_SRC_cmn_gen := $(CFG_LIBROOT)/vpx/vp8/common/generic
+export LOC_TAG := vp8comgen
+LOC_CXX_vp8comgen := c
+LOC_SRC_vp8comgen := $(CFG_LIBROOT)/vpx/vp8/common/generic
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := vpxs_gen
-LOC_CXX_vpxs_gen := c
-# LOC_INC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/include/generic
-LOC_SRC_vpxs_gen := $(CFG_LIBROOT)/vpx/vpx_scale/generic
+export LOC_TAG := vp8comx86
+LOC_CXX_vp8comx86 := c
+LOC_SRC_vp8comx86 := $(CFG_LIBROOT)/vpx/vp8/common/x86
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := enc
-LOC_EXC_enc := mr_dissim ssim
-LOC_CXX_enc := c
-LOC_SRC_enc := $(CFG_LIBROOT)/vpx/vp8/encoder
+export LOC_TAG := vp8enc
+LOC_CXX_vp8enc := c
+LOC_SRC_vp8enc := $(CFG_LIBROOT)/vpx/vp8/encoder
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := enc_gen
-LOC_CXX_enc_gen := c
-LOC_SRC_enc_gen := $(CFG_LIBROOT)/vpx/vp8/encoder/generic
+export LOC_TAG := vp8encx86
+LOC_CXX_vp8encx86 := c
+LOC_SRC_vp8encx86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := dec
-LOC_EXC_dec := error_concealment
-LOC_CXX_dec := c
-LOC_SRC_dec := $(CFG_LIBROOT)/vpx/vp8/decoder
+export LOC_TAG := vp8dec
+LOC_CXX_vp8dec := c
+LOC_SRC_vp8dec := $(CFG_LIBROOT)/vpx/vp8/decoder
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := dec_gen
-LOC_CXX_dec_gen := c
-LOC_SRC_dec_gen := $(CFG_LIBROOT)/vpx/vp8/decoder/generic
+export LOC_TAG := vp9
+LOC_CXX_vp9 := c
+LOC_SRC_vp9 := $(CFG_LIBROOT)/vpx/vp9
 include $(PRJ_LIBROOT)/build.mk
 
-ifneq ($(PROC),arm)
+export LOC_TAG := vp9com
+LOC_CXX_vp9com := c
+LOC_EXC_vp9com := vp9_mfqe
+LOC_SRC_vp9com := $(CFG_LIBROOT)/vpx/vp9/common
+include $(PRJ_LIBROOT)/build.mk
 
-# HAVE_AVX = Intel Sandy Bridge vector extension ???
+export LOC_TAG := vp9comx86
+LOC_CXX_vp9comx86 := c
+LOC_SRC_vp9comx86 := $(CFG_LIBROOT)/vpx/vp9/common/x86
+include $(PRJ_LIBROOT)/build.mk
 
-	ifeq ($(PLATFORM),windows)
-		ASMOPTS := $(ASMOPTS) -DHAVE_MMX -DHAVE_MMX2 
-		ifeq ($(BUILD),vs)
-			ASMOPTS := $(ASMOPTS) -I$(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/vs
-		else 
-			ASMOPTS := $(ASMOPTS) -I$(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/gcc
-		endif
+export LOC_TAG := vp9enc
+LOC_CXX_vp9enc := c
+LOC_EXC_vp9enc := vp9_denoiser
+LOC_SRC_vp9enc := $(CFG_LIBROOT)/vpx/vp9/encoder
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp9encx86
+LOC_CXX_vp9encx86 := c
+LOC_SRC_vp9encx86 := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp9dec
+LOC_CXX_vp9dec := c
+LOC_SRC_vp9dec := $(CFG_LIBROOT)/vpx/vp9/decoder
+include $(PRJ_LIBROOT)/build.mk
+
+
+# --- ASM ---
+
+# ASMOPTS := -I$(CFG_LIBROOT)/vpx/vp8/common/x86
+#		   -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW \
+#		   -DHAVE_SSSE -DHAVE_SSSE3 -DHAVE_AVX \
+#		   -DCONFIG_PIC=1
+
+ifeq ($(PLATFORM),windows)
+	ifeq ($(PROC),x64)
+		ASMCMD := yasm -f win64 $(ASMOPTS)
 	else
-		ifneq ($(PROC),x64)
-			ASMOPTS := $(ASMOPTS) -DHAVE_MMX -DHAVE_MMX2 
-		endif
-		ASMOPTS := $(ASMOPTS) -I$(CFG_LIB2BLD)/dep/etc/vpx/inc/posix
+		ASMCMD := yasm -f win32 -a x86 -DPREFIX $(ASMOPTS)
 	endif
-
-	ASMOPTS := $(ASMOPTS) -I$(CFG_LIBROOT)/vpx/vp8/encoder/x86	
-	ASMOPTS := $(ASMOPTS) -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW \
-						  -DHAVE_SSSE -DHAVE_SSSE3 -DHAVE_AVX \
-						  -DCONFIG_PIC=1
-
-	export LOC_TAG := enc_asm
-	LOC_CXX_enc_asm := asm
-	LOC_BLD_enc_asm := asm
-	ifeq ($(PLATFORM),windows)
-		ifeq ($(PROC),x64)
-			LOC_ASM_enc_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_enc_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
+else
+	ifeq ($(PROC),x64)
+		ASMCMD := yasm -f elf64 -DPIC $(ASMOPTS)
 	else
-		ifeq ($(PROC),x64)
-			LOC_ASM_enc_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_enc_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
+		ASMCMD := yasm -f elf32 -a x86 -DPIC $(ASMOPTS)
 	endif
-#	LOC_EXC_enc_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
-#	ifneq ($(PROC),x64)
-#		LOC_EXC_enc_asm := $(LOC_EXC_enc_asm) ssim_opt
-#	endif
-	LOC_SRC_enc_asm := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
-	include $(PRJ_LIBROOT)/build.mk
-
-	export LOC_TAG := enc_x86
-	LOC_CXX_enc_x86 := c
-	LOC_EXC_enc_x86 := x86_csystemdependent
-	LOC_SRC_enc_x86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
-	include $(PRJ_LIBROOT)/build.mk
-
-	export LOC_TAG := dec_asm
-	LOC_CXX_dec_asm := asm
-	LOC_BLD_dec_asm := asm
-	ifeq ($(PLATFORM),windows)
-		ifeq ($(PROC),x64)
-			LOC_ASM_dec_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_dec_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
-	else
-		ifeq ($(PROC),x64)
-			LOC_ASM_dec_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_dec_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
-	endif
-#	LOC_EXC_dec_asm := quantize_sse2 quantize_sse3 quantize_sse4 quantize_ssse3 sad_sse2
-#	ifneq ($(PROC),x64)
-#		LOC_EXC_dec_asm := $(LOC_EXC_dec_asm) ssim_opt
-#	endif
-	LOC_SRC_dec_asm := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
-	include $(PRJ_LIBROOT)/build.mk
-
-	export LOC_TAG := dec_x86
-	LOC_CXX_dec_x86 := c
-	LOC_EXC_dec_x86 := x86_csystemdependent
-	LOC_SRC_dec_x86 := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
-	include $(PRJ_LIBROOT)/build.mk
-
-	export LOC_TAG := cmn_asm
-	LOC_CXX_cmn_asm := asm
-	LOC_BLD_cmn_asm := asm
-	ifeq ($(PLATFORM),windows)
-		ifeq ($(PROC),x64)
-			LOC_ASM_cmn_asm := yasm -f win64 -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_cmn_asm := yasm -f win32 -a x86 -DPREFIX -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
-	else
-		ifeq ($(PROC),x64)
-			LOC_ASM_cmn_asm := yasm -f elf64 -DPIC -DARCH_X86_64 $(ASMOPTS)
-		else
-			LOC_ASM_cmn_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86 -DARCH_X86_32 $(ASMOPTS)
-		endif
-	endif
-#	LOC_EXC_cmn_asm := 
-#	ifneq ($(PROC),x64)
-#		LOC_EXC_cmn_asm := $(LOC_EXC_cmn_asm)
-#	endif
-	LOC_SRC_cmn_asm := $(CFG_LIBROOT)/vpx/vp8/decoder/x86
-	include $(PRJ_LIBROOT)/build.mk
-
-	export LOC_TAG := cmn_x86
-	LOC_CXX_cmn_x86 := c
-	LOC_SRC_cmn_x86 := $(CFG_LIBROOT)/vpx/vp8/common/x86
-	include $(PRJ_LIBROOT)/build.mk
-
 endif
+
+export LOC_TAG := vpx_ports
+LOC_CXX_vpx_ports := asm
+LOC_BLD_vpx_ports := asm
+LOC_ASM_vpx_ports := $(ASMCMD)
+LOC_EXC_vpx_ports := ssim_opt_x86_64
+LOC_SRC_vpx_ports := $(CFG_LIBROOT)/vpx/vpx_ports
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp8_x86_asm
+LOC_CXX_vp8_x86_asm := asm
+LOC_BLD_vp8_x86_asm := asm
+LOC_ASM_vp8_x86_asm := $(ASMCMD)
+LOC_EXC_vp8_x86_asm := loopfilter_block_sse2_x86_64
+LOC_SRC_vp8_x86_asm := $(CFG_LIBROOT)/vpx/vp8/common/x86
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp8_encx86_asm
+LOC_CXX_vp8_encx86_asm := asm
+LOC_BLD_vp8_encx86_asm := asm
+LOC_ASM_vp8_encx86_asm := $(ASMCMD)
+LOC_EXC_vp8_encx86_asm := ssim_opt_x86_64
+LOC_SRC_vp8_encx86_asm := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp9_x86_asm
+LOC_CXX_vp9_x86_asm := asm
+LOC_BLD_vp9_x86_asm := asm
+LOC_ASM_vp9_x86_asm := $(ASMCMD)
+LOC_EXC_vp9_x86_asm := 
+LOC_SRC_vp9_x86_asm := $(CFG_LIBROOT)/vpx/vp9/common/x86
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := vp9_encx86_asm
+LOC_CXX_vp9_encx86_asm := asm
+LOC_BLD_vp9_encx86_asm := asm
+LOC_ASM_vp9_encx86_asm := $(ASMCMD)
+LOC_EXC_vp9_encx86_asm := vp9_ssim_opt_x86_64 vp9_quantize_ssse3_x86_64
+LOC_SRC_vp9_encx86_asm := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
+include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
 # Execute the build

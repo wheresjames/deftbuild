@@ -44,14 +44,23 @@ EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
 ifneq ($(strip $(EXISTS_MSPSDK)),)
 	CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
 	PATH := $(PATH):$(CFG_MSPSDK)/Bin
-	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin
+ifneq ($(findstring x64,$(BLD)),)
+	PATH := $(PATH):$(CFG_MSPSDK)/Bin/x64
+	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x64
+else
+	PATH := $(PATH):$(CFG_MSPSDK)/Bin/x86
+	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x86
+endif
+	
 	CFG_CODESIGN := signtool.exe
-	CFG_CODESIGNING := 1
+	CFG_CODESIGNING := 1	
 
 	ifeq ($(BUILD),vs)
-		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses $(CFG_MSPSDK)/Include $(PRJ_SYSI)
+		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses \
+					$(CFG_MSPSDK)/Include $(CFG_MSPSDK)/Include/um $(CFG_MSPSDK)/Include/shared \
+					$(PRJ_SYSI)
 		ifeq ($(PROC),x86)
-			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(CFG_MSPSDK)/Lib/x86 $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
 			CFG_MIDL_FLAGS := /win32
 		else
 			ifeq ($(PROC),ia64)

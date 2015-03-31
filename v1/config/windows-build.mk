@@ -3,6 +3,10 @@ ifneq ($(findstring debug,$(BLD)),)
 	CFG_BLD_TYPE := -debug
 endif
 
+ifneq ($(findstring unicode,$(BLD)),)
+	CFG_BLD_TYPE := $(CFG_BLD_TYPE)-unicode
+endif
+
 ifneq ($(findstring shared,$(BLD)),)
 	CFG_BLD_TYPE := $(CFG_BLD_TYPE)-shared
 else

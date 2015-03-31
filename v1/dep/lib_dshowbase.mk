@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := dshowbase
-PRJ_DEPS := msdxsdk
+PRJ_DEPS := mspsdk
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS :=

@@ -77,6 +77,12 @@ ifdef DBG
 		ifneq ($(findstring msvs10,$(TGT)),)
 			CFG_MFCV := 100
 		endif
+		ifneq ($(findstring msvs11,$(TGT)),)
+			CFG_MFCV := 110
+		endif
+		ifneq ($(findstring msvs12,$(TGT)),)
+			CFG_MFCV := 120
+		endif
 		CFG_CEXTRA := /D_AFX_NOFORCE_LIBS $(CFG_CEXTRA)
 		ifeq ($(LIBLINK),static)
 			ifeq ($(UNICODE),)

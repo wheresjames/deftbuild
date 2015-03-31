@@ -1,2 +1,2 @@
-openssl cvs - anonymous@cvs.openssl.org:/openssl-cvs openssl :pserver:
-
+openssl git - https://github.com/openssl/openssl.git
+# openssl targz openssl-1.0.2a https://www.openssl.org/source/openssl-1.0.2a.tar.gz

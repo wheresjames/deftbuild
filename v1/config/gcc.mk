@@ -492,7 +492,7 @@ else
 			PRJ_DEFS := $(PRJ_DEFS) _AMD64_ __x86_64 __LP64__
 			CFG_MINGW64 := $(CFG_LIBROOT)/mingw64-win
 			PATH := $(CFG_MINGW64)/bin:$(PATH)
-			CFG_TOOLPREFIX := x86_64-w64-mingw32-
+			# CFG_TOOLPREFIX := x86_64-w64-mingw32-
 
 		else
 		
@@ -501,7 +501,7 @@ else
 			
 				CFG_MINGW64 := $(CFG_LIBROOT)/mingw64
 				CFG_SYSROOT := $(CFG_MINGW64)/x86_64-w64-mingw32
-				CFG_TOOLPREFIX := $(CFG_MINGW64)/bin/x86_64-w64-mingw32-
+				# CFG_TOOLPREFIX := $(CFG_MINGW64)/bin/x86_64-w64-mingw32-
 				
 			else
 
@@ -513,10 +513,10 @@ else
 			
 		endif
 
-		# -fstack-check -m64 -fpermissive
+		# -fstack-check -m64 -fpermissive -export-all-symbols -fno-leading-underscore
 		CFG_STDLIB := -lole32 -lgdi32 -liphlpapi -lws2_32 -lavicap32 -lmsvfw32
-		CFG_LFLAGS := $(CFG_LEXTRA) -export-all-symbols -fno-leading-underscore -static-libgcc -static-libstdc++
-		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 \
+		CFG_LFLAGS := $(CFG_LEXTRA) -static-libgcc -static-libstdc++
+		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 -Wno-narrowing -fpermissive \
 							-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 							-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
 		CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
@@ -583,7 +583,8 @@ ifneq ($(LIBLINK),static)
 	CFG_LFLAGS := $(CFG_LFLAGS) -fPIC -Wl,-Bsymbolic
 	ifeq ($(PRJ_NPIC),)
 		#  -fkeep-inline-functions
-		CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC -fvisibility=hidden
+		CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC 
+		# CFG_CFLAGS := $(CFG_CFLAGS) -fPIC -DPIC -fvisibility=hidden
 		# CFG_CFLAGS := $(CFG_CFLAGS) -mcmodel=large
 		# CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-protector -fno-PIE
 	endif

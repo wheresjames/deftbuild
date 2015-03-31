@@ -1,3 +1,8 @@
+
+ifeq ($(BLD),)
+	BLD := $(TGT)
+endif
+
 # Build Processor
 BLDPROC := $(strip $(foreach t,x86 x64 amd64 ia64 arm powerpc,$(findstring $(t),$(BLD))))
 ifeq ($(BLDPROC),)

@@ -55,7 +55,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_aes
 LOC_CXX_crypto_aes := c
 LOC_SRC_crypto_aes := $(CFG_LIBROOT)/openssl/crypto/aes
-LOC_EXC_crypto_aes := aes_core
+LOC_EXC_crypto_aes := aes_core aes_misc
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_asn1
@@ -152,6 +152,7 @@ export LOC_TAG := crypto_ec
 LOC_CXX_crypto_ec := c
 LOC_SRC_crypto_ec := $(CFG_LIBROOT)/openssl/crypto/ec
 LOC_EXC_crypto_ec := ectest
+LOC_WEX_crypto_ec := *_table
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_ecdh

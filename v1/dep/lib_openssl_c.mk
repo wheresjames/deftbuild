@@ -47,6 +47,7 @@ export LOC_TAG := crypto_evp
 LOC_CXX_crypto_evp := c
 LOC_SRC_crypto_evp := $(CFG_LIBROOT)/openssl/crypto/evp
 LOC_EXC_crypto_evp := e_dsa openbsd_hw evp_test
+LOC_EXI_crypto_evp := $(CFG_LIBROOT)/openssl/crypto/modes
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_hmac
@@ -121,6 +122,12 @@ LOC_SRC_crypto_pkcs12 := $(CFG_LIBROOT)/openssl/crypto/pkcs12
 LOC_EXC_crypto_pkcs12 :=
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_pqueue
+LOC_CXX_crypto_pqueue := c
+LOC_SRC_crypto_pqueue := $(CFG_LIBROOT)/openssl/crypto/pqueue
+LOC_EXC_crypto_pqueue := pq_test
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_rand
 LOC_CXX_crypto_rand := c
 LOC_SRC_crypto_rand := $(CFG_LIBROOT)/openssl/crypto/rand
@@ -163,6 +170,12 @@ LOC_SRC_crypto_sha := $(CFG_LIBROOT)/openssl/crypto/sha
 LOC_EXC_crypto_sha := sha sha1 shatest sha1test sha256t sha512t
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := crypto_srp
+LOC_CXX_crypto_srp := c
+LOC_SRC_crypto_srp := $(CFG_LIBROOT)/openssl/crypto/srp
+LOC_EXC_crypto_srp := srptest
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := crypto_stack
 LOC_CXX_crypto_stack := c
 LOC_SRC_crypto_stack := $(CFG_LIBROOT)/openssl/crypto/stack
@@ -173,6 +186,12 @@ export LOC_TAG := crypto_ts
 LOC_CXX_crypto_ts := c
 LOC_SRC_crypto_ts := $(CFG_LIBROOT)/openssl/crypto/ts
 LOC_EXC_crypto_ts :=
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := crypto_txtdb
+LOC_CXX_crypto_txtdb := c
+LOC_SRC_crypto_txtdb := $(CFG_LIBROOT)/openssl/crypto/txt_db
+LOC_EXC_crypto_txtdb :=
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := crypto_ui
@@ -196,7 +215,7 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := crypto_x509v3
 LOC_CXX_crypto_x509v3 := c
 LOC_SRC_crypto_x509v3 := $(CFG_LIBROOT)/openssl/crypto/x509v3
-LOC_EXC_crypto_x509v3 := tabtest v3conf v3prin
+LOC_EXC_crypto_x509v3 := tabtest v3conf v3prin v3nametest
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------
