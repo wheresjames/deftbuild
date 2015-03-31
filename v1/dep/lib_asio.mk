@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := asio
 PRJ_DEPS := asio
 PRJ_TYPE := lib
-PRJ_INCS := asio/common asio/host
+PRJ_INCS := asio/common asio/host asio/host/pc
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..

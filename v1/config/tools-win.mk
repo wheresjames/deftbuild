@@ -72,10 +72,10 @@ endif
 			endif
 		endif
 		ifeq ($(XBLD),)
-			CFG_RC := "rc"
+			CFG_RC := "rc" /nologo
 			CFG_MIDL := "Midl" /nologo
 		else
-			CFG_RC := wine "rc"
+			CFG_RC := wine "rc" /nologo
 			CFG_MIDL := wine "Midl" /nologo
 		endif
 
