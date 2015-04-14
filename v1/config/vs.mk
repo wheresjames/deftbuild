@@ -28,12 +28,12 @@ else
 	endif
 endif
 
-CFG_LOCAL_TOOL_JOIN := "$(CFG_LOCAL_BUILD_TYPE)/join.exe"
+CFG_LOCAL_TOOL_JOIN := "$(CFG_LOCAL_BUILD_TYPE)/join$(CFG_BLD_POST).exe"
 
 ifdef PRJ_SQEX
-	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/sqrbld.exe"
+	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/sqrbld$(CFG_BLD_POST).exe"
 else
-	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld.exe"
+	CFG_LOCAL_TOOL_RESCMP  	:= "$(CFG_LOCAL_BUILD_TYPE)/resbld$(CFG_BLD_POST).exe"
 endif
 
 ifeq ($(CFG_STDLIBS),)
@@ -93,9 +93,9 @@ ifdef DBG
 				endif
 			else
 				ifdef DBG
-					CFG_STDLIBS := unafxcwd.lib libcmtd.lib $(CFG_STDLIBS)
+					CFG_STDLIBS := uafxcwd.lib libcmtd.lib $(CFG_STDLIBS)
 				else
-					CFG_STDLIBS := unafxcw.lib libcmt.lib $(CFG_STDLIBS)
+					CFG_STDLIBS := uafxcw.lib libcmt.lib $(CFG_STDLIBS)
 				endif
 			endif
 		else
