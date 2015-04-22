@@ -31,6 +31,9 @@ LOC_SRC_def := $(CFG_LIBROOT)/asio/common
 LOC_EXC_def := debugmessage dllentry register
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_def := $(LOC_EXC_def) asiodrvr
+	ifneq ($(BUILD),vs)
+		LOC_EXC_def := $(LOC_EXC_def) combase
+	endif
 endif
 include $(PRJ_LIBROOT)/build.mk
 

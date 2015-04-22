@@ -39,7 +39,7 @@ LOC_EXC_crypto := lpdir_nyi lpdir_unix lpdir_vms lpdir_wince lpdir_win32 lpdir_w
 				   LPdir_nyi LPdir_unix LPdir_vms LPdir_wince LPdir_win32 LPdir_win \
 				   o_dir_test
 ifeq ($(PLATFORM),windows)
-	LOC_EXC_crypto := $(LOC_EXC_crypto) ppccap s390xcap sparcv9cap
+	LOC_EXC_crypto := $(LOC_EXC_crypto) armcap ppccap s390xcap sparcv9cap
 else
 	LOC_EXC_crypto := $(LOC_EXC_crypto) 
 endif
