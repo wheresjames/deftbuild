@@ -8,11 +8,12 @@ PRJ_NAME := webrtc
 PRJ_DEPS := webrtc
 PRJ_TYPE := lib
 PRJ_INCS := jsoncpp/include webrtc libyuv/include vpx \
-			libsrtp/include libsrtp/crypto/include
+			libsrtp/include libsrtp/crypto/include openssl/include
 PRJ_DEFS := NOMINMAX _WINSOCKAPI_ \
 			LIBPEERCONNECTION_LIB \
 			HAVE_SRTP SRTP_RELATIVE_PATH HAVE_X86 \
 			HAVE_WEBRTC_VOICE HAVE_WEBRTC_VIDEO \
+			SSL_USE_OPENSSL HAVE_OPENSSL_SSL_H FEATURE_ENABLE_SSL \
 			WEBRTC_NS_FIXED
 PRJ_LIBS := 
 PRJ_FWRK := mfc
