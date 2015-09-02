@@ -561,6 +561,7 @@ else
 			CFG_CFLAGS := $(CFG_CFLAGS) -m64 -fpermissive -Wno-narrowing
 			CFG_ASFLAGS := -f elf64
 		else
+			CFG_CFLAGS := $(CFG_CFLAGS) -m32
 			CFG_ASFLAGS := -f elf32 -a x86
 		endif
 		

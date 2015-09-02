@@ -41,7 +41,7 @@ LOC_EXC_crypto := lpdir_nyi lpdir_unix lpdir_vms lpdir_wince lpdir_win32 lpdir_w
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_crypto := $(LOC_EXC_crypto) armcap ppccap s390xcap sparcv9cap
 else
-	LOC_EXC_crypto := $(LOC_EXC_crypto) 
+	LOC_EXC_crypto := $(LOC_EXC_crypto) armcap ppccap s390xcap sparcv9cap
 endif
 include $(PRJ_LIBROOT)/build.mk
 

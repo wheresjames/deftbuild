@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := vpx
 PRJ_DEPS := vpx
 PRJ_TYPE := lib
-PRJ_INCS := vpx
+PRJ_INCS := vpx libyuv/include
 PRJ_DEFS := 
 PRJ_LIBS := 
 
@@ -19,20 +19,21 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-ifeq ($(PLATFORM)-$(BUILD),windows-gcc)
+#ifeq ($(PLATFORM)-$(BUILD),windows-gcc)
+ifeq ($(PLATFORM)-$(BUILD),_tryit_)
 UNSUPPORTED := BUILD=$(BUILD) is invalid, webrtc can only be built on windows with Visual Studio
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 # PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/nullconfig $(PRJ_INCS)
-# PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/srtp/inc/$(PLATFORM)/$(PROC) $(PRJ_INCS)
+PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/$(PLATFORM)/$(PROC) $(PRJ_INCS)
 
 # ifeq ($(PLATFORM),windows)
 	# ifeq ($(BUILD),vs)
 		# PRJ_DEFS := WEBRTC_WIN COMPILER_MSVC
 	# else
 		# PRJ_DEFS := WEBRTC_WIN AI_ADDRCONFIG=0
-		CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x
+		CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x 
 		CFG_CEXTRA := $(CFG_CEXTRA) -std=gnu++0x
 		# CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
 	# endif
@@ -40,9 +41,19 @@ else
 	# PRJ_DEFS := 
 # endif
 
+ifeq ($(BUILD),gcc)
+	CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+endif
+
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+
+export LOC_TAG := cfg
+LOC_CXX_cfg := c
+LOC_SRC_cfg := $(CFG_LIBROOT)/vpx
+include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vpx
 LOC_CXX_vpx := c
@@ -112,6 +123,7 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp9comx86
 LOC_CXX_vp9comx86 := c
+# LOC_WEX_vp9comx86 := *_avx2
 LOC_SRC_vp9comx86 := $(CFG_LIBROOT)/vpx/vp9/common/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -123,6 +135,7 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp9encx86
 LOC_CXX_vp9encx86 := c
+#LOC_WEX_vp9encx86 := *_avx2
 LOC_SRC_vp9encx86 := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 

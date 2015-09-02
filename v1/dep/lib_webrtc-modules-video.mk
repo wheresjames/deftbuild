@@ -54,12 +54,23 @@ ifeq ($(PLATFORM),windows)
 		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
 	endif
 else
-	PRJ_DEFS := 
+	PRJ_DEFS := WEBRTC_POSIX WEBRTC_LINUX
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
 endif
 
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+
+ifeq ($(PLATFORM),windows)
+	export LOC_TAG := wmvrw
+	LOC_CXX_wmvrw := cc
+	LOC_BLD_wmvrw := cpp
+	LOC_WEX_wmvrw := *_unittest
+	LOC_EXC_wmvrw := 
+	LOC_SRC_wmvrw := $(CFG_LIBROOT)/webrtc/webrtc/modules/video_render/windows
+	include $(PRJ_LIBROOT)/build.mk
+endif
 
 export LOC_TAG := wmu
 LOC_CXX_wmu := cc
@@ -171,14 +182,6 @@ LOC_BLD_wmvre := cpp
 LOC_WEX_wmvre := *_unittest
 LOC_EXC_wmvre := 
 LOC_SRC_wmvre := $(CFG_LIBROOT)/webrtc/webrtc/modules/video_render/external
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := wmvrw
-LOC_CXX_wmvrw := cc
-LOC_BLD_wmvrw := cpp
-LOC_WEX_wmvrw := *_unittest
-LOC_EXC_wmvrw := 
-LOC_SRC_wmvrw := $(CFG_LIBROOT)/webrtc/webrtc/modules/video_render/windows
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := wmrtp

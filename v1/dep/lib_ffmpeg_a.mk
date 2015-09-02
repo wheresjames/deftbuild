@@ -56,7 +56,7 @@ ifneq ($(PROC),arm)
 		ifneq ($(PROC),x64)
 			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=1
 		else
-			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=0
+			ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=1
 		endif
 	endif
 
@@ -71,7 +71,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_av86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_av86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_av86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
@@ -85,11 +85,11 @@ ifneq ($(PROC),arm)
 	LOC_EXC_av86 :=	dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
 				   	 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
 				   	 mpegvideo_mmx_template h264_qpel_mmx w64xmmtest
-	ifneq ($(PLATFORM),windows)
-		ifeq ($(PROC),x64)
-			LOC_WEX_av86 := $(LOC_WEX_av86) *mmx*
-		endif
-	endif
+#	ifneq ($(PLATFORM),windows)
+#		ifeq ($(PROC),x64)
+#			LOC_WEX_av86 := $(LOC_WEX_av86) *mmx*
+#		endif
+#	endif
 	include $(PRJ_LIBROOT)/build.mk
 
 endif
@@ -145,7 +145,8 @@ ifneq ($(PROC),arm)
 	ifneq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
 			# LOC_EXC_sws86 := yuv2rgb_mmx
-			LOC_WEX_sws86 := $(LOC_WEX_sws86) *mmx*
+#			LOC_EXC_sws86 := rgb2rgb
+#			LOC_WEX_sws86 := $(LOC_WEX_sws86) *mmx*
 		endif
 	endif
 	ifneq ($(PROC),x64)
@@ -169,7 +170,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_sws86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_sws86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_sws86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif
@@ -217,7 +218,7 @@ ifneq ($(PROC),arm)
 		endif
 	else
 		ifeq ($(PROC),x64)
-			LOC_ASM_avu86_asm := yasm -f elf64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
+			LOC_ASM_avu86_asm := yasm -f elf64 -DPIC -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)
 		else
 			LOC_ASM_avu86_asm := yasm -f elf32 -a x86 -DPIC -DARCH_X86=1 -DARCH_X86_32=1 -DARCH_X86_64=0 $(ASMOPTS)
 		endif

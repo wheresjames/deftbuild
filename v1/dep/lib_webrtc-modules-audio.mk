@@ -54,12 +54,23 @@ ifeq ($(PLATFORM),windows)
 		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
 	endif
 else
-	PRJ_DEFS := 
+	PRJ_DEFS := WEBRTC_POSIX WEBRTC_LINUX
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
 endif
 
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------
+
+ifeq ($(PLATFORM),windows)
+	export LOC_TAG := wmadw
+	LOC_CXX_wmadw := cc
+	LOC_BLD_wmadw := cpp
+	LOC_WEX_wmadw := *_unittest
+	LOC_EXC_wmadw := 
+	LOC_SRC_wmadw := $(CFG_LIBROOT)/webrtc/webrtc/modules/audio_device/win
+	include $(PRJ_LIBROOT)/build.mk
+endif
 
 export LOC_TAG := wma
 LOC_CXX_wma := cc
@@ -74,6 +85,9 @@ LOC_CXX_wmad := cc
 LOC_BLD_wmad := cpp
 LOC_WEX_wmad := *_unittest
 LOC_EXC_wmad := 
+ifneq ($(PLATFORM),windows)
+	LOC_EXI_wmad := $(CFG_LIBROOT)/webrtc/webrtc/modules/audio_device/linux
+endif
 LOC_SRC_wmad := $(CFG_LIBROOT)/webrtc/webrtc/modules/audio_device
 include $(PRJ_LIBROOT)/build.mk
 
@@ -83,14 +97,6 @@ LOC_BLD_wmadd := cpp
 LOC_WEX_wmadd := *_unittest
 LOC_EXC_wmadd := 
 LOC_SRC_wmadd := $(CFG_LIBROOT)/webrtc/webrtc/modules/audio_device/dummy
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := wmadw
-LOC_CXX_wmadw := cc
-LOC_BLD_wmadw := cpp
-LOC_WEX_wmadw := *_unittest
-LOC_EXC_wmadw := 
-LOC_SRC_wmadw := $(CFG_LIBROOT)/webrtc/webrtc/modules/audio_device/win
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := wmapaec

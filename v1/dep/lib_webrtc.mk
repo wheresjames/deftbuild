@@ -34,15 +34,15 @@ else
 # PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/nullconfig $(PRJ_INCS)
 PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/srtp/inc/$(PLATFORM)/$(PROC) $(PRJ_INCS)
 
-ifeq ($(PLATFORM),windows)
-	ifeq ($(BUILD),vs)
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/vs $(PRJ_INCS)
-	else 
-		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/gcc $(PRJ_INCS)
-	endif
-else
-	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/posix $(PRJ_INCS)
-endif
+#ifeq ($(PLATFORM),windows)
+#	ifeq ($(BUILD),vs)
+#		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/vs $(PRJ_INCS)
+#	else 
+#		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/gcc $(PRJ_INCS)
+#	endif
+#else
+#	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/posix $(PRJ_INCS)
+#endif
 
 ifeq ($(PLATFORM),windows)
 	ifeq ($(BUILD),vs)
@@ -54,7 +54,8 @@ ifeq ($(PLATFORM),windows)
 		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
 	endif
 else
-	PRJ_DEFS := 
+	PRJ_DEFS := WEBRTC_POSIX WEBRTC_LINUX
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
 endif
 
 #-------------------------------------------------------------------
@@ -69,8 +70,23 @@ LOC_EXC_wb := testclient latebindingsymboltable winfirewall
 ifeq ($(PLATFORM),windows)
 	LOC_EXC_wb := $(LOC_EXC_wb) unixfilesystem posix x11windowpicker
 	LOC_WEX_wb := $(LOC_WEX_wb) mac*
+else
+	LOC_EXC_wb := $(LOC_EXC_wb) unixfilesystem x11windowpicker schanneladapter winping
+	LOC_WEX_wb := $(LOC_WEX_wb) mac* *win32 *win
 endif
 LOC_SRC_wb := $(CFG_LIBROOT)/webrtc/webrtc/base
+include $(PRJ_LIBROOT)/build.mk
+
+export LOC_TAG := sys
+LOC_CXX_sys := cc
+LOC_BLD_sys := cpp
+ifeq ($(PLATFORM),windows)
+	LOC_WEX_sys := *_unittest *_posix *_android *_mac logcat_*
+else
+	LOC_WEX_sys := *_unittest *_android *_mac logcat_* *_win
+endif
+LOC_EXC_sys := 
+LOC_SRC_sys := $(CFG_LIBROOT)/webrtc/webrtc/system_wrappers/source
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := wrtc
@@ -79,14 +95,6 @@ LOC_BLD_wrtc := cpp
 LOC_WEX_wrtc := *_unittest
 LOC_EXC_wrtc := 
 LOC_SRC_wrtc := $(CFG_LIBROOT)/webrtc/webrtc
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := sys
-LOC_CXX_sys := cc
-LOC_BLD_sys := cpp
-LOC_WEX_sys := *_unittest *_posix *_android *_mac logcat_*
-LOC_EXC_sys := 
-LOC_SRC_sys := $(CFG_LIBROOT)/webrtc/webrtc/system_wrappers/source
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := p2p

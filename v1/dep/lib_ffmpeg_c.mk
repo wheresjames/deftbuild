@@ -40,14 +40,14 @@ include lib_ffmpeg.i
 export LOC_TAG := libavcodec
 LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_WLS_libavcodec := 0 1 2 3 4 5 6 7 8 9 a b c d e f
+LOC_WLS_libavcodec := 0 1 2 3 4 5 6 7 8 9 a b c d e f g h
 LOC_WEX_libavcodec := vaa lib *_template
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
 		LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*
 	endif
 endif
-LOC_EXC_libavcodec := beosthread g729dec imgconvert_template motion_est_template gsmdec_template \
+LOC_EXC_libavcodec := beosthread imgconvert_template motion_est_template gsmdec_template \
 					  mpegvideo_xvmc os2thread vdpau mpegaudio_tablegen \
 					  \
 					  dxva2 dxva2_h264 dxva2_vc1 \

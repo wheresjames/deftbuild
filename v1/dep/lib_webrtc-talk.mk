@@ -40,7 +40,7 @@ ifeq ($(PLATFORM),windows)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/windows/gcc $(PRJ_INCS)
 	endif
 else
-	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/posix $(PRJ_INCS)
+	PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/posix/$(PROC) $(PRJ_INCS)
 endif
 
 ifeq ($(PLATFORM),windows)
@@ -53,7 +53,8 @@ ifeq ($(PLATFORM),windows)
 		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
 	endif
 else
-	PRJ_DEFS := 
+	PRJ_DEFS := WEBRTC_POSIX WEBRTC_LINUX UINT16_MAX=65535
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
 endif
 
 #-------------------------------------------------------------------
@@ -70,6 +71,18 @@ endif
 LOC_SRC_talk_webrtc := $(CFG_LIBROOT)/webrtc/talk/app/webrtc
 include $(PRJ_LIBROOT)/build.mk
 
+export LOC_TAG := tmd
+LOC_CXX_tmd := cc
+LOC_BLD_tmd := cpp
+ifeq ($(PLATFORM),windows)
+	LOC_WEX_tmd := *_unittest libudev* mac* linux* v4l* carbon* gtk*
+else
+	LOC_WEX_tmd := *_unittest libudev* mac* win32* carbon* gtk* linux* v4l*
+endif
+LOC_EXC_tmd := 
+LOC_SRC_tmd := $(CFG_LIBROOT)/webrtc/talk/media/devices
+include $(PRJ_LIBROOT)/build.mk
+
 export LOC_TAG := tsm
 LOC_CXX_tsm := cc
 LOC_BLD_tsm := cpp
@@ -84,14 +97,6 @@ LOC_BLD_tmb := cpp
 LOC_WEX_tmb := *_unittest test*
 LOC_EXC_tmb := 
 LOC_SRC_tmb := $(CFG_LIBROOT)/webrtc/talk/media/base
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := tmd
-LOC_CXX_tmd := cc
-LOC_BLD_tmd := cpp
-LOC_WEX_tmd := *_unittest libudev* mac* linux* v4l* carbon* gtk*
-LOC_EXC_tmd := 
-LOC_SRC_tmd := $(CFG_LIBROOT)/webrtc/talk/media/devices
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := tmw
