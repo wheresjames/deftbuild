@@ -37,6 +37,8 @@ ifeq ($(PLATFORM),windows)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/mingw/inc $(PRJ_INCS)
 		PRJ_DEFS := $(PRJ_DEFS) WC_NO_BEST_FIT_CHARS=0x00000400
 	endif
+else
+		PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
 endif
 
 ifeq ($(OS),android)

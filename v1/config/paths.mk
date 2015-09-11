@@ -19,6 +19,8 @@ ifdef DBG
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-debug
 endif
 
+#CFG_LOCAL_BUILD_TYPE := $(CFG_BUILD_TYPE)
+
 ifeq ($(LIBLINK),static)
 	CFG_BUILD_TYPE := $(CFG_BUILD_TYPE)-static
 else

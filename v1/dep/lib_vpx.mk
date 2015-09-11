@@ -178,7 +178,7 @@ export LOC_TAG := vp8_x86_asm
 LOC_CXX_vp8_x86_asm := asm
 LOC_BLD_vp8_x86_asm := asm
 LOC_ASM_vp8_x86_asm := $(ASMCMD)
-LOC_EXC_vp8_x86_asm := loopfilter_block_sse2_x86_64
+#LOC_EXC_vp8_x86_asm := loopfilter_block_sse2_x86_64
 LOC_SRC_vp8_x86_asm := $(CFG_LIBROOT)/vpx/vp8/common/x86
 include $(PRJ_LIBROOT)/build.mk
 

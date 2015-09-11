@@ -49,7 +49,11 @@ ifneq ($(PROC),arm)
 
 	ASMOPTS := $(ASMOPTS) -I$(CFG_LIBROOT)/ffmpeg/libavutil/x86	
 	ASMOPTS := $(ASMOPTS) -DHAVE_MMX=1 -DHAVE_AVX=1 -DHAVE_AMD3DNOW=1 \
-						  -DHAVE_SSE=1 -DHAVE_SSSE=1 -DHAVE_SSSE3=1
+						  -DHAVE_SSE=1 -DHAVE_SSSE=1 -DHAVE_SSSE3=1 \
+						  -DHAVE_CPUNOP=1 -DHAVE_ALIGNED_STACK=1 -DHAVE_MMXEXT_EXTERNAL=1 \
+						  -DHAVE_SSE2_EXTERNAL=1 -DHAVE_SSSE3_EXTERNAL=1 \
+						  -DHAVE_FMA3_EXTERNAL=1 -DHAVE_AVX_EXTERNAL=1 -DHAVE_XOP_EXTERNAL=1 \
+						  -DHAVE_AVX2_EXTERNAL=0
 	ifeq ($(PLATFORM),windows)
 		ASMOPTS := $(ASMOPTS) -DHAVE_MMX2=1
 	else
@@ -77,6 +81,8 @@ ifneq ($(PROC),arm)
 		endif
 	endif
 	LOC_SRC_av86_asm := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
+	LOC_WEX_av86_asm := 
+	LOC_EXC_av86_asm := 
 	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := av86
@@ -84,7 +90,9 @@ ifneq ($(PROC),arm)
 	LOC_SRC_av86 := $(CFG_LIBROOT)/ffmpeg/libavcodec/x86
 	LOC_EXC_av86 :=	dsputil_h264_template_mmx dsputil_h264_template_ssse3 dsputil_mmx_avg_template \
 				   	 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
-				   	 mpegvideo_mmx_template h264_qpel_mmx w64xmmtest
+				   	 mpegvideo_mmx_template h264_qpel_mmx w64xmmtest \
+					 dct-test
+	LOC_WEX_av86 := *_template
 #	ifneq ($(PLATFORM),windows)
 #		ifeq ($(PROC),x64)
 #			LOC_WEX_av86 := $(LOC_WEX_av86) *mmx*
@@ -184,6 +192,7 @@ export LOC_TAG := avu
 LOC_CXX_avu := c
 LOC_SRC_avu := $(CFG_LIBROOT)/ffmpeg/libavutil
 LOC_EXC_avu := integer softfloat
+LOC_WEX_avu := opencl*
 include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
