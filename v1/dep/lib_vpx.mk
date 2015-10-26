@@ -26,25 +26,40 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 # PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/nullconfig $(PRJ_INCS)
-PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/$(PLATFORM)/$(PROC) $(PRJ_INCS)
+PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/vpx/inc/$(PLATFORM)/$(BUILD)/$(PROC) $(PRJ_INCS)
 
 # ifeq ($(PLATFORM),windows)
 	# ifeq ($(BUILD),vs)
 		# PRJ_DEFS := WEBRTC_WIN COMPILER_MSVC
 	# else
 		# PRJ_DEFS := WEBRTC_WIN AI_ADDRCONFIG=0
-		CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x 
-		CFG_CEXTRA := $(CFG_CEXTRA) -std=gnu++0x
-		# CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 -fpermissive
+		# CFG_CEXTRA := $(CFG_CEXTRA) -std=c++0x 
+		# CFG_CEXTRA := $(CFG_CEXTRA) -std=gnu++0x
+		# CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
+		# -fpermissive
 	# endif
 # else
 	# PRJ_DEFS := 
 # endif
 
 ifeq ($(BUILD),gcc)
-	CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+	ifeq ($(PLATFORM),windows)
+#		CFG_CFLAGS := $(CFG_CFLAGS)-std=c++0x 
+		CFG_CFLAGS := $(CFG_CFLAGS) -Wno-unused-function -Wno-attributes
+		ifeq ($(PROC),x86)
+#			CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
+			CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1
+		else
+#			CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11
+			CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+		endif
+	else
+		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
+		CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+	endif
+else
+	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
 endif
-
 
 #-------------------------------------------------------------------
 # File locations
@@ -102,6 +117,9 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp8encx86
 LOC_CXX_vp8encx86 := c
+ifeq ($(PROC)-$(BUILD),x86-vs)
+#	LOC_EXC_vp8encx86 := denoising_sse2 quantize_ssse3 quantize_sse4
+endif
 LOC_SRC_vp8encx86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -124,6 +142,10 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := vp9comx86
 LOC_CXX_vp9comx86 := c
 # LOC_WEX_vp9comx86 := *_avx2
+ifeq ($(PROC)-$(BUILD),x86-gcc)
+#	LOC_WEX_vp9comx86 := *_avx2 *_sse2 *_ssse3
+	LOC_WEX_vp9comx86 := *_avx2
+endif
 LOC_SRC_vp9comx86 := $(CFG_LIBROOT)/vpx/vp9/common/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -135,7 +157,9 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp9encx86
 LOC_CXX_vp9encx86 := c
-#LOC_WEX_vp9encx86 := *_avx2
+ifeq ($(PROC)-$(BUILD),x86-gcc)
+	LOC_WEX_vp9encx86 := *_avx2
+endif
 LOC_SRC_vp9encx86 := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -178,7 +202,9 @@ export LOC_TAG := vp8_x86_asm
 LOC_CXX_vp8_x86_asm := asm
 LOC_BLD_vp8_x86_asm := asm
 LOC_ASM_vp8_x86_asm := $(ASMCMD)
-#LOC_EXC_vp8_x86_asm := loopfilter_block_sse2_x86_64
+ifeq ($(PROC),x86)
+	LOC_EXC_vp8_x86_asm := loopfilter_block_sse2_x86_64
+endif
 LOC_SRC_vp8_x86_asm := $(CFG_LIBROOT)/vpx/vp8/common/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -194,7 +220,11 @@ export LOC_TAG := vp9_x86_asm
 LOC_CXX_vp9_x86_asm := asm
 LOC_BLD_vp9_x86_asm := asm
 LOC_ASM_vp9_x86_asm := $(ASMCMD)
-LOC_EXC_vp9_x86_asm := 
+#ifeq ($(PROC)-$(PLATFORM),x64-windows)
+#	LOC_WEX_vp9_x86_asm := $(LOC_WEX_vp9_x86_asm)*_sse2 *_ssse3
+#	LOC_EXC_vp9_x86_asm := $(LOC_EXC_vp9_x86_asm) \
+#						   vp9_copy_sse2 vp9_intrapred_sse2 vp9_intrapred_ssse3 vp9_high_intrapred_sse2
+#endif
 LOC_SRC_vp9_x86_asm := $(CFG_LIBROOT)/vpx/vp9/common/x86
 include $(PRJ_LIBROOT)/build.mk
 
@@ -202,7 +232,15 @@ export LOC_TAG := vp9_encx86_asm
 LOC_CXX_vp9_encx86_asm := asm
 LOC_BLD_vp9_encx86_asm := asm
 LOC_ASM_vp9_encx86_asm := $(ASMCMD)
-LOC_EXC_vp9_encx86_asm := vp9_ssim_opt_x86_64 vp9_quantize_ssse3_x86_64
+ifneq ($(PROC),x64)
+	LOC_EXC_vp9_encx86_asm := $(LOC_EXC_vp9_encx86_asm) vp9_ssim_opt_x86_64 vp9_quantize_ssse3_x86_64
+endif
+#ifeq ($(PROC)-$(PLATFORM)-$(BUILD),x64-windows-gcc)
+#	LOC_WEX_vp9_encx86_asm := *_sse2 *_ssse3 *_mmx
+#	LOC_EXC_vp9_encx86_asm := $(LOC_EXC_vp9_encx86_asm) vp9_variance_sse2 \
+#							  vp9_subpel_variance vp9_highbd_subpel_variance vp9_quantize_ssse3_x86_64 
+#							  vp9_dct_mmx
+#endif
 LOC_SRC_vp9_encx86_asm := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 

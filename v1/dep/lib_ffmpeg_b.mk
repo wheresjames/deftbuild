@@ -40,8 +40,11 @@ LOC_CXX_avf := c
 LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
 LOC_EXC_avf := avisynth bluray rtpdec_theora
 LOC_WLS_avf := g h i j k l m n o p q r s t u v w x y z
-LOC_WEX_avf := lib tls_*
+LOC_WEX_avf := lib* tls_*
 LOC_EXC_avf := sctp
+ifeq ($(PLATFORM),windows)
+	LOC_EXC_avf := $(LOC_EXC_avf) unix
+endif
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

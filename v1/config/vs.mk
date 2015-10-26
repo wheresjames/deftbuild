@@ -79,6 +79,7 @@ ifdef DBG
 		endif
 		ifneq ($(findstring msvs11,$(TGT)),)
 			CFG_MFCV := 110
+			CFG_STDLIBS := $(CFG_STDLIBS) uxtheme.lib winspool.lib windowscodecs.lib
 		endif
 		ifneq ($(findstring msvs12,$(TGT)),)
 			CFG_MFCV := 120

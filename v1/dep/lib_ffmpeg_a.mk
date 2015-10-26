@@ -39,8 +39,8 @@ export LOC_TAG := avf
 LOC_CXX_avf := c
 LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
 LOC_WLS_avf := 0 1 2 3 4 5 6 7 8 9 a b c d e f
-LOC_EXC_avf := avisynth bluray rtpdec_theora
-LOC_WEX_avf := lib
+LOC_EXC_avf := avisynth bluray rtpdec_theora async
+LOC_WEX_avf := lib*
 include $(PRJ_LIBROOT)/build.mk
 
 ifneq ($(PROC),arm)
@@ -92,6 +92,9 @@ ifneq ($(PROC),arm)
 				   	 dsputil_mmx_qns_template dsputil_mmx_rnd_template \
 				   	 mpegvideo_mmx_template h264_qpel_mmx w64xmmtest \
 					 dct-test
+ifeq ($(PLATFORM)-$(BUILD)-$(PROC),windows-gcc-x86)
+#	LOC_EXC_av86 := $(LOC_EXC_av86) ac3dsp_init
+endif
 	LOC_WEX_av86 := *_template
 #	ifneq ($(PLATFORM),windows)
 #		ifeq ($(PROC),x64)

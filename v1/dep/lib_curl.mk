@@ -29,6 +29,8 @@ ifeq ($(PLATFORM),windows)
 	PRJ_DEFS := $(PRJ_DEFS) CURL_STATICLIB CURL_DISABLE_LDAP HAVE_SELECT
 	ifeq ($(BUILD),vs)
 		PRJ_INCS := $(PRJ_INCS) $(CFG_LIB2BLD)/dep/etc/vs/inc/c99
+	else
+		PRJ_DEFS := $(PRJ_DEFS) HAVE_STRUCT_POLLFD
 	endif
 else
 	# HAVE_SYS_TYPES_H

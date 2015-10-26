@@ -64,7 +64,7 @@ ifneq ($(USE_HIGHGUI),)
 	export LOC_TAG := highgui
 	LOC_SRC_highgui := $(CFG_LIBROOT)/opencv/src/highgui
 	LOC_EXC_highgui := gstappsink image
-	LOC_WEX_highgui := cvcap *carbon* *gtk*
+	LOC_WEX_highgui := cvcap* *carbon* *gtk*
 	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := highgui_cap

@@ -38,12 +38,14 @@ include lib_ffmpeg.i
 export LOC_TAG := libavcodec
 LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_WLS_libavcodec := i j k l m n o p q r s t u v w x y z
-LOC_WEX_libavcodec := vaa vda lib *_template *_tablegen qsv* vdpau*
+LOC_WLS_libavcodec := i j k l m n o p 
+LOC_WEX_libavcodec := vaa* vda* lib* *_template *_tablegen qsv* vdpau* *-test
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)
 		LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*
 	endif
+else
+	LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *_xvmc
 endif
 LOC_EXC_libavcodec := imgconvert_template motion_est_template \
 					  os2thread vdpau mpegaudio_tablegen \
@@ -52,36 +54,8 @@ LOC_EXC_libavcodec := imgconvert_template motion_est_template \
 					  \
 					  mmaldec \
 					  \
-					  nvenc \
-					  \
-					  videotoolbox
-					  
+					  nvenc
 
-#ifeq ($(PLATFORM),windows)
-#	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) pthread
-#else
-#	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) w32thread
-#endif
-#ifneq ($(PLATFORM),windows)
-#	ifeq ($(PROC),x64)
-#		LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) *mmx*
-#	endif
-#endif
-
-include $(PRJ_LIBROOT)/build.mk
-
-# 3rd party libs
-export LOC_TAG := libavcodec_lib
-LOC_CXX_libavcodec_lib := c
-LOC_SRC_libavcodec_lib := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_LST_libavcodec_lib := libx264 libmp3lame libvpx libvpxenc libvpxdec
-include $(PRJ_LIBROOT)/build.mk
-
-# 3rd party libs
-export LOC_TAG := libavformat_lib
-LOC_CXX_libavformat_lib := c
-LOC_SRC_libavformat_lib := $(CFG_LIBROOT)/ffmpeg/libavformat
-LOC_LST_libavformat_lib := librtmp
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

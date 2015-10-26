@@ -35,42 +35,53 @@ ifneq ($(strip $(EXISTS_ANDROIDSDK)),)
 	CFG_ANDROID_JAR := $(CFG_ANDROIDSDK)/platforms/$(CFG_ANDROID_APILEVEL)/android.jar
 	CFG_SDKLIB_JAR := $(CFG_ANDROIDSDK)/tools/lib/sdklib.jar
 	CFG_JDK_CLASSPATH := $(CFG_ANDROID_JAR)
-	CFG_ANDROID_APKBUILDER := $(CFG_JAVA) -classpath $(CFG_SDKLIB_JAR) com.android.sdklib.build.ApkBuilderMain 
+	CFG_ANDROID_APKBUILDER := $(CFG_JAVA) -classpath $(CFG_SDKLIB_JAR) com.android.sdklib.build.ApkBuilderMain
 endif
 
 CFG_SIGN_TIMESTAMP := http://timestamp.verisign.com/scripts/timstamp.dll
 
-EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk)
-ifneq ($(strip $(EXISTS_MSPSDK)),)
-	CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk
-	PATH := $(PATH):$(CFG_MSPSDK)/Bin
-ifneq ($(findstring x64,$(BLD)),)
-	PATH := $(PATH):$(CFG_MSPSDK)/Bin/x64
-	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x64
-else
-	PATH := $(PATH):$(CFG_MSPSDK)/Bin/x86
-	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x86
+ifndef WINSDKVER
+	WINSDKVER := 8.1
 endif
-	
+
+EXISTS_MSPSDK := $(wildcard $(CFG_LIBROOT)/mspsdk/$(WINSDKVER))
+ifneq ($(strip $(EXISTS_MSPSDK)),)
+	CFG_MSPSDK := $(CFG_LIBROOT)/mspsdk/$(WINSDKVER)
+	PATH := $(PATH):$(CFG_MSPSDK)/Bin
+
+	PATH := $(PATH):$(CFG_MSPSDK)/Bin/$(PROC)
+	CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/$(PROC)
+
+# ifneq ($(findstring x64,$(BLD)),)
+	# PATH := $(PATH):$(CFG_MSPSDK)/Bin/x64
+	# CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x64
+# else
+	# PATH := $(PATH):$(CFG_MSPSDK)/Bin/x86
+	# CFG_SIGNROOT := $(CFG_MSPSDK)/Bin/x86
+# endif
+
 	CFG_CODESIGN := signtool.exe
-	CFG_CODESIGNING := 1	
+	CFG_CODESIGNING := 1
 
 	ifeq ($(BUILD),vs)
-		PRJ_SYSI := $(CFG_MSPSDK)/Samples/multimedia/directshow/baseclasses \
-					$(CFG_MSPSDK)/Include $(CFG_MSPSDK)/Include/um $(CFG_MSPSDK)/Include/shared \
+		PRJ_SYSI := $(CFG_MSPSDK)/Include $(CFG_MSPSDK)/Include/um $(CFG_MSPSDK)/Include/shared \
 					$(PRJ_SYSI)
 		ifeq ($(PROC),x86)
-			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(CFG_MSPSDK)/Lib/x86 $(CFG_MSPSDK)/Lib $(PRJ_LIBP)
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib $(CFG_MSPSDK)/Lib/$(PROC) $(PRJ_LIBP)
 			CFG_MIDL_FLAGS := /win32
 		else
-			ifeq ($(PROC),ia64)
-				PRJ_LIBP := $(CFG_MSPSDK)/Lib/IA64 $(PRJ_LIBP)
-				CFG_MIDL_FLAGS := /win64 /ia64
-			else
-				PRJ_LIBP := $(CFG_MSPSDK)/Lib/x64 $(PRJ_LIBP)
-				CFG_MIDL_FLAGS := /win64 /amd64
-			endif
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib/$(PROC) $(PRJ_LIBP)
+			CFG_MIDL_FLAGS := /win64 /$(PROC)
 		endif
+
+		# You're killing me Microsoft
+		ifeq ($(WINSDKVER),8.0)
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib/Win8/um/$(PROC) $(PRJ_LIBP)
+		endif
+		ifeq ($(WINSDKVER),8.1)
+			PRJ_LIBP := $(CFG_MSPSDK)/Lib/winv6.3/um/$(PROC) $(PRJ_LIBP)
+		endif
+
 		ifeq ($(XBLD),)
 			CFG_RC := "rc" /nologo
 			CFG_MIDL := "Midl" /nologo

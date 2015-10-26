@@ -5,7 +5,7 @@ default_target: all
 # Project
 #-------------------------------------------------------------------
 PRJ_NAME := dshowbase
-PRJ_DEPS := mspsdk
+PRJ_DEPS := dshowbase mspsdk
 PRJ_TYPE := lib
 PRJ_INCS := 
 PRJ_LIBS :=
@@ -27,7 +27,7 @@ else
 # File locations
 #-------------------------------------------------------------------
 export LOC_TAG := def
-LOC_SRC_def := $(CFG_LIBROOT)/mspsdk/Samples/multimedia/directshow/baseclasses
+LOC_SRC_def := $(CFG_LIBROOT)/dshowbase
 include $(PRJ_LIBROOT)/build.mk
 
 #-------------------------------------------------------------------

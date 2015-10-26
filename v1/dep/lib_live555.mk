@@ -28,7 +28,7 @@ ifeq ($(PLATFORM),windows)
 endif
 
 ifeq ($(BUILD),gcc)
-	PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
+#	PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
 endif
 
 ifeq ($(OS),android)

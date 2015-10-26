@@ -129,7 +129,7 @@ ifneq ($(LOC_EXC_$(LOC_TAG)),)
 endif
 
 ifneq ($(LOC_WEX_$(LOC_TAG)),)
-	BLD_WEXCLUDE_$(LOC_TAG)	:= $(foreach wc,$(LOC_WEX_$(LOC_TAG)),$(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/$(wc)*.$(LOC_CXX_$(LOC_TAG))))
+	BLD_WEXCLUDE_$(LOC_TAG)	:= $(foreach wc,$(LOC_WEX_$(LOC_TAG)),$(wildcard $(BLD_PATH_SRC_$(LOC_TAG))/$(wc).$(LOC_CXX_$(LOC_TAG))))
 	#BLD_WEXCLUDE_$(LOC_TAG)	:= $(foreach file,$(LOC_EXC_$(LOC_TAG)),$(BLD_PATH_SRC_$(LOC_TAG))/$(file).$(LOC_CXX_$(LOC_TAG)))
 	BLD_SOURCES_$(LOC_TAG) 	:= $(filter-out $(BLD_WEXCLUDE_$(LOC_TAG)),$(BLD_SOURCES_$(LOC_TAG)))
 endif

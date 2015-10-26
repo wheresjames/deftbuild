@@ -28,6 +28,10 @@ UNSUPPORTED := UNICODE=$(UNICODE) is invalid
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
+ifeq ($(BUILD),gcc)
+	PRJ_DEFS := $(PRJ_DEFS) NO_VDMDBG
+endif
+
 #-------------------------------------------------------------------
 # File locations
 #-------------------------------------------------------------------

@@ -3,6 +3,14 @@
 # Common ffmpeg config
 #-------------------------------------------------------------------
 
+ifeq ($(PROC),x86)
+	CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+else
+	CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+endif
+CFG_CFLAGS := $(CFG_CFLAGS) -Wno-unused-function -Wno-attributes \
+							-Wno-parentheses -Wno-switch -Wno-pointer-sign
+
 ifeq ($(PLATFORM),windows)
 	ifeq ($(BUILD),vs)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/vs $(PRJ_INCS)

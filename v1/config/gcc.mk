@@ -470,14 +470,24 @@ else
 				PATH := $(CFG_MINGW32)/bin:$(PATH)
 			endif
 		endif
+		
+# To fix _mm_fence, add: #include <emmintrin.h>
 
-			CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32 -liphlpapi
-			CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA) -export-all-symbols
-			CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) \
-								-c -MMD -Wall -fno-strict-aliasing \
-								-DOEX_NODSHOW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
-			CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
-			CFG_AFLAGS := cq
+		CFG_STDLIB := -lole32 -lgdi32 -lws2_32 -lvfw32 -liphlpapi -lstdc++ -lpthread
+		CFG_LFLAGS := $(CFG_CFLAGS) $(CFG_LEXTRA)
+#		CFG_LFLAGS := $(CFG_LFLAGS) -Wl,--large-address-aware
+#		CFG_LFLAGS := $(CFG_LFLAGS) -export-all-symbols
+#		CFG_LFLAGS := $(CFG_LFLAGS) -static 
+#		CFG_LFLAGS := $(CFG_LFLAGS) -static -static-libgcc -static-libstdc++
+		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -Wno-narrowing \
+							-c -MMD -Wall -fno-strict-aliasing -fpermissive \
+							-DOEX_NODSHOW -DOEX_NOCRTDEBUG -D__int64="long long" -DOEX_NOSTRUCTINIT
+		CFG_SFLAGS := $(CFG_CFLAGS) -S -MMD
+		CFG_AFLAGS := cq
+		
+		ifeq ($(PRJ_TYPE),dll)
+#			CFG_LFLAGS := $(CFG_LFLAGS) --export-all-symbols
+		endif			
 
 	endif
 	ifeq ($(CFG_TOOLS),mingw64)
@@ -596,7 +606,8 @@ ifeq ($(PRJ_TYPE),dll)
 	ifeq ($(PLATFORM),windows)
 		CFG_LFLAGS := $(CFG_LFLAGS) -Wl,-enable-auto-import
 	endif
-else
+endif
+#else
 	ifeq ($(LIBLINK),static)
 		CFG_LFLAGS := $(CFG_LFLAGS) -static
 		CFG_CFLAGS := $(CFG_CFLAGS) -static
@@ -604,7 +615,7 @@ else
 		# CFG_LFLAGS := $(CFG_LFLAGS) -shared
 		# CFG_CFLAGS := $(CFG_CFLAGS) -shared
 	endif
-endif
+#endif
 
 ifeq ($(LIBLINK),static)
 	# CFG_LFLAGS := $(CFG_LFLAGS) -static-libgcc -static-libstdc++
