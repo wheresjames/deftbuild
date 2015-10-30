@@ -26,9 +26,19 @@ Name "${APPNAME}"
 !endif
 OutFile "${OUTROOT}\${FULL_FILENAME}"
 
-!if "${PROC}-${BUILD}" == "x64-vs"
-!define FULL_GCC_PATH "..\windows-gcc-win64-x64-mingw64-static\${FULL_GCC_FILENAME}"
-!endif  
+!if "${PROC}" == "x64"
+!define BITS 64
+!else
+!define BITS 32
+!endif
+
+!if "${BUILD}" == "vs"
+!define INCLUDE_GCC_VERSION
+!endif
+
+!ifdef INCLUDE_GCC_VERSION
+!define FULL_GCC_PATH "..\windows-gcc-${OS}-${PROC}-mingw${BITS}-${LIBLINK}\${FULL_GCC_FILENAME}"
+!endif 
 
 ; The default installation director
 !if "${PROC}" == "x64"
@@ -94,7 +104,7 @@ Section "${APPNAME} (required)"
   File "${OUTROOT}\sqrl-cgi${POSTFIX}.exe"
 
   ; Hack - install GCC version if needed and it exists
-!if "${PROC}-${BUILD}" == "x64-vs"
+!ifdef INCLUDE_GCC_VERSION
 ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
 !ifdef GCC_BUILD_EXISTS
 	File "${OUTROOT}\${FULL_GCC_PATH}"
@@ -109,19 +119,21 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
   File "${OUTROOT}\_sqmod\sqmod_asio${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_cell${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_curl${POSTFIX}.dll"
-!if "${PROC}" != "x64"
-  File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
-!else
+;!if "${PROC}" != "x64"
+;  File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
+;!else
 !if "${BUILD}" != "vs"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
 !endif
-!endif
+;!endif
   File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
   ;File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
-  File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
+;!if "${BUILD}" != "vs"
+;  File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
+;!endif
   File "${OUTROOT}\_sqmod\sqmod_openssl${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_poco${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_portaudio${POSTFIX}.dll"
@@ -144,7 +156,7 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
   WriteUninstaller "uninstall.exe"
   
   ; Hack - install GCC version
-!if "${PROC}-${BUILD}" == "x64-vs"
+!ifdef INCLUDE_GCC_VERSION
   ExecWait '"$INSTDIR\${FULL_GCC_FILENAME}" /S'
 !endif  
   
@@ -167,8 +179,7 @@ Section "Uninstall"
 	SetRegView 64
 !endif
 
-!if "${PROC}" == "x64"
-!if "${BUILD}" == "vs"
+!ifdef INCLUDE_GCC_VERSION
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GCCKEYNAME}" "UninstallString"
   ReadRegStr $R1 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GCCKEYNAME}" "InstallLocation"
   StrCmp $R0 "" gcc_done
@@ -176,7 +187,6 @@ Section "Uninstall"
 	Delete "$R1\uninstall.exe"
 	RMDir "$R1"
 gcc_done: 
-!endif
 !endif
 
   ; Remove registry keys
@@ -208,7 +218,7 @@ gcc_done:
   Delete $INSTDIR\modules\sqmod_ssh2.dll
   Delete $INSTDIR\modules\sqmod_tinyxml.dll
 
-!if "${PROC}-${BUILD}" == "x64-vs"
+!ifdef INCLUDE_GCC_VERSION
   Delete "$INSTDIR\${FULL_GCC_FILENAME}"
 !endif  
   
