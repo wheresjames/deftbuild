@@ -4,12 +4,14 @@
 
 #if defined( _WIN64 ) || defined( _M_X64 ) || defined( __amd64__ ) || defined( __LP64__ ) || defined( __x86_64__ ) || defined( __ppc64__ ) || defined( _LP64 )
 #	define INT_BIT 64
-#define HAVE_MMX 1
-#define HAVE_MMX2 1
+#	define HAVE_MMX 1
+#	define HAVE_MMX2 1
 #else
 #	define INT_BIT 32
-#define HAVE_MMX 1
-#define HAVE_MMX2 1
+#	define HAVE_MMX 1
+#	define HAVE_MMX2 1
+#	define HAVE_EBP_AVAILABLE 0
+#	define HAVE_EBX_AVAILABLE 1
 #endif
 
 //#define BROKEN_RELOCATIONS 1
@@ -343,8 +345,6 @@
 #define HAVE_ASM_MOD_Q 0
 #define HAVE_ATTRIBUTE_MAY_ALIAS 1
 #define HAVE_ATTRIBUTE_PACKED 1
-#define HAVE_EBP_AVAILABLE 1
-#define HAVE_EBX_AVAILABLE 1
 #define HAVE_GNU_AS 0
 #define HAVE_GNU_WINDRES 0
 #define HAVE_IBM_ASM 0
@@ -1973,7 +1973,7 @@
 #define CONFIG_VP3_PARSER 1
 #define CONFIG_VP8_PARSER 1
 #define CONFIG_VP9_PARSER 1
-#define CONFIG_ASYNC_PROTOCOL 1
+#define CONFIG_ASYNC_PROTOCOL 0
 #define CONFIG_BLURAY_PROTOCOL 0
 #define CONFIG_CACHE_PROTOCOL 1
 #define CONFIG_CONCAT_PROTOCOL 1

@@ -33,6 +33,8 @@ else
 ifeq ($(PLATFORM),posix)
 	ifeq ($(PROC),x64)
 #		PRJ_DEFS := $(PRJ_DEFS) ptrdiff_t=long difference_type=long
+	else
+#		PRJ_DEFS := $(PRJ_DEFS) ptrdiff_t=long
 	endif
 endif
 

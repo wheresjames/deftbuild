@@ -525,7 +525,7 @@ else
 
 		# -fstack-check -m64 -fpermissive -export-all-symbols -fno-leading-underscore
 		CFG_STDLIB := -lole32 -lgdi32 -liphlpapi -lws2_32 -lavicap32 -lmsvfw32
-		CFG_LFLAGS := $(CFG_LEXTRA) -static-libgcc -static-libstdc++
+		CFG_LFLAGS := $(CFG_LEXTRA) -static-libgcc -static-libstdc++ -m64
 		CFG_CFLAGS := $(CFG_CFLAGS) $(CFG_CEXTRA) -m64 -Wno-narrowing -fpermissive \
 							-c -MMD -Wall -fno-strict-aliasing -fno-leading-underscore \
 							-DOEX_NODSHOW -DOEX_NOCRTDEBUG -DOEX_NOSTRUCTINIT -D__int64="long long"
@@ -568,15 +568,19 @@ else
 		CFG_AFLAGS := cq
 
 		ifeq ($(PROC),x64)
-			CFG_CFLAGS := $(CFG_CFLAGS) -m64 -fpermissive -Wno-narrowing
+			CFG_CFLAGS := $(CFG_CFLAGS) -m64
+			CFG_LFLAGS := $(CFG_LFLAGS) -m64
 			CFG_ASFLAGS := -f elf64
 		else
 			CFG_CFLAGS := $(CFG_CFLAGS) -m32
+			CFG_LFLAGS := $(CFG_LFLAGS) -m32
 			CFG_ASFLAGS := -f elf32 -a x86
 		endif
 		
+		CFG_CFLAGS := $(CFG_CFLAGS) -fpermissive -Wno-narrowing -fno-strict-aliasing
+		
 		ifeq ($(PRJ_TYPE),dll)
-			CFG_LFLAGS := $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
+			CFG_LFLAGS := $(CFG_LFLAGS) $(CFG_LEXTRA) -rdynamic -Wl,-E -Wl,--export-dynamic
 		endif
 
 		ifeq ($(LIBLINK),static)
