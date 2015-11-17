@@ -131,7 +131,8 @@ else
 endif
 
 ifeq ($(PROC),x86)
-	CFG_LEXTRA := /MACHINE:x86 /LARGEADDRESSAWARE $(CFG_LEXTRA)
+	CFG_LEXTRA := /MACHINE:x86 $(CFG_LEXTRA)
+#	CFG_LEXTRA := /MACHINE:x86 /LARGEADDRESSAWARE $(CFG_LEXTRA)
 else
 	ifeq ($(PROC),x64)
 		CFG_LEXTRA := /MACHINE:x64 $(CFG_LEXTRA)
@@ -178,7 +179,7 @@ ifneq ($(VSVER),)
 			endif
 
 			ifeq ($(PROC),x86)
-				PATH := $(PATH):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
+				PATH := $(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE:$(PATH)
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib
 				ifeq ($(NOMFC),)
 					PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/atlmfc/lib
@@ -190,9 +191,9 @@ ifneq ($(VSVER),)
 					MSPROC := $(PROC)
 				endif
 				ifneq ($(findstring x64,$(BLD)),)
-					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/$(MSPROC):$(CFG_PATHROOT)/Common7/IDE
+					PATH := $(CFG_PATHROOT)/VC/bin/$(MSPROC):$(CFG_PATHROOT)/Common7/IDE:$(PATH)
 				else
-					PATH := $(PATH):$(CFG_PATHROOT)/VC/bin/x86_$(MSPROC):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE
+					PATH := $(CFG_PATHROOT)/VC/bin/x86_$(MSPROC):$(CFG_PATHROOT)/VC/bin:$(CFG_PATHROOT)/Common7/IDE:$(PATH)
 				endif
 				PRJ_LIBP := $(PRJ_LIBP) $(CFG_VSROOT)/VC/lib/$(MSPROC)
 				ifeq ($(NOMFC),)

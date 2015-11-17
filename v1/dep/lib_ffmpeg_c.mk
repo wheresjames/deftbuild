@@ -48,13 +48,16 @@ ifneq ($(PLATFORM),windows)
 		LOC_WEX_libavcodec := $(LOC_WEX_libavcodec) *mmx*
 	endif
 endif
-LOC_EXC_libavcodec := beosthread imgconvert_template gsmdec_template \
+ifneq ($(PLATFORM),windows)
+	LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) dxva2 dxva2_h264 dxva2_vc1 dxva2_hevc dxva2_mpeg2
+endif
+LOC_EXC_libavcodec := $(LOC_EXC_libavcodec) \
 					  \
-					  dxva2 dxva2_h264 dxva2_vc1 dxva2_hevc \
+					  beosthread imgconvert_template gsmdec_template \
 					  \
 					  dv_tablegen \
 					  \
-					  aacpsdata dct32 dxva2_mpeg2 \
+					  aacpsdata dct32 \
 					  \
 					  dct-test fft-test \
 					  \

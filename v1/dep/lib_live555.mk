@@ -9,7 +9,7 @@ PRJ_DEPS := live555
 PRJ_TYPE := lib
 PRJ_INCS := live555/liveMedia/include live555/groupsock/include \
 			live555/UsageEnvironment/include live555/BasicUsageEnvironment/include 
-PRJ_DEFS := SOCKLEN_T=socklen_t BSD=1 TIMEVAL=timeval
+PRJ_DEFS := SOCKLEN_T=socklen_t BSD=1
 PRJ_LIBS := 
 
 PRJ_LIBROOT := ..
@@ -29,6 +29,7 @@ endif
 
 ifeq ($(BUILD),gcc)
 #	PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
+#	PRJ_DEFS := $(PRJ_DEFS) _TIMEVAL_DEFINED
 endif
 
 ifeq ($(OS),android)

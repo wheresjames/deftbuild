@@ -24,8 +24,8 @@ UNSUPPORTED := PROC=$(PROC) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-ifeq ($(PROC)-$(PLATFORM),x64-posix)
-UNSUPPORTED := $(PROC)-$(PLATFORM) is not supported
+ifneq ($(PLATFORM),windows)
+UNSUPPORTED := $(PLATFORM) is not supported
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

@@ -8,7 +8,7 @@ ifeq ($(PROC),x86)
 else
 	CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
 endif
-CFG_CFLAGS := $(CFG_CFLAGS) -Wno-unused-function -Wno-attributes \
+CFG_CFLAGS := $(CFG_CFLAGS) -Wno-unused-function -Wno-attributes -Wno-unused-local-typedefs \
 							-Wno-parentheses -Wno-switch -Wno-pointer-sign
 
 ifeq ($(PLATFORM),windows)
@@ -21,6 +21,7 @@ ifeq ($(PLATFORM),windows)
 			PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/windows/gcc $(PRJ_INCS) zlib
 		endif
 	endif
+	PRJ_DEFS := $(PRJ_DEFS) USEDXVA=1
 else
 	ifeq ($(PROC),arm)
 		PRJ_INCS := $(CFG_LIB2BLD)/dep/etc/ffmpeg/inc/posix/arm $(PRJ_INCS) zlib
