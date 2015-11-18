@@ -19,9 +19,8 @@ PRJ_OBJROOT := _0_dep
 #-------------------------------------------------------------------
 include $(PRJ_LIBROOT)/config.mk
 
-#ifeq ($(PLATFORM)-$(BUILD),windows-gcc)
-ifeq ($(PLATFORM)-$(BUILD),_tryit_)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, webrtc can only be built on windows with Visual Studio
+ifeq ($(VSVER)-$(PROC),msvs11-x64)
+UNSUPPORTED := $(VSVER)-$(PROC) is invalid, there is a bug Visual Studio 11
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
@@ -58,7 +57,8 @@ ifeq ($(BUILD),gcc)
 		CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
 	endif
 else
-	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
+#	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
+#	CFG_CFLAGS := $(CFG_CFLAGS) /Zm2000
 endif
 
 #-------------------------------------------------------------------
