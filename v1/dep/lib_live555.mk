@@ -27,8 +27,8 @@ ifeq ($(PLATFORM),windows)
 	endif
 endif
 
-ifeq ($(BUILD),gcc)
-#	PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
+ifeq ($(PLATFORM),posix)
+	PRJ_DEFS := $(PRJ_DEFS) TIMEVAL=timeval
 #	PRJ_DEFS := $(PRJ_DEFS) _TIMEVAL_DEFINED
 endif
 

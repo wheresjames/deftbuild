@@ -53,8 +53,10 @@ ifeq ($(BUILD),gcc)
 			CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
 		endif
 	else
+	    ifneq ($(PROC),arm)
 		CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
 		CFG_CFLAGS := $(CFG_CFLAGS) -mmmx -msse -msse2 -mssse3 -msse4.1 -mavx2
+		endif
 	endif
 else
 #	CFG_CFLAGS := $(CFG_CFLAGS) -std=c++11 
@@ -80,11 +82,6 @@ LOC_CXX_vpx_mem := c
 LOC_SRC_vpx_mem := $(CFG_LIBROOT)/vpx/vpx_mem
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := vpx_scale
-LOC_CXX_vpx_scale := c
-LOC_SRC_vpx_scale := $(CFG_LIBROOT)/vpx/vpx_scale
-include $(PRJ_LIBROOT)/build.mk
-
 export LOC_TAG := vpx_scale_gen
 LOC_CXX_vpx_scale_gen := c
 LOC_SRC_vpx_scale_gen := $(CFG_LIBROOT)/vpx/vpx_scale/generic
@@ -97,6 +94,9 @@ include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp8com
 LOC_CXX_vp8com := c
+ifeq ($(PROC),arm)
+    LOC_EXC_vp8com := rtcd
+endif
 LOC_SRC_vp8com := $(CFG_LIBROOT)/vpx/vp8/common
 include $(PRJ_LIBROOT)/build.mk
 
@@ -105,22 +105,9 @@ LOC_CXX_vp8comgen := c
 LOC_SRC_vp8comgen := $(CFG_LIBROOT)/vpx/vp8/common/generic
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := vp8comx86
-LOC_CXX_vp8comx86 := c
-LOC_SRC_vp8comx86 := $(CFG_LIBROOT)/vpx/vp8/common/x86
-include $(PRJ_LIBROOT)/build.mk
-
 export LOC_TAG := vp8enc
 LOC_CXX_vp8enc := c
 LOC_SRC_vp8enc := $(CFG_LIBROOT)/vpx/vp8/encoder
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := vp8encx86
-LOC_CXX_vp8encx86 := c
-ifeq ($(PROC)-$(BUILD),x86-vs)
-#	LOC_EXC_vp8encx86 := denoising_sse2 quantize_ssse3 quantize_sse4
-endif
-LOC_SRC_vp8encx86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp8dec
@@ -136,17 +123,10 @@ include $(PRJ_LIBROOT)/build.mk
 export LOC_TAG := vp9com
 LOC_CXX_vp9com := c
 LOC_EXC_vp9com := vp9_mfqe
-LOC_SRC_vp9com := $(CFG_LIBROOT)/vpx/vp9/common
-include $(PRJ_LIBROOT)/build.mk
-
-export LOC_TAG := vp9comx86
-LOC_CXX_vp9comx86 := c
-# LOC_WEX_vp9comx86 := *_avx2
-ifeq ($(PROC)-$(BUILD),x86-gcc)
-#	LOC_WEX_vp9comx86 := *_avx2 *_sse2 *_ssse3
-	LOC_WEX_vp9comx86 := *_avx2
+ifeq ($(PROC),arm)
+    LOC_EXC_vp9com := $(LOC_EXC_vp9com) vp9_rtcd
 endif
-LOC_SRC_vp9comx86 := $(CFG_LIBROOT)/vpx/vp9/common/x86
+LOC_SRC_vp9com := $(CFG_LIBROOT)/vpx/vp9/common
 include $(PRJ_LIBROOT)/build.mk
 
 export LOC_TAG := vp9enc
@@ -155,21 +135,54 @@ LOC_EXC_vp9enc := vp9_denoiser
 LOC_SRC_vp9enc := $(CFG_LIBROOT)/vpx/vp9/encoder
 include $(PRJ_LIBROOT)/build.mk
 
-export LOC_TAG := vp9encx86
-LOC_CXX_vp9encx86 := c
-ifeq ($(PROC)-$(BUILD),x86-gcc)
-	LOC_WEX_vp9encx86 := *_avx2
-endif
-LOC_SRC_vp9encx86 := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
-include $(PRJ_LIBROOT)/build.mk
-
 export LOC_TAG := vp9dec
 LOC_CXX_vp9dec := c
 LOC_SRC_vp9dec := $(CFG_LIBROOT)/vpx/vp9/decoder
 include $(PRJ_LIBROOT)/build.mk
 
+ifneq ($(PROC),arm)
+	
+	export LOC_TAG := vpx_scale
+	LOC_CXX_vpx_scale := c
+	LOC_SRC_vpx_scale := $(CFG_LIBROOT)/vpx/vpx_scale
+	include $(PRJ_LIBROOT)/build.mk
+	
+	export LOC_TAG := vp8comx86
+	LOC_CXX_vp8comx86 := c
+	LOC_SRC_vp8comx86 := $(CFG_LIBROOT)/vpx/vp8/common/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := vp8encx86
+	LOC_CXX_vp8encx86 := c
+	ifeq ($(PROC)-$(BUILD),x86-vs)
+	#	LOC_EXC_vp8encx86 := denoising_sse2 quantize_ssse3 quantize_sse4
+	endif
+	LOC_SRC_vp8encx86 := $(CFG_LIBROOT)/vpx/vp8/encoder/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := vp9encx86
+	LOC_CXX_vp9encx86 := c
+	ifeq ($(PROC)-$(BUILD),x86-gcc)
+		LOC_WEX_vp9encx86 := *_avx2
+	endif
+	LOC_SRC_vp9encx86 := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+	export LOC_TAG := vp9comx86
+	LOC_CXX_vp9comx86 := c
+	# LOC_WEX_vp9comx86 := *_avx2
+	ifeq ($(PROC)-$(BUILD),x86-gcc)
+	#	LOC_WEX_vp9comx86 := *_avx2 *_sse2 *_ssse3
+		LOC_WEX_vp9comx86 := *_avx2
+	endif
+	LOC_SRC_vp9comx86 := $(CFG_LIBROOT)/vpx/vp9/common/x86
+	include $(PRJ_LIBROOT)/build.mk
+
+endif
+
 
 # --- ASM ---
+ifneq ($(PROC),arm)
 
 # ASMOPTS := -I$(CFG_LIBROOT)/vpx/vp8/common/x86
 #		   -DHAVE_SSE -DHAVE_AVX -DHAVE_AMD3DNOW \
@@ -243,6 +256,9 @@ endif
 #endif
 LOC_SRC_vp9_encx86_asm := $(CFG_LIBROOT)/vpx/vp9/encoder/x86
 include $(PRJ_LIBROOT)/build.mk
+
+# arm
+endif
 
 #-------------------------------------------------------------------
 # Execute the build

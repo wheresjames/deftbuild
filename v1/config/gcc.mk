@@ -431,8 +431,8 @@ ifeq ($(CFG_PROC),arm)
 		CFG_EXE_POST := .exe
 
 	endif
-	ifeq ($(CFG_TOOLS),)
 
+	ifeq ($(strip $(CFG_TOOLS)),local)
 
 		OS := linux
 		PLATFORM := posix
@@ -440,7 +440,7 @@ ifeq ($(CFG_PROC),arm)
 		# Custom tools
 		CFG_TOOLPREFIX := $(CFG_TOOLROOT)/$(CFG_TOOLS)/bin/$(CFG_TOOLS)-
 #			CFG_SYSROOT := $(CFG_TOOLROOT)/$(CFG_TOOLS)/sysroot
-		override CFG_TOOLS := custom
+#		override CFG_TOOLS := custom
 
 		CFG_STDLIB := -lrt -pthread
 		CFG_LFLAGS := $(CFG_LEXTRA)

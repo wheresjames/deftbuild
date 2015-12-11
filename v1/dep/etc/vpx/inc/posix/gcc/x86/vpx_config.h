@@ -54,9 +54,9 @@
 #define CONFIG_GPROF 0
 #define CONFIG_GCOV 0
 #define CONFIG_RVCT 0
-#define CONFIG_GCC 0
-#define CONFIG_MSVS 1
-#define CONFIG_PIC 0
+#define CONFIG_GCC 1
+#define CONFIG_MSVS 0
+#define CONFIG_PIC 1
 #define CONFIG_BIG_ENDIAN 0
 #define CONFIG_CODEC_SRCS 0
 #define CONFIG_DEBUG_LIBS 0
