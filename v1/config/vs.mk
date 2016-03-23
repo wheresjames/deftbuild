@@ -83,6 +83,15 @@ ifdef DBG
 		endif
 		ifneq ($(findstring msvs12,$(TGT)),)
 			CFG_MFCV := 120
+			CFG_STDLIBS := $(CFG_STDLIBS) uxtheme.lib winspool.lib windowscodecs.lib
+		endif
+		ifneq ($(findstring msvs13,$(TGT)),)
+			CFG_MFCV := 130
+			CFG_STDLIBS := $(CFG_STDLIBS) uxtheme.lib winspool.lib windowscodecs.lib
+		endif
+		ifneq ($(findstring msvs14,$(TGT)),)
+			CFG_MFCV := 140
+			CFG_STDLIBS := $(CFG_STDLIBS) uxtheme.lib winspool.lib windowscodecs.lib
 		endif
 		CFG_CEXTRA := /D_AFX_NOFORCE_LIBS $(CFG_CEXTRA)
 		ifeq ($(LIBLINK),static)
@@ -263,7 +272,7 @@ CFG_CC_INC := /I
 CFG_FLAG_EXPORT := /EXPORT:
 
 CFG_CFLAGS := $(CFG_CFLAGS) /EHsc /c $(CFG_CEXTRA)
-CFG_LFLAGS := $(CFG_LEXTRA)
+CFG_LFLAGS := $(CFG_LEXTRA) /INCREMENTAL:NO
 
 ifeq ($(PRJ_TYPE),dll)
 	CFG_LFLAGS := $(CFG_LFLAGS) /DLL

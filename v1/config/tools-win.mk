@@ -92,3 +92,16 @@ ifneq ($(strip $(EXISTS_MSPSDK)),)
 
 	endif
 endif
+
+ifndef WSDKVER
+	WSDKVER := 10.0.10240.0
+endif
+
+EXISTS_WSDK := $(wildcard $(CFG_LIBROOT)/wsdk)
+ifneq ($(strip $(EXISTS_WSDK)),)
+
+	CFG_WSDK := $(CFG_LIBROOT)/wsdk
+
+	PRJ_SYSI := $(EXISTS_WSDK)/Include/$(WSDKVER)/ucrt $(PRJ_SYSI)
+	PRJ_LIBP := $(CFG_WSDK)/Lib/$(WSDKVER)/ucrt/$(PROC) $(PRJ_LIBP)
+endif

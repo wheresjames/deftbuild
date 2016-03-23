@@ -1,6 +1,6 @@
 diff -rupwN ../dnl3/jpeg/jconfig.h jpeg/jconfig.h
---- jpeg/jconfig.h	Wed Dec 31 19:00:00 1969
-+++ jpeg/jconfig.h	Sat Mar 21 14:01:08 2009
+--- ../dnl3/jpeg/jconfig.h	1969-12-31 19:00:00.000000000 -0500
++++ jpeg/jconfig.h	2010-04-08 15:12:26.000000000 -0400
 @@ -0,0 +1,45 @@
 +/* jconfig.vc --- jconfig.h for Microsoft Visual C++ on Windows 95 or NT. */
 +/* see jconfig.txt for explanations */
@@ -47,3 +47,16 @@ diff -rupwN ../dnl3/jpeg/jconfig.h jpeg/jconfig.h
 +#undef PROGRESS_REPORT		/* optional */
 +
 +#endif /* JPEG_CJPEG_DJPEG */
+diff -rupwN ../dnl3/jpeg/jdinput.c jpeg/jdinput.c
+--- ../dnl3/jpeg/jdinput.c	2009-12-28 09:01:10.000000000 -0500
++++ jpeg/jdinput.c	2010-07-22 23:40:58.000000000 -0400
+@@ -53,6 +53,9 @@ jpeg_core_output_dimensions (j_decompres
+   int ci;
+   jpeg_component_info *compptr;
+ 
++  if ( !cinfo->scale_denom )
++	  cinfo->scale_denom = 8;
++
+   /* Compute actual output image dimensions and DCT scaling choices. */
+   if (cinfo->scale_num * cinfo->block_size <= cinfo->scale_denom) {
+     /* Provide 1/block_size scaling */

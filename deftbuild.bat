@@ -15,7 +15,7 @@ set EXT=%%e
 set EX2=%%f
 )
 
-IF /I !IDX! EQU 0 SET /P IDX=Which IDX?
+IF /I !IDX! EQU 0 SET /P IDX=Which IDX? 
 IF /I !CMD! EQU 0 SET /P CMD=Which Command? 
 IF /I !GRP! EQU 0 SET /P GRP=Which Groups? 
 IF /I !PRJ! EQU 0 SET /P PRJ=Which Projects? 
@@ -79,8 +79,8 @@ REM ----------------------------------------------------------------
 REM Find project files if not specified
 REM ----------------------------------------------------------------
 
-IF /I !PRJ! NEQ 0 ( 
-SET UPRJ=!PRJ! 
+IF /I !PRJ! NEQ 0 (
+SET UPRJ=!PRJ!
 ) ELSE (
 SET UPRJ=
 )

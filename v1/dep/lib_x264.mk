@@ -25,13 +25,21 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, x264 can only be built with 'gcc'
+    ifeq ($(findstring msvs14,$(TGT)),)
+	NOTSUPPORTED := 1
+    endif
+endif
+
+ifneq ($(NOTSUPPORTED),)
+UNSUPPORTED := $(BUILD)-$(TGT) is invalid for ffmpeg
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
-CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
-ifdef DBG
-	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
+ifeq ($(BUILD),gcc)
+	CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
+	ifdef DBG
+		CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
+	endif
 endif
 
 #-------------------------------------------------------------------

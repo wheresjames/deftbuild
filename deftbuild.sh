@@ -35,17 +35,17 @@ fi
 
 # Shortcuts
 CMD=$2
-if [ ${CMD} == "-" ]; then 
-	CMD=show 
+if [ ${CMD} == "-" ]; then
+	CMD=show
 fi
 if [ ${CMD} == "co" ]; then
-	CMD=checkout 
+	CMD=checkout
 fi
 if [ ${CMD} == "cop" ]; then
 	CMD=checkoutpatch
 fi
-if [ ${CMD} == "up" ]; then 
-	CMD=update 
+if [ ${CMD} == "up" ]; then
+	CMD=update
 fi
 if [ ${CMD} == "arc" ]; then
 	CMD=archive
@@ -71,7 +71,7 @@ if [ $3 ] && [ $3 != "-" ]; then
 	IFS=","; DIRLIST=($3); unset IFS
 else
 	cd ${DIR_LPRJ}
-	for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done		
+	for i in $(ls -d */); do DIRLIST="${DIRLIST} ${i%*/}"; done
 fi
 
 echo "---"
@@ -155,17 +155,17 @@ fi
 #-------------------------------------------------------------------
 # Process each group/project
 #-------------------------------------------------------------------
-for DR in ${DIRLIST[@]} 
+for DR in ${DIRLIST[@]}
 do
 
 	if [ $4 ] && [ $4 != "-" ]; then
 		IFS=","; FILELIST=($4); unset IFS
-	else	
+	else
 		FILELIST=
 		for i in $( find ${DIR_LPRJ}/${DR} -maxdepth 1 -type f -name '*'.${EXT_REPO} ); do FILELIST="${FILELIST} ${i##*/}"; done
 	fi
 
-	for CF in ${FILELIST[@]} 
+	for CF in ${FILELIST[@]}
 	do
 
 		CF=${CF%.*}
@@ -184,7 +184,7 @@ do
 			do
 				STR=${LINE}
 				PROJ=${STR%% *}
-				
+
 				STR=${STR#* }
 				REPO=${STR%% *}
 				STR=${STR#* }
@@ -194,9 +194,9 @@ do
 				STR=${STR#* }
 				FOPTS=${STR%% *}
 				STR=${STR#* }
-		
-				if [ -n "${FVERS}" ]; then	
-					REVN=${FVERS}			
+
+				if [ -n "${FVERS}" ]; then
+					REVN=${FVERS}
 				fi
 
 				if [ -z "${REVN}" ]; then
@@ -205,12 +205,12 @@ do
 
 				if [ -n "${PROJ}" ] && [ -n ${REPO} ] && [ "${PROJ}" != "#" ]; then
 
-					# Where is the library?	
+					# Where is the library?
 					LIBPATH="${DIR_LIB}/${PROJ}"
-					
+
 					# Start in library root
 					cd ${DIR_LIB}
-					
+
 					# Show affected projects
 					if [ ${CMD} == "show" ]; then
 						echo ${PROJ} : ${REPO} : ${REVN} : ${LINK} : ${OPTS}
@@ -220,12 +220,12 @@ do
 					if [ ${CMD} == "build" ]; then
 						. ${DIR_LBIN}/build.sh
 					fi
-					
+
 					# Checkout
 					if [ ${CMD} == "checkout" ]; then
 						. ${DIR_LBIN}/checkout.sh
 					fi
-					
+
 					# Checkout and patch
 					if [ ${CMD} == "checkout" ]; then
 						. ${DIR_LBIN}/checkout.sh
@@ -236,35 +236,35 @@ do
 					if [ ${CMD} == "update" ]; then
 						. ${DIR_LBIN}/update.sh
 					fi
-	
+
 					# Archive
 					if [ ${CMD} == "archive" ]; then
 						. ${DIR_LBIN}/archive.sh
 					fi
-	
+
 					# Restore from archive
 					if [ ${CMD} == "restore" ]; then
 						. ${DIR_LBIN}/restore.sh
 					fi
-	
+
 					# diff
 					if [ ${CMD} == "diff" ]; then
 						. ${DIR_LBIN}/diff.sh
 					fi
-	
+
 					# makepatch
 					if [ ${CMD} == "makepatch" ]; then
 						. ${DIR_LBIN}/makepatch.sh
 					fi
-	
+
 					# makepatch
 					if [ ${CMD} == "applypatch" ]; then
 						. ${DIR_LBIN}/applypatch.sh
 					fi
-	
+
 				fi
-				
-			done < ${FULL}		
+
+			done < ${FULL}
 		fi
 	done
 done

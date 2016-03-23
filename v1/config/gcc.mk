@@ -661,6 +661,10 @@ ifneq ($(CFG_SYSROOT_HEADERS),)
 	CFG_SYSROOT_OPTIONS := $(CFG_SYSROOT_OPTIONS) --headers=$(CFG_SYSROOT_HEADERS)
 endif
 
+ifneq ($(DETECTLEAKS),)
+	CFG_CFLAGS := $(CFG_CFLAGS) -fsanitize=leak
+endif
+
 # Tools
 CFG_PP := $(CFG_TOOLPREFIX)g++ $(CFG_SYSROOT_OPTIONS)
 CFG_LD := $(CFG_TOOLPREFIX)g++
@@ -684,3 +688,5 @@ CFG_CC_OUT := -o $(nullstring)
 CFG_LD_OUT := -o $(nullstring)
 
 CFG_CC_INC := -I
+
+

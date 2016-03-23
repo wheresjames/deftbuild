@@ -29,7 +29,7 @@ ifneq ($(findstring vs,$(TGT)),)
 	LIBLINK := static
 	WBLD := 1
 	ifneq ($(findstring msvs,$(TGT)),)
-		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10 msvs11 msvs12,$(findstring $(t),$(TGT))))
+		VSVER := $(strip $(foreach t,msvs6 msvs7 msvs8 msvs9 msvs10 msvs11 msvs12 msvs13 msvs14,$(findstring $(t),$(TGT))))
 	endif		
 	ifneq ($(findstring vsexp,$(TGT)),)
 		VSVER := $(strip $(foreach t,vsexp8 vsexp9 vsexp10 vsexp11 vsexp12,$(findstring $(t),$(TGT))))

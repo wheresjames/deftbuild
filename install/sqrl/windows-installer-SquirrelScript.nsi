@@ -32,9 +32,9 @@ OutFile "${OUTROOT}\${FULL_FILENAME}"
 !define BITS 32
 !endif
 
-!if "${BUILD}" == "vs"
-!define INCLUDE_GCC_VERSION
-!endif
+#!if "${BUILD}" == "vs"
+#!define INCLUDE_GCC_VERSION
+#!endif
 
 !ifdef INCLUDE_GCC_VERSION
 !define FULL_GCC_PATH "..\windows-gcc-${OS}-${PROC}-mingw${BITS}-${LIBLINK}\${FULL_GCC_FILENAME}"
@@ -122,14 +122,13 @@ ${!defineifexist} GCC_BUILD_EXISTS "${OUTROOT}\${FULL_GCC_PATH}"
 ;!if "${PROC}" != "x64"
 ;  File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
 ;!else
-!if "${BUILD}" != "vs"
+;!if "${BUILD}" != "vs"
   File "${OUTROOT}\_sqmod\sqmod_ffmpeg${POSTFIX}.dll"
-!endif
+;!endif
 ;!endif
   File "${OUTROOT}\_sqmod\sqmod_fftw${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_freetype2${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_gdchart${POSTFIX}.dll"
-  ;File "${OUTROOT}\_sqmod\sqmod_irrlicht${POSTFIX}.dll"
   File "${OUTROOT}\_sqmod\sqmod_live555${POSTFIX}.dll"
 ;!if "${BUILD}" != "vs"
 ;  File "${OUTROOT}\_sqmod\sqmod_mysql${POSTFIX}.dll"
@@ -208,7 +207,6 @@ gcc_done:
   Delete $INSTDIR\modules\sqmod_fftw.dll
   Delete $INSTDIR\modules\sqmod_freetype2.dll
   Delete $INSTDIR\modules\sqmod_gdchart.dll
-  Delete $INSTDIR\modules\sqmod_irrlicht.dll
   Delete $INSTDIR\modules\sqmod_live555.dll
   Delete $INSTDIR\modules\sqmod_mysql.dll
   Delete $INSTDIR\modules\sqmod_openssl.dll

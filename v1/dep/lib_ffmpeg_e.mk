@@ -7,7 +7,7 @@ default_target: all
 PRJ_NAME := ffe
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
-PRJ_INCS := ffmpeg x264 vpx rtmpd lame/include
+PRJ_INCS := ffmpeg x264 vpx rtmpd lame/include zlib
 PRJ_LIBS := 
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 PRJ_OPTS := -O2
@@ -26,7 +26,13 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
+    ifeq ($(findstring msvs14,$(TGT)),)
+	NOTSUPPORTED := 1
+    endif
+endif
+
+ifneq ($(NOTSUPPORTED),)
+UNSUPPORTED := $(BUILD)-$(TGT) is invalid for ffmpeg
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 

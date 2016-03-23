@@ -26,7 +26,13 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
+    ifeq ($(findstring msvs14,$(TGT)),)
+	NOTSUPPORTED := 1
+    endif
+endif
+
+ifneq ($(NOTSUPPORTED),)
+UNSUPPORTED := $(BUILD)-$(TGT) is invalid for ffmpeg
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
@@ -40,7 +46,8 @@ export LOC_TAG := avf
 LOC_CXX_avf := c
 LOC_SRC_avf := $(CFG_LIBROOT)/ffmpeg/libavformat
 LOC_WLS_avf := 0 1 2 3 4 5 6 7 8 9 a b c d e f
-LOC_EXC_avf := avisynth bluray rtpdec_theora async
+#LOC_EXC_avf := avisynth bluray rtpdec_theora async
+LOC_EXC_avf := async bluray
 LOC_WEX_avf := lib*
 include $(PRJ_LIBROOT)/build.mk
 
@@ -153,7 +160,7 @@ ifneq ($(PROC),arm)
 	export LOC_TAG := sws86
 	LOC_CXX_sws86 := c
 	LOC_SRC_sws86 := $(CFG_LIBROOT)/ffmpeg/libswscale/x86
-	LOC_WEX_sws86 := *_template
+	LOC_WEX_sws86 := *_template *test*
 	ifneq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
 			# LOC_EXC_sws86 := yuv2rgb_mmx
@@ -166,10 +173,10 @@ ifneq ($(PROC),arm)
 	endif
 	include $(PRJ_LIBROOT)/build.mk
 
-	export LOC_TAG := avu86
-	LOC_CXX_avu86 := c
-	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
-	include $(PRJ_LIBROOT)/build.mk
+#	export LOC_TAG := avu86
+#	LOC_CXX_avu86 := c
+#	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+#	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := sws86_asm
 	LOC_CXX_sws86_asm := asm
@@ -215,14 +222,15 @@ ifneq ($(PROC),arm)
 	endif
 	include $(PRJ_LIBROOT)/build.mk
 
-	export LOC_TAG := avu86
-	LOC_CXX_avu86 := c
-	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
-	include $(PRJ_LIBROOT)/build.mk
+#	export LOC_TAG := avu86
+#	LOC_CXX_avu86 := c
+#	LOC_SRC_avu86 := $(CFG_LIBROOT)/ffmpeg/libavutil/x86
+#	include $(PRJ_LIBROOT)/build.mk
 
 	export LOC_TAG := avu86_asm
 	LOC_CXX_avu86_asm := asm
 	LOC_BLD_avu86_asm := asm
+	LOC_WEX_avu86_asm := x86*
 	ifeq ($(PLATFORM),windows)
 		ifeq ($(PROC),x64)
 			LOC_ASM_avu86_asm := yasm -f win64 -DARCH_X86_32=0 -DARCH_X86_64=1 $(ASMOPTS)

@@ -7,8 +7,8 @@ default_target: all
 PRJ_NAME := ffd
 PRJ_DEPS := ffmpeg
 PRJ_TYPE := lib
-PRJ_INCS := ffmpeg x264 vpx rtmpd lame/include
-PRJ_LIBS := 
+PRJ_INCS := ffmpeg x264 vpx rtmpd lame/include zlib
+PRJ_LIBS :=
 PRJ_DEFS := HAVE_AV_CONFIG_H=1 __STDC_CONSTANT_MACROS
 PRJ_OPTS := -O2
 
@@ -26,7 +26,13 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifneq ($(BUILD),gcc)
-UNSUPPORTED := BUILD=$(BUILD) is invalid, ffmpeg can only be built with 'gcc'
+    ifeq ($(findstring msvs14,$(TGT)),)
+	NOTSUPPORTED := 1
+    endif
+endif
+
+ifneq ($(NOTSUPPORTED),)
+UNSUPPORTED := $(BUILD)-$(TGT) is invalid for ffmpeg
 include $(PRJ_LIBROOT)/unsupported.mk
 else
 
@@ -39,7 +45,7 @@ include lib_ffmpeg.i
 export LOC_TAG := libavcodec
 LOC_CXX_libavcodec := c
 LOC_SRC_libavcodec := $(CFG_LIBROOT)/ffmpeg/libavcodec
-LOC_WLS_libavcodec := i j k l m n o p 
+LOC_WLS_libavcodec := i j k l m n o p
 LOC_WEX_libavcodec := vaa* vda* lib* *_template *_tablegen qsv* vdpau* *-test
 ifneq ($(PLATFORM),windows)
 	ifeq ($(PROC),x64)

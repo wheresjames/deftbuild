@@ -10,9 +10,10 @@
 #	define INT_BIT 32
 #	define HAVE_MMX 1
 #	define HAVE_MMX2 1
-#	define HAVE_EBP_AVAILABLE 0
-#	define HAVE_EBX_AVAILABLE 1
 #endif
+
+#define HAVE_EBP_AVAILABLE 0
+#define HAVE_EBX_AVAILABLE 1
 
 //#define BROKEN_RELOCATIONS 1
 #if !defined( INFINITY ) && defined( HUGE_VAL )
