@@ -36,10 +36,10 @@ include $(PRJ_LIBROOT)/unsupported.mk
 else
 
 ifeq ($(BUILD),gcc)
-	CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
-	ifdef DBG
-		CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
-	endif
+    CFG_CFLAGS := $(CFG_CFLAGS) -ffast-math -fomit-frame-pointer -std=c99
+    ifdef DBG
+	CFG_CFLAGS := $(CFG_CFLAGS) -fno-stack-check -O1
+    endif
 endif
 
 #-------------------------------------------------------------------

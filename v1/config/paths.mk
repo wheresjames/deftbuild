@@ -66,9 +66,12 @@ CFG_INCS := $(foreach inc,$(PRJ_INCS), $(CFG_CC_INC)$(CFG_LIBROOT)/$(inc))
 ifeq ($(BUILD),vs)
 	ifneq ($(CFG_DBGINFO),)
 		CFG_DBGDIR := $(CFG_BINROOT)/_0_dbg
+#		CFG_CFLAGS := $(CFG_CFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb"
+#		CFG_LFLAGS := $(CFG_LFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb" \
+#									/MAP:$(CFG_DBGDIR)/$(PRJ_NAME).map \
+#									/MAPINFO:EXPORTS
 		CFG_CFLAGS := $(CFG_CFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb"
-		CFG_LFLAGS := $(CFG_LFLAGS) /Fd"$(CFG_DBGDIR)/$(PRJ_NAME).pdb" \
-									/MAP:$(CFG_DBGDIR)/$(PRJ_NAME).map \
+		CFG_LFLAGS := $(CFG_LFLAGS) /MAP:$(CFG_DBGDIR)/$(PRJ_NAME).map \
 									/MAPINFO:EXPORTS
 	endif
 endif
