@@ -6,8 +6,10 @@
 #endif
 
 ifneq ($(VSVER),)
+	CFG_COMPILER := $(VSVER)
 	CFG_BUILD_TYPE := $(PLATFORM)-$(VSVER)-$(OS)-$(PROC)-$(UTOOLS)
 else
+	CFG_COMPILER := $(BUILD)
 	CFG_BUILD_TYPE := $(PLATFORM)-$(BUILD)-$(OS)-$(PROC)-$(UTOOLS)
 endif
 
